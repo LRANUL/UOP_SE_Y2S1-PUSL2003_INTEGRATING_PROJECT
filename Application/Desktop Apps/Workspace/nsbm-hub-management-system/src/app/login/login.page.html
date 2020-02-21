@@ -60,7 +60,7 @@
       </ion-card-header>
 
       <ion-card-content>
-        <form [formGroup] = "loginForm" (ngSubmit)="submit()">
+        <form [formGroup] = "loginForm">
           <ion-grid>
             <ion-row>
               <ion-col>
@@ -111,16 +111,15 @@
             <ion-row>
 
               <ion-col>
-                <button ion-button [disabled]="!loginForm.valid" style="border-radius: 4px;
-                                                                        width: 250px;
-                                                                        height: 40px;
-                                                                        margin-top: 10px;
-                                                                        background-color: #0192B6;
-                                                                        font-size: 20px;
-                                                                        color: white;
-                                                                        position: relative;
-                                                                        left: 50%;
-                                                                        transform: translateX(-50%);">LOGIN</button>
+                <ion-button [disabled]="!loginForm.valid" (click)="login()" style="border-radius: 4px;
+                                                                                width: 270px;
+                                                                                height: 40px;
+                                                                                margin-top: 10px;
+                                                                                font-size: 20px;
+                                                                                color: white;
+                                                                                position: relative;
+                                                                                left: 50%;
+                                                                                transform: translateX(-50%);">LOGIN</ion-button>
               </ion-col>
 
             </ion-row>

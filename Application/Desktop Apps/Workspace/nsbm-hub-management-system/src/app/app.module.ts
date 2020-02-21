@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { AngularFireModule } from "@angular/fire";
+import { AngularFireAuthModule } from "@angular/fire/auth"; 
 import { environment } from "../environments/environment";
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -19,6 +20,7 @@ import { AboutModalPageModule } from './login/about-modal/about-modal.module';
   entryComponents: [],
   imports: [
     AngularFireModule.initializeApp(environment.firebase), // Requires the firebase config information as parameters. These will be retrieved from the environments.ts file.
+    AngularFireAuthModule, 
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule,
