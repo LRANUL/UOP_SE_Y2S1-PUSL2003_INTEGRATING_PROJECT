@@ -29,10 +29,13 @@
 
     <div style="position: relative;
                 top: 60px;">
-      <ion-img src="../../assets/icon/favicon.png" alt="NSBM Hub Logo" style="width: 280px;
-                                                                              position: absolute;
-                                                                              left: 50%;
-                                                                              transform: translateX(-50%);"></ion-img>
+      <div>
+        <ion-img src="../../assets/images/NSBM_Hub_Logo.png" alt="NSBM Hub Logo" style="width: 280px;
+                                                                                position: absolute;
+                                                                                left: 50%;
+                                                                                transform: translateX(-50%);"></ion-img>
+      </div>
+      
       <h3 style="color: black;
                 text-align: center;
                 position: relative;
@@ -57,66 +60,85 @@
       </ion-card-header>
 
       <ion-card-content>
-        <ion-grid>
-          <ion-row>
+        <form [formGroup] = "loginForm" (ngSubmit)="submit()">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                
+                <ion-label style="font-size: 18px; 
+                                  margin-bottom: 4px;
+                                  color: #272727" position="floating">Email</ion-label>
+                <div class="inputBorder">
+                  <ion-item>
+                    <ion-icon name="mail-outline" style="font-size: 30px;
+                                                          margin-left: -2px;
+                                                          color: #0192B6;"></ion-icon>
+                    <ion-input type="email" clearInput formControlName="email" style="font-size: 18px;
+                                                                                      margin-left: 10px;"></ion-input>
+                  </ion-item>
+                </div>
+                
 
-            <ion-col>
-              <ion-label style="font-size: 18px; 
-                                margin-bottom: 4px;
-                                color: #272727">Email:</ion-label>
-              <div style="border: #ccc solid 1px;
-                          border-radius: 5px;">
-                <ion-input type="email" clearInput style="font-size: 18px;">
-                  <ion-icon name="mail-outline" style="font-size: 30px;
-                                                      margin-left: 7px;"></ion-icon>
-                </ion-input>
-              </div>
-            </ion-col>
-            <ion-col>
-              <ion-label style="font-size: 18px; 
-                                margin-bottom: 4px;
-                                color: #272727;">Password:</ion-label>
-              <div style="border: #ccc solid 1px;
-                          border-radius: 5px;">
-                <ion-input type="password" clearInput style="font-size: 18px;">
-                  <ion-icon name="key-outline" style="font-size: 30px;
-                                                      margin-left: 7px;"></ion-icon>
-                </ion-input>
-              </div>
-              <p style="margin-left: 200px;">Forgot the password?</p>
-            </ion-col>
+              
+                <!-- Displaying the error message -->
+              <!--
+                <div *ngFor="let error of errorMessages.email">
+                  <ng-container *ngIf="email.hasError(email.type) && (email.dirty || email.touched)">
+                    <h1 class="error-message">{{error.message}}</h1>
+                  </ng-container>
+                </div>
+              -->
 
-          </ion-row>
-          <ion-row>
+              </ion-col>
+              <ion-col>
 
-            <ion-col>
-              <button ion-button style="border-radius: 4px;
-                                        width: 250px;
-                                        height: 40px;
-                                        margin-top: 10px;
-                                        background-color: #0192B6;
-                                        font-size: 20px;
-                                        color: white;
-                                        position: relative;
-                                        left: 50%;
-                                        transform: translateX(-50%);">Login</button>
-            </ion-col>
+                <ion-label style="font-size: 18px; 
+                                  margin-bottom: 4px;
+                                  color: #272727;">Password</ion-label>
+                <div class="inputBorder">
+                  <ion-item>
+                    <ion-icon name="key-outline" style="font-size: 30px;
+                                                          margin-left: -1.5px;
+                                                          color: #0192B6"></ion-icon>
+                    <ion-input type="password" clearInput formControlName="password" style="font-size: 18px;
+                                                                                            margin-left: 10px;"></ion-input>
+                  </ion-item>
+                </div>
+                <p style="margin-left: 200px;">Forgot the password?</p>
+              </ion-col>
 
-          </ion-row>
-        </ion-grid>
+            </ion-row>
+            <ion-row>
+
+              <ion-col>
+                <button ion-button [disabled]="!loginForm.valid" style="border-radius: 4px;
+                                                                        width: 250px;
+                                                                        height: 40px;
+                                                                        margin-top: 10px;
+                                                                        background-color: #0192B6;
+                                                                        font-size: 20px;
+                                                                        color: white;
+                                                                        position: relative;
+                                                                        left: 50%;
+                                                                        transform: translateX(-50%);">LOGIN</button>
+              </ion-col>
+
+            </ion-row>
+          </ion-grid>
+        </form>
       </ion-card-content>
     </ion-card>
 
-    <button ion-button style="color: white;
-                              background-color: #B6B6B6;
-                              padding: 10px;
-                              border-radius: 5px;
-                              width: 90px;
-                              height: 35px;
-                              font-size: 16px;
-                              position: absolute; 
-                              top: 800px;
-                              right: 70px;">About</button>
+    <button ion-button (click)="OpenModal()" style="color: white;
+                                                    background-color: #848484;
+                                                    padding: 10px;
+                                                    border-radius: 5px;
+                                                    width: 90px;
+                                                    height: 35px;
+                                                    font-size: 16px;
+                                                    position: absolute; 
+                                                    top: 800px;
+                                                    right: 70px;">About</button>
 
 
   </div>
