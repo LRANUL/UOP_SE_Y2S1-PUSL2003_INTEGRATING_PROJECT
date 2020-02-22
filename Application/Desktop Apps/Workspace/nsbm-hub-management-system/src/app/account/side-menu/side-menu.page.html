@@ -1,17 +1,15 @@
-<ion-split-pane> <!-- Opens the side menu in large screens -->
+<ion-split-pane contentId="content"> <!-- Opens the side menu in large screens -->
 
   <ion-menu contentId="content" type="overlay"> <!-- (ion-menu section displays the menu part) -->
     
     <ion-content>
 
       <ion-list>
-        <ion-menu-toggle auto-hide="false" *ngFor="let p of page">
+        <ion-menu-toggle auto-hide="false" *ngFor="let p of pages"> <!-- This 'pages' references to pages array in side-menu.page.ts file -->
           <ion-item [routerLink]="p.url" routerDirection="root" [class.active-item]="selectedPath.startsWith(p.url)">
             <ion-label>
-             <!-- <ion-icon slot="start" [name]="p.icon"></ion-icon> -->
-              <ion-label>
-                {{ p.title }}
-              </ion-label>
+              <ion-icon slot="start" [name]="p.icon"></ion-icon> 
+              {{ p.title }}
             </ion-label>
           </ion-item>
         </ion-menu-toggle>

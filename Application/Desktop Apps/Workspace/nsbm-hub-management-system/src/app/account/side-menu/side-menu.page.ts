@@ -11,11 +11,13 @@ export class SideMenuPage implements OnInit {
   pages = [
     {
       title: 'Dashboard',
-      url: '/side-menu/dashboard'
+      url: '/side-menu/dashboard',
+      icon: 'grid-outline'
     },
     {
       title: 'Notices',
-      url: '/side-menu/notices'
+      url: '/side-menu/notices',
+      icon: 'create-outline'
     }
   ];
 
