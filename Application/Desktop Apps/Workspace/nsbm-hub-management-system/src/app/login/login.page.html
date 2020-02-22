@@ -67,7 +67,7 @@
                 
                 <ion-label style="font-size: 18px; 
                                   margin-bottom: 4px;
-                                  color: #272727" position="floating">Email</ion-label>
+                                  color: #272727" position="floating">Email Address</ion-label>
                 <div class="inputBorder">
                   <ion-item>
                     <ion-icon name="mail-outline" style="font-size: 30px;
@@ -79,12 +79,12 @@
                 </div>
                 
 
-              
+
                 <!-- Displaying the error message -->
               <!--
                 <div *ngFor="let error of errorMessages.email">
                   <ng-container *ngIf="email.hasError(email.type) && (email.dirty || email.touched)">
-                    <h1 class="error-message">{{error.message}}</h1>
+                    <small class="error-message">{{error.message}}</small>
                   </ng-container>
                 </div>
               -->
@@ -104,6 +104,16 @@
                                                                                             margin-left: 10px;"></ion-input>
                   </ion-item>
                 </div>
+
+                  <!-- Displaying the error message -->
+                <!--
+                  <div *ngFor="let error of errorMessages.password">
+                    <ng-container *ngIf="password.hasError(password.type) && (password.dirty || password.touched)">
+                      <small class="error-message">{{password.message}}</small>
+                    </ng-container>
+                  </div>
+                -->
+
                 <p style="margin-left: 200px;">Forgot the password?</p>
               </ion-col>
 

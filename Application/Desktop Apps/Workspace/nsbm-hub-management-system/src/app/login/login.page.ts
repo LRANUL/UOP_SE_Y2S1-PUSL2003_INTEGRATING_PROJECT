@@ -5,6 +5,7 @@ import { AboutModalPage } from './about-modal/about-modal.page';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LoginCredential } from '../types';
 import { LoginService } from '../login.service';
+import { Router } from '@angular/router';
 
 
 
@@ -51,6 +52,7 @@ export class LoginPage implements OnInit {
   });
 
   constructor(
+    private _router: Router,
     private _loginService: LoginService,
     private formBuilder: FormBuilder,
     private modalController:ModalController
@@ -66,6 +68,7 @@ export class LoginPage implements OnInit {
     const loginCredentials: LoginCredential = this.loginForm.value;
     this._loginService.login(loginCredentials)
       .then((authData)=> {
+        this._router.navigate(["/side-menu/dashboard"]);
         console.log("Authentication Successful",authData);
       })
       .catch((authError)=> {

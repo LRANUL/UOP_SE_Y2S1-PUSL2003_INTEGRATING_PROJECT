@@ -1,0 +1,27 @@
+<ion-split-pane> <!-- Opens the side menu in large screens -->
+
+  <ion-menu contentId="content" type="overlay"> <!-- (ion-menu section displays the menu part) -->
+    
+    <ion-content>
+
+      <ion-list>
+        <ion-menu-toggle auto-hide="false" *ngFor="let p of page">
+          <ion-item [routerLink]="p.url" routerDirection="root" [class.active-item]="selectedPath.startsWith(p.url)">
+            <ion-label>
+             <!-- <ion-icon slot="start" [name]="p.icon"></ion-icon> -->
+              <ion-label>
+                {{ p.title }}
+              </ion-label>
+            </ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+
+    </ion-content>
+
+  </ion-menu>
+
+  <ion-router-outlet id="content" main></ion-router-outlet> <!-- (ion-router) section displays the content relavant for the page -->
+  <!-- this will be loaded from the loadChrildren link provided in the app-routing.module.ts file -->
+
+</ion-split-pane>

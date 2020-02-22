@@ -1,6 +1,6 @@
 ion-content{
     // Changing the background color from black to white
-    --background: white;
+    --ion-background-color: white;
 }
 
 ion-item{
@@ -18,3 +18,4 @@ ion-item{
 .error-message {
     color: var(--ion-color-danger);
 }
+

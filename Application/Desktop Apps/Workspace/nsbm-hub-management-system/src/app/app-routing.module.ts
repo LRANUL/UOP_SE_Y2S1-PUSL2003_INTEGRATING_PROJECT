@@ -3,10 +3,8 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  {
-    path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
-  },
+  { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
+  { path: 'side-menu', loadChildren: './account/side-menu/side-menu.module#SideMenuPageModule' }
 ];
 
 @NgModule({
