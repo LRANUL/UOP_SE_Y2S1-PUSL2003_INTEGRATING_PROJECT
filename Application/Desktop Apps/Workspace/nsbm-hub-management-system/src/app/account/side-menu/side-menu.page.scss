@@ -1,3 +1,32 @@
-.active-item {
-    border-left: 8px solid var(--ion-color-primary);
+ion-header{
+    background-color: rgb(242, 248, 241);
 }
+
+ion-content{
+    --ion-background-color: white;
+}
+
+/* // Code block for Side Menu and Sub Menu Pages
+.active{
+    --ion-text-color: var(--ion-color-primary);
+    ion-icon{
+        --ion-text-color-rgb: var(--ion-color-primary);
+    }
+}
+
+.active-parent{
+    font-weight: 500;
+}
+
+.sub-item{
+    padding-left: 20px;
+    font-size: small;
+}
+*/
+
+
+.active-item {
+    border-left: 8px solid #00AEDE; // Small line in the corner of the active page in the side menu.
+}
+
+

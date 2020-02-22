@@ -1,6 +1,24 @@
 <ion-split-pane contentId="content"> <!-- Opens the side menu in large screens -->
 
-  <ion-menu contentId="content" type="overlay"> <!-- (ion-menu section displays the menu part) -->
+  <ion-menu contentId="content" type="overlay" style="width: 100px;"> <!-- (ion-menu section displays the menu part) -->
+
+    <ion-header>
+      <ion-card style="background-color: white;
+                      height: 150px;">
+        <ion-card-header>
+          <ion-img src="../../../assets/images/NSBM_Hub_Logo.png" style="width: 70px;
+                                                                        position: relative;
+                                                                        left: 50%;
+                                                                        transform: translateX(-50%);"></ion-img>
+          <ion-label>
+            <h3 style="text-align: center; 
+                      color: black;
+                      margin-top: 10px;"><b>NSBM Hub <br> Management System</b></h3>
+          </ion-label>
+        </ion-card-header>
+      </ion-card>
+    </ion-header>
+
     
     <ion-content>
 
@@ -15,8 +33,41 @@
         </ion-menu-toggle>
       </ion-list>
 
-    </ion-content>
+      <!-- Code block for Side Menu and Sub Menu Pages
+      <div *ngFor="let p of pages"> -->  <!-- This 'pages' references to pages array in side-menu.page.ts file -->
+      <!--
+        <ion-menu-toggle *ngIf="p.url"> 
+          <ion-item [routerLink]="p.url" routerDirection="root" routerLinkActive="active">
+            <ion-icon [name]="p.icon" slot="start"></ion-icon> 
+            <ion-label>
+              {{ p.title }}
+            </ion-label>
+          </ion-item>
+        </ion-menu-toggle>
 
+        <ion-item button *ngIf="p.children?.length > 0" (click)="p.open = !p.open" 
+           [class.active-parent]="p.open" detail="false">
+          <ion-icon slot="start" name="arrow-forward" *ngIf="!p.open"></ion-icon>
+          <ion-icon slot="start" name="arrow-down" *ngIf="p.open"></ion-icon>
+          <ion-label>{{ p.title }}</ion-label>
+        </ion-item>
+
+        <ion-list *ngIf="p.open">
+          <ion-menu-toggle>
+            <ion-item *ngFor="let sub of p.children" [routerLink]="sub.url" routerDirection="root" routerLinkActive="active">
+              <ion-icon [name]="sub.icon" slot="start"></ion-icon>
+              <ion-label>
+                {{ sub.title }}
+              </ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+
+
+      </div>
+    -->
+    
+    </ion-content>
   </ion-menu>
 
   <ion-router-outlet id="content" main></ion-router-outlet> <!-- (ion-router) section displays the content relavant for the page -->
