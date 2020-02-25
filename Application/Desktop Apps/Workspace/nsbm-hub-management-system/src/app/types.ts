@@ -8,6 +8,7 @@ export interface EventNoticeData { // Used to upload event cover page to the fir
     noticeTitle: string,
     noticeDescription: string,
     noticeCategory: string,
+    noticeRecipient: string;
  /*   noticeRecipient: [
         {
             noticeRecipientModule: string,

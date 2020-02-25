@@ -99,7 +99,7 @@
                   </ion-col>
                   <ion-col size="8">
                     <ion-item>
-                      <ion-select interface="popover" style="min-width: 100%;" [(ngModel)]="noticeCategory" [selectedText]="noticeCategory" (ionChange)="changeUploadCoverImage(noticeCategory)">
+                      <ion-select interface="popover" style="min-width: 100%;" id="noticeCategory" [(ngModel)]="noticeCategory" [selectedText]="noticeCategory" (ionChange)="changeUploadCoverImage(noticeCategory)">
                         <ion-select-option value="Lecture">Lecture</ion-select-option>
                         <ion-select-option value="Module">Module</ion-select-option>
                         <ion-select-option value="Event">Event</ion-select-option>
@@ -111,27 +111,44 @@
                 <ion-row style="margin-top: -14px;">
                   <ion-col size="3">
                     <ion-label><h3 style="padding-top: 15px;
-                                          font-size: 15px;">Upload Cover Image</h3></ion-label>
+                                          font-size: 15px;">Notice Cover Image</h3></ion-label>
                   </ion-col>
                   <ion-col size="8">
 
                   <!-- Code Block with upload event cover image -->
                   <div id="withEventCoverImage" style="display: none;">
                     <!-- Card Before Uploading an Image -->
-                    <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded">
+                    <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded" style="width: 350px;
+                                                                                            height: 300px;
+                                                                                            margin-left: 0px">
                       <ion-card-header>
                         <ion-card-title>Select Image to Upload</ion-card-title>
                       </ion-card-header>
                       <ion-card-content>
+                        
+                          <input type="file" name="eventCoverImage" accept="image/*" (change)="coverImageViewer($event)">
+                          <div style="margin: 10px; 
+                                      margin-top: 15px;
+                                      width: 200px;
+                                      position: absolute;
+                                      left: 50%;
+                                      transform: translateX(-50%);">
+                           <img *ngIf=" eventCoverImage != '' " src="{{ eventCoverImage }}"/>
+                          </div>
+                        <!--
                         <div>
                           <span>Upload Image</span> 
-                          <ion-input id="uploadBtn" type="file" class="upload" (change)="uploadNewNoticeDetails($event.target.files)"></ion-input>
+                          <ion-input id="uploadBtn" type="file" class="upload" (change)="selectNewNoticeImage($event.target.files)"></ion-input>
                         </div>
+                      -->
                       </ion-card-content>
                     </ion-card>
 
+                  
                     <!-- Card During Uploading an Image -->
-                    <ion-card text-center *ngIf="isFileUploading && !isFileUploaded">
+                    <ion-card text-center *ngIf="isFileUploading && !isFileUploaded" style="width: 350px;
+                                                                                            height: 300px;
+                                                                                            margin-left: 0px;">
                       <ion-card-header>
                         <ion-card-title>Selected File: <i>{{ fileName }}</i></ion-card-title>
                       </ion-card-header>
@@ -161,7 +178,9 @@
                     </ion-card>
 
                     <!-- Card After Uploading an Image -->
-                    <ion-card text-center *ngIf="!isFileUploading && isFileUploaded">
+                    <ion-card text-center *ngIf="!isFileUploading && isFileUploaded" style="width: 350px;
+                                                                                            height: 300px;
+                                                                                            margin-left: 0px;">
                       <ion-card-header>
                         <ion-card-title>Image Selected to Upload</ion-card-title>
                       </ion-card-header>
@@ -197,9 +216,9 @@
                   </ion-col>
                   <ion-col size="4">
                     <ion-item>
-                      <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Module"  [(ngModel)]="noticeRecipientModule" style="min-width: 170px;">
+                      <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Module"  [(ngModel)]="noticeRecipient" style="min-width: 170px;">
                         <ion-select-option value="SOFT255SL">SOFT255SL</ion-select-option>
-                        <ion-select-option value="PUSL2003SL">PUSL2003SL</ion-select-option>
+                        <ion-select-option value="PUSL2003SL">PUSL2003</ion-select-option>
                       </ion-select>
                     </ion-item>
                   </ion-col>
@@ -231,7 +250,7 @@
 
                 <div style="position: relative;
                             top: 10px;">
-                  <ion-button expand="block">Send Notice</ion-button>
+                  <ion-button expand="block" (click)="uploadNewNoticeImage($event)">Send Notice</ion-button>
                 </div>
 
               </ion-grid>
@@ -239,10 +258,11 @@
             </div>
             
 
+
             <!-- Send New Notice to Lecturer -->
             <div id="newNoticeSubmitLecturer" style="display: none;">
               <p>efefe</p>
-
+              
             </div>
 
           </ion-card-content>
