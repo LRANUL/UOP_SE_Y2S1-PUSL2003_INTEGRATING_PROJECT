@@ -8,6 +8,8 @@ import { NoticesPageRoutingModule } from './notices-routing.module';
 
 import { NoticesPage } from './notices.page';
 
+import { FileSizeFormatPipe } from './file-size-format.pipe';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -15,6 +17,9 @@ import { NoticesPage } from './notices.page';
     IonicModule,
     NoticesPageRoutingModule
   ],
-  declarations: [NoticesPage]
+  declarations: [
+    NoticesPage,
+    FileSizeFormatPipe
+  ]
 })
 export class NoticesPageModule {}

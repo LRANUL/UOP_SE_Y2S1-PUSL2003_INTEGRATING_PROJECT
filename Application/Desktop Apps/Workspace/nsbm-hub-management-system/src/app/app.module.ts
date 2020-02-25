@@ -15,15 +15,22 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AboutModalPageModule } from './login/about-modal/about-modal.module';
 
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
-    AngularFireModule.initializeApp(environment.firebase), // Requires the firebase config information as parameters. These will be retrieved from the environments.ts file.
+    AngularFireModule.initializeApp(environment.firebaseConfig), // Requires the firebase config information as parameters. These will be retrieved from the environments.ts file.
     AngularFireAuthModule, 
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule,
+    AngularFireStorageModule,
+    AngularFirestoreModule,
+    AngularFireDatabaseModule,
     AboutModalPageModule
   ],
   providers: [
