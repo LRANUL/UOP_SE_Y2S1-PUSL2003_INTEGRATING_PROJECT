@@ -5,6 +5,16 @@ export interface LoginCredential { // Used for user authentication at the login 
 }
 
 export interface EventNoticeData { // Used to upload event cover page to the firestore
+    noticeTitle: string,
+    noticeDescription: string,
+    noticeCategory: string,
+ /*   noticeRecipient: [
+        {
+            noticeRecipientModule: string,
+            noticeRecipientBatch: string
+        }
+    ],*/
+    noticeAuthor: string,
     coverImageFileName: string,
     coverImageFilePath: string,
     coverImageFileSize: number

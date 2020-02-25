@@ -9,6 +9,7 @@ import { EventNoticeData } from '../../types';
 
 import { NoticesService } from '../../notices.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { firestore } from 'firebase';
 
 
 @Component({
@@ -58,6 +59,14 @@ export class NoticesPage implements OnInit {
     }
   }
 
+  // Declaring variables to store the user entered value from the new notice form
+  noticeTitle: string;
+  noticeDescription: string;
+  noticeCategory: string;
+  noticeRecipientModule: string;
+  noticeRecipientBatch: string;
+  noticeAuthor: string;
+
 
   // Upload Task
   task: AngularFireUploadTask;
@@ -97,7 +106,15 @@ export class NoticesPage implements OnInit {
   }
 
   // Upload file process
-  uploadFile(event: FileList) {
+  uploadNewNoticeDetails(event: FileList) {
+
+    // Initializing previously declared variables with users entered values
+    const noticeTitle = this.noticeTitle;
+    const noticeDescription = this.noticeDescription;
+    const noticeCategory = this.noticeCategory;
+    const noticeRecipientModule = this.noticeRecipientModule;
+    const noticeRecipientBatch = this.noticeRecipientBatch;
+    const noticeAuthor = this.noticeAuthor;
 
     // File Object
     const file = event.item(0);
@@ -141,10 +158,20 @@ export class NoticesPage implements OnInit {
 
         // Retrieving the URL of the uploaded file storage
         this.UploadedFileURL = fileRef.getDownloadURL();
-
+        
         // Uploading notice document to firestore
         this.UploadedFileURL.subscribe(resp => {
           this.addNewNoticeDocumentToDB({
+            noticeTitle: noticeTitle,
+            noticeDescription: noticeDescription,
+            noticeCategory: noticeCategory,
+         /*   noticeRecipient: [
+              {
+                noticeRecipientModule: noticeRecipientModule,
+                noticeRecipientBatch: noticeRecipientBatch,
+              }
+            ],*/
+            noticeAuthor: noticeAuthor,
             coverImageFileName: file.name,
             coverImageFilePath: resp,
             coverImageFileSize: this.fileSize

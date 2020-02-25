@@ -77,7 +77,7 @@
                   </ion-col>
                   <ion-col size="8">
                     <ion-item>
-                      <ion-input type="text" clearInput></ion-input>
+                      <ion-input type="text" clearInput [(ngModel)]="noticeTitle"></ion-input>
                     </ion-item>
                   </ion-col>
                 </ion-row>
@@ -88,7 +88,7 @@
                   </ion-col>
                   <ion-col size="8">
                     <ion-item>
-                      <ion-textarea></ion-textarea>
+                      <ion-textarea [(ngModel)]="noticeDescription"></ion-textarea>
                     </ion-item>
                   </ion-col>
                 </ion-row>
@@ -125,7 +125,7 @@
                       <ion-card-content>
                         <div>
                           <span>Upload Image</span> 
-                          <ion-input id="uploadBtn" type="file" class="upload" (change)="uploadFile($event.target.files)"></ion-input>
+                          <ion-input id="uploadBtn" type="file" class="upload" (change)="uploadNewNoticeDetails($event.target.files)"></ion-input>
                         </div>
                       </ion-card-content>
                     </ion-card>
@@ -197,7 +197,7 @@
                   </ion-col>
                   <ion-col size="4">
                     <ion-item>
-                      <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Module" style="min-width: 170px;">
+                      <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Module"  [(ngModel)]="noticeRecipientModule" style="min-width: 170px;">
                         <ion-select-option value="SOFT255SL">SOFT255SL</ion-select-option>
                         <ion-select-option value="PUSL2003SL">PUSL2003SL</ion-select-option>
                       </ion-select>
@@ -206,7 +206,7 @@
                   <ion-label><p style="margin-top: 35px;">OR</p></ion-label>
                   <ion-col size="4">
                     <ion-item>
-                      <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Batch" style="min-width: 170px;">
+                      <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Batch" [(ngModel)]="noticeRecipientBatch" style="min-width: 170px;">
                         <ion-select-option value="Plymouth Batch 7">Plymouth Batch 7</ion-select-option>
                         <ion-select-option value="UGC: MIS Batch 6">UCG: MIS Batch 6</ion-select-option>
                       </ion-select>
@@ -220,7 +220,7 @@
                   </ion-col>
                   <ion-col size="8">
                     <ion-item>
-                      <ion-select interface="popover" style="min-width: 100%;">
+                      <ion-select interface="popover" [(ngModel)]="noticeAuthor" style="min-width: 100%;">
                         <ion-select-option value="Program Office: School of Computing" style="width: 100%;">Program Office: SoC</ion-select-option>
                         <ion-select-option value="Program Office: School of Business" style="width: 100%;">Program Office: SoB</ion-select-option>
                         <ion-select-option value="Program Office: School of Engineering" style="width: 100%;">Program Office: SoE</ion-select-option>
@@ -230,8 +230,8 @@
                 </ion-row>
 
                 <div style="position: relative;
-                            top: 200px;">
-                  <ion-button expand="block" (click)="submit()">Send Notice</ion-button>
+                            top: 10px;">
+                  <ion-button expand="block">Send Notice</ion-button>
                 </div>
 
               </ion-grid>
