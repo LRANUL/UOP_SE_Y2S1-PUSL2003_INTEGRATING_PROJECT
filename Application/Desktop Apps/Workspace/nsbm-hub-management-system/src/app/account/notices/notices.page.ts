@@ -5,7 +5,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 
-import { EventNoticeData } from '../../types';
+import { EventNoticeData, NoticeData } from '../../types';
 
 import { AlertController } from '@ionic/angular';
 
@@ -72,7 +72,7 @@ export class NoticesPage implements OnInit {
   noticeTitle: string;
   noticeDescription: string;
   noticeCategory: string;
-  noticeRecipient: string;
+  noticeRecipientModule: string;
   noticeRecipientBatch: string;
   noticeAuthor: string;
 
@@ -155,7 +155,11 @@ export class NoticesPage implements OnInit {
     fileReader.readAsDataURL($event.target.files[0]);
     
   }
-            
+
+  // Retriving the current date and time from the localhost
+  currentDT = new Date();
+  currentDateTime = this.currentDT.getDate() + "/" + this.currentDT.getMonth() + "/" + this.currentDT.getFullYear() + " " + this.currentDT.getHours() + ":" + this.currentDT.getMinutes() + ":" + this.currentDT.getSeconds();
+
 
   // Upload file process
   uploadNewNoticeImage() {
@@ -176,7 +180,7 @@ export class NoticesPage implements OnInit {
         const noticeTitle = this.noticeTitle;
         const noticeDescription = this.noticeDescription;
         const noticeCategory = this.noticeCategory;
-        const noticeRecipient = this.noticeRecipient;
+        const noticeRecipientModule = this.noticeRecipientModule;
         const noticeRecipientBatch = this.noticeRecipientBatch;
         const noticeAuthor = this.noticeAuthor;
 
@@ -219,28 +223,73 @@ export class NoticesPage implements OnInit {
             
             // Uploading notice document to firestore
             this.UploadedFileURL.subscribe(resp => {
-              this.addNewNoticeDocumentToDB({
-                noticeTitle: noticeTitle,
-                noticeDescription: noticeDescription,
-                noticeCategory: noticeCategory,
-                noticeRecipient: noticeRecipient,
-            /*   noticeRecipient: [
-                  {
-                    noticeRecipientModule: noticeRecipientModule,
-                    noticeRecipientBatch: noticeRecipientBatch,
+
+              if( noticeRecipientModule == "" ) {
+
+                this.addNewEventNoticeDocumentToDB({
+                  noticeTitle: noticeTitle,
+                  noticeDescription: noticeDescription,
+                  noticeCategory: noticeCategory,
+                  noticeRecipient: {
+                    noticeRecipientModule: "NULL",
+                    noticeRecipientBatch: noticeRecipientBatch 
+                  },
+                  noticeCoverImage: {
+                    coverImageFileName: this.file.name,
+                    coverImageFilePath: resp,
+                    cooverImageFileSize: this.fileSize
+                  },
+                  noticeCreated: {
+                    noticeCreatedByName: "Program Office User Name",
+                    noticeCreatedByFaculty: noticeAuthor,
+                    noticeCreatedDateTime: this.currentDateTime
                   }
-                ],*/
-                noticeAuthor: noticeAuthor,
-                coverImageFileName: this.file.name,
-                coverImageFilePath: resp,
-                coverImageFileSize: this.fileSize
-              });
+                });
+
+              }
+              else if ( noticeRecipientBatch == "" ) {
+
+                this.addNewEventNoticeDocumentToDB({
+                  noticeTitle: noticeTitle,
+                  noticeDescription: noticeDescription,
+                  noticeCategory: noticeCategory,
+                  noticeRecipient: {
+                    noticeRecipientModule: noticeRecipientModule,
+                    noticeRecipientBatch: "NULL" 
+                  },
+                  noticeCoverImage: {
+                    coverImageFileName: this.file.name,
+                    coverImageFilePath: resp,
+                    cooverImageFileSize: this.fileSize
+                  },
+                  noticeCreated: {
+                    noticeCreatedByName: "Program Office User Name",
+                    noticeCreatedByFaculty: noticeAuthor,
+                    noticeCreatedDateTime: this.currentDateTime
+                  }
+                });
+
+              }
+
+              
+
+              // Removing the user entered values from the input fields after the notice has been created
+              this.noticeTitle = "";
+              this.noticeDescription = "";
+              this.noticeCategory = "";
+              this.noticeRecipientModule = "";
+              this.noticeRecipientBatch = "";
+              this.noticeAuthor = "";
+
+
 
               this.isFileUploading = false;
               this.isFileUploaded = false;
               
               // Displaying new notice successfully created
-              this.alertnotice('Notice Successfully Created', 'Notice has been added to the system.<br>Notices Can be views in the "Notices Sent Sections" in the right side.');
+              this.alertnotice('Notice Successfully Created', 'Notice has been added to the system.<br>Notices Can be viewed in the "Notices Sent Sections" on the right side of the panel.');
+
+
 
             }, error => {
               console.error('Upload Error: ' + error);
@@ -255,82 +304,70 @@ export class NoticesPage implements OnInit {
       }
     }
     else{
-console.log("wo");
+
       // Initializing previously declared variables with users entered values
       const noticeTitle = this.noticeTitle;
       const noticeDescription = this.noticeDescription;
       const noticeCategory = this.noticeCategory;
-      const noticeRecipient = this.noticeRecipient;
+      const noticeRecipientModule = this.noticeRecipientModule;
       const noticeRecipientBatch = this.noticeRecipientBatch;
       const noticeAuthor = this.noticeAuthor;
 
-      // File Object
-      // const file = event.item(0);
 
-      this.isFileUploading = true;
-      this.isFileUploaded = false;
+      if( noticeRecipientModule == "" ) {
+
+        this.addNewNoticeDcouementToDB({
+          noticeTitle: noticeTitle,
+          noticeDescription: noticeDescription,
+          noticeCategory: noticeCategory,
+          noticeRecipient: {
+            noticeRecipientModule: "NULL",
+            noticeRecipientBatch: noticeRecipientBatch 
+          },
+          noticeCreated: {
+            noticeCreatedByName: "Program Office User Name",
+            noticeCreatedByFaculty: noticeAuthor,
+            noticeCreatedDateTime: this.currentDateTime // firebase.firestore.Timestamp.fromDate(new Date(this.currentDateTime))
+          }
+        });
+
+      }
+      else if( noticeRecipientBatch == "" ) {
+
+        this.addNewNoticeDcouementToDB({
+          noticeTitle: noticeTitle,
+          noticeDescription: noticeDescription,
+          noticeCategory: noticeCategory,
+          noticeRecipient: {
+            noticeRecipientModule: noticeRecipientModule,
+            noticeRecipientBatch: "NULL" 
+          },
+          noticeCreated: {
+            noticeCreatedByName: "Program Office User Name",
+            noticeCreatedByFaculty: noticeAuthor,
+            noticeCreatedDateTime: this.currentDateTime // firebase.firestore.Timestamp.fromDate(new Date(this.currentDateTime))
+          }
+        });
+
+
+      }
+
       
-      this.fileName = this.file.name;
 
-      // Retrieving current date and time in Unix Timestamp from localhost
-      var currentDateTimeUnix = new Date().getTime();
       
-      // Retrieving filename of selected file
-      var currentFileName = this.file.name;
 
-      console.log("DateTime: " + currentDateTimeUnix + " FileName: " + currentFileName);
+      // Displaying new notice successfully created
+      this.alertnotice('Notice Successfully Created', 'Notice has been added to the system.<br>Notices can be viewed in the "Notices Sent Sections" on the right side of the panel.');
 
-      // Storage path of the file in the firebase storage
-      var path = 'files/images/notices/events/' + currentDateTimeUnix + '_' + currentFileName;
+      // Removing the user entered values from the input fields after the notice has been created
+      this.noticeTitle = "";
+      this.noticeDescription = "";
+      this.noticeCategory = "";
+      this.noticeRecipientModule = "";
+      this.noticeRecipientBatch = "";
+      this.noticeAuthor = "";
 
-      // Custom metadata
-      const customMetadata = { app: 'Event Notice Cover Image File' };
 
-      // File referencing
-      const fileRef = this.storage.ref(path);
-
-      // Uploading file to firebase storage
-      this.task = this.storage.upload(path, this.file, { customMetadata });
-
-      // Retrieving file progress percentage
-      this.percentage = this.task.percentageChanges();
-      this.snapshot = this.task.snapshotChanges().pipe(
-
-        finalize(() => {
-
-          // Retrieving the URL of the uploaded file storage
-          this.UploadedFileURL = fileRef.getDownloadURL();
-          
-          // Uploading notice document to firestore
-          this.UploadedFileURL.subscribe(resp => {
-            this.addNewNoticeDocumentToDB({
-              noticeTitle: noticeTitle,
-              noticeDescription: noticeDescription,
-              noticeCategory: noticeCategory,
-              noticeRecipient: noticeRecipient,
-          /*   noticeRecipient: [
-                {
-                  noticeRecipientModule: noticeRecipientModule,
-                  noticeRecipientBatch: noticeRecipientBatch,
-                }
-              ],*/
-              noticeAuthor: noticeAuthor,
-              coverImageFileName: null,
-              coverImageFilePath: null,
-              coverImageFileSize: null
-            });
-
-            
-            // Displaying new notice successfully created
-            this.alertnotice('Notice Successfully Created', 'Notice has been added to the system.<br>Notices Can be views in the "Notices Sent Sections" in the right side.');
-
-          }, error => {
-            console.error('Upload Error: ' + error);
-            this.alertnotice('ERROR! ', 'An error has occurred during the process. Error' + error + " <br>Please contact the system web administrator.");
-          })
-        })
-      )
-      
     }
 
   }
@@ -339,7 +376,7 @@ console.log("wo");
   
 
   // Method for adding notice document to firestore
-  addNewNoticeDocumentToDB(data: EventNoticeData){
+  addNewEventNoticeDocumentToDB(data: EventNoticeData){
 
     // Creating an ID for the document
     const id = this.database.createId();
@@ -349,6 +386,17 @@ console.log("wo");
       console.log(resp);
     }).catch(error => {
       console.log("Error occurred: " + error);
+    })
+  }
+
+  addNewNoticeDcouementToDB(data: NoticeData){
+    
+    const id = this.database.createId();
+
+    this.imageCollection.doc(id).set(data).then(resp => {
+      console.log(resp);
+    }).catch(error => {
+      console.log("Error occurred:" + error);
     })
   }
 

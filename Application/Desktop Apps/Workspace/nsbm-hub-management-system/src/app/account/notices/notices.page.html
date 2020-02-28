@@ -6,7 +6,7 @@
     <div style="position: absolute;
                 right: 20px;
                 top: 0px;">
-      <ion-card style="height: 45px;
+        <ion-card style="height: 45px;
                       width: 200px;">
         <ion-card-header>Name</ion-card-header>
       </ion-card>
@@ -68,6 +68,8 @@
 
             <!-- New Notice to Student Section -->
             <div id="newNoticeSubmitStudent" style="display: inline">
+
+             
               <ion-grid>
                 <ion-row>
 
@@ -216,7 +218,7 @@
                   </ion-col>
                   <ion-col size="4">
                     <ion-item>
-                      <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Module"  [(ngModel)]="noticeRecipient" style="min-width: 170px;">
+                      <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Module"  [(ngModel)]="noticeRecipientModule" style="min-width: 170px;">
                         <ion-select-option value="SOFT255SL">SOFT255SL</ion-select-option>
                         <ion-select-option value="PUSL2003SL">PUSL2003</ion-select-option>
                       </ion-select>
