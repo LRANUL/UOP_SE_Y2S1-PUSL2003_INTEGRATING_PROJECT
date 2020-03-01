@@ -243,6 +243,12 @@ export class NoticesPage implements OnInit {
                     noticeCreatedByName: "Program Office User Name",
                     noticeCreatedByFaculty: noticeAuthor,
                     noticeCreatedDateTime: this.currentDateTime
+                  },
+                  noticeUpdate: {
+                    updatedByName: "NULL",
+                    updatedByFaculty: "NULL",
+                    updatedDateTime: "NULL",
+                    updatedSection: "NULL",
                   }
                 });
 
@@ -266,6 +272,12 @@ export class NoticesPage implements OnInit {
                     noticeCreatedByName: "Program Office User Name",
                     noticeCreatedByFaculty: noticeAuthor,
                     noticeCreatedDateTime: this.currentDateTime
+                  },
+                  noticeUpdate: {
+                    updatedByName: "NULL",
+                    updatedByFaculty: "NULL",
+                    updatedDateTime: "NULL",
+                    updatedSection: "NULL",
                   }
                 });
 
@@ -328,6 +340,12 @@ export class NoticesPage implements OnInit {
             noticeCreatedByName: "Program Office User Name",
             noticeCreatedByFaculty: noticeAuthor,
             noticeCreatedDateTime: this.currentDateTime // firebase.firestore.Timestamp.fromDate(new Date(this.currentDateTime))
+          },
+          noticeUpdate: {
+            updatedByName: "NULL",
+            updatedByFaculty: "NULL",
+            updatedDateTime: "NULL",
+            updatedSection: "NULL",
           }
         });
 
@@ -346,6 +364,12 @@ export class NoticesPage implements OnInit {
             noticeCreatedByName: "Program Office User Name",
             noticeCreatedByFaculty: noticeAuthor,
             noticeCreatedDateTime: this.currentDateTime // firebase.firestore.Timestamp.fromDate(new Date(this.currentDateTime))
+          },
+          noticeUpdate: {
+            updatedByName: "NULL",
+            updatedByFaculty: "NULL",
+            updatedDateTime: "NULL",
+            updatedSection: "NULL",
           }
         });
 

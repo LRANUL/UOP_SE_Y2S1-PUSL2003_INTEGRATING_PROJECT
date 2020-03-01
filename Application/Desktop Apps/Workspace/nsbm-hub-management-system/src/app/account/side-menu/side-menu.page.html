@@ -23,18 +23,26 @@
     <ion-content>
 
       <ion-list>
-        <ion-menu-toggle auto-hide="false" *ngFor="let p of pages"> <!-- This 'pages' references to pages array in side-menu.page.ts file -->
-          <ion-item [routerLink]="p.url" routerDirection="root" [class.active-item]="selectedPath.startsWith(p.url)">
+        <ion-menu-toggle auto-hide="false" *ngFor="let p of pagesTop"> <!-- This 'pagesTop' references to pagesTop array in side-menu.page.ts file -->
+          <ion-item [routerLink]="p.url" routerDirection="root" [class.active-item-top]="selectedPath.startsWith(p.url)">
             <ion-label>
+              <ion-img src="{{ p.icon }}" style="width: 26px;
+                                                margin-top: -2px;"></ion-img>
+
+              <!-- Ionic icon implmentation
               <ion-icon slot="start" [name]="p.icon"></ion-icon> 
-              {{ p.title }}
+              -->
+            </ion-label>
+            <ion-label style="position: absolute;
+                              top: 1px;
+                              left: 40px;"> {{ p.title }} 
             </ion-label>
           </ion-item>
         </ion-menu-toggle>
       </ion-list>
 
       <!-- Code block for Side Menu and Sub Menu Pages
-      <div *ngFor="let p of pages"> -->  <!-- This 'pages' references to pages array in side-menu.page.ts file -->
+      <div *ngFor="let p of pagesTop"> -->  <!-- This 'pagesTop' references to pagesTop array in side-menu.page.ts file -->
       <!--
         <ion-menu-toggle *ngIf="p.url"> 
           <ion-item [routerLink]="p.url" routerDirection="root" routerLinkActive="active">
@@ -66,6 +74,49 @@
 
       </div>
     -->
+
+    <ion-list style="position: relative;
+                    top: 250px;">
+      <ion-menu-toggle auto-hide="false"> 
+        <ion-item [routerLink]="'/side-menu/account'" routerDirection="root" [class.active-item-bottom]="selectedPath.startsWith('/side-menu/account')">
+          <ion-label>
+            <ion-img src="../../../assets/images/account/side-menu_icons/account.png" style="width: 26px;
+                                                                                            margin-top: -2px;"></ion-img>
+          </ion-label>
+          <ion-label style="position: absolute;
+                            top: 1px;
+                            left: 40px;"> 
+            Account
+          </ion-label>
+        </ion-item>
+
+        <ion-item routerDirection="root" [routerLink]="'/side-menu/settings'" routerDirection="root" [class.active-item-bottom]="selectedPath.startsWith('/side-menu/settings')">
+          <ion-label>
+            <ion-icon name="settings-outline" style="width: 26px;
+                                                    margin-top: -2px;
+                                                    font-size: 25px;"></ion-icon>
+          </ion-label>
+          <ion-label style="position: absolute;
+                            top: 1px;
+                            left: 40px;"> 
+            Settings
+          </ion-label>
+        </ion-item>
+
+        <ion-item routerDirection="root">
+          <ion-label>
+            <ion-icon name="log-out-outline" style="width: 26px;
+                                                    font-size: 25px;
+                                                    margin-top: -2px;"></ion-icon>
+          </ion-label>
+          <ion-label style="position: absolute;
+                            top: 1px;
+                            left: 40px;"> 
+            Logout
+          </ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+    </ion-list>
     
     </ion-content>
   </ion-menu>

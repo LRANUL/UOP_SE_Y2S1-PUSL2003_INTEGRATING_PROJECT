@@ -21,7 +21,7 @@ const routes: Routes = [
         loadChildren: '../lecture-schedule/lecture-schedule.module#LectureSchedulePageModule'
       },
       {
-        path: 'semester-calendar ',
+        path: 'semester-calendar',
         loadChildren: '../semester-calendar/semester-calendar.module#SemesterCalendarPageModule'
       },
       {
@@ -33,12 +33,8 @@ const routes: Routes = [
         loadChildren: '../events/events.module#EventsPageModule'
       },
       {
-        path: 'recent-news',
-        loadChildren: '../recent-news/recent-news.module#RecentNewsPageModule'
-      },
-      {
-        path: 'news-and-media',
-        loadChildren: '../news-and-media/news-and-media.module#NewsAndMediaPageModule'
+        path: 'news',
+        loadChildren: '../news/news.module#NewsPageModule'
       },
       {
         path: 'lecturer-registration',
@@ -47,6 +43,14 @@ const routes: Routes = [
       {
         path: 'transportation-schedule',
         loadChildren: '../transportation-schedule/transportation-schedule.module#TransportationSchedulePageModule'
+      },
+      {
+        path: 'account',
+        loadChildren: '../account/account.module#AccountPageModule'
+      },
+      {
+        path: 'settings',
+        loadChildren: '../settings/settings.module#SettingsPageModule'
       }
     ]
   }

@@ -23,14 +23,12 @@ export interface EventNoticeData { // Used to upload event cover page to the fir
         noticeCreatedByFaculty: string,
         noticeCreatedDateTime: string
     }
-    /* // Added only if an update is done to a document
     noticeUpdate: {
         updatedByName: string,
         updatedByFaculty: string,
-        updatedDateTime: Date,
+        updatedDateTime: string,
         updatedSection: string,
     }
-    */
 }
 
 export interface NoticeData {
@@ -46,12 +44,10 @@ export interface NoticeData {
         noticeCreatedByFaculty: string,
         noticeCreatedDateTime: string
     }
-    /* // Added only if an update is done to a document
     noticeUpdate: {
         updatedByName: string,
         updatedByFaculty: string,
         updatedDateTime: string,
         updatedSection: string,
     }
-    */
 }

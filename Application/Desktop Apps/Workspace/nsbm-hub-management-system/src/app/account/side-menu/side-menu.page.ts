@@ -8,56 +8,51 @@ import { Router, RouterEvent } from '@angular/router';
 })
 export class SideMenuPage implements OnInit {
 
-  pages = [
+  pagesTop = [
     {
       title: 'Dashboard',
       url: '/side-menu/dashboard',
-      icon: 'grid-outline'
+      icon: '../../../assets/images/account/side-menu_icons/dashboard.png'
     },
     {
       title: 'Notices',
       url: '/side-menu/notices',
-      icon: 'create-outline'
+      icon: '../../../assets/images/account/side-menu_icons/notices.png'
     },
     {
       title: 'Lecture Scedule',
       url: '/side-menu/lecture-schedule',
-      icon: ''
+      icon: '../../../assets/images/account/side-menu_icons/lecture_schedule.png'
     },
     {
       title: 'Semester Calendar',
       url: '/side-menu/semester-calendar',
-      icon: ''
+      icon: '../../../assets/images/account/side-menu_icons/semester_calendar.png'
     },
     {
       title: 'Modules',
       url: '/side-menu/modules',
-      icon: ''
+      icon: '../../../assets/images/account/side-menu_icons/modules.png'
     },
     {
       title: 'Events',
       url: '/side-menu/events',
-      icon: ''
+      icon: '../../../assets/images/account/side-menu_icons/events.png'
     },
     {
-      title: 'Recent News',
-      url: '/side-menu/recent-news',
-      icon: ''
-    },
-    {
-      title: 'News and Media',
-      url: '/side-menu/news-and-media',
-      icon: ''
+      title: 'News',
+      url: '/side-menu/news',
+      icon: '../../../assets/images/account/side-menu_icons/news.png'
     },
     {
       title: 'Lecturer Registration',
       url: '/side-menu/lecturer-registration',
-      icon: ''
+      icon: '../../../assets/images/account/side-menu_icons/lecturer_registration.png'
     },
     {
       title: 'Transportation Schedule',
       url: '/side-menu/transportation-schedule',
-      icon: ''
+      icon: '../../../assets/images/account/side-menu_icons/transportation_schedule.png'
     }
   ];
 
