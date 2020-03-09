@@ -6,40 +6,137 @@
 
 <ion-content>
 
-  <!-- Main Content Section -->
-  <div style="height: 960px;
-              width: 1590px;
-              background-color: black;
-              margin-top: 30px;
-              margin-left: 30px;">
+  <ion-grid>
 
-    <!-- Create New Event Section -->
-    <ion-card style="width: 200px;
-                    height: 960px;
-                    background-color: white;
-                    border-radius: 5px;
-                    margin-left: -0px;">
+    <ion-row>
 
+      <ion-col>
 
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              Event Calendar
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            
+            <ion-grid>
 
+              <ion-row>
 
-  </ion-card>
+                <ion-col>
 
-    <!--  -->
-    <ion-card >
+                  <ion-card>
+                    <ion-card-content>
 
+                    </ion-card-content>
+                  </ion-card>
 
-    </ion-card>
+                </ion-col>
+                <ion-col>
 
-    <!--  -->
-    <ion-card>
+                  <ion-card>
+                    <ion-card-content>
 
+                    </ion-card-content>
+                  </ion-card>
 
-    </ion-card>
+                </ion-col>
 
+              </ion-row>
 
+            </ion-grid>
 
-  </div>
+          </ion-card-content>
+        </ion-card>
 
+      </ion-col>
+
+    </ion-row>
+    <ion-row>
+
+      <ion-col>
+
+        <ion-card>
+        	<ion-card-header>
+				<ion-card-title>
+					Add New Event
+				</ion-card-title>
+        	</ion-card-header>
+        	<ion-card-content>
+				
+				<ion-grid>
+					<ion-row>
+						<ion-col>
+							
+							<ion-label>
+								Event Title
+							</ion-label>
+							
+						</ion-col>
+						<ion-col>
+							<ion-item>
+								<ion-input type="text" inputClear></ion-input>
+							</ion-item>
+						</ion-col>
+					</ion-row>
+					<ion-row>
+						<ion-col>
+							
+							<ion-label>
+								Event Start Date Time
+							</ion-label>
+							
+						</ion-col>
+						<ion-col>
+							<ion-item>
+								<!-- Time select -->
+							</ion-item>
+						</ion-col>
+					</ion-row>
+					<ion-row>
+						<ion-col>
+							
+							<ion-label>
+								Event End Date Time
+							</ion-label>
+							
+						</ion-col>
+						<ion-col>
+							<ion-item>
+								<!-- Time select -->
+							</ion-item>
+						</ion-col>
+					</ion-row>
+					<ion-row>
+						<ion-col>
+							<ion-button type="submit" style="position: relative;
+															left: 50%;
+															transform: translateX(-50%);">
+								Add Event
+							</ion-button>
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+
+          	</ion-card-content>
+        </ion-card>
+
+      </ion-col>
+      <ion-col>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              Ongoing and Incoming Events
+            </ion-card-title>
+          </ion-card-header>
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
 
 </ion-content>

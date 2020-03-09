@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterEvent } from '@angular/router';
 
+import { AlertController } from '@ionic/angular';
+
 @Component({
   selector: 'app-side-menu',
   templateUrl: './side-menu.page.html',
@@ -45,30 +47,73 @@ export class SideMenuPage implements OnInit {
       icon: '../../../assets/images/account/side-menu_icons/news.png'
     },
     {
-      title: 'Lecturer Registration',
-      url: '/side-menu/lecturer-registration',
-      icon: '../../../assets/images/account/side-menu_icons/lecturer_registration.png'
-    },
-    {
       title: 'Transportation Schedule',
       url: '/side-menu/transportation-schedule',
       icon: '../../../assets/images/account/side-menu_icons/transportation_schedule.png'
+    },
+    {
+      title: 'Lecturer Registration',
+      url: '/side-menu/lecturer-registration',
+      icon: '../../../assets/images/account/side-menu_icons/lecturer_registration.png'
     }
   ];
 
   selectedPath = '';
 
   constructor(
-    private router: Router
+    private router: Router,
+    private alertController: AlertController
   ) {
+    
     this.router.events.subscribe((event: RouterEvent) => {
       if (event && event.url) {
         this.selectedPath = event.url;
       }
     })
+
   }
 
   ngOnInit() {
   }
+
+
+  // Logout Process
+  logout(){
+
+    this.alertnotice('Confirmation ', 'Are you sure you want to logout?');
+    
+  }
+
+
+  // Alert Box Implementation (Logout)
+  async alertnotice ( title: string, content: string ) {
+
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: [
+
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log("Logout request canceled");
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            this.router.navigate(["/login"]);
+            console.log("User Logged Out");
+          }
+        }
+
+      ]
+    });
+
+    await alert.present();
+
+  }
+
 
 }

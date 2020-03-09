@@ -122,7 +122,7 @@ export class NoticesPage implements OnInit {
       header: title,
       message: content,
       buttons: ['OK']
-    })
+    });
 
     await alert.present();
 
