@@ -53,4 +53,226 @@
 
 <ion-content>
 
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              Assigned Schedule
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+
+                    <ion-card>
+                      <ion-card-header>
+                        <ion-card-title>
+                          NSBM Destination
+                        </ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>Departure</th>
+                              <th>Destination</th>
+                              <th>Departure Time</th>
+                              <th>Approximated Arrival Time</th>
+                              <th>Available Days</th>
+                              <th>Status</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Colombo</td>
+                              <td>NSBM</td>
+                              <td>7:30 AM</td>
+                              <td>8:30 AM</td>
+                              <td>All Weekdays</td>
+                              <td>Available</td>
+                              <td>
+                                <ion-button>
+                                  Edit
+                                </ion-button>
+                                <ion-button color="danger">
+                                  Remove
+                                </ion-button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                      </ion-card-content>
+                    </ion-card>
+
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    
+                    <ion-card>
+                      <ion-card-header>
+                        <ion-card-title>
+                          NSBM Departure
+                        </ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>Departure</th>
+                              <th>Destination</th>
+                              <th>Departure Time</th>
+                              <th>Approximated Arrival Time</th>
+                              <th>Available Days</th>
+                              <th>Status</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>NSBM</td>
+                              <td>Colombo</td>
+                              <td>5:30 PM</td>
+                              <td>6:30 PM</td>
+                              <td>All Weekdays</td>
+                              <td>Available</td>
+                              <td>
+                                <ion-button>
+                                  Edit
+                                </ion-button>
+                                <ion-button color="danger">
+                                  Remove
+                                </ion-button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                      </ion-card-content>
+                    </ion-card>
+
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col style="max-width: 50%;">
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              Add New Slot
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+
+            <ion-grid>
+              <ion-row>
+
+                <ion-col>
+                  <ion-label>
+                    Departure
+                  </ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-input type="text" inputClear placeholder="Enter Departure"></ion-input>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+              <ion-row>
+                
+                <ion-col>
+                  <ion-label>
+                    Arrival
+                  </ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-input type="text" inputClear placeholder="Enter Arrival"></ion-input>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+              <ion-row>
+
+                <ion-col>
+                  <ion-label>
+                    Departure Time
+                  </ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="17:00"></ion-datetime>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+              <ion-row>
+
+                <ion-col>
+                  <ion-label>
+                    Approximate Arrival Time
+                  </ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="18:00"></ion-datetime>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+              <ion-row>
+
+                <ion-col>
+                  <ion-label>
+                    Available Days
+                  </ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-select placeholder="Select Days" style="min-width: 100%;">
+                      <ion-select-option value="Monday">Monday</ion-select-option>
+                      <ion-select-option value="Tuesday">Tuesday</ion-select-option>
+                      <ion-select-option value="Wednesday">Wednesday</ion-select-option>
+                      <ion-select-option value="Thursday">Thursday</ion-select-option>
+                      <ion-select-option value="Friday">Friday</ion-select-option>
+                      <ion-select-option value="Saturday">Saturday</ion-select-option>
+                      <ion-select-option value="Sunday">Sunday</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+
+            <ion-button expand="block">
+              Add
+            </ion-button>
+            
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+
+
 </ion-content>
