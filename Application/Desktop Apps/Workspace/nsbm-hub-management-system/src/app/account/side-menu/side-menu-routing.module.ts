@@ -37,16 +37,20 @@ const routes: Routes = [
         loadChildren: '../news/news.module#NewsPageModule'
       },
       {
-        path: 'lecturer-registration',
-        loadChildren: '../lecturer-registration/lecturer-registration.module#LecturerRegistrationPageModule'
+        path: 'students',
+        loadChildren: '../students/students.module#StudentsPageModule'
+      },
+      {
+        path: 'lecturers',
+        loadChildren: '../lecturers/lecturers.module#LecturersPageModule'
       },
       {
         path: 'transportation-schedule',
         loadChildren: '../transportation-schedule/transportation-schedule.module#TransportationSchedulePageModule'
       },
       {
-        path: 'account',
-        loadChildren: '../account/account.module#AccountPageModule'
+        path: 'profile',
+        loadChildren: '../profile/profile.module#ProfilePageModule'
       },
       {
         path: 'settings',

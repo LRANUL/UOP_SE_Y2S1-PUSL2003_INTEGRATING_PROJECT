@@ -52,9 +52,14 @@ export class SideMenuPage implements OnInit {
       icon: '../../../assets/images/account/side-menu_icons/transportation_schedule.png'
     },
     {
-      title: 'Lecturer Registration',
-      url: '/side-menu/lecturer-registration',
-      icon: '../../../assets/images/account/side-menu_icons/lecturer_registration.png'
+      title: 'Students',
+      url: '/side-menu/students',
+      icon: '../../../assets/images/account/side-menu_icons/students.png'
+    },
+    {
+      title: 'Lecturers',
+      url: '/side-menu/lecturers',
+      icon: '../../../assets/images/account/side-menu_icons/lecturers.png'
     }
   ];
 

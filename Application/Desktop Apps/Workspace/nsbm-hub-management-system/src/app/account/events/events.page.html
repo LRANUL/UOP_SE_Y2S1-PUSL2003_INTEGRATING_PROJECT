@@ -1,8 +1,55 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Events</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-header style="height: 70px;">
+	<ion-toolbar>
+	  <ion-title style="margin-top: 15px;">Events</ion-title>
+  
+	  <!-- Header Contents Section -->
+	  <div style="position: absolute;
+				  right: 25px;
+				  top: 8px;">
+		<!-- Notification Bell, Unread Notifications Count, Drop Down -->          
+		<div>
+		  <button ion-button style="width: 100px;
+						height: 45px;
+						background-color: white;">
+  
+			<!-- Notification Bell Icon -->
+			<div style="height: 42px;
+						width: 42px;
+						border-radius: 5px;
+						position: absolute;
+						top: 3px;
+						left: 10px;"> 
+			  <ion-icon name="notifications-outline" style="font-size: 35px;
+															position: absolute;
+															top: 5px;
+															left: 0px;"></ion-icon>
+			</div>
+  
+			<!-- Unread Notifications Count -->
+			<div style="position: absolute;
+						top: 5px;
+						left: 40px;
+						color: red;">
+			  <ion-label>
+				10
+			  </ion-label>
+			</div>
+  
+			<!-- Arrow Icon -->
+			<div style="position: absolute;
+						top: 13px;
+						left: 70px;
+						font-size: 26px;">
+			  <ion-icon name="arrow-down-outline"></ion-icon>
+			</div>
+			
+		  </button>
+		</div>
+	  </div>
+  
+	  
+	</ion-toolbar>
+  </ion-header>
 
 <ion-content>
 
