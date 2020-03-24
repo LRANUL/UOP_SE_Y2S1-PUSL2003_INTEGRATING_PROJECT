@@ -22,7 +22,7 @@ export class SideMenuPage implements OnInit {
       icon: '../../../assets/images/account/side-menu_icons/notices.png'
     },
     {
-      title: 'Lecture Scedule',
+      title: 'Lecture Schedule',
       url: '/side-menu/lecture-schedule',
       icon: '../../../assets/images/account/side-menu_icons/lecture_schedule.png'
     },
