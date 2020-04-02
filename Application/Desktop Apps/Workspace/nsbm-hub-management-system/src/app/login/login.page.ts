@@ -7,7 +7,7 @@ import { RegisterModalPage } from './register-modal/register-modal.page';
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LoginCredential } from '../types';
-import { LoginService } from '../login.service';
+import { LoginService } from '../services/login.service';
 import { Router } from '@angular/router';
 
 

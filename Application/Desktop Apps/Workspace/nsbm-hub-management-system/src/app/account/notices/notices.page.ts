@@ -9,7 +9,7 @@ import { EventNoticeData, NoticeData } from '../../types';
 
 import { AlertController } from '@ionic/angular';
 
-import { NoticesService } from '../../notices.service';
+import { NoticesService } from '../../services/notices.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { firestore } from 'firebase';
 
