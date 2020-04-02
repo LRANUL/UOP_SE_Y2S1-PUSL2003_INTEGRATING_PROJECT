@@ -14,6 +14,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AboutModalPageModule } from './login/about-modal/about-modal.module';
+import { RegisterModalPageModule } from './login/register-modal/register-modal.module';
 
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -31,7 +32,8 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
     AngularFireStorageModule,
     AngularFirestoreModule,
     AngularFireDatabaseModule,
-    AboutModalPageModule
+    AboutModalPageModule,
+    RegisterModalPageModule
   ],
   providers: [
     StatusBar,

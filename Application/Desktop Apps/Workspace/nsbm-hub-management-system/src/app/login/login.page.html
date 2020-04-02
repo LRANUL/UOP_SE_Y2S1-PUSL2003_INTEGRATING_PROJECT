@@ -9,16 +9,16 @@
 <ion-content>
   <div style="background-color: white;">
 
-    <button ion-button style="color: white;
-                              background-color: #35C5E8;
-                              padding: 10px;
-                              border-radius: 20px;
-                              width: 130px;
-                              height: 40px;
-                              font-size: 20px;
-                              position: absolute;
-                              top: 20px;
-                              right: 70px;">
+    <button ion-button (click)="OpenRegisterModal()" style="color: white;
+                                                        background-color: #35C5E8;
+                                                        padding: 10px;
+                                                        border-radius: 20px;
+                                                        width: 130px;
+                                                        height: 40px;
+                                                        font-size: 20px;
+                                                        position: absolute;
+                                                        top: 20px;
+                                                        right: 70px;">
       <ion-icon name="add-outline" style="margin-right: 10px;
                                           position: absolute;
                                           left: 10px;"></ion-icon>
@@ -138,7 +138,7 @@
       </ion-card-content>
     </ion-card>
 
-    <button ion-button (click)="OpenModal()" style="color: white;
+    <button ion-button (click)="OpenAboutModal()" style="color: white;
                                                     background-color: #848484;
                                                     padding: 10px;
                                                     border-radius: 5px;

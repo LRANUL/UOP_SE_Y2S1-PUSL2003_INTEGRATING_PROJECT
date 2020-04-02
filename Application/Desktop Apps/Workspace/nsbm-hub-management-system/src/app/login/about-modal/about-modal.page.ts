@@ -9,9 +9,11 @@ import {ModalController} from '@ionic/angular';
 })
 export class AboutModalPage implements OnInit {
 
-  constructor(private modalController:ModalController) { }
+  constructor(
+    private modalController:ModalController
+  ) { }
 
-  CloseModal(){ // Implementation for closing the 'about' modal
+  CloseAboutModal(){ // Implementation for closing the 'about' modal
     this.modalController.dismiss();
   }
 

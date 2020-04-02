@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { ModalController } from '@ionic/angular';
 import { AboutModalPage } from './about-modal/about-modal.page';
+import { RegisterModalPage } from './register-modal/register-modal.page';
+
+
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LoginCredential } from '../types';
 import { LoginService } from '../login.service';
@@ -79,8 +82,14 @@ export class LoginPage implements OnInit {
 
 
 
-  OpenModal(){  // Implementation for opening the 'about' modal
+  OpenAboutModal(){  // Implementation for opening the 'about' modal
     this.modalController.create({component:AboutModalPage}).then((modalElement)=>{
+      modalElement.present();
+    })
+  }
+
+  OpenRegisterModal(){  // Implementation for opening the 'register' modal
+    this.modalController.create({component:RegisterModalPage}).then((modalElement)=>{
       modalElement.present();
     })
   }
