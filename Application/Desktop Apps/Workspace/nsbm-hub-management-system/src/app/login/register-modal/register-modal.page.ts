@@ -78,7 +78,6 @@ export class RegisterModalPage implements OnInit {
           text: 'Continue',
           handler: () => {
             this.doNewUserRegistration(value);
-
           }
         }
 
@@ -89,12 +88,28 @@ export class RegisterModalPage implements OnInit {
 
   }
 
+  // Alert Box Implementation
+  async alertnotice ( title: string, content: string ) {
+
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+
+  }
+
 
 
   doNewUserRegistration(value){
-console.log("1");
-
     this.loginService.newUserRegistorDetailsVerification(value);
+
+    this.alertnotice("Details Sent", "New user details were successfully sent.");
+
+    // Discarding entered details on the form
+    this.newUserRegistrationForm.reset();
   }
 
 }
