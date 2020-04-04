@@ -67,7 +67,7 @@
         <ion-row>
           <ion-col>
 
-            <ion-card style="height: 460px;">
+            <ion-card style="height: 430px;">
               <ion-card-header>
                 <h4>Today's Lectures</h4>
               </ion-card-header>
@@ -75,7 +75,7 @@
 
                 <ion-card style="height: 180px;
                                 width: 250px;
-                                margin-top: -5px;">
+                                margin-top: -10px;">
                   <ion-card-header>
                     SOFT255SL
                   </ion-card-header>
@@ -91,7 +91,7 @@
                 <ion-card style="height: 170px;
                                 width: 250px;
                                 position: absolute;
-                                ">
+                                margin-top: -5px;">
                   <ion-card-header>
                     SOFT255SL
                   </ion-card-header>
@@ -112,20 +112,63 @@
         <ion-row>
           <ion-col>
 
-            <ion-card style="height: 400px;
-                            margin-top: -5px;
-                            width: 99%;">
+            <ion-card style="height: 660px;
+                            margin-top: -5px;">
               <ion-card-header>
-                <h4>Weeks Lectures</h4>
+                <h4>Upcoming Lectures</h4>
               </ion-card-header>
+              <ion-card-content>
+
+                <div style="position: absolute;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            top: -40px;">
+                
+                  <ion-button fill="clear" (click)="previousMonthLecture()" style="margin-top: -12px;">
+                    <ion-icon name="arrow-back"></ion-icon>
+                  </ion-button>
+
+                  <ion-label style="font-size: 20px;">
+                    {{ viewingMonthLecture }}
+                  </ion-label>
+
+                  <ion-button fill="clear" (click)="nextMonthLecture()" style="margin-top: -12px;">
+                    <ion-icon name="arrow-forward"></ion-icon>
+                  </ion-button>
+
+                </div>
+                
+
+                <div style="overflow-y: scroll;
+                            margin-top: -10px;">
+                  <div style="height: 580px;">
+                    <calendar [eventSource]="eventSourceLecture"
+                    [calendarMode]="calendarLecture.mode"
+                    [currentDate]="calendarLecture.currentDate"
+                    (onCurrentDateChanged)="onCurrentDateChangedLecture($event)"
+                    (onRangeChanged)="reloadSourceLecture(startTime, endTime)"
+                    (onEventSelected)="onEventSelectedLecture($event)"
+                    (onTitleChanged)="onViewTitleChangedLecture($event)"
+                    (onTimeSelected)="onTimeSelectedLecture($event)"
+                    startHour="9"
+                    endHour="17"
+                    step="30"
+                    startingDayWeek="1" id="LectureCalendar">
+                  
+                    </calendar>
+                  </div>
+                </div>
+
+              </ion-card-content>
             </ion-card>
 
           </ion-col>
+        </ion-row>
+        <ion-row>
           <ion-col>
 
-            <ion-card style="height: 400px;
-                            margin-top: -5px;">
-              <ion-card-header style="height: 400px;">
+            <ion-card style="height: 400px;">
+              <ion-card-header>
                 <h4>Notices from Lecturers</h4>
               </ion-card-header>
               <ion-card-content>
@@ -140,27 +183,68 @@
             </ion-card>
 
           </ion-col>
-  
-        </ion-row>
-        <ion-row>
           <ion-col>
 
-            <ion-card style="height: 300px;
-                            margin-top: -5px;
-                            width: 99%;">
+            <ion-card style="height: 400px;">
               <ion-card-header>
                 <h4>NEWS</h4>
               </ion-card-header>
             </ion-card>
 
           </ion-col>
+        </ion-row>
+        <ion-row>
           <ion-col>
 
-            <ion-card style="height: 300px;
-                            margin-top: -5px;">
+            <ion-card style="margin-top: -5px;
+                            height: 570px;">
               <ion-card-header>
                 <h4>Events</h4>
               </ion-card-header>
+              <ion-card-content>
+              
+                
+                <div style="position: absolute;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            top: -40px;">
+                
+                  <ion-button fill="clear" (click)="previousMonthEvent()" style="margin-top: -12px;">
+                    <ion-icon name="arrow-back"></ion-icon>
+                  </ion-button>
+
+                  <ion-label style="font-size: 20px;">
+                    {{ viewingMonthEvent }}
+                  </ion-label>
+
+                  <ion-button fill="clear" (click)="nextMonthEvent()" style="margin-top: -12px;">
+                    <ion-icon name="arrow-forward"></ion-icon>
+                  </ion-button>
+
+                </div>
+                
+
+                <div style="overflow-y: scroll;
+                            margin-top: -10px;">
+                  <div style="height: 500px;">
+                    <calendar [eventSource]="eventSourceEvent"
+                    [calendarMode]="calendarEvent.mode"
+                    [currentDate]="calendarEvent.currentDate"
+                    (onCurrentDateChanged)="onCurrentDateChangedEvent($event)"
+                    (onRangeChanged)="reloadSourceEvent(startTime, endTime)"
+                    (onEventSelected)="onEventSelectedEvent($event)"
+                    (onTitleChanged)="onViewTitleChangedEvent($event)"
+                    (onTimeSelected)="onTimeSelectedEvent($event)"
+                    startHour="9"
+                    endHour="17"
+                    step="30"
+                    startingDayWeek="1" id="EventCalendar">
+                  
+                    </calendar>
+                  </div>
+                </div>
+
+              </ion-card-content>
             </ion-card>
 
           </ion-col>
@@ -194,5 +278,5 @@
 
   </ion-grid>
 
-
+  
 </ion-content>

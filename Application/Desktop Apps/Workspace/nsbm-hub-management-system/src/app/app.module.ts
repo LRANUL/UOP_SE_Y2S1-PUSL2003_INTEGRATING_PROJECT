@@ -23,6 +23,8 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { LoginService } from './services/login.service';
 import { NoticesService } from './services/notices.service';
 
+import { NgCalendarModule } from 'ionic2-calendar';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -36,7 +38,8 @@ import { NoticesService } from './services/notices.service';
     AngularFirestoreModule,
     AngularFireDatabaseModule,
     AboutModalPageModule,
-    RegisterModalPageModule
+    RegisterModalPageModule,
+    NgCalendarModule
   ],
   providers: [
     StatusBar,
