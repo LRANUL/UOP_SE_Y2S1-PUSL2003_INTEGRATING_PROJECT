@@ -66,7 +66,102 @@
           </ion-card-header>
           <ion-card-content>
 
+            <ion-grid>
+              <ion-row>
+                <ion-col size="5">
+                  <ion-row>
+                    <ion-col>
+                      <ion-item>
+                        <ion-label style="margin-left: 15px;">Batch</ion-label>
+                        <ion-select placeholder="Select Batch" okText="Select" cancelText="Cancel">
+                          <ion-select-option value="#">#</ion-select-option>
+                        </ion-select>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col>
+                      <ion-item style="margin-top: 10px;">
+                        <ion-label style="margin-left: 15px;">Degree Program</ion-label>
+                        <ion-select placeholder="Select Degree Program" okText="Select" cancelText="Cancel">
+                          <ion-select-option value="#">#</ion-select-option>
+                        </ion-select>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col>
+                      <ion-button expand="block">
+                        <ion-icon name="search-outline"></ion-icon>
+                        <ion-label style="color: white;
+                                          margin-left: 10px;">
+                          SEARCH
+                        </ion-label>
+                      </ion-button>          
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+                  <!-- Vertical line in the center of the page -->
+                  <div style="border-left: rgb(236, 236, 236) solid 2px;
+                              height: 105%;
+                              position: absolute;
+                              left: 41.7%;
+                              top: -40px;
+                              transform: translateX(-68.3%);">
+                  </div>
+                <ion-col size="7">
+                  
+                  <div style="position: absolute;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            top: -40px;">
+                
+                  <ion-button fill="clear" (click)="previousMonthPSCalendar()" style="margin-top: -12px;">
+                    <ion-icon name="arrow-back"></ion-icon>
+                  </ion-button>
 
+                  <ion-label style="font-size: 20px;">
+                    {{ viewingMonthPSCalendar }}
+                  </ion-label>
+
+                  <ion-button fill="clear" (click)="nextMonthPSCalendar()" style="margin-top: -12px;">
+                    <ion-icon name="arrow-forward"></ion-icon>
+                  </ion-button>
+
+                </div>
+                
+
+                <div style="overflow-y: scroll;
+                            margin-top: -10px;">
+                  <div style="height: 500px;">
+                    <calendar [eventSource]="eventSourcePSCalendar"
+                    [calendarMode]="calendarPSCalendar.mode"
+                    [currentDate]="calendarPSCalendar.currentDate"
+                    (onCurrentDateChanged)="onCurrentDateChangedPSCalendar($event)"
+                    (onRangeChanged)="reloadSourcePSCalendar(startTime, endTime)"
+                    (onEventSelected)="onEventSelectedPSCalendar($event)"
+                    (onTitleChanged)="onViewTitleChangedPSCalendar($event)"
+                    (onTimeSelected)="onTimeSelectedPSCalendar($event)"
+                    startHour="9"
+                    endHour="17"
+                    step="30"
+                    startingDayWeek="1" id="publishedSemesterCalendar">
+                  
+                    </calendar>
+                  </div>
+                </div>
+
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            
+
+            
+
+            
+            
+           
 
           </ion-card-content>
         </ion-card>
@@ -427,8 +522,50 @@
                 <ion-col size="12" size-sm="12" size-md="12" size-lg="6">
                   
                   <ion-card>
-                    <ion-card-content>
+                    <ion-card-header>
                       Active Calendar
+                    </ion-card-header>
+                    <ion-card-content>
+                      
+                      <div style="position: absolute;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            top: -40px;">
+                
+                        <ion-button fill="clear" (click)="previousMonthASCalander()" style="margin-top: -12px;">
+                          <ion-icon name="arrow-back"></ion-icon>
+                        </ion-button>
+
+                        <ion-label style="font-size: 20px;">
+                          {{ viewingMonthASCalander }}
+                        </ion-label>
+
+                        <ion-button fill="clear" (click)="nextMonthASCalander()" style="margin-top: -12px;">
+                          <ion-icon name="arrow-forward"></ion-icon>
+                        </ion-button>
+
+                      </div>
+
+                      <div style="overflow-y: scroll;
+                                  margin-top: -10px;">
+                        <div style="height: 500px;">
+                          <calendar [eventSource]="eventSourceASCalander"
+                          [calendarMode]="calendarASCalander.mode"
+                          [currentDate]="calendarASCalander.currentDate"
+                          (onCurrentDateChanged)="onCurrentDateChangedASCalander($event)"
+                          (onRangeChanged)="reloadSourceASCalander(startTime, endTime)"
+                          (onEventSelected)="onEventSelectedASCalander($event)"
+                          (onTitleChanged)="onViewTitleChangedASCalander($event)"
+                          (onTimeSelected)="onTimeSelectedASCalander($event)"
+                          startHour="9"
+                          endHour="17"
+                          step="30"
+                          startingDayWeek="1" id="ActiveSemesterCalendar">
+                        
+                          </calendar>
+                        </div>
+                      </div>
+
                     </ion-card-content>
                   </ion-card>
 

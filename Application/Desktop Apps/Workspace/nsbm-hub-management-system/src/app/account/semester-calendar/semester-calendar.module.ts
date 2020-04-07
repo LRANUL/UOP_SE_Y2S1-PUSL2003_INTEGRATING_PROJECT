@@ -8,12 +8,15 @@ import { SemesterCalendarPageRoutingModule } from './semester-calendar-routing.m
 
 import { SemesterCalendarPage } from './semester-calendar.page';
 
+import { NgCalendarModule } from 'ionic2-calendar';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SemesterCalendarPageRoutingModule
+    SemesterCalendarPageRoutingModule,
+    NgCalendarModule
   ],
   declarations: [SemesterCalendarPage]
 })

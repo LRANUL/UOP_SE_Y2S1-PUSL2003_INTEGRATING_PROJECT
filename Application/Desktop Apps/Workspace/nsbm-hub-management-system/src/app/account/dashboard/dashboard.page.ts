@@ -16,18 +16,18 @@ export class DashboardPage implements OnInit {
 
   constructor(
     private dashboardService: DashboardService,
-    private firestore: AngularFirestore
+    private fireStore: AngularFirestore
   ) {
 
     // Retrieving the lecture sessions from the firestore database
-    this.firestore.collection("sessions/sessionTypes/lectureSessions").snapshotChanges().subscribe(lectureSlots => {
+    this.fireStore.collection("sessions/sessionTypes/lectureSessions").snapshotChanges().subscribe(lectureSlots => {
       this.eventSourceLecture = []; // Clearing the existing events on the calendar before syncing 
       lectureSlots.forEach(snap => {
         let eventLecture:any = snap.payload.doc.data();
         eventLecture.id = snap.payload.doc.id;
         eventLecture.title = eventLecture.ModuleCode + "-" + eventLecture.ModuleTitle + " | Status: " + eventLecture.Status;
-        eventLecture.startTime = eventLecture.StartTime.toDate();
-        eventLecture.endTime = eventLecture.EndTime.toDate();
+        eventLecture.startTime = eventLecture.StartTime.toDate().calendar();
+        eventLecture.endTime = eventLecture.EndTime.toDate().calendar();
 
         console.log(eventLecture)
 
@@ -36,7 +36,7 @@ export class DashboardPage implements OnInit {
     });
 
     // Retrieving the event sessions from the firestore database
-    this.firestore.collection("sessions/sessionTypes/eventSessions").snapshotChanges().subscribe(eventSlots => {
+    this.fireStore.collection("sessions/sessionTypes/eventSessions").snapshotChanges().subscribe(eventSlots => {
       this.eventSourceEvent = []; // Clearing the exisiting events on the calendar before syncing
       eventSlots.forEach(snap => {
         let event:any = snap.payload.doc.data();

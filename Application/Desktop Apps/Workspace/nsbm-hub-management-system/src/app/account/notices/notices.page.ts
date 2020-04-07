@@ -154,9 +154,9 @@ export class NoticesPage implements OnInit {
     this.isFileUploaded = false;
 
     // Collection set of where the eventNoticeData will be saved 
-    this.imageCollectionStudent = database.collection<EventNoticeData>('notices-PO-To-Students');
+    this.imageCollectionStudent = database.collection<EventNoticeData>('notices/noticeTypes/notices-PO-To-Students');
 
-    this.imageCollectionLecturer = database.collection<EventNoticeData>('notices-PO-To-Lecturers');
+    this.imageCollectionLecturer = database.collection<EventNoticeData>('notices/noticeTypes/notices-PO-To-Lecturers');
   }
 
 
