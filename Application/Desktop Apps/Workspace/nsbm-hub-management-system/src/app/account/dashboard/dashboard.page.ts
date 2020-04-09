@@ -25,9 +25,9 @@ export class DashboardPage implements OnInit {
       lectureSlots.forEach(snap => {
         let eventLecture:any = snap.payload.doc.data();
         eventLecture.id = snap.payload.doc.id;
-        eventLecture.title = eventLecture.ModuleCode + "-" + eventLecture.ModuleTitle + " | Status: " + eventLecture.Status;
-        eventLecture.startTime = eventLecture.StartTime.toDate().calendar();
-        eventLecture.endTime = eventLecture.EndTime.toDate().calendar();
+        eventLecture.title = eventLecture.moduleCode + "-" + eventLecture.moduleTitle + " | Status: " + eventLecture.status;
+        eventLecture.startTime = eventLecture.startTime.toDate();
+        eventLecture.endTime = eventLecture.endTime.toDate();
 
         console.log(eventLecture)
 
@@ -42,8 +42,8 @@ export class DashboardPage implements OnInit {
         let event:any = snap.payload.doc.data();
         event.id = snap.payload.doc.id;
         event.title = event.Title;
-        event.startTime = event.StartTime.toDate();
-        event.endTime = event.EndTime.toDate();
+        event.startTime = event.startTime.toDate();
+        event.endTime = event.endTime.toDate();
 
         console.log(event);
 
