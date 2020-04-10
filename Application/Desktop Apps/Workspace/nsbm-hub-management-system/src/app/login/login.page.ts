@@ -82,16 +82,28 @@ export class LoginPage implements OnInit {
 
 
 
-  OpenAboutModal(){  // Implementation for opening the 'about' modal
-    this.modalController.create({component:AboutModalPage}).then((modalElement)=>{
+  async OpenAboutModal(){  // Implementation for opening the 'about' modal
+
+    this.modalController.create({
+      component:AboutModalPage,
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    }).then((modalElement)=>{
       modalElement.present();
-    })
+    });
+    
   }
 
   OpenRegisterModal(){  // Implementation for opening the 'register' modal
-    this.modalController.create({component:RegisterModalPage}).then((modalElement)=>{
+
+    this.modalController.create({
+      component:RegisterModalPage,
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    }).then((modalElement)=>{
       modalElement.present();
-    })
+    });
+    
   }
 
   ngOnInit() {

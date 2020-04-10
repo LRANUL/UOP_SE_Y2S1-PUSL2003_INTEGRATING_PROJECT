@@ -103,6 +103,7 @@
                             <ion-row>
                               <ion-col>
                                 <ion-select placeholder="Select Year" okText="Select" cancelText="Cancel" formControlName="academicYearYear" style="max-width: 100% !important;">
+                                  <ion-select-option value="1">Year 1</ion-select-option>
                                   <ion-select-option value="2">Year 2</ion-select-option>
                               </ion-select>
                               </ion-col>
@@ -130,8 +131,41 @@
                       </ion-col>
                     </ion-row>
                   </form>
+
+                  <ion-spinner name="dots" style="position: absolute;
+                                              left: 50%;
+                                              transform: translateX(-50%);
+                                              margin-top: -25px;
+                                              height: 100px;
+                                              width: 100px;" *ngIf="loadingSpinnerPLS"></ion-spinner>
                   
+                  <ion-grid style="margin-top: 50px;
+                                  padding-top: 10px;">
+                    <ion-row>
+                      <ion-col>
+                        <ion-button style="min-width: 100%;" color="medium">
+                          <ion-icon name="refresh-outline"></ion-icon>
+                          <ion-label style="color: white;
+                                            margin-left: 10px;">
+                            Generate PDF
+                          </ion-label>
+                        </ion-button>
+                      </ion-col>
+                      <ion-col>
+                        <ion-button style="min-width: 100%;" color="medium">
+                          <ion-icon name="cloud-download-outline"></ion-icon>
+                          <ion-label style="color: white;
+                                            margin-left: 10px;">
+                            Download PDF
+                          </ion-label>
+                        </ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+
+
                 </ion-col>
+
                   <!-- Vertical line in the center of the page -->
                   <div style="border-left: rgb(236, 236, 236) solid 2px;
                               height: 105%;
@@ -140,87 +174,106 @@
                               top: -40px;
                               transform: translateX(-68.3%);">
                   </div>
+
                 <ion-col size="7">
+
+                  <!-- Reset Button -->
+                  <ion-button style="width: 90px;
+                                    position: absolute;
+                                    top: -55px;
+                                    right: -1.5%;" color="dark" fill="outline" size="small" (click)="resetSearchAssignedSemesterCalendar()"> 
+                    <ion-icon name="refresh-outline"></ion-icon>
+                    <ion-label style="color: rgb(59, 59, 59);
+                                      margin-left: 5px;">
+                      Reset
+                    </ion-label>
+                  </ion-button>
                   
                   <div style="position: absolute;
                             left: 50%;
                             transform: translateX(-50%);
                             top: -40px;">
                 
-                  <ion-button fill="clear" (click)="previousMonthPSCalendar()" style="margin-top: -12px;">
-                    <ion-icon name="arrow-back"></ion-icon>
-                  </ion-button>
+                    <ion-button fill="clear" (click)="previousMonthPSCalendar()" style="margin-top: -12px;">
+                      <ion-icon name="arrow-back"></ion-icon>
+                    </ion-button>
 
-                  <ion-label style="font-size: 20px;">
-                    {{ viewingMonthPSCalendar }}
-                  </ion-label>
+                    <ion-label style="font-size: 20px;">
+                      {{ viewingMonthPSCalendar }}
+                    </ion-label>
 
-                  <ion-button fill="clear" (click)="nextMonthPSCalendar()" style="margin-top: -12px;">
-                    <ion-icon name="arrow-forward"></ion-icon>
-                  </ion-button>
+                    <ion-button fill="clear" (click)="nextMonthPSCalendar()" style="margin-top: -12px;">
+                      <ion-icon name="arrow-forward"></ion-icon>
+                    </ion-button>
 
-                </div>
-                
-                <div style="overflow-y: scroll;
-                                  margin-top: 20px;">
-                    <div style="height: 550px;">
-                    <calendar [eventSource]="eventSourcePSCalendar"
-                    [calendarMode]="calendarPSCalendar.mode"
-                    [currentDate]="calendarPSCalendar.currentDate"
-                    (onCurrentDateChanged)="onCurrentDateChangedPSCalendar($event)"
-                    (onRangeChanged)="reloadSourcePSCalendar(startTime, endTime)"
-                    (onEventSelected)="onEventSelectedPSCalendar($event)"
-                    (onTitleChanged)="onViewTitleChangedPSCalendar($event)"
-                    (onTimeSelected)="onTimeSelectedPSCalendar($event, searchSemesterCalendar.value)"
-                    startHour="9"
-                    endHour="17"
-                    step="30"
-                    startingDayWeek="1" id="publishedSemesterCalendar">
-                  
-                    </calendar>
                   </div>
-                </div>
-
-                <script>
-                  
-                </script>
-
-                <div style="position: absolute;
-                            top: 305px;
-                            right: 3%;">
-
-                  <ion-button size="small" title="Edit Lecture Session" color="secondary" style="width: 40px;
-                                                                                                height: 40px;
-                                                                                                display: inline-block;
-                                                                                                border-radius: 5px;
-                                                                                                font-size: 100%;">
-                    <ion-icon name="create-outline"></ion-icon>
-                  </ion-button>
-                  <a href="#" data-toggle="tooltip" title="Remove Lecture Session">
-                  <ion-button size="small" title="Remove Lecture Session" color="danger" style="width: 40px;
-                                                                                                height: 40px;
-                                                                                                margin-left: 5px;
-                                                                                                display: inline-block;
-                                                                                                border-radius: 5px;
-                                                                                                font-size: 100%;">
-                    <ion-icon name="trash-outline" style="margin-left: -1px;"></ion-icon>
-                    
-                  </ion-button>
-                </a>
-                </div>
-
                 
+                  <div style="overflow-y: scroll;">
+                      <div style="height: 450px;">
+                      <calendar [eventSource]="eventSourcePSCalendar"
+                      [calendarMode]="calendarPSCalendar.mode"
+                      [currentDate]="calendarPSCalendar.currentDate"
+                      (onCurrentDateChanged)="onCurrentDateChangedPSCalendar($event)"
+                      (onRangeChanged)="reloadSourcePSCalendar(startTime, endTime)"
+                      (onEventSelected)="onEventSelectedPSCalendar($event)"
+                      (onTitleChanged)="onViewTitleChangedPSCalendar($event)"
+                      (onTimeSelected)="onTimeSelectedPSCalendar($event, searchSemesterCalendar.value)"
+                      startHour="9"
+                      endHour="17"
+                      step="30"
+                      startingDayWeek="1" id="publishedSemesterCalendar">
+                    
+                      </calendar>
+                    </div>
+                  </div>
 
 
+                  <ion-grid style="width: 140px;
+                                  position: absolute;
+                                  top: 282px;
+                                  right: 1%;
+                                  padding: 0;
+                                  margin: 0;">
+                    <ion-row *ngFor="let session of numberOfLectureSessionsDocuments">
+                      <ion-col>
+                        <ion-button size="small" title="Lecture Session Read More" color="secondary" (click)="moreDetailsLectureSession($event, session)" style="width: 40px;
+                                                                                                                                                                    height: 40px;
+                                                                                                                                                                    border-radius: 5px;
+                                                                                                                                                                    font-size: 100%;
+                                                                                                                                                                    margin-bottom: -5px;
+                                                                                                                                                                    margin-left: -10px;">
+                          <ion-icon name="document-text"></ion-icon>
+                        </ion-button>
+                      </ion-col>
+                      <ion-col>
+                        <ion-button size="small" title="Edit Lecture Session" color="warning" (click)="editLectureSession(session.id)" style="width: 40px;
+                                                                                                                                              height: 40px;
+                                                                                                                                              border-radius: 5px;
+                                                                                                                                              font-size: 100%;
+                                                                                                                                              margin-bottom: -5px;
+                                                                                                                                              margin-left: -12px;">
+                          <ion-icon name="create" style="color: white;"></ion-icon>
+                        </ion-button>
+                      </ion-col>
+                      <ion-col>
+                        <ion-button size="small" title="Remove Lecture Session" color="danger"
+                          (click)="removeLectureSession('Confirmation', 'This lecture session will be removed, do you want to continue?', session.id)" style="width: 40px;
+                                                                                                                                                              height: 40px;
+                                                                                                                                                              border-radius: 5px;
+                                                                                                                                                              font-size: 100%;
+                                                                                                                                                              margin-bottom: -5px;
+                                                                                                                                                              margin-left: -14px;">
+                          <ion-icon name="trash" style="margin-left: -1px;"></ion-icon>
+                        </ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+
+
+              
                 </ion-col>
               </ion-row>
             </ion-grid>
-
-            
-
-            <!--<ion-label >
-              
-            </ion-label>-->
 
             
             
@@ -245,7 +298,6 @@
           <ion-card-content>
 
             <ion-grid>
-
               <ion-row>
                 <ion-col size="12" size-sm="12" size-lg="6">
                   
@@ -519,7 +571,7 @@
                       <div style="position: absolute;
                             left: 50%;
                             transform: translateX(-50%);
-                            top: -30px;">
+                            top: -50px;">
                 
                         <ion-button fill="clear" (click)="previousMonthASCalendar()" style="margin-top: -12px;">
                           <ion-icon name="arrow-back"></ion-icon>

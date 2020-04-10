@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { AlertController, LoadingController, NavController, ModalController, PopoverController } from '@ionic/angular';
 import { async } from 'rxjs/internal/scheduler/async';
+
+import { MatTooltipModule } from '@angular/material';
+
+import { EditLectureSessionModalPage } from './edit-lecture-session-modal/edit-lecture-session-modal.page';
+import { LectureSchedulePage } from '../lecture-schedule/lecture-schedule.page';
+import { MoreDetailsSessionPopoverPage } from './more-details-session-popover/more-details-session-popover.page';
 
 @Component({
   selector: 'app-semester-calendar',
@@ -15,36 +21,36 @@ export class SemesterCalendarPage implements OnInit {
 
   assignNewLectureSlotSC: FormGroup;
 
+  loadingSpinnerPLS: Boolean = false;
+
   constructor(
     private fireStore: AngularFirestore,
     private formBuilder: FormBuilder,
     private alertController: AlertController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private navController: NavController,
+    private modalController: ModalController,
+    private popoverController: PopoverController
   ) {
 
-    
-    
-  
 
-   }
+  }
 
-   
-   
+
 
   ngOnInit() {
 
     this.publishedLecureSlots;
 
 
-    $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();
-    });
     
+    
+
     this.searchSemesterCalendar = this.formBuilder.group({
-      batch: new FormControl(''),
-      degreeProgram: new FormControl(''),
-      academicYearYear: new FormControl(''),
-      academicYearSemester: new FormControl('')
+      batch: new FormControl('', Validators.required),
+      degreeProgram: new FormControl('', Validators.required),
+      academicYearYear: new FormControl('', Validators.required),
+      academicYearSemester: new FormControl('', Validators.required)
     })
 
     this.assignNewLectureSlotSC = this.formBuilder.group({
@@ -65,16 +71,6 @@ export class SemesterCalendarPage implements OnInit {
 
   }
 
-  // Laoding Spinner Implementation
-  async screenLoadingSpinner() {
-    const loading = await this.loadingController.create({
-      message: 'Retrieving Content, Please wait...',
-      duration: 2000
-    });
-    await loading.present();
-
-    const { role, data } = await loading.onDidDismiss();
-  }
 
 
   // Alert Box Implementation
@@ -91,13 +87,18 @@ export class SemesterCalendarPage implements OnInit {
   }
 
 
-
+  numberOfLectureSessions;
+  
 
   publishedLecureSlots;
 
+  // Declaring an array to initialize the number of events (lecture sessions) and their ids
+  numberOfLectureSessionsDocuments = [];
 
-
+  // Retriving published lecture sessions
   doSearchSemesterCalendar(value){
+
+    this.loadingSpinnerPLS = true;
 
     // Retrieving the published lecture sessions from the firestore database
     this.fireStore.collection("sessions/sessionTypes/lectureSessions", ref => ref
@@ -119,14 +120,90 @@ export class SemesterCalendarPage implements OnInit {
       });
     });
 
-    
 
-    this.screenLoadingSpinner();
+
+    // Setting loading dots to false after the contents has loaded.
+    this.fireStore.collection("sessions/sessionTypes/lectureSessions", ref => ref
+      .where("batch", "==", value.batch)
+      .where("degreeProgram", "==", value.degreeProgram)
+      .where("academicYear", "==", parseInt(value.academicYearYear)) /* ( parseInt() ) Converting value data type from the form, string to int */
+      .where("academicSemester", "==", parseInt(value.academicYearSemester))).snapshotChanges().subscribe(() => this.loadingSpinnerPLS = false);
 
     this.alertnotice("Lecture Sessions Retrieval", "Available lecture sessions are placed on the calendar.");
     
   }
 
+  // More details of lecture sessions popover
+  async moreDetailsLectureSession(ev: Event, value){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: MoreDetailsSessionPopoverPage,
+      componentProps: {
+        lectureSessionId: value.id,
+        lecturer: value.lecturer,
+        lecturehall: value.lectureHall
+      },
+      event: ev
+    });
+
+    moreDetailsLectureSessionPopover.present();
+  }
+
+
+  // Editing lecture sessions modal calling, opening modal
+  async editLectureSession(value){
+    console.log(value);
+
+    const editLectureSessionModal = await this.modalController.create({
+      component: EditLectureSessionModalPage,
+      // Passing value to the modal using 'componentProps'
+      componentProps: {
+        lectureSessionId: value
+      },
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+
+    editLectureSessionModal.present();
+  }
+
+
+  // Confirm Box Implementation (Remove existing lecture session)
+  async removeLectureSession ( title: string, content: string, value) {
+
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: [
+
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log("Alert Box: Remove Lecture Session Request Denied");
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            console.log("Alert Box: Remove Lecture Session Request Accepted");
+
+            // Implementation of deleting a lecture session from firestore
+            this.fireStore.doc("sessions/sessionTypes/lectureSessions/" + value).delete();
+
+          }
+        }
+
+      ]
+    });
+
+    await alert.present();
+
+  }
+
+
+
+
+  // Publishing new lecture sessions and retrieving published lecture sessions 
   doPublishLectureSlotSC(value){
 
     // Retrieving the new lecture sessions from the firestore database
@@ -139,7 +216,7 @@ export class SemesterCalendarPage implements OnInit {
       activeLectureSlots.forEach(snap => {
         let eventASCalendar:any = snap.payload.doc.data();
         eventASCalendar.id = snap.payload.doc.id;
-        eventASCalendar.title = eventASCalendar.moduleCode + "-" + eventASCalendar.moduleTitle + " | Status: " + eventASCalendar.status;
+        eventASCalendar.title = eventASCalendar.moduleCode + "-" + eventASCalendar.moduleTitle + "\n | Status: " + eventASCalendar.status;
         eventASCalendar.startTime = eventASCalendar.startTime.toDate();
         eventASCalendar.endTime = eventASCalendar.endTime.toDate();
 
@@ -148,6 +225,17 @@ export class SemesterCalendarPage implements OnInit {
         this.eventSourceASCalendar.push(eventASCalendar);
       });
     });
+
+  }
+
+  // Resetting search assigned semester calendar
+  resetSearchAssignedSemesterCalendar(){
+
+    // Resetting formControlGroup
+    this.searchSemesterCalendar.reset();
+
+    // Resetting calendar
+    this.eventSourcePSCalendar = []; 
 
   }
 
@@ -179,19 +267,26 @@ export class SemesterCalendarPage implements OnInit {
   }
 
   onEventSelectedPSCalendar(event) {
-    console.log("Lecture Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title);
-
-    
-
+    console.log("Lecture Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title); 
   }
 
   onTimeSelectedPSCalendar(event){
     console.log("Lecture Session Selected Time: " + event.selectedTime + ", has sessions: " + (event.events !== undefined && event.events.length !== 0) +
       ", disabled: " + event.disabled);
+
+      if((event.events !== undefined && event.events.length !== 0) == false){
+        this.numberOfLectureSessionsDocuments = [];
+      }
+      else if ((event.events !== undefined && event.events.length !== 0) == true){
+        this.numberOfLectureSessionsDocuments = event.events;
+      }
+      console.log(this.numberOfLectureSessionsDocuments);
   }
 
   onCurrentDateChangedPSCalendar(event: Date){
     console.log("Current Lecture Session Date Change: " + event);
+
+    this.numberOfLectureSessionsDocuments = [];
   }
 
   onRangeChangedPSCalendar(evt) {

@@ -1,0 +1,56 @@
+<ion-list>
+  <ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="closePopover()" color="danger">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label style="font-size: 20px;">
+            <b>More Details</b>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+  <ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-label>
+            <b>Lecturer</b>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label>
+            {{ passedLecturer }}
+          </ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+  <ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-label>
+            <b>Lecture Hall</b>  
+          </ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label>
+            {{ passedLectureHall }}
+          </ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+</ion-list>

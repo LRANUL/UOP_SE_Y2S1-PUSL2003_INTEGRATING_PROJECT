@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { SemesterCalendarPage } from './semester-calendar.page';
 
+import { EditLectureSessionModalPageModule } from './edit-lecture-session-modal/edit-lecture-session-modal.module';
+
 const routes: Routes = [
   {
     path: '',

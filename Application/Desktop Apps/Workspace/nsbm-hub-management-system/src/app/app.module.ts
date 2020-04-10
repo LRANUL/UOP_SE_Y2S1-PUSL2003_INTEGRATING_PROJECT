@@ -25,6 +25,14 @@ import { NoticesService } from './services/notices.service';
 
 import { NgCalendarModule } from 'ionic2-calendar';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MatTooltipModule } from '@angular/material';
+
+import { EditLectureSessionModalPageModule } from './account/semester-calendar/edit-lecture-session-modal/edit-lecture-session-modal.module';
+
+import { MoreDetailsSessionPopoverPageModule } from './account/semester-calendar/more-details-session-popover/more-details-session-popover.module';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -39,7 +47,11 @@ import { NgCalendarModule } from 'ionic2-calendar';
     AngularFireDatabaseModule,
     AboutModalPageModule,
     RegisterModalPageModule,
-    NgCalendarModule
+    NgCalendarModule,
+    BrowserAnimationsModule,
+    MatTooltipModule,
+    EditLectureSessionModalPageModule,
+    MoreDetailsSessionPopoverPageModule
   ],
   providers: [
     StatusBar,
