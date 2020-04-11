@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterEvent } from '@angular/router';
 
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController, NavParams, NavController } from '@ionic/angular';
+import { AngularFireAuth } from '@angular/fire/auth';
+import * as firebase from 'firebase/app';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { FirestoreService } from 'src/app/services/firebase/firestore.service';
 
 @Component({
   selector: 'app-side-menu',
@@ -65,9 +69,14 @@ export class SideMenuPage implements OnInit {
 
   selectedPath = '';
 
+  
+
   constructor(
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private loadingController: LoadingController,
+    private angularFireAuth: AngularFireAuth,
+    private fireStore: FirestoreService
   ) {
     
     this.router.events.subscribe((event: RouterEvent) => {
@@ -75,23 +84,71 @@ export class SideMenuPage implements OnInit {
         this.selectedPath = event.url;
       }
     })
-
   }
+
+  // Declaring variable to store the faculty of the logged in user
+  userFacultyFirestore;
+
+  userDetailsAuth: any;
 
   ngOnInit() {
+
+    // Retrieving the auth details of the logged in user
+    this.userDetailsAuth = this.fireStore.retrieveLoggedInUserDetailsAuth();
+
+    console.log(this.userDetailsAuth);
+    console.log(this.userDetailsAuth.uid);
+
+    this.retrieveLoggedInUserDetailsFirestore();
+
   }
+
+
+  // Retrieving the faculty of the logged in user and assign it the 'userFacultyFirestore' variable
+  retrieveLoggedInUserDetailsFirestore = () =>
+    this.fireStore.retrieveLoggedInUserDetailsFirestore(this.userDetailsAuth.uid).subscribe(userFacultyFirestore => (
+      userFacultyFirestore.forEach(document => {
+        let firestoreDoc:any = document.payload.doc.data();
+        firestoreDoc = firestoreDoc.faculty;
+
+        this.userFacultyFirestore = firestoreDoc;
+      })
+    ));
+
+  // Passing user faculty
+  passUserFaculty() {
+    return this.userFacultyFirestore;
+  }
+
+
+
+  // Alert Box Implementation
+  async alertNotice ( title: string, content: string ) {
+
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+ 
+  }
+
+
+
 
 
   // Logout Process
   logout(){
 
-    this.alertnotice('Confirmation ', 'Are you sure you want to logout?');
-    
+    this.logoutAlert('Confirmation ', 'Are you sure you want to logout?');
+
   }
 
 
   // Alert Box Implementation (Logout)
-  async alertnotice ( title: string, content: string ) {
+  async logoutAlert ( title: string, content: string ) {
 
     const alert = await this.alertController.create({
       header: title,
@@ -108,16 +165,38 @@ export class SideMenuPage implements OnInit {
         {
           text: 'Continue',
           handler: () => {
-            this.router.navigate(["/login"]);
-            console.log("User Logged Out");
+            
+            this.logoutProcessApproved();
+
           }
         }
-
       ]
     });
 
     await alert.present();
+  }
 
+
+  // Implementation after logout confirmation is approved
+  async logoutProcessApproved() {
+    const loading = await this.loadingController.create({
+      message: 'Logging Out..',
+      duration: 2000
+    });
+
+    await loading.present();
+
+    this.router.navigate(["/login"]);
+
+    if(firebase.auth().currentUser){
+      firebase.auth().signOut()
+        .then(() => {
+          console.log("Logout Successful");
+        }).catch((error) => {
+          console.log("Logout Process Failed, " + error);
+          this.alertNotice("Error", "Logout Process Failed, " + error);
+        });
+    }
   }
 
 

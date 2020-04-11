@@ -9,9 +9,9 @@ import { EventNoticeData, NoticeData } from '../../types';
 
 import { AlertController } from '@ionic/angular';
 
-import { NoticesService } from '../../services/notices.service';
+import { FirestoreService } from '../../services/firebase/firestore.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { firestore } from 'firebase';
+
 
 
 @Component({
@@ -148,7 +148,7 @@ export class NoticesPage implements OnInit {
     private storage: AngularFireStorage,
     private database: AngularFirestore,
     private alertController: AlertController,
-    private noticesService: NoticesService,
+    private noticesService: FirestoreService,
   ){
     this.isFileUploading = false;
     this.isFileUploaded = false;

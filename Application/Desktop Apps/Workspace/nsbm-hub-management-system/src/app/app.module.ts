@@ -20,8 +20,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 
-import { LoginService } from './services/login.service';
-import { NoticesService } from './services/notices.service';
+import { FirestoreService } from './services/firebase/firestore.service';
 
 import { NgCalendarModule } from 'ionic2-calendar';
 
@@ -32,6 +31,7 @@ import { MatTooltipModule } from '@angular/material';
 import { EditLectureSessionModalPageModule } from './account/semester-calendar/edit-lecture-session-modal/edit-lecture-session-modal.module';
 
 import { MoreDetailsSessionPopoverPageModule } from './account/semester-calendar/more-details-session-popover/more-details-session-popover.module';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -57,8 +57,7 @@ import { MoreDetailsSessionPopoverPageModule } from './account/semester-calendar
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    LoginService,
-    NoticesService
+    FirestoreService
   ],
   bootstrap: [AppComponent]
 })

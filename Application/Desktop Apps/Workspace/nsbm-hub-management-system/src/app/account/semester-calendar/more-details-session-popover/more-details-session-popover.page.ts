@@ -19,7 +19,6 @@ export class MoreDetailsSessionPopoverPage implements OnInit {
 
   ngOnInit() {
 
-  
     // Retrieving the passed value from the parent page and assigning to this variable
     this.passedLectureSessionId = this.navParams.get('lectureSessionId');
 
@@ -27,6 +26,9 @@ export class MoreDetailsSessionPopoverPage implements OnInit {
     this.passedLectureHall = this.navParams.get('lectureHall');
 
   }
+
+
+  
 
 
   // Closing the popover

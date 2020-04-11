@@ -1,15 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ModalController } from '@ionic/angular';
+import { ModalController, LoadingController, AlertController } from '@ionic/angular';
 import { AboutModalPage } from './about-modal/about-modal.page';
 import { RegisterModalPage } from './register-modal/register-modal.page';
 
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LoginCredential } from '../types';
-import { LoginService } from '../services/login.service';
+
+import { FirestoreService } from '../services/firebase/firestore.service';
+
 import { Router } from '@angular/router';
 
+import { AngularFireAuth } from '@angular/fire/auth';
+
+import * as firebase from 'firebase/app';
 
 
 @Component({
@@ -56,10 +61,15 @@ export class LoginPage implements OnInit {
 
   constructor(
     private _router: Router,
-    private _loginService: LoginService,
+    private _loginService: FirestoreService,
     private formBuilder: FormBuilder,
-    private modalController:ModalController
-  ) {}
+    private modalController:ModalController,
+    private loadingController: LoadingController,
+    private alertController: AlertController,
+    private angularFireAuth: AngularFireAuth
+  ) {
+    
+  }
 
   // Displays the entered values into the console
   public submit(){
@@ -67,15 +77,39 @@ export class LoginPage implements OnInit {
   }
 
 
-  login(){
+  // Alert Box Implementation
+  async alertNotice ( title: string, content: string ) {
+
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+
+  }
+
+  // Login operation implementation
+  async login(){
+    const loading = await this.loadingController.create({
+      message: 'Logging In..',
+      duration: 2000
+    });
+
+    await loading.present();
+
     const loginCredentials: LoginCredential = this.loginForm.value;
     this._loginService.login(loginCredentials)
       .then((authData)=> {
         this._router.navigate(["/side-menu/dashboard"]);
-        console.log("Authentication Successful",authData);
+        console.log("Authentication (Login) Successful, ",authData);
+        console.log(firebase.auth().currentUser);
+        console.log(firebase.auth().currentUser.uid);
       })
       .catch((authError)=> {
         console.log("Authentication Error: ", authError);
+        this.alertNotice("Error", "Login process failed, " + authError);
       });
 
   }
@@ -107,6 +141,33 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
+
+
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (user) {
+
+        // If user is logged in
+        console.log('User is Logged In');
+        const loading = await this.loadingController.create({
+          message: 'Logging In..',
+          duration: 2000
+        });
+        await loading.present();
+
+        const { role, data } = await loading.onDidDismiss();
+        console.log('Loading spinner dismissed');
+
+        // Navigating to the dashboard
+        this._router.navigate(["/side-menu/dashboard"]);
+      }
+      else {
+        // If user is not logged in
+        console.log('User is NOT Logged In');
+
+      }
+    });
+
+
   }
 
 }

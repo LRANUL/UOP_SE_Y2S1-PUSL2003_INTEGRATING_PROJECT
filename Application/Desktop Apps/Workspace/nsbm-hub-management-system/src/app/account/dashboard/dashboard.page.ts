@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterEvent } from '@angular/router';
 
-import { DashboardService } from '../../services/dashboard.service';
+import { FirestoreService } from '../../services/firebase/firestore.service';
+
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { AngularFirestore } from '@angular/fire/firestore';
+
+import { SideMenuPage } from '../side-menu/side-menu.page';
 
 
 @Component({
@@ -15,8 +18,9 @@ export class DashboardPage implements OnInit {
 
 
   constructor(
-    private dashboardService: DashboardService,
-    private fireStore: AngularFirestore
+    private dashboardService: FirestoreService,
+    private fireStore: AngularFirestore,
+    private sideMenuPageUserFaculty: SideMenuPage
   ) {
 
     // Retrieving the lecture sessions from the firestore database
@@ -26,8 +30,8 @@ export class DashboardPage implements OnInit {
         let eventLecture:any = snap.payload.doc.data();
         eventLecture.id = snap.payload.doc.id;
         eventLecture.title = eventLecture.moduleCode + "-" + eventLecture.moduleTitle + " | Status: " + eventLecture.status;
-        eventLecture.startTime = eventLecture.startTime.toDate();
-        eventLecture.endTime = eventLecture.endTime.toDate();
+        eventLecture.startTime = eventLecture.startDateTime.toDate();
+        eventLecture.endTime = eventLecture.endDateTime.toDate();
 
         console.log(eventLecture)
 
@@ -42,8 +46,8 @@ export class DashboardPage implements OnInit {
         let event:any = snap.payload.doc.data();
         event.id = snap.payload.doc.id;
         event.title = event.Title;
-        event.startTime = event.startTime.toDate();
-        event.endTime = event.endTime.toDate();
+        event.startTime = event.startDateTime.toDate();
+        event.endTime = event.endDateTime.toDate();
 
         console.log(event);
 
@@ -56,11 +60,15 @@ export class DashboardPage implements OnInit {
 
   ngOnInit() {
 
-    this.publishedNotices_Lecturers_To_PO;
+    this.retrievePublishedNotices_Lecturers_To_PO();
 
-
-    
+    // Retrieving user faculty from the sideMenu page
+    console.log(this.sideMenuPageUserFaculty.passUserFaculty());
+  
   }
+
+
+
 
   // Retrieving published notices (Lecturers To Program Office (PO)) and assigning them
   publishedNotices_Lecturers_To_PO;

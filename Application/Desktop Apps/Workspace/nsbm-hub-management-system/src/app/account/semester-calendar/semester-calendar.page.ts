@@ -54,19 +54,22 @@ export class SemesterCalendarPage implements OnInit {
     })
 
     this.assignNewLectureSlotSC = this.formBuilder.group({
-      batch: new FormControl(''),
-      degreeProgram: new FormControl(''),
-      academicYearYear: new FormControl(''),
-      academicYearSemester: new FormControl(''),
-      module: new FormControl(''),
-      sessionDateSingle: new FormControl(''),
-      sessionStartTimeSingle: new FormControl(''),
-      sessionEndTimeSingle: new FormControl(''),
-      sessionDayMultiple: new FormControl(''),
-      sessionStartDateMultiple: new FormControl(''),
-      sessionEndDateMultiple: new FormControl(''),
-      sessionStartTimeMultiple: new FormControl(''),
-      sessionEndTimeMultiple: new FormControl('')
+      batch: new FormControl('', Validators.required),
+      degreeProgram: new FormControl('', Validators.required),
+      academicYearYear: new FormControl('', Validators.required),
+      academicYearSemester: new FormControl('', Validators.required),
+      module: new FormControl('', Validators.required),
+      lecturer: new FormControl('', Validators.required),
+      lectureHall: new FormControl('', Validators.required),
+      status: new FormControl('', Validators.required),
+      sessionDateSingle: new FormControl('', Validators.required),
+      sessionStartTimeSingle: new FormControl('', Validators.required),
+      sessionEndTimeSingle: new FormControl('', Validators.required),
+      sessionDayMultiple: new FormControl('', Validators.required),
+      sessionStartDateMultiple: new FormControl('', Validators.required),
+      sessionEndDateMultiple: new FormControl('', Validators.required),
+      sessionStartTimeMultiple: new FormControl('', Validators.required),
+      sessionEndTimeMultiple: new FormControl('', Validators.required)
     });
 
   }
@@ -111,8 +114,8 @@ export class SemesterCalendarPage implements OnInit {
         let eventPSCalendar:any = snap.payload.doc.data();
         eventPSCalendar.id = snap.payload.doc.id;
         eventPSCalendar.title = eventPSCalendar.moduleCode + "-" + eventPSCalendar.moduleTitle + " | Status: " + eventPSCalendar.status;
-        eventPSCalendar.startTime = eventPSCalendar.startTime.toDate();
-        eventPSCalendar.endTime = eventPSCalendar.endTime.toDate();
+        eventPSCalendar.startTime = eventPSCalendar.startDateTime.toDate();
+        eventPSCalendar.endTime = eventPSCalendar.endDateTime.toDate();
 
         console.log(eventPSCalendar);
 
@@ -140,7 +143,7 @@ export class SemesterCalendarPage implements OnInit {
       componentProps: {
         lectureSessionId: value.id,
         lecturer: value.lecturer,
-        lecturehall: value.lectureHall
+        lectureHall: value.lectureHall
       },
       event: ev
     });
@@ -157,12 +160,22 @@ export class SemesterCalendarPage implements OnInit {
       component: EditLectureSessionModalPage,
       // Passing value to the modal using 'componentProps'
       componentProps: {
-        lectureSessionId: value
+      /*  lectureSessionId: value.id,
+        lectureSesionBatch: value.batch,
+        lectureSessionDegreeProgram: value.degreeProgram,
+        lectureSessionAcademicYear: value.academicYear,
+        lectureSessionAcademicSemester: value.academicSemester,
+        lectureSesionModuleCode: value.moduleCode,
+        lectureSessionModuleTitle: value.moduleTitle,
+        lectureSessionStartDateTime: value.startTime,
+        lectureSessionEndDateTime: value.endTime,
+        lectureSessionLecturer: value.lecturer,
+        lectureSessionLectureHall: value.lectureHall,
+        lectureSessionStatus: value.status */
       },
       // Disabling modal closing from any outside clicks
       backdropDismiss: false
     });
-
     editLectureSessionModal.present();
   }
 
@@ -217,8 +230,8 @@ export class SemesterCalendarPage implements OnInit {
         let eventASCalendar:any = snap.payload.doc.data();
         eventASCalendar.id = snap.payload.doc.id;
         eventASCalendar.title = eventASCalendar.moduleCode + "-" + eventASCalendar.moduleTitle + "\n | Status: " + eventASCalendar.status;
-        eventASCalendar.startTime = eventASCalendar.startTime.toDate();
-        eventASCalendar.endTime = eventASCalendar.endTime.toDate();
+        eventASCalendar.startTime = eventASCalendar.startDateTime.toDate();
+        eventASCalendar.endTime = eventASCalendar.endDateTime.toDate();
 
         console.log(eventASCalendar);
 
@@ -236,6 +249,11 @@ export class SemesterCalendarPage implements OnInit {
 
     // Resetting calendar
     this.eventSourcePSCalendar = []; 
+
+  }
+
+  // Resetting assign semester calendar
+  resetAssignSemesterCalendar(){
 
   }
 

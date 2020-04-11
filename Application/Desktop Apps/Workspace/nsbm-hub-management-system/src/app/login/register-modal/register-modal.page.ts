@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { LoginService } from 'src/app/services/login.service';
+
+import { FirestoreService } from 'src/app/services/firebase/firestore.service';
 
 @Component({
   selector: 'app-register-modal',
@@ -15,7 +16,7 @@ export class RegisterModalPage implements OnInit {
 
   constructor(
     private modalController:ModalController,
-    private loginService: LoginService,
+    private loginService: FirestoreService,
     private formBuilder: FormBuilder,
     private alertController: AlertController
   ) { }
