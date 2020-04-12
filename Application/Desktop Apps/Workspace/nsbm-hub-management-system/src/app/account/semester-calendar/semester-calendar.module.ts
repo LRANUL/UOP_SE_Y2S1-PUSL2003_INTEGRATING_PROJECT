@@ -9,7 +9,10 @@ import { SemesterCalendarPageRoutingModule } from './semester-calendar-routing.m
 import { SemesterCalendarPage } from './semester-calendar.page';
 
 import { NgCalendarModule } from 'ionic2-calendar';
+
 import { MatTooltipModule } from '@angular/material';
+
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -19,7 +22,8 @@ import { MatTooltipModule } from '@angular/material';
     SemesterCalendarPageRoutingModule,
     ReactiveFormsModule,
     NgCalendarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    HttpClientModule
   ],
   declarations: [SemesterCalendarPage]
 })

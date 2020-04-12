@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Edit Details of Lecture Session</ion-title>
-    <ion-button (click)="closeModal()" slot="end" shape="round" fill="outline" style="margin-right: 20px;">
+    <ion-button (click)="closeModal()" slot="end" shape="round" fill="outline" color="danger" style="margin-right: 20px;">
       <ion-icon name="close-outline" style="font-size: 30px;"></ion-icon>
     </ion-button>
   </ion-toolbar>
@@ -14,9 +14,11 @@
 
       <ion-grid>
 
-        <div style="border: #ccc solid 1px;
-                    padding: 10px;
-                    border-radius: 5px;">
+        <form [formGroup]="editLectureSessionForm" (ngSubmit)="doEditLectureSession(editLectureSessionForm.value)">
+
+          <div style="border: #ccc solid 1px;
+                      padding: 10px;
+                      border-radius: 5px;">
             <ion-row>
               <ion-col>
                 <ion-label style="position: absolute;
@@ -40,7 +42,7 @@
                   <ion-label>
                     Batch
                   </ion-label>
-                  <ion-select placeholder="Batch" style="min-width: 100%;">
+                  <ion-select placeholder="Batch" style="min-width: 100%;" value="{{ passedLectureSessionBatch }}" formControlName="batch">
                     <ion-select-option *ngFor="let item of publishedBatches" value="{{ item.payload.doc.id }}">{{ item.payload.doc.id }}</ion-select-option>
                   </ion-select>
                 </ion-item>
@@ -57,8 +59,8 @@
                   <ion-label>
                     Degree Program
                   </ion-label>
-                  <ion-select placeholder="Degree Program" style="min-width: 100%;">
-                    <ion-select-option *ngFor="let item of publishedDegreePrograms" value="{{ item.payload.doc.data().affiliatedUniversity }}">{{ item.payload.doc.data().degree }}, {{ item.payload.doc.data().affiliatedUniversity }}</ion-select-option>
+                  <ion-select placeholder="Degree Program" style="min-width: 100%;" value="{{ passedLectureSessionDegreeProgram }}" formControlName="degreeProgram">
+                    <ion-select-option value="{{ publishedDegreeProgramDegree }}">{{ publishedDegreeProgramDegree }} {{ publishedDegreeProgramAffiliatedUniversity }}</ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
@@ -70,24 +72,23 @@
                 </ion-label>
               </ion-col>
               <ion-col size="7">
-               
+                
                 <div style="border: #ccc solid 1px;
                             border-radius: 5px;">
 
                   <ion-row>
-                    <ion-select placeholder="Year" style="min-width: 95%;">
-                      <ion-select-option value="2">Year 2</ion-select-option>
+                    <ion-select placeholder="Year" style="min-width: 95%;" value="{{ passedLectureSessionAcademicYear }}" formControlName="academicYear">
+                      <ion-select-option *ngFor="let item of convertToArray(publishedDegreeProgramNoOfYears); let i = index" value="{{ i + 1 }}">{{ i + 1 }}</ion-select-option>
                     </ion-select>
                   </ion-row>
                   <ion-row>
-                    <ion-select placeholder="Semester" style="min-width: 95%;">
-                      <ion-select-option value="1">Semester 1</ion-select-option>
-                      <ion-select-option value="2">Semester 2</ion-select-option>
+                    <ion-select placeholder="Semester" style="min-width: 95%;" value="{{ passedLectureSessionAcademicSemester }}" formControlName="academicSemester">
+                      <ion-select-option *ngFor="let item of convertToArray(publishedDegreeProgramNoOfSemestersAnnaully); let i = index" value="{{ i + 1 }}">{{ i + 1 }}</ion-select-option>
                     </ion-select>
                   </ion-row>
 
                 </div>
- 
+
               </ion-col>
             </ion-row>
           </div>
@@ -119,8 +120,8 @@
                   <ion-label>
                     Module
                   </ion-label>
-                  <ion-select placeholder="Module" style="min-width: 100%;">
-                    <ion-select-option *ngFor="let item of publishedModules" value="{{ item.payload.doc.id }}">{{ item.payload.doc.id }} - {{ item.payload.doc.data().moduleTitle }}</ion-select-option>
+                  <ion-select placeholder="Module" style="min-width: 100%;" value="{{ passedLectureSesionModuleCode }} {{ passedLectureSessionModuleTitle }}" formControlName="module">
+                    <ion-select-option value="{{ publishedModuleTitle }}">{{ publishedModuleCode }} - {{ publishedModuleTitle }}</ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
@@ -136,7 +137,7 @@
                   <ion-label>
                     Lecturer
                   </ion-label>
-                  <ion-select placeholder="Lecturer" style="min-width: 100%;">
+                  <ion-select placeholder="Lecturer" style="min-width: 100%;" value="{{ passedLectureSessionLecturer }}" formControlName="lecturer">
                     <ion-select-option *ngFor="let item of registeredLecturers" value="{{ item.payload.doc.id }}">{{ item.payload.doc.data().r }}</ion-select-option>
                   </ion-select>
                 </ion-item>
@@ -153,7 +154,7 @@
                   <ion-label>
                     Lecture Hall
                   </ion-label>
-                  <ion-select placeholder="Lecture Hall" style="min-width: 100%;">
+                  <ion-select placeholder="Lecture Hall" style="min-width: 100%;" value="{{ passedLectureSessionLectureHall }}" formControlName="lectureHall">
                     <ion-select-option *ngFor="let item of publishedLectureHalls" value="{{ item.payload.doc.id }}">{{ item.payload.doc.id }}</ion-select-option>
                   </ion-select>
                 </ion-item>
@@ -170,10 +171,8 @@
                   <ion-label>
                     Lecture Status
                   </ion-label>
-                  <ion-select placeholder="Status" style="min-width: 100%;">
-                    <ion-select-option value="Confirmed">Confirmed</ion-select-option>
-                    <ion-select-option value="Pending">Pending</ion-select-option>
-                    <ion-select-option value="Cancelled">Cancelled</ion-select-option>
+                  <ion-select placeholder="Status" style="min-width: 100%;" value="{{ passedLectureSesionStatus }}" formControlName="lectureStatus">
+                    <ion-select-option *ngFor="let item of publishedSessionStatuses" value="{{ item.payload.doc.id }}">{{ item.payload.doc.id }}</ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
@@ -186,7 +185,7 @@
               </ion-col>
               <ion-col size="7">
                 <ion-item>
-                  <ion-datetime value="2020-03-02"></ion-datetime>
+                  <ion-datetime value="{{ lectureSessionStartDateTime }}" formControlName="sessionDate"></ion-datetime>
                 </ion-item>
               </ion-col>
             </ion-row>
@@ -198,7 +197,7 @@
               </ion-col>
               <ion-col size="7">
                 <ion-item>
-                  <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="09:00"></ion-datetime>
+                  <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="{{ lectureSessionStartDateTime }}" formControlName="sessionStartTime"></ion-datetime>
                 </ion-item>
               </ion-col>
             </ion-row>
@@ -210,7 +209,7 @@
               </ion-col>
               <ion-col size="7">
                 <ion-item>
-                  <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="09:00"></ion-datetime>
+                  <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="{{ lectureSessionEndTime }}" formControlName="sessionEndTime"></ion-datetime>
                 </ion-item>
               </ion-col>
             </ion-row>
@@ -220,12 +219,14 @@
                           margin-bottom: 10px;">
             <ion-col>
 
-              <ion-button expand="block" type="submit">
+              <ion-button expand="block" type="submit" [disabled]="!editLectureSessionForm.valid">
                 UPDATE
               </ion-button>
 
             </ion-col>
           </ion-row>
+
+        </form>
 
       </ion-grid>
 

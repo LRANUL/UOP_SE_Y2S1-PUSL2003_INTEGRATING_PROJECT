@@ -32,6 +32,8 @@ import { EditLectureSessionModalPageModule } from './account/semester-calendar/e
 
 import { MoreDetailsSessionPopoverPageModule } from './account/semester-calendar/more-details-session-popover/more-details-session-popover.module';
 
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -51,7 +53,8 @@ import { MoreDetailsSessionPopoverPageModule } from './account/semester-calendar
     BrowserAnimationsModule,
     MatTooltipModule,
     EditLectureSessionModalPageModule,
-    MoreDetailsSessionPopoverPageModule
+    MoreDetailsSessionPopoverPageModule,
+    HttpClientModule
   ],
   providers: [
     StatusBar,

@@ -10,6 +10,8 @@ import { EditLectureSessionModalPage } from './edit-lecture-session-modal/edit-l
 import { LectureSchedulePage } from '../lecture-schedule/lecture-schedule.page';
 import { MoreDetailsSessionPopoverPage } from './more-details-session-popover/more-details-session-popover.page';
 
+import { SideMenuPage } from '../side-menu/side-menu.page';
+
 @Component({
   selector: 'app-semester-calendar',
   templateUrl: './semester-calendar.page.html',
@@ -30,7 +32,8 @@ export class SemesterCalendarPage implements OnInit {
     private loadingController: LoadingController,
     private navController: NavController,
     private modalController: ModalController,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private sideMenuPageUserFaculty: SideMenuPage
   ) {
 
 
@@ -51,7 +54,7 @@ export class SemesterCalendarPage implements OnInit {
       degreeProgram: new FormControl('', Validators.required),
       academicYearYear: new FormControl('', Validators.required),
       academicYearSemester: new FormControl('', Validators.required)
-    })
+    });
 
     this.assignNewLectureSlotSC = this.formBuilder.group({
       batch: new FormControl('', Validators.required),
@@ -160,8 +163,8 @@ export class SemesterCalendarPage implements OnInit {
       component: EditLectureSessionModalPage,
       // Passing value to the modal using 'componentProps'
       componentProps: {
-      /*  lectureSessionId: value.id,
-        lectureSesionBatch: value.batch,
+        lectureSessionId: value.id,
+        lectureSessionBatch: value.batch,
         lectureSessionDegreeProgram: value.degreeProgram,
         lectureSessionAcademicYear: value.academicYear,
         lectureSessionAcademicSemester: value.academicSemester,
@@ -171,7 +174,8 @@ export class SemesterCalendarPage implements OnInit {
         lectureSessionEndDateTime: value.endTime,
         lectureSessionLecturer: value.lecturer,
         lectureSessionLectureHall: value.lectureHall,
-        lectureSessionStatus: value.status */
+        lectureSessionStatus: value.status,
+        userFaculty: this.sideMenuPageUserFaculty.passUserFaculty()
       },
       // Disabling modal closing from any outside clicks
       backdropDismiss: false

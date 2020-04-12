@@ -5,6 +5,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { LoginCredential } from './../../types';
 import * as firebase from 'firebase/app';
 
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -77,8 +79,8 @@ export class FirestoreService {
   }
 
   // Retrieving published modules and their details from the firestore database
-  retrievePublishedModules() {
-    return this.fireStore.collection("studentCategories/studentCategoryTypes/modules").snapshotChanges();
+  retrievePublishedModules(userFaculty) {
+    return this.fireStore.collection("faculties/"+ userFaculty +"/modules").snapshotChanges();
   }
 
   // Retrieving registered lecturers and their details from the firestore database
@@ -87,18 +89,41 @@ export class FirestoreService {
   }
 
   // Retrieving published degree programs and their details from the firestore database
-  retrievePublishedDegreeProgram() {
-    return this.fireStore.collection("studentCategories/studentCategoryTypes/degreeProgram").snapshotChanges();
+  retrievePublishedDegreeProgram(userFaculty) {
+    return this.fireStore.collection("faculties/"+ userFaculty +"/degreePrograms").snapshotChanges();
   }
 
   // Retrieving published batch and their details from the firestore database
-  retrievePublishedBatch() {
-    return this.fireStore.collection("studentCategories/studentCategoryTypes/batch").snapshotChanges();
+  retrievePublishedBatch(userFaculty) {
+    return this.fireStore.collection("faculties/"+ userFaculty +"/batches").snapshotChanges();
   }
 
   // Retrieving published lecture halls and their details from the firestore database
-  retrievePublishedLectureHallsSOC() {
-    return this.fireStore.collection("faculties/School of Computing/lectureHalls").snapshotChanges();
+  retrievePublishedLectureHallsSOC(userFaculty) {
+    return this.fireStore.collection("faculties/"+ userFaculty +"/lectureHalls").snapshotChanges();
+  }
+
+  // Retrieving published session statuses and their details from the firestore database
+  retrievePublishedSessionStatuses() {
+    return this.fireStore.collection("sessionStatuses").snapshotChanges();
+  }
+
+  updateLectureSession(userFaculty, id, value, userFormDataModuleCode, userFormDataSessionStartDateTime, userFormDataSessionEndDateTime) {
+    return this.fireStore.doc("sessions/lectureSessions/"+ id).update({
+      batch: value.batch,
+      degreeProgram: value.degreeProgram,
+      academicYear: value.academicYear,
+      academicSemester: value.academicSemester,
+      moduleCode: userFormDataModuleCode,
+      moduleTitle: value.moduleTitle,
+      lecture: value.lecturer,
+      lectureHall: value.lectureHall,
+      status: value.lectureStatus,
+      startDateTime: userFormDataSessionStartDateTime,
+      endDateTime: userFormDataSessionEndDateTime
+    }).then(function() {
+      console.log("Values Updated");
+    });
   }
 
 

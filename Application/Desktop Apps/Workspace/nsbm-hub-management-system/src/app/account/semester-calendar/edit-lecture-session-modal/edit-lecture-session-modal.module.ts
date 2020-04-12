@@ -8,13 +8,16 @@ import { EditLectureSessionModalPageRoutingModule } from './edit-lecture-session
 
 import { EditLectureSessionModalPage } from './edit-lecture-session-modal.page';
 
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     EditLectureSessionModalPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   declarations: [EditLectureSessionModalPage]
 })
