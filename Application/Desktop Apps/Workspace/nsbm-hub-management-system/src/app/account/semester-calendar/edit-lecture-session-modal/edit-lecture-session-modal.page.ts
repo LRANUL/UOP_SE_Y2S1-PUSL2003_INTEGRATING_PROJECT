@@ -58,7 +58,7 @@ export class EditLectureSessionModalPage implements OnInit {
 
     this.retrievePublishedDegreeProgram();
 
-    this.retrievePublishedModules();
+    this.retrieveRegisteredModules();
 
     this.retrieveRegisteredLecturers();
 
@@ -104,7 +104,7 @@ export class EditLectureSessionModalPage implements OnInit {
   publishedDegreePrograms;
 
   publishedDegreeProgramDegree;
-  publishedDegreeProgramAffiliatedUniversity;
+  publishedDegreeProgramAwardingBodyUniversity;
   publishedDegreeProgramNoOfYears
   publishedDegreeProgramNoOfSemestersAnnaully;
 
@@ -113,12 +113,11 @@ export class EditLectureSessionModalPage implements OnInit {
        response.forEach(document => {
         let firestoreDoc: any = document.payload.doc.data();
         this.publishedDegreeProgramDegree = firestoreDoc.degree;
-        this.publishedDegreeProgramAffiliatedUniversity = firestoreDoc.affiliatedUniversity;
+        this.publishedDegreeProgramAwardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
         this.publishedDegreeProgramNoOfYears = firestoreDoc.deliveryNoOfYears;
         this.publishedDegreeProgramNoOfSemestersAnnaully = firestoreDoc.deliveryNoOfSemestersAnnually;
       })
     ));
-
   }
 
   // Implementation of generating an array for the count of, no of years and no of semesters
@@ -135,8 +134,8 @@ export class EditLectureSessionModalPage implements OnInit {
   publishedModuleCode;
   publishedModuleTitle;
 
-  retrievePublishedModules = () => {
-    this.editLectureSessionService.retrievePublishedModules(this.navParams.get('userFaculty')).subscribe(response => (this.publishedModules = 
+  retrieveRegisteredModules = () => {
+    this.editLectureSessionService.retrieveRegisteredModules(this.navParams.get('userFaculty')).subscribe(response => (this.publishedModules = 
       response.forEach(document => {
         let firestoreDoc: any = document.payload.doc.data();
         this.publishedModuleCode = document.payload.doc.id;
@@ -172,6 +171,7 @@ export class EditLectureSessionModalPage implements OnInit {
 
    
   userFormDataModuleCode;  
+  userFormDataAwardingBodyUniversity;
 
   userFormDataLectureSessionStartDateWithPreviousDate; // Used to store lecture session date from a count in milliseconds since 00:00:00 UTC on 1 January 1970
   userFormDataLectureSessionStartDateWithPreviousDateUnix;
@@ -196,7 +196,11 @@ export class EditLectureSessionModalPage implements OnInit {
     if(value.module == this.publishedModuleTitle){
       this.userFormDataModuleCode = this.publishedModuleCode;
     }
-    
+
+    // Retriving the awardingBodyUniversity from the user selected degreeProgram
+    if(value.degreeProgram == this.publishedDegreeProgramDegree){
+      this.userFormDataAwardingBodyUniversity = this.publishedDegreeProgramDegree;
+    }
 
     // Calculating lecture session start datetime
     // Converting user selected date to (Unix Epoch Seconds time) in milliseconds

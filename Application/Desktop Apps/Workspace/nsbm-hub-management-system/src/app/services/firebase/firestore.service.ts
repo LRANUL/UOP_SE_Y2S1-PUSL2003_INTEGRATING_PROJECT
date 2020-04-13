@@ -78,8 +78,25 @@ export class FirestoreService {
     return this.fireStore.collection("notices/noticeTypes/notices-PO-To-Lecturers").snapshotChanges();
   }
 
-  // Retrieving published modules and their details from the firestore database
-  retrievePublishedModules(userFaculty) {
+  // Retrieving published lecture session and their detais from the firestore database for the semester calendar page
+  retrievePublishedLectureSessionsSemesterCalendar(userFaculty, value, userSelectedAwardingBodyUniversity) {
+    return this.fireStore.collection("faculties/"+ userFaculty +"/lectureSessions", ref => ref
+            .where("batch", "==", value.batch)
+            .where("degreeProgram", "==", value.degreeProgram)
+            .where("awardingBodyUniversity", "==", userSelectedAwardingBodyUniversity)
+            .where("academicYear", "==", parseInt(value.academicYearYear)) /* ( parseInt() ) Converting value data type from the form, string to int */
+            .where("academicSemester", "==", parseInt(value.academicYearSemester))).snapshotChanges();
+  }
+
+  // Retrieving published lecture session and their detais from the firestore database for the lecture schedule page
+  retrievePublishedLectureSessionsLectureSchedule(userFaculty, currentDateMidnightUnix, nextDateMidnightUnix) {
+    return this.fireStore.collection("faculties/"+ userFaculty +"/lectureSessions", ref => ref
+              .where("startDateTime", "<=", currentDateMidnightUnix)
+              .where("startDateTime", ">=", nextDateMidnightUnix)).snapshotChanges();
+  }
+
+  // Retrieving registered modules and their details from the firestore database
+  retrieveRegisteredModules(userFaculty) {
     return this.fireStore.collection("faculties/"+ userFaculty +"/modules").snapshotChanges();
   }
 
@@ -108,8 +125,9 @@ export class FirestoreService {
     return this.fireStore.collection("sessionStatuses").snapshotChanges();
   }
 
+  // Updating lecture session values in the firestore database
   updateLectureSession(userFaculty, id, value, userFormDataModuleCode, userFormDataSessionStartDateTime, userFormDataSessionEndDateTime) {
-    return this.fireStore.doc("sessions/lectureSessions/"+ id).update({
+    return this.fireStore.doc("faculties/"+ userFaculty +"/lectureSessions/"+ id).update({
       batch: value.batch,
       degreeProgram: value.degreeProgram,
       academicYear: value.academicYear,
@@ -125,6 +143,12 @@ export class FirestoreService {
       console.log("Values Updated");
     });
   }
+
+  // Removing lecture session from the firestore database
+  removeLectureSession(userFaculty, id) {
+    return this.fireStore.doc("faculties/"+ userFaculty +"/lectureSessions/"+ id).delete();
+  }
+ 
 
 
 }

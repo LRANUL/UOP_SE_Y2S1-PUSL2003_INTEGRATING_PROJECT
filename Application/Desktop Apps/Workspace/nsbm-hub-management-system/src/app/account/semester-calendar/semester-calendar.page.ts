@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { AlertController, LoadingController, NavController, ModalController, PopoverController } from '@ionic/angular';
-import { async } from 'rxjs/internal/scheduler/async';
+import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 
-import { MatTooltipModule } from '@angular/material';
+
 
 import { EditLectureSessionModalPage } from './edit-lecture-session-modal/edit-lecture-session-modal.page';
-import { LectureSchedulePage } from '../lecture-schedule/lecture-schedule.page';
 import { MoreDetailsSessionPopoverPage } from './more-details-session-popover/more-details-session-popover.page';
 
 import { SideMenuPage } from '../side-menu/side-menu.page';
+import { FirestoreService } from 'src/app/services/firebase/firestore.service';
 
 @Component({
   selector: 'app-semester-calendar',
@@ -26,14 +24,12 @@ export class SemesterCalendarPage implements OnInit {
   loadingSpinnerPLS: Boolean = false;
 
   constructor(
-    private fireStore: AngularFirestore,
     private formBuilder: FormBuilder,
     private alertController: AlertController,
-    private loadingController: LoadingController,
-    private navController: NavController,
     private modalController: ModalController,
     private popoverController: PopoverController,
-    private sideMenuPageUserFaculty: SideMenuPage
+    private sideMenuPageUserFaculty: SideMenuPage,
+    private semesterCalendarService: FirestoreService
   ) {
 
 
@@ -43,11 +39,14 @@ export class SemesterCalendarPage implements OnInit {
 
   ngOnInit() {
 
+    // Calling the functions inorder for them to execute upon page load
+    this.retrievePublishedBatch();
+
+    this.retrievePublishedDegreeProgram();
+
+
     this.publishedLecureSlots;
 
-
-    
-    
 
     this.searchSemesterCalendar = this.formBuilder.group({
       batch: new FormControl('', Validators.required),
@@ -77,6 +76,39 @@ export class SemesterCalendarPage implements OnInit {
 
   }
 
+  // Retrieving the published batch from the firestore database
+  publishedBatches;
+
+  retrievePublishedBatch = () => {
+    this.semesterCalendarService.retrievePublishedBatch(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(response => (this.publishedBatches = response));
+  }
+
+
+  // Retrieving the published degree programs and details from the firestore database
+  publishedDegreePrograms;
+
+  publishedDegreeProgramDegree;
+  publishedDegreeProgramAwardingBodyUniversity;
+  publishedDegreeProgramNoOfYears
+  publishedDegreeProgramNoOfSemestersAnnaully;
+
+  retrievePublishedDegreeProgram = () => {
+    this.semesterCalendarService.retrievePublishedDegreeProgram(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(response => (this.publishedDegreePrograms = 
+       response.forEach(document => {
+        let firestoreDoc: any = document.payload.doc.data();
+        this.publishedDegreeProgramDegree = firestoreDoc.degree;
+        this.publishedDegreeProgramAwardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
+        this.publishedDegreeProgramNoOfYears = firestoreDoc.deliveryNoOfYears;
+        this.publishedDegreeProgramNoOfSemestersAnnaully = firestoreDoc.deliveryNoOfSemestersAnnually;
+      })
+    ));
+  }
+
+  // Implementation of generating an array for the count of, no of years and no of semesters
+  convertToArray(n: number): any[] {
+    return Array(n);
+  }
+
 
 
   // Alert Box Implementation
@@ -101,17 +133,30 @@ export class SemesterCalendarPage implements OnInit {
   // Declaring an array to initialize the number of events (lecture sessions) and their ids
   numberOfLectureSessionsDocuments = [];
 
+  userSelectedAwardingBodyUniversity;
+
   // Retriving published lecture sessions
   doSearchSemesterCalendar(value){
 
     this.loadingSpinnerPLS = true;
 
-    // Retrieving the published lecture sessions from the firestore database
-    this.fireStore.collection("sessions/sessionTypes/lectureSessions", ref => ref
-      .where("batch", "==", value.batch)
-      .where("degreeProgram", "==", value.degreeProgram)
-      .where("academicYear", "==", parseInt(value.academicYearYear)) /* ( parseInt() ) Converting value data type from the form, string to int */
-      .where("academicSemester", "==", parseInt(value.academicYearSemester))).snapshotChanges().subscribe(lectureSlots => {
+    if(value.degreeProgram == this.publishedDegreeProgramDegree){
+      this.userSelectedAwardingBodyUniversity = this.publishedDegreeProgramAwardingBodyUniversity;
+    }
+
+    console.log(value.batch);
+
+    console.log(value.degreeProgram);
+    console.log(this.publishedDegreeProgramDegree);
+    console.log(this.publishedDegreeProgramAwardingBodyUniversity);
+
+    console.log(value.academicYearYear);
+    console.log(value.academicYearSemester);
+
+    
+
+    // Calling function to retrieve the published lecture sessions from the firestore database
+    this.semesterCalendarService.retrievePublishedLectureSessionsSemesterCalendar(this.sideMenuPageUserFaculty.passUserFaculty(), value, this.userSelectedAwardingBodyUniversity).subscribe(lectureSlots => {
       this.eventSourcePSCalendar = []; // Clearing the existing events on the calendar before syncing 
       lectureSlots.forEach(snap => {
         let eventPSCalendar:any = snap.payload.doc.data();
@@ -126,14 +171,8 @@ export class SemesterCalendarPage implements OnInit {
       });
     });
 
-
-
-    // Setting loading dots to false after the contents has loaded.
-    this.fireStore.collection("sessions/sessionTypes/lectureSessions", ref => ref
-      .where("batch", "==", value.batch)
-      .where("degreeProgram", "==", value.degreeProgram)
-      .where("academicYear", "==", parseInt(value.academicYearYear)) /* ( parseInt() ) Converting value data type from the form, string to int */
-      .where("academicSemester", "==", parseInt(value.academicYearSemester))).snapshotChanges().subscribe(() => this.loadingSpinnerPLS = false);
+    // Calling function to retrive the lecture sessions and setting loading dots to false after the contents has loaded.
+    this.semesterCalendarService.retrievePublishedLectureSessionsSemesterCalendar(this.sideMenuPageUserFaculty.passUserFaculty(), value, this.userSelectedAwardingBodyUniversity).subscribe(() => this.loadingSpinnerPLS = false);
 
     this.alertnotice("Lecture Sessions Retrieval", "Available lecture sessions are placed on the calendar.");
     
@@ -204,8 +243,8 @@ export class SemesterCalendarPage implements OnInit {
           handler: () => {
             console.log("Alert Box: Remove Lecture Session Request Accepted");
 
-            // Implementation of deleting a lecture session from firestore
-            this.fireStore.doc("sessions/sessionTypes/lectureSessions/" + value).delete();
+            // Calling function to remove lecture session
+            this.semesterCalendarService.removeLectureSession(this.sideMenuPageUserFaculty.passUserFaculty(), value);
 
           }
         }
@@ -220,15 +259,15 @@ export class SemesterCalendarPage implements OnInit {
 
 
 
-  // Publishing new lecture sessions and retrieving published lecture sessions 
+  // (Publishing new lecture sessions section) and retrieving published lecture sessions 
   doPublishLectureSlotSC(value){
 
-    // Retrieving the new lecture sessions from the firestore database
-    this.fireStore.collection("sessions/sessionTypes/lectureSessions", ref => ref
-    .where("batch", "==", value.batch)
-    .where("degreeProgram", "==", value.degreeProgram)
-    .where("academicYear", "==", parseInt(value.academicYearYear)) /* ( parseInt() ) Converting value data type from the form, string to int */
-    .where("academicSemester", "==", parseInt(value.academicYearSemester))).snapshotChanges().subscribe(activeLectureSlots => {
+    if(value.degreeProgram == this.publishedDegreeProgramDegree){
+      this.userSelectedAwardingBodyUniversity = this.publishedDegreeProgramAwardingBodyUniversity;
+    }
+
+    // Calling function to retrieving the new lecture sessions from the firestore database
+    this.semesterCalendarService.retrievePublishedLectureSessionsSemesterCalendar(this.sideMenuPageUserFaculty.passUserFaculty(), value, this.userSelectedAwardingBodyUniversity).subscribe(activeLectureSlots => {
       this.eventSourceASCalendar = []; // Clearing the existing events on the calendar before syncing 
       activeLectureSlots.forEach(snap => {
         let eventASCalendar:any = snap.payload.doc.data();
