@@ -54,20 +54,7 @@ export class EditLectureSessionModalPage implements OnInit {
       sessionEndTime: new FormControl('')
     });
 
-    this.retrievePublishedBatch();
-
-    this.retrievePublishedDegreeProgram();
-
-    this.retrieveRegisteredModules();
-
-    this.retrieveRegisteredLecturers();
-
-    this.retrievePublishedLectureHallsSOC();
-
-    this.retrievePublishedSessionStatuses();
-    
-
-    // Getting the values from the parent page and assigning them to the variables
+    // Getting the values from the parent page (semester calendar page) and assigning them to the variables
     this.passedLectureSessionId = this.navParams.get('lectureSessionId');
     
     this.passedLectureSessionBatch = this.navParams.get('lectureSessionBatch');
@@ -81,6 +68,20 @@ export class EditLectureSessionModalPage implements OnInit {
     this.passedLectureSessionLecturer = this.navParams.get('lectureSessionLecturer');
     this.passedLectureSessionLectureHall = this.navParams.get('lectureSessionLectureHall');
     this.passedLectureSessionStatus = this.navParams.get('lectureSessionStatus');
+
+
+    this.retrievePublishedBatch();
+
+    this.retrievePublishedDegreeProgram();
+
+    this.retrieveRegisteredModules();
+
+    this.retrieveRegisteredLecturers();
+
+    this.retrievePublishedLectureHallsSOC();
+
+    this.retrievePublishedSessionStatuses();
+
 
     // Assigning date and time seperately to the variables
     this.lectureSessionStartDateTime = this.passedLectureSessionStartDateTime.toISOString();
@@ -158,7 +159,7 @@ export class EditLectureSessionModalPage implements OnInit {
   publishedLectureHalls;
 
   retrievePublishedLectureHallsSOC = () =>
-    this.editLectureSessionService.retrievePublishedLectureHallsSOC(this.navParams.get('userFaculty')).subscribe(response => (this.publishedLectureHalls = response));
+    this.editLectureSessionService.retrievePublishedLectureHalls(this.navParams.get('userFaculty')).subscribe(response => (this.publishedLectureHalls = response));
     
 
   
@@ -199,7 +200,7 @@ export class EditLectureSessionModalPage implements OnInit {
 
     // Retriving the awardingBodyUniversity from the user selected degreeProgram
     if(value.degreeProgram == this.publishedDegreeProgramDegree){
-      this.userFormDataAwardingBodyUniversity = this.publishedDegreeProgramDegree;
+      this.userFormDataAwardingBodyUniversity = this.publishedDegreeProgramAwardingBodyUniversity;
     }
 
     // Calculating lecture session start datetime
@@ -251,7 +252,7 @@ export class EditLectureSessionModalPage implements OnInit {
 
 
   // Implementation for closing the modal
-  closeModal(){
+  closeEditLectureSessionModal(){
     this.modalController.dismiss();
   }
 

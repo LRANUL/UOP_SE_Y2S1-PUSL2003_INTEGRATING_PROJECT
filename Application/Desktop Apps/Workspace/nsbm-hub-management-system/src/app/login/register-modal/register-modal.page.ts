@@ -105,7 +105,7 @@ export class RegisterModalPage implements OnInit {
 
 
   doNewUserRegistration(value){
-    this.loginService.newUserRegistorDetailsVerification(value);
+    this.loginService.newUserRegisterDetailsVerification(value);
 
     this.alertnotice("Details Sent", "New user details were successfully sent.");
 

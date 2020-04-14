@@ -89,7 +89,7 @@ export class SemesterCalendarPage implements OnInit {
 
   publishedDegreeProgramDegree;
   publishedDegreeProgramAwardingBodyUniversity;
-  publishedDegreeProgramNoOfYears
+  publishedDegreeProgramNoOfYears;
   publishedDegreeProgramNoOfSemestersAnnaully;
 
   retrievePublishedDegreeProgram = () => {
@@ -112,7 +112,7 @@ export class SemesterCalendarPage implements OnInit {
 
 
   // Alert Box Implementation
-  async alertnotice ( title: string, content: string ) {
+  async alertNotice ( title: string, content: string ) {
 
     const alert = await this.alertController.create({
       header: title,
@@ -174,7 +174,7 @@ export class SemesterCalendarPage implements OnInit {
     // Calling function to retrive the lecture sessions and setting loading dots to false after the contents has loaded.
     this.semesterCalendarService.retrievePublishedLectureSessionsSemesterCalendar(this.sideMenuPageUserFaculty.passUserFaculty(), value, this.userSelectedAwardingBodyUniversity).subscribe(() => this.loadingSpinnerPLS = false);
 
-    this.alertnotice("Lecture Sessions Retrieval", "Available lecture sessions are placed on the calendar.");
+    this.alertNotice("Lecture Sessions Retrieval", "Available lecture sessions are placed on the calendar.");
     
   }
 

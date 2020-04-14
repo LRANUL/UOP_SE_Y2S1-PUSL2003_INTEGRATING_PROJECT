@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Edit Details of Lecture Session</ion-title>
-    <ion-button (click)="closeModal()" slot="end" shape="round" fill="outline" color="danger" style="margin-right: 20px;">
+    <ion-button (click)="closeEditLectureSessionModal()" slot="end" shape="round" fill="outline" color="danger" style="margin-right: 20px;">
       <ion-icon name="close-outline" style="font-size: 30px;"></ion-icon>
     </ion-button>
   </ion-toolbar>
@@ -78,12 +78,12 @@
 
                   <ion-row>
                     <ion-select placeholder="Year" style="min-width: 95%;" value="{{ passedLectureSessionAcademicYear }}" formControlName="academicYear">
-                      <ion-select-option *ngFor="let item of convertToArray(publishedDegreeProgramNoOfYears); let i = index" value="{{ i + 1 }}">{{ i + 1 }}</ion-select-option>
+                      <ion-select-option *ngFor="let item of convertToArray(publishedDegreeProgramNoOfYears); let i = index" value="{{ i + 1 }}">Year {{ i + 1 }}</ion-select-option>
                     </ion-select>
                   </ion-row>
                   <ion-row>
                     <ion-select placeholder="Semester" style="min-width: 95%;" value="{{ passedLectureSessionAcademicSemester }}" formControlName="academicSemester">
-                      <ion-select-option *ngFor="let item of convertToArray(publishedDegreeProgramNoOfSemestersAnnaully); let i = index" value="{{ i + 1 }}">{{ i + 1 }}</ion-select-option>
+                      <ion-select-option *ngFor="let item of convertToArray(publishedDegreeProgramNoOfSemestersAnnaully); let i = index" value="{{ i + 1 }}">Semester {{ i + 1 }}</ion-select-option>
                     </ion-select>
                   </ion-row>
 

@@ -70,7 +70,7 @@
                 <ion-row>
                     <ion-col size="3">
                       <ion-item style="min-width: 100%;">
-                        <ion-input type="text" clearInput style="min-width: 100%;" placeholder="Enter Module Code" formControlName="moduleCode"></ion-input>
+                        <ion-input type="text" clearInput style="min-width: 100%;" placeholder="Enter Module Code" formControlName="moduleCode" (ionInput)="validateModuleCodeInput($event)"></ion-input>
                       </ion-item>
                     </ion-col>
                     <ion-col size="0.5">
@@ -84,7 +84,7 @@
                     </ion-col>
                     <ion-col size="3">
                       <ion-item style="min-width: 100%;">
-                        <ion-input type="text" clearInput style="min-width: 100%;" placeholder="Enter Module Title" formControlName="moduleTitle"></ion-input>
+                        <ion-input type="text" clearInput style="min-width: 100%;" placeholder="Enter Module Title" formControlName="moduleTitle" (ionInput)="validateModuleTitleInput($event)"></ion-input>
                       </ion-item>
                     </ion-col>
                     <ion-col size="0.5">
@@ -99,17 +99,18 @@
                     <ion-col size="3">
                       <ion-item>
                         <ion-label style="color: #ccc;">
-                          Degree Program
+                          Select Degree Program
                         </ion-label>
-                        <ion-select placeholder="Select Degree Program" style="min-width: 100%;" formControlName="degreeProgram">
-                          <ion-select-option value="School of Computing">School of Computing</ion-select-option>
+                        <ion-select cancelText="Cancel" okText="Continue" style="min-width: 40%;" formControlName="degreeProgram" (ionChange)="validateDegreeProgramSelect($event)">
+                          <ion-select-option value=""></ion-select-option>
+                          <ion-select-option value="{{ publishedDegreeProgramDegree }}">{{ publishedDegreeProgramDegree }}, {{ publishedDegreeProgramAwardingBodyUniversity }}</ion-select-option>
                         </ion-select>
                       </ion-item>
                     </ion-col>
                     <ion-col size="2">
                       <ion-button expand="block" type="submit" style="margin-top: 0px;
                                                                       min-height: 50px;
-                                                                      font-size: 18px;" [disabled]="!searchRegisteredModuleForm.valid">
+                                                                      font-size: 18px;" [disabled]="searchRegisteredModuleButtonDisabled">
                         <ion-icon name="search-outline" style="margin-right: 10px;"></ion-icon>
                         SEARCH
                       </ion-button>
@@ -118,28 +119,105 @@
               </ion-grid>
             </form>
            
-            <ion-spinner name="dots" style="position: absolute;
-                                            left: 50%;
-                                            transform: translateX(-50%);
-                                            margin-top: 20px;
-                                            height: 100px;
-                                            width: 100px;" *ngIf="showLoadingDots"></ion-spinner>
+            
 
 
             <div style="overflow-y: scroll; 
                         height: 460px;
                         margin-top: 15px;
                         border-top: #ccc solid 1px;">
+
+
+              <!-- Page loading search module text -->
+              <div *ngIf="pageLoadSearchModuleText" style="position: absolute;
+                                                          top: 150px;
+                                                          left: 50%;
+                                                          transform: translateX(-50%);
+                                                          font-size: 18px;
+                                                          border: rgb(100, 116, 121) solid 2px;
+                                                          border-radius: 5px;
+                                                          padding: 15px;
+                                                          min-width: 53%;">
+                <ion-icon name="chevron-up-circle-outline" style="color: rgb(8, 177, 219);
+                                                                  font-size: 30px;
+                                                                  margin-top: 2px;
+                                                                  margin-right: 10px;"></ion-icon>
+                <ion-label style="position: relative;
+                                  top: -5px;">
+                  Please populate a field and click 'Search' button to search for a registered module.
+                </ion-label>
+              </div>
+
+              <!-- Loading Spinner -->
+              <ion-spinner name="dots" style="position: absolute;
+                                              left: 50%;
+                                              transform: translateX(-50%);
+                                              margin-top: 20px;
+                                              height: 100px;
+                                              width: 100px;" *ngIf="loadingSpinnerSearchRegisteredModule"></ion-spinner>
+
               <ion-grid>
 
-                <ion-row>
+                <ion-row *ngFor="let item of registeredModules">
 
-                  <ion-col size="12" size-sm="6" size-lg="6">
+                  <ion-col size="4" size-sm="4" size-lg="4">
 
-                    <ion-card>
+                    <ion-card style="min-width: 100%;
+                                     min-height: 150px;">
                       <ion-card-header>
-                        <ion-card-title> </ion-card-title>
+                        <ion-card-title>{{ item.payload.doc.data().moduleCode }} - {{ item.payload.doc.data().moduleTitle }}</ion-card-title>
                       </ion-card-header>
+                      <ion-card-content>
+                        <ion-label>
+                          <b>Credits:</b> {{ item.payload.doc.data().creditsWeighting }}
+                        </ion-label>
+                        <br>
+                        <ion-label>
+                          <b>Degree Program:</b> {{ item.payload.doc.data().degree }}, 
+                        </ion-label>
+                        <br>
+                        <ion-label style="margin-left: 100px;">
+                          {{ item.payload.doc.data().awardingBodyUniversity }} 
+                        </ion-label>
+                        <br>
+                        <ion-label>
+                          <b>Module Leader:</b> {{ item.payload.doc.data().moduleLeader }} 
+                        </ion-label>
+                        <br>
+                        <ion-label>
+                          <b>Academic Period:</b> Year {{ item.payload.doc.data().academicPeriod.academicYear }}, Semester {{ item.payload.doc.data().academicPeriod.academicSemester }}  
+                        </ion-label>
+
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col>
+                              <ion-button expand="block" color="secondary" style="min-width: 100%;" (click)="moreDetailsRegisteredModule($event, item)">
+                                <ion-icon name="document-text" style="font-size: 25px;
+                                                                      margin-right: 5px;"></ion-icon>
+                                More Details
+                              </ion-button>
+                            </ion-col>
+                            <ion-col>
+                              <ion-button expand="block" color="warning" style="min-width: 100%;" (click)="editRegisteredModule(item)">
+                                <ion-icon name="create" style="font-size: 25px;
+                                                              margin-right: 5px;
+                                                              color: white;"></ion-icon>
+                                <ion-label style="color: white;">
+                                  Edit Details
+                                </ion-label>
+                              </ion-button>
+                            </ion-col>
+                            <ion-col>
+                              <ion-button expand="block" color="danger" style="min-width: 100%;" (click)="removeRegisteredModule('Confirmation', 'Module will be removed, do you want to continue?' , item.payload.doc.id)">
+                                <ion-icon name="trash" style="font-size: 25px;
+                                                              margin-right: 5px;"></ion-icon>
+                                Remove
+                              </ion-button>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+
+                      </ion-card-content>
 
                     </ion-card>
 
@@ -170,21 +248,20 @@
                 <ion-card-content>
 
                 
-                  <form> 
+                  <form [formGroup]="registerModuleForm" (ngSubmit)="doRegisterModule(registerModuleForm.value)"> 
                     <ion-grid>
-
                       <ion-row>
 
                         <ion-col size="12" size-md="6" size-lg="6">
 
-                          <ion-label>
+                          <ion-label class="registerModuleFormLabel">
                             Module Code
                           </ion-label>
 
                         </ion-col>
                         <ion-col size="12" size-md="6" size-lg="6">
                           <ion-item class="registerModuleFormItem">
-                            <ion-input type="text" placeholder="Mandatory" clearInput></ion-input>
+                            <ion-input type="text" placeholder="Code" clearInput formControlName="moduleCode"></ion-input>
                           </ion-item>
                         </ion-col>
 
@@ -192,13 +269,13 @@
                       <ion-row>
 
                         <ion-col size="12" size-md="6" size-lg="6">
-                          <ion-label>
+                          <ion-label class="registerModuleFormLabel">
                             Module Title
                           </ion-label>
                         </ion-col>
                         <ion-col size="12" size-md="6" size-lg="6">
                           <ion-item class="registerModuleFormItem">
-                            <ion-input type="text" placeholder="Mandatory" clearInput></ion-input>
+                            <ion-input type="text" placeholder="Title" clearInput formControlName="moduleTitle"></ion-input>
                           </ion-item>
                         </ion-col>
 
@@ -206,13 +283,16 @@
                       <ion-row>
 
                         <ion-col size="12" size-md="6" size-lg="6">
-                          <ion-label>
+                          <ion-label class="registerModuleFormLabel">
                             Credits Weighting
                           </ion-label>
                         </ion-col>
                         <ion-col size="12" size-md="6" size-lg="6">
-                          <ion-item class="registerModuleFormItem">
-                            <ion-input type="number" placeholder="Mandatory" clearInput></ion-input>
+                          <ion-item cancelText="Cancel" okText="Continue" class="registerModuleFormItem">
+                            <ion-label class="registerModuleUserInputLabel">Credits Weighting</ion-label>
+                            <ion-select placeholder="Credits" cancelText="Cancel" okText="Continue" style="min-width: 100%;" formControlName="creditsWeighting">
+                              <ion-select-option *ngFor="let item of publishedModuleCreditsWeighting" value="{{ item.payload.doc.data().creditsWeighting }}">{{ item.payload.doc.data().creditsWeighting }} credits</ion-select-option>
+                            </ion-select>
                           </ion-item>
                         </ion-col>
 
@@ -220,18 +300,16 @@
                       <ion-row>
 
                         <ion-col size="12" size-md="6" size-lg="6">
-                          <ion-label>
-                            Faculty
+                          <ion-label class="registerModuleFormLabel">
+                            Degree Program
                           </ion-label>
                         </ion-col>
                         <ion-col size="12" size-md="6" size-lg="6">
 
                           <ion-item class="registerModuleFormItem">
-                            <ion-label>Faculty</ion-label>
-                            <ion-select>
-                              <ion-select-option value="School of Computing">School of Computing</ion-select-option>
-                              <ion-select-option value="School of Business">School of Business</ion-select-option>
-                              <ion-select-option value="School of Engineering">School of Engineering</ion-select-option>
+                            <ion-label class="registerModuleUserInputLabel">Degree</ion-label>
+                            <ion-select cancelText="Cancel" okText="Continue" style="min-width: 80%;" formControlName="degreeProgram">
+                              <ion-select-option value="{{ publishedDegreeProgramDegree }}">{{ publishedDegreeProgramDegree }}, {{ publishedDegreeProgramAwardingBodyUniversity }}</ion-select-option>
                             </ion-select>
                           </ion-item>
 
@@ -241,18 +319,27 @@
                       <ion-row>
 
                         <ion-col size="12" size-md="6" size-lg="6">
-                          <ion-label>
-                            Program
+                          <ion-label class="registerModuleFormLabel" style="top: 15px;">
+                            Academic Period
                           </ion-label>
                         </ion-col>
                         <ion-col size="12" size-md="6" size-lg="6">
 
-                          <ion-item class="registerModuleFormItem">
-                            <ion-label>Program</ion-label>
-                            <ion-select> 
-                              <ion-select-option value="Sample">Sample</ion-select-option>
-                            </ion-select>
-                          </ion-item>
+                          <div style="border: #ccc solid 1px;
+                                          border-radius: 5px;">
+
+                            <ion-row>
+                              <ion-select placeholder="Year" style="min-width: 95%;" formControlName="academicPeriodYear">
+                                <ion-select-option *ngFor="let item of convertToArray(publishedDegreeProgramNoOfYears); let i = index" value="{{ i + 1 }}">Year {{ i + 1 }}</ion-select-option>
+                              </ion-select>
+                            </ion-row>
+                            <ion-row>
+                              <ion-select placeholder="Semester" style="min-width: 95%;" formControlName="academicPeriodSemester">
+                                <ion-select-option *ngFor="let item of convertToArray(publishedDegreeProgramNoOfSemestersAnnaully); let i = index" value="{{ i + 1 }}">Semester {{ i + 1 }}</ion-select-option>
+                              </ion-select>
+                            </ion-row>
+
+                          </div>
 
                         </ion-col>
 
@@ -260,17 +347,18 @@
                       <ion-row>
 
                         <ion-col size="12" size-md="6" size-lg="6">
-                          <ion-label>
+                          <ion-label class="registerModuleFormLabel" style="top: 15px;">
                             Module Leader
                           </ion-label>
                         </ion-col>
                         <ion-col size="12" size-md="6" size-lg="6">
 
                           <ion-item class="registerModuleFormItem">
-                            <ion-label>Module Leader</ion-label>
-                            <ion-select>
-                              <ion-select-option value="">
-                                
+                            <ion-label class="registerModuleUserInputLabel">Module Leader</ion-label>
+                            <ion-select placeholder="Leader" cancelText="Cancel" okText="Continue" style="min-width: 100%;" formControlName="moduleLeader">
+                              <ion-select-option *ngFor="let item of registeredLecturerUsers" 
+                                value="{{ item.payload.doc.data().name.prefix }} {{ item.payload.doc.data().name.firstName }} {{ item.payload.doc.data().name.lastName }}">
+                                {{ item.payload.doc.data().name.prefix }} {{ item.payload.doc.data().name.firstName }} {{ item.payload.doc.data().name.lastName }}
                               </ion-select-option>
                             </ion-select>
                           </ion-item>
@@ -281,18 +369,38 @@
                       <ion-row>
 
                         <ion-col size="12" size-md="6" size-lg="6">
-                          <ion-label>
-                            Teaching Staff
+                          <ion-label class="registerModuleFormLabel" style="top: 15px;">
+                            Assigned Lecturer
                           </ion-label>
                         </ion-col>
                         <ion-col size="12" size-md="6" size-lg="6">
 
                           <ion-item class="registerModuleFormItem">
-                            <ion-label>Teaching Staff</ion-label>
-                            <ion-select multiple="true" cancelText="Cancel" okText="Ok">
-                              <ion-select-option value="">
-                                
+                            <ion-label class="registerModuleUserInputLabel">Assigned Lecturer</ion-label>
+                            <ion-select placeholder="Lecturer" cancelText="Cancel" okText="Continue" style="min-width: 100%;" formControlName="assignedLecturer">
+                              <ion-select-option *ngFor="let item of registeredLecturerUsers" 
+                                value="{{ item.payload.doc.data().name.prefix }} {{ item.payload.doc.data().name.firstName }} {{ item.payload.doc.data().name.lastName }}">
+                                {{ item.payload.doc.data().name.prefix }} {{ item.payload.doc.data().name.firstName }} {{ item.payload.doc.data().name.lastName }}
                               </ion-select-option>
+                            </ion-select>
+                          </ion-item>
+
+                        </ion-col>
+
+                      </ion-row>
+                      <ion-row>
+
+                        <ion-col size="12" size-md="6" size-lg="6">
+                          <ion-label class="registerModuleFormLabel" style="top: 15px;">
+                            Assigned Lecture Hall
+                          </ion-label>
+                        </ion-col>
+                        <ion-col size="12" size-md="6" size-lg="6">
+
+                          <ion-item class="registerModuleFormItem">
+                            <ion-label class="registerModuleUserInputLabel">Assigned Lecture Hall</ion-label>
+                            <ion-select placeholder="Lecture Hall" cancelText="Cancel" okText="Continue" style="min-width: 100%;" formControlName="assignedLectureHall">
+                              <ion-select-option *ngFor="let item of publishedLectureHalls" value="{{ item.payload.doc.id }}">{{ item.payload.doc.id }}</ion-select-option>
                             </ion-select>
                           </ion-item>
 

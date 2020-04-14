@@ -33,6 +33,8 @@ import { EditLectureSessionModalPageModule } from './account/semester-calendar/e
 import { MoreDetailsSessionPopoverPageModule } from './account/semester-calendar/more-details-session-popover/more-details-session-popover.module';
 
 import { HttpClientModule } from '@angular/common/http';
+import { MoreDetailsModulePopoverPageModule } from './account/modules/more-details-module-popover/more-details-module-popover.module';
+import { EditModuleModalPageModule } from './account/modules/edit-module-modal/edit-module-modal.module';
 
 
 @NgModule({
@@ -54,7 +56,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatTooltipModule,
     EditLectureSessionModalPageModule,
     MoreDetailsSessionPopoverPageModule,
-    HttpClientModule
+    HttpClientModule,
+    MoreDetailsModulePopoverPageModule,
+    EditModuleModalPageModule
   ],
   providers: [
     StatusBar,
