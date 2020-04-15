@@ -2,16 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { NavParams, PopoverController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-more-details-session-popover',
-  templateUrl: './more-details-session-popover.page.html',
-  styleUrls: ['./more-details-session-popover.page.scss'],
+  selector: 'app-more-details-todays-lectures-popover',
+  templateUrl: './more-details-todays-lectures-popover.page.html',
+  styleUrls: ['./more-details-todays-lectures-popover.page.scss'],
 })
-export class MoreDetailsSessionPopoverPage implements OnInit {
+export class MoreDetailsTodaysLecturesPopoverPage implements OnInit {
 
-  passedLectureSessionId = null;
-  passedBatch = null;
-  passedLecturer = null;
-  passedLectureHall = null;
+  passedLectureSessionDocId = null;
   passedDegree = null;
   passedAwardingBodyUniversity = null;
   passedAcademicPeriodYear = null;
@@ -24,27 +21,20 @@ export class MoreDetailsSessionPopoverPage implements OnInit {
 
   ngOnInit() {
 
-    // Retrieving the passed value from the parent page (semester calendar page) and assigning to these variables
-    this.passedLectureSessionId = this.navParams.get('lectureSessionId');
+    // Retrieving the passed value from the parent page (dashboard page) and assigning to these variables
+    this.passedLectureSessionDocId = this.navParams.get('lectureSessionDocId');
 
-    this.passedBatch = this.navParams.get('batch');
-    this.passedLecturer = this.navParams.get('lecturer');
-    this.passedLectureHall = this.navParams.get('lectureHall');
     this.passedDegree = this.navParams.get('degree');
     this.passedAwardingBodyUniversity = this.navParams.get('awardingBodyUniversity');
     this.passedAcademicPeriodYear = this.navParams.get('academicPeriodYear');
     this.passedAcademicPeriodSemester = this.navParams.get('academicPeriodSemester');
-
+    
   }
 
   // Closing the popover
-  closeMoreDetailsSessionPopover() {
+  closeMoreDetailsTodaysLecturesPopover() {
     this.popoverController.dismiss();
   }
-
-
-
-
 
 
 }

@@ -73,36 +73,45 @@
               </ion-card-header>
               <ion-card-content>
 
-                <ion-card style="height: 180px;
-                                width: 250px;
-                                margin-top: -10px;">
-                  <ion-card-header>
-                    SOFT255SL
-                  </ion-card-header>
-                  <ion-card-content>
-                    Software Engineering In Java <br>
-                    <b>Lecture Hall: </b> C2 - 009 <br>
-                    <b>Start Time: </b> 9:00am <br>
-                    <b>End Time: </b> 12:00pm <br>
-                    <b>Lecturer:  </b> Sample
-                  </ion-card-content>
-                </ion-card>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="3" size-sm="3" size-lg="3" *ngFor="let item of todaysLectureSessions">
 
-                <ion-card style="height: 170px;
-                                width: 250px;
-                                position: absolute;
-                                margin-top: -5px;">
-                  <ion-card-header>
-                    SOFT255SL
-                  </ion-card-header>
-                  <ion-card-content>
-                    Software Engineering In Java <br>
-                    <b>Lecture Hall: </b> C2 - 009 <br>
-                    <b>Start Time: </b> 9:00am <br>
-                    <b>End Time: </b> 12:00pm <br>
-                    <b>Lecturer:  </b> Sample
-                  </ion-card-content>
-                </ion-card>
+
+
+                      <ion-card style="height: 210px;
+                                        width: 230px;
+                                        margin-top: -10px;">
+                      <ion-card-header>
+                        <ion-button shape="round" color="primary" size="small" style="position: absolute;
+                                                                                      top: 0px;
+                                                                                      left: 185px;
+                                                                                      width: 40px;
+                                                                                      height: 40px;" (click)="moreDetailsTodaysLectureSession($event, item)">
+                          <ion-icon name="document-text-outline"></ion-icon>
+                        </ion-button>
+                        <ion-label>
+                          {{ item.payload.doc.data().moduleCode }}
+                        </ion-label>
+                      </ion-card-header>
+                      <ion-card-content>
+                        <ion-label>
+                          {{ item.payload.doc.data().moduleTitle }} <br>
+                          <b>Lecture Hall: </b> {{ item.payload.doc.data().lectureHall }} <br>
+                          <b>Batch:  </b> {{ item.payload.doc.data().batch }} <br>
+                          <b>Lecturer:  </b> {{ item.payload.doc.data().lecturer }} <br>
+                          <b>Start Time: </b> {{ (item.payload.doc.data().startDateTime.toDate()).getHours() }} : {{ (item.payload.doc.data().startDateTime.toDate()).getMinutes() }} <br>
+                          <b>End Time: </b> {{ (item.payload.doc.data().endDateTime.toDate()).getHours() }} : {{ (item.payload.doc.data().endDateTime.toDate()).getMinutes() }}<br>
+                          <b>Status: </b> {{ item.payload.doc.data().status }}
+                        </ion-label>
+                      </ion-card-content>
+                    </ion-card>
+
+
+
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
 
               </ion-card-content>
             </ion-card>
@@ -157,6 +166,18 @@
                   
                     </calendar>
                   </div>
+                </div>
+
+                <div style="position: absolute;
+                            top: 282px;
+                            right: 3.4%;" *ngFor="let item of noOfLectureSessions">
+                  <ion-button size="small" title="Lecture Session Read More" color="secondary" (click)="moreDetailsUpcomingLectureSession($event, item)" style="width: 40px;
+                                                                                                                                                                  height: 40px;
+                                                                                                                                                                  border-radius: 5px;
+                                                                                                                                                                  margin-bottom: -5px;
+                                                                                                                                                                  margin-left: -10px;">
+                    <ion-icon name="document-text" style="font-size: 30px;"></ion-icon>
+                  </ion-button>
                 </div>
 
               </ion-card-content>
@@ -241,6 +262,18 @@
                   
                     </calendar>
                   </div>
+                </div>
+
+                <div style="position: absolute;
+                            top: 282px;
+                            right: 3.4%;" *ngFor="let item of noOfEventSessions">
+                  <ion-button size="small" title="Lecture Session Read More" color="secondary" (click)="moreDetailsEventSession($event, session)" style="width: 40px;
+                                                                                                                                                                  height: 40px;
+                                                                                                                                                                  border-radius: 5px;
+                                                                                                                                                                  margin-bottom: -5px;
+                                                                                                                                                                  margin-left: -10px;">
+                    <ion-icon name="document-text" style="font-size: 30px;"></ion-icon>
+                  </ion-button>
                 </div>
 
               </ion-card-content>

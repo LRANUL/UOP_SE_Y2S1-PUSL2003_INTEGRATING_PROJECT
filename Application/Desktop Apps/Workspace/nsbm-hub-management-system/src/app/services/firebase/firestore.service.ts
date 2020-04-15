@@ -122,6 +122,24 @@ export class FirestoreService {
               .where("startDateTime", ">=", nextDateMidnightUnix)).snapshotChanges();
   }
 
+  // Retrieving published lecture sessions for the current date and their details from the firestore database fro the 
+  // dashboard page, today's lectures section
+  retrievePublishedLectureSessionsDashboardTodayLectures(userFaculty) {
+    return this.fireStore.collection("faculties/"+ userFaculty +"/lectureSessions").snapshotChanges();
+  }
+
+  // Retrieving published oncoming lecture sessions from the current date and their details from the firestore database
+  // for the dashboard page, upcoming lectures section
+  retrievePublishedLectureSessionsDashboardUpcomingLectures(userFaculty) {
+    return this.fireStore.collection("faculties/"+ userFaculty +"/lectureSessions", ref => ref
+              .where("startDateTime", ">", new Date())).snapshotChanges();
+  }
+
+  // Retrieving the events sessions and their details from the firesstore database
+  retrievePublishedEventSessionsDashboard(userFaculty) {
+    return this.fireStore.collection("faculty/"+ userFaculty +"/eventSessions").snapshotChanges();
+  }
+
   // Retrieving registered module and their details from the firestore database for the module page (Module Code)
   retrieveRegisterdModulesModuleCode(userFaculty, value){
     return this.fireStore.collection("faculties/"+ userFaculty +"/modules", ref => ref 
@@ -157,7 +175,7 @@ export class FirestoreService {
     return this.fireStore.collection("faculties/"+ userFaculty +"/degreePrograms").snapshotChanges();
   }
 
-  // Retrieving published batch and their details from the firestore database
+  // Retrieving published batches and their details from the firestore database
   retrievePublishedBatch(userFaculty) {
     return this.fireStore.collection("faculties/"+ userFaculty +"/batches").snapshotChanges();
   }

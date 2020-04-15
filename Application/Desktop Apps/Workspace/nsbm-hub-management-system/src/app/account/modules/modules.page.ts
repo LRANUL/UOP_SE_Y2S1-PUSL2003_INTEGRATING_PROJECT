@@ -5,7 +5,6 @@ import { SideMenuPage } from '../side-menu/side-menu.page';
 import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { EditModuleModalPage } from './edit-module-modal/edit-module-modal.page';
 import { MoreDetailsModulePopoverPage } from './more-details-module-popover/more-details-module-popover.page';
-import { exists } from 'fs';
 
 @Component({
   selector: 'app-modules',

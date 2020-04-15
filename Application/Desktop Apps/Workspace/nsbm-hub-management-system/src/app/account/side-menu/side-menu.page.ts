@@ -120,6 +120,11 @@ export class SideMenuPage implements OnInit {
     return this.userFacultyFirestore;
   }
 
+  // Passing user id
+  passUserId() {
+    return this.userDetailsAuth.uid;
+  }
+
 
 
   // Alert Box Implementation

@@ -144,6 +144,8 @@ export class SemesterCalendarPage implements OnInit {
       this.userSelectedAwardingBodyUniversity = this.publishedDegreeProgramAwardingBodyUniversity;
     }
 
+    console.log(value);
+
     console.log(value.batch);
 
     console.log(value.degreeProgram);
@@ -184,8 +186,13 @@ export class SemesterCalendarPage implements OnInit {
       component: MoreDetailsSessionPopoverPage,
       componentProps: {
         lectureSessionId: value.id,
+        batch: value.batch,
         lecturer: value.lecturer,
-        lectureHall: value.lectureHall
+        lectureHall: value.lectureHall,
+        degree: value.degreeProgram,
+        awardingBodyUniversity: value.awardingBodyUniversity,
+        academicPeriodYear: value.academicYear,
+        academicPeriodSemester: value.academicSemester
       },
       event: ev
     });
@@ -370,12 +377,12 @@ export class SemesterCalendarPage implements OnInit {
   }
 
   nextMonthASCalendar(){
-    var frontSwipeASCalendar = document.getElementById('activeSemesterCalendar').querySelector('.swiper-container')['swiper'];
+    var frontSwipeASCalendar = document.getElementById('EventCalendar').querySelector('.swiper-container')['swiper'];
     frontSwipeASCalendar.slideNext();
   }
 
   previousMonthASCalendar(){
-    var backSwipeASCalendar = document.getElementById('activeSemesterCalendar').querySelector('.swiper-container')['swiper'];
+    var backSwipeASCalendar = document.getElementById('EventCalendar').querySelector('.swiper-container')['swiper'];
     backSwipeASCalendar.slidePrev();
   }
 

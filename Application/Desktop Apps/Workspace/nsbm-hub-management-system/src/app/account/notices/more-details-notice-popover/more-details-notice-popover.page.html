@@ -22,39 +22,14 @@
       <ion-row>
         <ion-col>
           <ion-label>
-            <b>Batch</b>
+            <b>Faculty Created By:</b>
           </ion-label>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
           <ion-label>
-            {{ passedBatch }}
-          </ion-label>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-item>
-  <ion-item>
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <ion-label>
-            <b>Degree Program</b>
-          </ion-label>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-label>
-            {{ passedDegree }},
-          </ion-label>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-label>
-            {{ passedAwardingBodyUniversity }}
+            {{ passedNoticeCreatedFaculty }}
           </ion-label>
         </ion-col>
       </ion-row>
@@ -65,21 +40,14 @@
       <ion-row>
         <ion-col>
           <ion-label>
-            <b>Academic Period</b>
+            <b>Created At:</b>
           </ion-label>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
           <ion-label>
-            Year {{ passedAcademicPeriodYear }}
-          </ion-label>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-label>
-            Semester {{ passedAcademicPeriodSemester }}
+            {{ passedNoticeCredtedDateTime }}
           </ion-label>
         </ion-col>
       </ion-row>
@@ -90,32 +58,23 @@
       <ion-row>
         <ion-col>
           <ion-label>
-            <b>Lecturer</b>
+            <b>Sent To:</b>
           </ion-label>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
-          <ion-label>
-            {{ passedLecturer }}
+          <ion-label style="font-size: 20px;">
+            Module Recipients: 
           </ion-label>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-item>
-  <ion-item>
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <ion-label>
-            <b>Lecture Hall</b>  
+          <ion-label *ngFor="let item of passedNoticeRecipientBatch">
+            {{ item }} <br>
           </ion-label>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-label>
-            {{ passedLectureHall }}
+          <ion-label style="font-size: 20px;">
+            Batch Recipients: 
+          </ion-label>
+          <ion-label *ngFor="let item of passedNoticeRecipientModule">
+            {{ item }} <br>
           </ion-label>
         </ion-col>
       </ion-row>

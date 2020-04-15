@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { NavParams, PopoverController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-more-details-session-popover',
-  templateUrl: './more-details-session-popover.page.html',
-  styleUrls: ['./more-details-session-popover.page.scss'],
+  selector: 'app-more-details-lectures-popover',
+  templateUrl: './more-details-lectures-popover.page.html',
+  styleUrls: ['./more-details-lectures-popover.page.scss'],
 })
-export class MoreDetailsSessionPopoverPage implements OnInit {
+export class MoreDetailsLecturesPopoverPage implements OnInit {
 
-  passedLectureSessionId = null;
+  passedLectureSessionDocId = null;
   passedBatch = null;
   passedLecturer = null;
   passedLectureHall = null;
@@ -24,8 +24,8 @@ export class MoreDetailsSessionPopoverPage implements OnInit {
 
   ngOnInit() {
 
-    // Retrieving the passed value from the parent page (semester calendar page) and assigning to these variables
-    this.passedLectureSessionId = this.navParams.get('lectureSessionId');
+    // Retrieving the passed value from the parent page (dashboard page) and assigning to these variables
+    this.passedLectureSessionDocId = this.navParams.get('lectureSessionDocId');
 
     this.passedBatch = this.navParams.get('batch');
     this.passedLecturer = this.navParams.get('lecturer');
@@ -35,16 +35,12 @@ export class MoreDetailsSessionPopoverPage implements OnInit {
     this.passedAcademicPeriodYear = this.navParams.get('academicPeriodYear');
     this.passedAcademicPeriodSemester = this.navParams.get('academicPeriodSemester');
 
+
   }
 
   // Closing the popover
-  closeMoreDetailsSessionPopover() {
+  closeMoreDetailsUpcomingLecturesPopover() {
     this.popoverController.dismiss();
   }
-
-
-
-
-
 
 }

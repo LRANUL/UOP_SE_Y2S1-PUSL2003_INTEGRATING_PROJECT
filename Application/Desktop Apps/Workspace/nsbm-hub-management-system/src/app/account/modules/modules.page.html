@@ -123,7 +123,7 @@
 
 
             <div style="overflow-y: scroll; 
-                        height: 460px;
+                        height: 500px;
                         margin-top: 15px;
                         border-top: #ccc solid 1px;">
 
@@ -158,9 +158,9 @@
 
               <ion-grid>
 
-                <ion-row *ngFor="let item of registeredModules">
+                <ion-row>
 
-                  <ion-col size="4" size-sm="4" size-lg="4">
+                  <ion-col size="4" size-sm="4" size-lg="4" *ngFor="let item of registeredModules">
 
                     <ion-card style="min-width: 100%;
                                      min-height: 150px;">
@@ -241,7 +241,7 @@
           <ion-row>
             <ion-col size="6">
                
-              <ion-card>
+              <ion-card style="margin-top: -10px;">
                 <ion-card-header>
                   <ion-card-title>Register Module</ion-card-title>
                 </ion-card-header>

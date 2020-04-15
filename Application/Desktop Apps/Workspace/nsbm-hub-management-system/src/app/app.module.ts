@@ -32,9 +32,13 @@ import { EditLectureSessionModalPageModule } from './account/semester-calendar/e
 
 import { MoreDetailsSessionPopoverPageModule } from './account/semester-calendar/more-details-session-popover/more-details-session-popover.module';
 
-import { HttpClientModule } from '@angular/common/http';
 import { MoreDetailsModulePopoverPageModule } from './account/modules/more-details-module-popover/more-details-module-popover.module';
 import { EditModuleModalPageModule } from './account/modules/edit-module-modal/edit-module-modal.module';
+import { MoreDetailsTodaysLecturesPopoverPageModule } from './account/dashboard/more-details-todays-lectures-popover/more-details-todays-lectures-popover.module';
+import { MoreDetailsEventSessionsPopoverPageModule } from './account/dashboard/more-details-event-sessions-popover/more-details-event-sessions-popover.module';
+import { MoreDetailsNoticePopoverPageModule } from './account/notices/more-details-notice-popover/more-details-notice-popover.module';
+import { ViewImageNoticeModalPageModule } from './account/notices/view-image-notice-modal/view-image-notice-modal.module';
+import { MoreDetailsLecturesPopoverPageModule } from './account/dashboard/more-details-lectures-popover/more-details-lectures-popover.module';
 
 
 @NgModule({
@@ -56,9 +60,13 @@ import { EditModuleModalPageModule } from './account/modules/edit-module-modal/e
     MatTooltipModule,
     EditLectureSessionModalPageModule,
     MoreDetailsSessionPopoverPageModule,
-    HttpClientModule,
     MoreDetailsModulePopoverPageModule,
-    EditModuleModalPageModule
+    EditModuleModalPageModule,
+    MoreDetailsEventSessionsPopoverPageModule,
+    MoreDetailsTodaysLecturesPopoverPageModule,
+    MoreDetailsLecturesPopoverPageModule,
+    ViewImageNoticeModalPageModule,
+    MoreDetailsNoticePopoverPageModule
   ],
   providers: [
     StatusBar,

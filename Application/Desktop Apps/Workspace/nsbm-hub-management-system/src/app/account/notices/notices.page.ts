@@ -7,10 +7,13 @@ import { finalize, tap } from 'rxjs/operators';
 
 import { EventNoticeData, NoticeData } from '../../types';
 
-import { AlertController } from '@ionic/angular';
+import { AlertController, PopoverController, ModalController } from '@ionic/angular';
 
 import { FirestoreService } from '../../services/firebase/firestore.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { SideMenuPage } from '../side-menu/side-menu.page';
+import { MoreDetailsNoticePopoverPage } from './more-details-notice-popover/more-details-notice-popover.page';
+import { ViewImageNoticeModalPage } from './view-image-notice-modal/view-image-notice-modal.page';
 
 
 
@@ -21,31 +24,117 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class NoticesPage implements OnInit {
 
+  loggedInUserId;
+
+  loggedInUserFaculty;
+
+  // Retrieve notices current datetime
+  currentDateTimeRNObject;
+
+  // Retrieve notices current datetime
+  currentDateTimeRN;
+
   ngOnInit() {
 
-    //this.publishedNotices_Lecturers_To_PO;
+    this.retrieveRegisteredModules();
 
-    this.publishedNotices_PO_To_Students;
+    this.retrievePublishedBatch();
 
-    //this.publishedNotices_PO_To_Lecturers;
+    this.loggedInUserId =  this.sideMenuPageUserFaculty.passUserId();
+
+    this.loggedInUserFaculty = this.sideMenuPageUserFaculty.passUserFaculty();
+
+    console.log(this.loggedInUserId);
+
+    console.log(this.loggedInUserFaculty);
+
+    this.retrieveRegisteredLecturers();
+
+    this.currentDateTimeRNObject = new Date();
+
+    this.currentDateTimeRN = new Date().toISOString();//this.currentDateTimeRNObject.getFullYear() + "-" + (this.currentDateTimeRNObject.getMonth() + 1) + "-" + this.currentDateTimeRNObject.getDate();
+
+    console.log(this.currentDateTimeRN);
+
+    this.retrievePublishedNotices_Lecturers_To_PO();
+
+    this.retrievePublishedNotices_PO_To_Students();
+
+    this.retrievePublishedNotices_PO_To_Lecturers();
     
   }
 
+  // Retrieving published modules from the firestore database
+  publishedModules;
+  retrieveRegisteredModules = () => 
+    this.noticesService.retrieveRegisteredModules(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(response => (this.publishedModules = response));
+
+  // Retrieving the published batches from the firesore database
+  publishedBatches;
+  retrievePublishedBatch = () => 
+    this.noticesService.retrievePublishedBatch(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(response => (this.publishedBatches = response));
+  
+
+  // Retrieving the registered lecture users from the firestore database
+  registeredLecturerUsers;
+  retrieveRegisteredLecturers = () => 
+    this.noticesService.retrieveRegisteredLecturers().subscribe(response => (this.registeredLecturerUsers = response));
+
   // Retrieving published notices (Lecturers To Program Office (PO)) and assigning them
-  //publishedNotices_Lecturers_To_PO;
-  //retrievePublishedNotices_Lecturers_To_PO = () => 
-  //  this.noticesService.retrievePublishedNotices_Lecturers_To_PO().subscribe(response => (this.publishedNotices_Lecturers_To_PO = response));
+  publishedNotices_Lecturers_To_PO;
+  retrievePublishedNotices_Lecturers_To_PO = () => 
+    this.noticesService.retrievePublishedNotices_Lecturers_To_PO().subscribe(response => (this.publishedNotices_Lecturers_To_PO = response));
+
 
   // Retrieving published notices (Program Office (PO) To Students) and assigning them
   publishedNotices_PO_To_Students;
-  retrievePublishedNotices_PO_To_Students = () => 
+  retrievePublishedNotices_PO_To_Students = () => {
     this.noticesService.retrievePublishedNotices_PO_To_Students().subscribe(response => (this.publishedNotices_PO_To_Students = response));
+  }
+
 
   // Retrieving published notices (Program Office (PO) To Lecturers) and assigning them
- // publishedNotices_PO_To_Lecturers;
-  //retrievePublishedNotices_PO_To_Lecturers = () => 
-  //  this.noticesService.retrievePublishedNotices_PO_To_Lecturers().subscribe(response => (this.publishedNotices_PO_To_Lecturers = response));
+  publishedNotices_PO_To_Lecturers;
+  retrievePublishedNotices_PO_To_Lecturers = () => 
+    this.noticesService.retrievePublishedNotices_PO_To_Lecturers().subscribe(response => (this.publishedNotices_PO_To_Lecturers = response));
 
+
+  // More details of notice popover
+  async moreDetailsNotice(ev: Event, value){
+    const moreDetailsNoticePopover = await this.popoverController.create({
+      component: MoreDetailsNoticePopoverPage,
+      componentProps: {
+        noticeDocId: value.id,
+        noticeCreatedFaculty: value.noticeCreated.noticeCreatedByFaculty,
+        noticeCredtedDateTime: value.noticeCreated.noticeCreatedDateTime,
+        noticeRecipientBatch: value.noticeRecipient.noticeRecipientBatch,
+        noticeRecipientModule: value.noticeRecipient.noticeRecipientModule
+      },
+      event: ev
+    });
+
+    moreDetailsNoticePopover.present();
+  }
+
+  // View image of event notice modal calling, opening modal
+  async viewImageNotice(value){
+    console.log(value);
+
+    const viewImageNoticeModal = await this.modalController.create({
+      component: ViewImageNoticeModalPage,
+      // Passing value to the modal using 'componentProps'
+      componentProps: {
+        noticeDocId: value.id,
+        coverImageFileName: value.noticeCoverImage.coverImageFileName,
+        coverImageFileSize: value.noticeCoverImage.coverImageFileSize,
+        coverImageFilePath: value.noticeCoverImage.coverImageFilePath
+      },
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+    viewImageNoticeModal.present();
+  }
+  
 
 
   
@@ -149,6 +238,9 @@ export class NoticesPage implements OnInit {
     private database: AngularFirestore,
     private alertController: AlertController,
     private noticesService: FirestoreService,
+    private sideMenuPageUserFaculty: SideMenuPage,
+    private modalController: ModalController,
+    private popoverController: PopoverController
   ){
     this.isFileUploading = false;
     this.isFileUploaded = false;
@@ -203,7 +295,7 @@ export class NoticesPage implements OnInit {
 
   // Retriving the current date and time from the localhost
   currentDT = new Date();
-  currentDateTime = this.currentDT.getDate() + "/" + this.currentDT.getMonth() + "/" + this.currentDT.getFullYear() + " " + this.currentDT.getHours() + ":" + this.currentDT.getMinutes() + ":" + this.currentDT.getSeconds();
+  currentDateTime = this.currentDT.getDate() + "/" + (this.currentDT.getMonth()+1) + "/" + this.currentDT.getFullYear() + " " + this.currentDT.getHours() + ":" + this.currentDT.getMinutes() + ":" + this.currentDT.getSeconds();
   
 
   // Upload file process (Student)
@@ -285,7 +377,7 @@ export class NoticesPage implements OnInit {
                     cooverImageFileSize: this.fileSize
                   },
                   noticeCreated: {
-                    noticeCreatedByName: "Program Office User Name",
+                    noticeCreatedByUid: this.loggedInUserId,
                     noticeCreatedByFaculty: noticeAuthor,
                     noticeCreatedDateTime: this.currentDateTime
                   },
@@ -314,7 +406,7 @@ export class NoticesPage implements OnInit {
                     cooverImageFileSize: this.fileSize
                   },
                   noticeCreated: {
-                    noticeCreatedByName: "Program Office User Name",
+                    noticeCreatedByUid: this.loggedInUserId,
                     noticeCreatedByFaculty: noticeAuthor,
                     noticeCreatedDateTime: this.currentDateTime
                   },
@@ -382,7 +474,7 @@ export class NoticesPage implements OnInit {
             noticeRecipientBatch: noticeRecipientBatch 
           },
           noticeCreated: {
-            noticeCreatedByName: "Program Office User Name",
+            noticeCreatedByUid: this.loggedInUserId,
             noticeCreatedByFaculty: noticeAuthor,
             noticeCreatedDateTime: this.currentDateTime // firebase.firestore.Timestamp.fromDate(new Date(this.currentDateTime))
           },
@@ -406,7 +498,7 @@ export class NoticesPage implements OnInit {
             noticeRecipientBatch: "NULL" 
           },
           noticeCreated: {
-            noticeCreatedByName: "Program Office User Name",
+            noticeCreatedByUid: this.loggedInUserId,
             noticeCreatedByFaculty: noticeAuthor,
             noticeCreatedDateTime: this.currentDateTime // firebase.firestore.Timestamp.fromDate(new Date(this.currentDateTime))
           },
@@ -553,7 +645,7 @@ export class NoticesPage implements OnInit {
                     cooverImageFileSize: this.fileSize
                   },
                   noticeCreated: {
-                    noticeCreatedByName: "Program Office User Name",
+                    noticeCreatedByUid: this.loggedInUserId,
                     noticeCreatedByFaculty: noticeAuthor,
                     noticeCreatedDateTime: this.currentDateTime
                   },
@@ -582,7 +674,7 @@ export class NoticesPage implements OnInit {
                     cooverImageFileSize: this.fileSize
                   },
                   noticeCreated: {
-                    noticeCreatedByName: "Program Office User Name",
+                    noticeCreatedByUid: this.loggedInUserId,
                     noticeCreatedByFaculty: noticeAuthor,
                     noticeCreatedDateTime: this.currentDateTime
                   },
@@ -650,7 +742,7 @@ export class NoticesPage implements OnInit {
             noticeRecipientBatch: noticeRecipientBatch 
           },
           noticeCreated: {
-            noticeCreatedByName: "Program Office User Name",
+            noticeCreatedByUid: this.loggedInUserId,
             noticeCreatedByFaculty: noticeAuthor,
             noticeCreatedDateTime: this.currentDateTime // firebase.firestore.Timestamp.fromDate(new Date(this.currentDateTime))
           },
@@ -674,7 +766,7 @@ export class NoticesPage implements OnInit {
             noticeRecipientBatch: "NULL" 
           },
           noticeCreated: {
-            noticeCreatedByName: "Program Office User Name",
+            noticeCreatedByUid: this.loggedInUserId,
             noticeCreatedByFaculty: noticeAuthor,
             noticeCreatedDateTime: this.currentDateTime // firebase.firestore.Timestamp.fromDate(new Date(this.currentDateTime))
           },

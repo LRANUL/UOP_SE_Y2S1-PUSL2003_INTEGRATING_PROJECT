@@ -256,9 +256,8 @@
                       </ion-col>
                       <ion-col size="4">
                         <ion-item>
-                          <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Module"  [(ngModel)]="noticeRecipientModule" style="min-width: 170px;">
-                            <ion-select-option value="SOFT255SL">SOFT255SL</ion-select-option>
-                            <ion-select-option value="PUSL2003SL">PUSL2003</ion-select-option>
+                          <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Module" [(ngModel)]="noticeRecipientModule" style="min-width: 170px;">
+                            <ion-select-option *ngFor="let item of publishedModules" value="{{ item.payload.doc.data().moduleCode }}">{{ item.payload.doc.data().moduleCode }}</ion-select-option>
                           </ion-select>
                         </ion-item>
                       </ion-col>
@@ -266,8 +265,7 @@
                       <ion-col size="4">
                         <ion-item>
                           <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Batch" [(ngModel)]="noticeRecipientBatch" style="min-width: 170px;">
-                            <ion-select-option value="Plymouth Batch 7">Plymouth Batch 7</ion-select-option>
-                            <ion-select-option value="UGC: MIS Batch 6">UCD: MIS Batch 6</ion-select-option>
+                            <ion-select-option *ngFor="let item of publishedBatches" value="{{ item.payload.doc.data().batch }}">{{ item.payload.doc.data().batch }}</ion-select-option>
                           </ion-select>
                         </ion-item>
                       </ion-col>
@@ -279,11 +277,7 @@
                       </ion-col>
                       <ion-col size="8">
                         <ion-item>
-                          <ion-select interface="popover" [(ngModel)]="noticeAuthor" style="min-width: 100%;">
-                            <ion-select-option value="Program Office: School of Computing" style="width: 100%;">Program Office: SoC</ion-select-option>
-                            <ion-select-option value="Program Office: School of Business" style="width: 100%;">Program Office: SoB</ion-select-option>
-                            <ion-select-option value="Program Office: School of Engineering" style="width: 100%;">Program Office: SoE</ion-select-option>
-                          </ion-select>
+                          <ion-input [(ngModel)]="noticeAuthor" style="min-width: 100%;" type="text" readOnly>Program Office: {{ loggedInUserFaculty }}</ion-input>
                         </ion-item>
                       </ion-col>
                     </ion-row>
@@ -436,8 +430,10 @@
                       <ion-col size="4">
                         <ion-item>
                           <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Lecturer"  [(ngModel)]="noticeRecipientModule" style="min-width: 170px;">
-                            <ion-select-option value="Dr. Sample">Dr. Sample</ion-select-option>
-                            <ion-select-option value="Mr. Sample">Mr. Sample</ion-select-option>
+                            <ion-select-option *ngFor="let item of registeredLecturerUsers" 
+                              value="{{ item.payload.doc.data().name.prefix }} {{ item.payload.doc.data().name.firstName }} {{ item.payload.doc.data().name.lastName }}">
+                              {{ item.payload.doc.data().name.prefix }} {{ item.payload.doc.data().name.firstName }} {{ item.payload.doc.data().name.lastName }}
+                            </ion-select-option>
                           </ion-select>
                         </ion-item>
                       </ion-col>
@@ -449,11 +445,7 @@
                       </ion-col>
                       <ion-col size="8">
                         <ion-item>
-                          <ion-select interface="popover" [(ngModel)]="noticeAuthor" style="min-width: 100%;">
-                            <ion-select-option value="Program Office: School of Computing" style="width: 100%;">Program Office: SoC</ion-select-option>
-                            <ion-select-option value="Program Office: School of Business" style="width: 100%;">Program Office: SoB</ion-select-option>
-                            <ion-select-option value="Program Office: School of Engineering" style="width: 100%;">Program Office: SoE</ion-select-option>
-                          </ion-select>
+                            <ion-input [(ngModel)]="noticeAuthor" style="min-width: 100%;" type="text" readOnly>Program Office: {{ loggedInUserFaculty }}</ion-input>
                         </ion-item>
                       </ion-col>
                     </ion-row>
@@ -494,12 +486,14 @@
                 <ion-grid>
                   <ion-row>
                     <ion-col>
-                      <h4> Notices From to Lecturers </h4>
+                      <h4> Notices From Lecturers </h4>
                     </ion-col>
                     <ion-col>
-                      <ion-item style="margin-top: -12px;">
-                        <ion-label>Select Date</ion-label>
-                        <ion-datetime value="2020-02-01" placeholder="Select Date"></ion-datetime>
+                      <ion-item style="margin-top: -12px;
+                                      color: black;">
+                        <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
+                        <ion-label style="margin-left: 10px;">Select Date</ion-label>
+                        <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticeLecturesToPO($event, this)"></ion-datetime>
                       </ion-item>
                     </ion-col>
                   </ion-row>
@@ -514,15 +508,50 @@
                             margin-top: -20px;">
                 </div>
 
-                <ion-card>
-                  <ion-card-header>
-                 
-                  </ion-card-header>
-                  <ion-card-content>
+                <div style="overflow-y: scroll;
+                              width: 100%;
+                              height: 300px;">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col size="6" *ngFor="let list of publishedNotices_Lecturers_To_PO">
 
-                  </ion-card-content>
-                </ion-card>
+                          <ion-card>
+                            <ion-card-header>
+                              <ion-label>
+                                <b>{{ list.payload.doc.data().noticeTitle }}</b>
+                              </ion-label>
+                            </ion-card-header>
+                            <ion-card-content>
+                              <ion-label>
+                                {{ list.payload.doc.data().noticeDescription }} <br>
+                              </ion-label>
+                              <ion-label>
+                                <b>Notice Category: </b>
+                                {{ list.payload.doc.data().noticeCategory }} <br>
+                              </ion-label>
+                              <ion-grid>
+                                <ion-row>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" color="secondary">
+                                    <ion-icon name="image-outline"></ion-icon>
+                                    </ion-button>
+                                  </ion-col>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" (click)="moreDetailsNotice($event, list)">
+                                      <ion-icon name="document-text-outline"></ion-icon>
+                                    </ion-button>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                            </ion-card-content>
+                          </ion-card>
 
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </div>
                 
 
               </ion-card-content>
@@ -550,8 +579,9 @@
                       </ion-col>
                       <ion-col>
                         <ion-item style="margin-top: -12px;">
-                          <ion-label>Select Date</ion-label>
-                          <ion-datetime value="2020-02-01" placeholder="Select Date"></ion-datetime>
+                          <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
+                          <ion-label style="margin-left: 10px;">Select Date</ion-label>
+                          <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticePOToStudents($event, this)"></ion-datetime>
                         </ion-item>
                       </ion-col>
                     </ion-row>
@@ -566,14 +596,50 @@
                               margin-top: -20px;">
                   </div>
 
-                  <ion-card *ngFor="let list of publishedNotices_PO_To_Students">
-                    <ion-card-header>
-                      {{ list.payload.doc.data().noticeTitle }}
-                    </ion-card-header>
-                    <ion-card-content>
+                  <div style="overflow-y: scroll;
+                              width: 100%;
+                              height: 300px;">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col size="6" *ngFor="let list of publishedNotices_PO_To_Students">
 
-                    </ion-card-content>
-                  </ion-card>
+                          <ion-card>
+                            <ion-card-header>
+                              <ion-label>
+                                <b>{{ list.payload.doc.data().noticeTitle }}</b>
+                              </ion-label>
+                            </ion-card-header>
+                            <ion-card-content>
+                              <ion-label>
+                                {{ list.payload.doc.data().noticeDescription }} <br>
+                              </ion-label>
+                              <ion-label>
+                                <b>Notice Category: </b>
+                                {{ list.payload.doc.data().noticeCategory }} <br>
+                              </ion-label>
+                              <ion-grid>
+                                <ion-row>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" color="secondary">
+                                    <ion-icon name="image-outline"></ion-icon>
+                                    </ion-button>
+                                  </ion-col>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" (click)="moreDetailsNotice($event, list)">
+                                      <ion-icon name="document-text-outline"></ion-icon>
+                                    </ion-button>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                            </ion-card-content>
+                          </ion-card>
+
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </div>
 
                 </ion-card-content>
               </ion-card>
@@ -596,9 +662,11 @@
                         <h4> Notices Sent to Lecturers </h4>
                       </ion-col>
                       <ion-col>
-                        <ion-item style="margin-top: -12px;">
-                          <ion-label>Select Date</ion-label>
-                          <ion-datetime value="2020-02-01" placeholder="Select Date"></ion-datetime>
+                        <ion-item style="margin-top: -12px;
+                                        color: black;">
+                          <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
+                          <ion-label style="margin-left: 10px;">Select Date</ion-label>
+                          <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticePOToLecturers($event, this)"></ion-datetime>
                         </ion-item>
                       </ion-col>
                     </ion-row>
@@ -613,14 +681,52 @@
                               margin-top: -20px;">
                   </div>
 
-                  <ion-card>
-                    <ion-card-header>
-                  
-                    </ion-card-header>
-                    <ion-card-content>
+                  <div style="overflow-y: scroll;
+                              width: 100%;
+                              height: 300px;">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col size="6" *ngFor="let list of publishedNotices_PO_To_Lecturers">
 
-                    </ion-card-content>
-                  </ion-card>
+                          <ion-card>
+                            <ion-card-header>
+                              <ion-label>
+                                <b>{{ list.payload.doc.data().noticeTitle }}</b>
+                              </ion-label>
+                            </ion-card-header>
+                            <ion-card-content>
+                              <ion-label>
+                                {{ list.payload.doc.data().noticeDescription }} <br>
+                              </ion-label>
+                              <ion-label>
+                                <b>Notice Category: </b>
+                                {{ list.payload.doc.data().noticeCategory }} <br>
+                              </ion-label>
+                              <ion-grid>
+                                <ion-row>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" color="secondary">
+                                    <ion-icon name="image-outline"></ion-icon>
+                                    </ion-button>
+                                  </ion-col>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" (click)="moreDetailsNotice($event, list)">
+                                      <ion-icon name="document-text-outline"></ion-icon>
+                                    </ion-button>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                            </ion-card-content>
+                          </ion-card>
+
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </div>
+
+
 
                 </ion-card-content>
               </ion-card>

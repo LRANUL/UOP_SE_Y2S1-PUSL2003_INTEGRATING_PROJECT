@@ -19,7 +19,7 @@ export interface EventNoticeData { // Used to upload event cover page to the fir
         cooverImageFileSize: number
     }
     noticeCreated: {
-        noticeCreatedByName: string,
+        noticeCreatedByUid: string,
         noticeCreatedByFaculty: string,
         noticeCreatedDateTime: string
     }
@@ -40,7 +40,7 @@ export interface NoticeData {
         noticeRecipientBatch: string
     },
     noticeCreated: {
-        noticeCreatedByName: string,
+        noticeCreatedByUid: string,
         noticeCreatedByFaculty: string,
         noticeCreatedDateTime: string
     }
@@ -48,6 +48,6 @@ export interface NoticeData {
         updatedByName: string,
         updatedByFaculty: string,
         updatedDateTime: string,
-        updatedSection: string,
+        updatedSection: string
     }
 }
