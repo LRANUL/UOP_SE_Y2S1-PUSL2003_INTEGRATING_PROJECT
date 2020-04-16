@@ -34,6 +34,8 @@ export class NoticesPage implements OnInit {
   // Retrieve notices current datetime
   currentDateTimeRN;
 
+  poToStudentNoticeForm: FormGroup;
+
   ngOnInit() {
 
     this.retrieveRegisteredModules();
@@ -101,18 +103,20 @@ export class NoticesPage implements OnInit {
 
   // More details of notice popover
   async moreDetailsNotice(ev: Event, value){
+    console.log(value);
     const moreDetailsNoticePopover = await this.popoverController.create({
       component: MoreDetailsNoticePopoverPage,
       componentProps: {
-        noticeDocId: value.id,
-        noticeCreatedFaculty: value.noticeCreated.noticeCreatedByFaculty,
-        noticeCredtedDateTime: value.noticeCreated.noticeCreatedDateTime,
-        noticeRecipientBatch: value.noticeRecipient.noticeRecipientBatch,
-        noticeRecipientModule: value.noticeRecipient.noticeRecipientModule
+        noticeDocId: value.payload.doc.id,
+        noticeCreatedFaculty: value.payload.doc.data().noticeCreated.noticeCreatedByFaculty,
+        noticeCredtedDateTime: value.payload.doc.data().noticeCreated.noticeCreatedDateTime,
+        noticeRecipientBatch: value.payload.doc.data().noticeRecipient.noticeRecipientBatch,
+        noticeRecipientModule: value.payload.doc.data().noticeRecipient.noticeRecipientModule
       },
       event: ev
     });
-
+    console.log(value.payload.doc.data().noticeRecipient.noticeRecipientBatch);
+    console.log(value.payload.doc.data().noticeRecipient.noticeRecipientModule);
     moreDetailsNoticePopover.present();
   }
 
@@ -124,10 +128,10 @@ export class NoticesPage implements OnInit {
       component: ViewImageNoticeModalPage,
       // Passing value to the modal using 'componentProps'
       componentProps: {
-        noticeDocId: value.id,
-        coverImageFileName: value.noticeCoverImage.coverImageFileName,
-        coverImageFileSize: value.noticeCoverImage.coverImageFileSize,
-        coverImageFilePath: value.noticeCoverImage.coverImageFilePath
+        noticeDocId: value.payload.doc.id,
+        coverImageFileName: value.payload.doc.data().noticeCoverImage.coverImageFileName,
+        coverImageFileSize: value.payload.doc.data().noticeCoverImage.coverImageFileSize,
+        coverImageFilePath: value.payload.doc.data().noticeCoverImage.coverImageFilePath
       },
       // Disabling modal closing from any outside clicks
       backdropDismiss: false
@@ -379,7 +383,7 @@ export class NoticesPage implements OnInit {
                   noticeCreated: {
                     noticeCreatedByUid: this.loggedInUserId,
                     noticeCreatedByFaculty: noticeAuthor,
-                    noticeCreatedDateTime: this.currentDateTime
+                    noticeCreatedDateTime: new Date().toISOString()
                   },
                   noticeUpdate: {
                     updatedByName: "NULL",

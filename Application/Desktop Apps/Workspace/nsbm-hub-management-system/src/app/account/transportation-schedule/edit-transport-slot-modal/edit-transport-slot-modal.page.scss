@@ -12,10 +12,9 @@ ion-item{
 }
 
 ion-label{
+    position: absolute;
+    top: 20px;
     color: black;
+    font-size: 15px;
 }
 
-.addEventFormLabel{
-    position: relative;
-    top: 15px;
-}

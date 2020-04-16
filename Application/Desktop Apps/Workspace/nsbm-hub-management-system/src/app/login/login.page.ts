@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ModalController, LoadingController, AlertController } from '@ionic/angular';
+import { ModalController, LoadingController, AlertController, NavController } from '@ionic/angular';
 import { AboutModalPage } from './about-modal/about-modal.page';
 import { RegisterModalPage } from './register-modal/register-modal.page';
 

@@ -38,9 +38,10 @@ export class DashboardPage implements OnInit {
 
     this.retrievePublishedLectureSessionsDashboardUpcomingLecturers();
 
-    this.retrievePublishedEventSessionsDashboard();
+    this.retrievePublishedEventSessions();
 
   }
+  
 
   // Retrieving the published lecture sessions fro the current date from the firestore database
   todaysLectureSessions;
@@ -128,14 +129,14 @@ export class DashboardPage implements OnInit {
   }
 
 
-  retrievePublishedEventSessionsDashboard = () => {
+  retrievePublishedEventSessions = () => {
     // Retrieving the event sessions from the firestore database
-    this.dashboardService.retrievePublishedEventSessionsDashboard(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(eventSlots => {
+    this.dashboardService.retrievePublishedEventSessions(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(eventSlots => {
       this.eventSourceEvent = []; // Clearing the exisiting events on the calendar before syncing
       eventSlots.forEach(snap => {
         let event:any = snap.payload.doc.data();
         event.id = snap.payload.doc.id;
-        event.title = event.eventTitle + "| Status: " + event.status;
+        event.title = event.eventTitle + "  | Status:  " + event.status;
         event.startTime = event.startDateTime.toDate();
         event.endTime = event.endDateTime.toDate();
 

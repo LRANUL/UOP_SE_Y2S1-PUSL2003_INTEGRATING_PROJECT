@@ -1,9 +1,22 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>viewImageNoticeModal</ion-title>
+    <ion-title>Notice Cover Image</ion-title>
+    <ion-button (click)="closeViewImageNoticeModal()" slot="end" shape="round" fill="outline" color="danger" style="margin-right: 20px;">
+      <ion-icon name="close-outline" style="font-size: 30px;"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  
+  <ion-card>
+    <ion-card-content>
+      <div style="position: relative;
+                  left: 50%;
+                  transform: translateX(-50%);">
+        <img src="{{ passedCoverImageFilePath }}" width=90%>
+      </div>
+    </ion-card-content>
+  </ion-card>
 
 </ion-content>

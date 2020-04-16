@@ -71,11 +71,57 @@ export class FirestoreService {
       assignedLecturer: value.assignedLecturer,
       assignedLectureHall: value.assignedLectureHall
     }).then(function() {
-      console.log("Module registerd and value were added");
+      console.log("Module registerd and values were added");
     });
   }
-  
 
+  // Publishing new event session by adding the details to the firestore database
+  publishNewEventSession(userFaculty, value, eventStartDateTime, eventEndDateTime){
+    // Creating an ID for the document
+    const docId = this.fireStore.createId();
+
+    return this.fireStore.collection("faculties/"+ userFaculty +"/eventSessions").doc(docId).set({
+      eventTitle: value.eventTitle,
+      startDateTime: eventStartDateTime,
+      endDateTime: eventEndDateTime,
+      status: value.eventStatus
+    }).then(function() {
+      console.log("New event published and values added");
+    })
+  }
+
+  // Publishing new transport schedule slot by adding the details to the firestore database
+  publishNewTransportSlot(transportSlotType, value, userId){
+    // Creating an ID for the document
+    const docId = this.fireStore.createId();
+    console.log(value.availableDays);
+    if(transportSlotType == "nsbmDestination"){
+      return this.fireStore.collection("transportationSchedule/transportScheduleType/"+ transportSlotType).doc(docId).set({
+        departure: value.departure,
+        destination: "NSBM",
+        departureTime: value.departureTime,
+        approximatedArrivalTime: value.approArrivalTime,
+        availableWeekdays: value.availableWeekdays,
+        availableWeekends: value.availableWeekends,
+        status: value.status,
+        createdByUid: userId
+      })
+    }
+    else if(transportSlotType == "nsbmDeparture"){
+      return this.fireStore.collection("transportationSchedule/transportScheduleType/"+ transportSlotType).doc(docId).set({
+        departure: "NSBM",
+        destination: value.destination,
+        departureTime: value.departureTime,
+        approximatedArrivalTime: value.approArrivalTime,
+        availableWeekdays: value.availableWeekdays,
+        availableWeekends: value.availableWeekends,
+        status: value.status,
+        createdByUid: userId
+      })
+    }
+  }
+  
+  // Publishing new notice by adding the details to the firestore database
   createNewNotice(record) {
     return this.fireStore.collection('Notices').add(record);
   }
@@ -135,9 +181,9 @@ export class FirestoreService {
               .where("startDateTime", ">", new Date())).snapshotChanges();
   }
 
-  // Retrieving the events sessions and their details from the firesstore database
-  retrievePublishedEventSessionsDashboard(userFaculty) {
-    return this.fireStore.collection("faculty/"+ userFaculty +"/eventSessions").snapshotChanges();
+  // Retrieving the events sessions and their details from the firestore database
+  retrievePublishedEventSessions(userFaculty) {
+    return this.fireStore.collection("faculties/"+ userFaculty +"/eventSessions").snapshotChanges();
   }
 
   // Retrieving registered module and their details from the firestore database for the module page (Module Code)
@@ -196,6 +242,11 @@ export class FirestoreService {
             .where("status", "==", "Active")).snapshotChanges();
   }
 
+  // Retrieving published transportation schedules and their details from the firestore database
+  retrievePublishedTransportationSchedules(transportSlotType) {
+    return this.fireStore.collection("transportationSchedule/transportScheduleType/"+ transportSlotType + "/").snapshotChanges();
+  }
+
   // Updating lecture session values in the firestore database
   updateLectureSession(userFaculty, id, value, userFormDataModuleCode, userFormDataSessionStartDateTime, userFormDataSessionEndDateTime) {
     return this.fireStore.doc("faculties/"+ userFaculty +"/lectureSessions/"+ id).update({
@@ -235,6 +286,55 @@ export class FirestoreService {
     });
   }
 
+  // Updating event session values in the firestore database
+  updateEventSession(userFaculty, docId, value, eventStartDateTime, eventEndDateTime){
+    return this.fireStore.doc("faculties/"+ userFaculty +"/eventSessions/"+ docId).update({
+      eventTitle: value.eventTitle,
+      startDateTime: eventStartDateTime,
+      endDateTime: eventEndDateTime,
+      status: value.eventStatus
+    }).then(function() {
+      console.log("Event Session Details has been updated.");
+    });
+  }
+
+  // Updating transport slot values in the firestore database
+  updateTransportSlot(transportSlotType, docId, value){
+    
+    if(transportSlotType == "nsbmDestination"){
+      return this.fireStore.doc("transportationSchedule/transportScheduleType/"+ transportSlotType + "/" + docId).update({
+        departure: "NSBM",
+        destination: value.destination,
+        departureTime: value.departureTime,
+        approximatedArrivalTime: value.approArrivalTime,
+        availableWeekdays: value.availableWeekdays,
+        availableWeekends: value.availableWeekends,
+        status: value.status
+      }).then(function() {
+        console.log("Transport slot details has been updated.");
+      });
+    }
+    else if(transportSlotType == "nsbmDeparture"){
+      return this.fireStore.doc("transportationSchedule/transportScheduleType/"+ transportSlotType + "/" + docId).update({
+        departure: value.departure,
+        destination: "NSBM",
+        departureTime: value.departureTime,
+        approximatedArrivalTime: value.approArrivalTime,
+        availableWeekdays: value.availableWeekdays,
+        availableWeekends: value.availableWeekends,
+        status: value.status
+      }).then(function() {
+        console.log("Transport slot details has been updated.");
+      });
+    }
+
+  }
+
+  // Removing event session from the firestore database
+  removeEventSession(userFaculty, id) {
+    return this.fireStore.doc("faculties/"+ userFaculty +"/eventSessions/"+ id).delete();
+  }
+
   // Removing lecture session from the firestore database
   removeLectureSession(userFaculty, id) {
     return this.fireStore.doc("faculties/"+ userFaculty +"/lectureSessions/"+ id).delete();
@@ -245,6 +345,10 @@ export class FirestoreService {
     this.fireStore.doc("faculties/"+ userFaculty +"/modules/"+ DocId).delete();
   }
  
+  // Removing published transport schedule from the firestore database
+  removePublishedTransportSlot(transportSlotType, docId){
+    this.fireStore.doc("transportationSchedule/transportScheduleType/"+ transportSlotType + "/" + docId).delete();
+  }
 
 
 }

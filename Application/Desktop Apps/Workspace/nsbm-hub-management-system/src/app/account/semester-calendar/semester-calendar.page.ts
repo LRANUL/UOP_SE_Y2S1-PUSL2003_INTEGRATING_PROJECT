@@ -242,16 +242,16 @@ export class SemesterCalendarPage implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log("Alert Box: Remove Lecture Session Request Denied");
+            console.log("Alert Box: Remove Event Session Request Denied");
           }
         },
         {
           text: 'Continue',
           handler: () => {
-            console.log("Alert Box: Remove Lecture Session Request Accepted");
+            console.log("Alert Box: Remove Event Session Request Accepted");
 
             // Calling function to remove lecture session
-            this.semesterCalendarService.removeLectureSession(this.sideMenuPageUserFaculty.passUserFaculty(), value);
+            this.semesterCalendarService.removeEventSession(this.sideMenuPageUserFaculty.passUserFaculty(), value);
 
           }
         }

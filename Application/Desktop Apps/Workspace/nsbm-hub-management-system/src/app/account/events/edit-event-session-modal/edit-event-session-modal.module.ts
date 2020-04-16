@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { TransportationSchedulePageRoutingModule } from './transportation-schedule-routing.module';
+import { EditEventSessionModalPageRoutingModule } from './edit-event-session-modal-routing.module';
 
-import { TransportationSchedulePage } from './transportation-schedule.page';
+import { EditEventSessionModalPage } from './edit-event-session-modal.page';
 
 @NgModule({
   imports: [
@@ -14,8 +14,8 @@ import { TransportationSchedulePage } from './transportation-schedule.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    TransportationSchedulePageRoutingModule
+    EditEventSessionModalPageRoutingModule
   ],
-  declarations: [TransportationSchedulePage]
+  declarations: [EditEventSessionModalPage]
 })
-export class TransportationSchedulePageModule {}
+export class EditEventSessionModalPageModule {}

@@ -14,6 +14,10 @@ export class MoreDetailsNoticePopoverPage implements OnInit {
   passedNoticeRecipientBatch = null;
   passedNoticeRecipientModule = null;
 
+  recipientBatchNone: Boolean = false;
+
+  recipientModuleNone: Boolean = false;
+
   constructor(
     private navParams: NavParams,
     private popoverController: PopoverController
@@ -28,11 +32,19 @@ export class MoreDetailsNoticePopoverPage implements OnInit {
     this.passedNoticeCredtedDateTime = this.navParams.get('noticeCredtedDateTime');
 
     if(this.navParams.get('noticeRecipientBatch') == "NULL"){
-      this.passedNoticeRecipientBatch = "";
+      this.passedNoticeRecipientBatch = "None";
+      this.recipientBatchNone = true;
     }
-    else if(this.navParams.get('noticeRecipientBatch') == "NULL"){
-      this.passedNoticeRecipientModule = "";
+    else if(this.navParams.get('noticeRecipientModule') == "NULL"){
+      this.passedNoticeRecipientModule = "None";
+      this.recipientModuleNone = true;
     }
+
+    this.passedNoticeRecipientBatch = this.navParams.get('noticeRecipientBatch');
+    this.passedNoticeRecipientModule = this.navParams.get('noticeRecipientModule');
+
+    console.log(this.passedNoticeRecipientBatch);
+    console.log(this.passedNoticeRecipientModule);
 
   }
 

@@ -33,7 +33,7 @@ export class LectureSchedulePage implements OnInit {
     // 3,600,000 milliseconds in one hour
     // 60,000 milliseconds in one minute
     // 1000 milliseconds in one second
-
+/*
     this.currentTimeMilli = (this.currentDateTimeObject.getHours() * 3600000) + (this.currentDateTimeObject.getMinutes() * 60000) + (this.currentDateTimeObject.getSeconds() * 1000) + (this.currentDateTimeObject.getMilliseconds);
 
     this.currentDateTimeMidnightUnix = this.currentDateTimeUnix - this.currentTimeMilli;
@@ -45,9 +45,9 @@ export class LectureSchedulePage implements OnInit {
 
 
     console.log(this.currentDateTimeMidnightUnix);
-    console.log(this.dateTimeAtUpcomingMidnightUnix);
+    console.log(this.dateTimeAtUpcomingMidnightUnix);*/
 
-    this.retrievePublishedLectureSessionsLectureSchedule();
+   // this.retrievePublishedLectureSessionsLectureSchedule();
   }
 
   lectureSessionBatch;
@@ -58,7 +58,7 @@ export class LectureSchedulePage implements OnInit {
   lectureSessionLectureHall;
   lectureSessionLecturer;
   lectureSessionStatus;
-
+/*
   // Retreving the lecture sessions of the current date and their details from the firestore database
   publishedCurentDateLectureSession;
   retrievePublishedLectureSessionsLectureSchedule = () => {
@@ -76,7 +76,7 @@ export class LectureSchedulePage implements OnInit {
       })
     ));
   }
-
+*/
 
 
 

@@ -39,6 +39,8 @@ import { MoreDetailsEventSessionsPopoverPageModule } from './account/dashboard/m
 import { MoreDetailsNoticePopoverPageModule } from './account/notices/more-details-notice-popover/more-details-notice-popover.module';
 import { ViewImageNoticeModalPageModule } from './account/notices/view-image-notice-modal/view-image-notice-modal.module';
 import { MoreDetailsLecturesPopoverPageModule } from './account/dashboard/more-details-lectures-popover/more-details-lectures-popover.module';
+import { EditEventSessionModalPageModule } from './account/events/edit-event-session-modal/edit-event-session-modal.module';
+import { EditTransportSlotModalPageModule } from './account/transportation-schedule/edit-transport-slot-modal/edit-transport-slot-modal.module';
 
 
 @NgModule({
@@ -66,7 +68,9 @@ import { MoreDetailsLecturesPopoverPageModule } from './account/dashboard/more-d
     MoreDetailsTodaysLecturesPopoverPageModule,
     MoreDetailsLecturesPopoverPageModule,
     ViewImageNoticeModalPageModule,
-    MoreDetailsNoticePopoverPageModule
+    MoreDetailsNoticePopoverPageModule,
+    EditEventSessionModalPageModule,
+    EditTransportSlotModalPageModule
   ],
   providers: [
     StatusBar,

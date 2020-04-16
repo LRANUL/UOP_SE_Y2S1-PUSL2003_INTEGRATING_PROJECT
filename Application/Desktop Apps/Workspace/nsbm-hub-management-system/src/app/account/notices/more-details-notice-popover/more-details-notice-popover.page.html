@@ -3,7 +3,7 @@
     <ion-grid>
       <ion-row>
         <ion-col>
-          <ion-button (click)="closeMoreDetailsSessionPopover()" color="danger">
+          <ion-button (click)="closeMoreDetailsNoticePopover()" color="danger">
             <ion-icon name="close-outline"></ion-icon>
           </ion-button>
         </ion-col>
@@ -64,16 +64,23 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <ion-label style="font-size: 20px;">
+          <ion-label style="font-size: 17px;">
             Module Recipients: 
           </ion-label>
-          <ion-label *ngFor="let item of passedNoticeRecipientBatch">
+          <ion-label *ngIf="recipientBatchNone" style="margin-left: 30px;">
+            None <br>
+          </ion-label>
+          <ion-label *ngFor="let item of passedNoticeRecipientBatch" style="margin-left: 30px;">
             {{ item }} <br>
           </ion-label>
-          <ion-label style="font-size: 20px;">
+          <ion-label style="font-size: 17px;
+                            margin-top: 15px;">
             Batch Recipients: 
           </ion-label>
-          <ion-label *ngFor="let item of passedNoticeRecipientModule">
+          <ion-label *ngIf="recipientModuleNone" style="margin-left: 30px;">
+            None <br>
+          </ion-label>
+          <ion-label *ngFor="let item of passedNoticeRecipientModule" style="margin-left: 30px;">
             {{ item }} <br>
           </ion-label>
         </ion-col>
