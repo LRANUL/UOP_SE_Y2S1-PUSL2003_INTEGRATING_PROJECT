@@ -3,17 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, LoadingController, AlertController, NavController } from '@ionic/angular';
 import { AboutModalPage } from './about-modal/about-modal.page';
 import { RegisterModalPage } from './register-modal/register-modal.page';
-
-
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LoginCredential } from '../types';
-
 import { FirestoreService } from '../services/firebase/firestore.service';
-
 import { Router } from '@angular/router';
-
 import { AngularFireAuth } from '@angular/fire/auth';
-
 import * as firebase from 'firebase/app';
 
 
@@ -23,6 +17,8 @@ import * as firebase from 'firebase/app';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+
+  loginLoadingSpinner: Boolean = false;
 
   // Retrieving the user entered value
   get email() {
@@ -50,7 +46,8 @@ export class LoginPage implements OnInit {
   loginForm = this.formBuilder.group({
     email: ["", [
       Validators.required,
-      Validators.pattern('[a-zA-Z0-9._%-]+@[nsbm.lk]+')
+      //Validators.pattern('[a-zA-Z0-9._%-]+@[nsbm.lk]+')
+      Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
     ] ],
     password: ["", [
       Validators.required, 
@@ -67,9 +64,42 @@ export class LoginPage implements OnInit {
     private loadingController: LoadingController,
     private alertController: AlertController,
     private angularFireAuth: AngularFireAuth
-  ) {
-    
+  ) {}
+
+
+  ngOnInit() {
+
+    firebase.auth().onAuthStateChanged(async (user) => {
+
+      // Setting loading spinner to spin
+      this.loginLoadingSpinner = true;
+
+      if (user) {
+        
+        // If user is logged in
+        console.log('User is Logged In');
+        const loading = await this.loadingController.create({
+          message: 'Logging In..',
+          duration: 2000
+        });
+        await loading.present();
+
+        const { role, data } = await loading.onDidDismiss();
+        console.log('Loading spinner dismissed');
+
+        // Navigating to the dashboard
+        this._router.navigate(["/side-menu/dashboard"]);
+
+      }
+      else {
+        // If user is not logged in
+        console.log('User is NOT Logged In');
+      }
+    });
   }
+
+
+
 
   // Displays the entered values into the console
   public submit(){
@@ -92,6 +122,10 @@ export class LoginPage implements OnInit {
 
   // Login operation implementation
   async login(){
+
+    // Setting loading spinner to spin
+    this.loginLoadingSpinner = true;
+
     const loading = await this.loadingController.create({
       message: 'Logging In..',
       duration: 2000
@@ -106,10 +140,16 @@ export class LoginPage implements OnInit {
         console.log("Authentication (Login) Successful, ",authData);
         console.log(firebase.auth().currentUser);
         console.log(firebase.auth().currentUser.uid);
+
+        // Setting loading spinner to stop spinning
+        this.loginLoadingSpinner = false;
       })
       .catch((authError)=> {
         console.log("Authentication Error: ", authError);
         this.alertNotice("Error", "Login process failed, " + authError);
+
+        // Setting loading spinner to stop spinning
+        this.loginLoadingSpinner = false;
       });
 
   }
@@ -140,34 +180,6 @@ export class LoginPage implements OnInit {
     
   }
 
-  ngOnInit() {
-
-
-    firebase.auth().onAuthStateChanged(async (user) => {
-      if (user) {
-
-        // If user is logged in
-        console.log('User is Logged In');
-        const loading = await this.loadingController.create({
-          message: 'Logging In..',
-          duration: 2000
-        });
-        await loading.present();
-
-        const { role, data } = await loading.onDidDismiss();
-        console.log('Loading spinner dismissed');
-
-        // Navigating to the dashboard
-        this._router.navigate(["/side-menu/dashboard"]);
-      }
-      else {
-        // If user is not logged in
-        console.log('User is NOT Logged In');
-
-      }
-    });
-
-
-  }
+  
 
 }

@@ -45,7 +45,7 @@ export class SemesterCalendarPage implements OnInit {
     this.retrievePublishedDegreeProgram();
 
 
-    this.publishedLecureSlots;
+    this.publishedLectureSlots;
 
 
     this.searchSemesterCalendar = this.formBuilder.group({
@@ -128,7 +128,7 @@ export class SemesterCalendarPage implements OnInit {
   numberOfLectureSessions;
   
 
-  publishedLecureSlots;
+  publishedLectureSlots;
 
   // Declaring an array to initialize the number of events (lecture sessions) and their ids
   numberOfLectureSessionsDocuments = [];
@@ -251,7 +251,7 @@ export class SemesterCalendarPage implements OnInit {
             console.log("Alert Box: Remove Event Session Request Accepted");
 
             // Calling function to remove lecture session
-            this.semesterCalendarService.removeEventSession(this.sideMenuPageUserFaculty.passUserFaculty(), value);
+            this.semesterCalendarService.removeLectureSession(this.sideMenuPageUserFaculty.passUserFaculty(), value);
 
           }
         }

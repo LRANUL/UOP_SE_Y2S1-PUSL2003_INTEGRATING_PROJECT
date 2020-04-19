@@ -76,7 +76,7 @@ export class SideMenuPage implements OnInit {
     private alertController: AlertController,
     private loadingController: LoadingController,
     private angularFireAuth: AngularFireAuth,
-    private fireStore: FirestoreService
+    private sideMenuService: FirestoreService
   ) {
     
     this.router.events.subscribe((event: RouterEvent) => {
@@ -94,7 +94,7 @@ export class SideMenuPage implements OnInit {
   ngOnInit() {
 
     // Retrieving the auth details of the logged in user
-    this.userDetailsAuth = this.fireStore.retrieveLoggedInUserDetailsAuth();
+    this.userDetailsAuth = this.sideMenuService.retrieveLoggedInUserDetailsAuth();
 
     console.log(this.userDetailsAuth);
     console.log(this.userDetailsAuth.uid);
@@ -106,7 +106,7 @@ export class SideMenuPage implements OnInit {
 
   // Retrieving the faculty of the logged in user and assign it the 'userFacultyFirestore' variable
   retrieveLoggedInUserDetailsFirestore = () =>
-    this.fireStore.retrieveLoggedInUserDetailsFirestore(this.userDetailsAuth.uid).subscribe(userFacultyFirestore => (
+    this.sideMenuService.retrieveLoggedInUserDetailsFirestore(this.userDetailsAuth.uid).subscribe(userFacultyFirestore => (
       userFacultyFirestore.forEach(document => {
         let firestoreDoc:any = document.payload.doc.data();
         firestoreDoc = firestoreDoc.faculty;
@@ -146,6 +146,8 @@ export class SideMenuPage implements OnInit {
 
   // Logout Process
   logout(){
+
+    this.sideMenuService.logout();
 
     this.logoutAlert('Confirmation ', 'Are you sure you want to logout?');
 

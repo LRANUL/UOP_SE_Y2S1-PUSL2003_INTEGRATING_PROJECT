@@ -79,18 +79,18 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>{{ lectureSessionBatch }}</td>
-                  <td>{{ lectureSessionModuleCode }}</td>
-                  <td>{{ lectureSessionModuleTitle }}</td>
-                  <td>{{ lectureSessionStartTime }}</td>
-                  <td>{{ lectureSessionEndTime }}</td>
-                  <td>{{ lectureSessionLectureHall }}</td>
-                  <td>{{ lectureSessionLecturer }}</td>
-                  <td>{{ lectureSessionStatus }}</td>
+                <tr *ngFor="let item of publishedLectureSessionCurrentDate">
+                  <td>{{ item.payload.doc.data().batch }}</td>
+                  <td>{{ item.payload.doc.data().moduleCode }}</td>
+                  <td>{{ item.payload.doc.data().moduleTitle }}</td>
+                  <td>{{ item.payload.doc.data().startDateTime.toDate() | date: 'h:mm a' }}</td>
+                  <td>{{ item.payload.doc.data().endDateTime.toDate() | date: 'h:mm a'}}</td>
+                  <td>{{ item.payload.doc.data().lectureHall }}</td>
+                  <td>{{ item.payload.doc.data().lecturer }}</td>
+                  <td>{{ item.payload.doc.data().status }}</td>
                   <td>
                     <ion-button>
-                      Verify
+                      EDIT
                     </ion-button>
                   </td>
                 </tr>

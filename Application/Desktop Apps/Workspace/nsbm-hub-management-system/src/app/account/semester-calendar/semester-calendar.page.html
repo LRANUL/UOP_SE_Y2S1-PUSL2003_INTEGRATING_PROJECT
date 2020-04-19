@@ -76,7 +76,7 @@
                         <ion-item>
                           <ion-label style="margin-left: 15px;">Batch</ion-label>
                           <ion-select placeholder="Select Batch" okText="Select" id="batchOption" cancelText="Cancel" formControlName="batch" style="max-width: 100%;">
-                            <ion-select-option *ngFor="let item of publishedBatches" value="{{ item.payload.doc.id }}">{{ item.payload.doc.id }}</ion-select-option>
+                            <ion-select-option *ngFor="let item of publishedBatches" value="{{ item.payload.doc.data().batch }}">{{ item.payload.doc.data().batch }}</ion-select-option>
                           </ion-select>
                         </ion-item>
                       </ion-col>

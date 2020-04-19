@@ -9,15 +9,8 @@ import { FirestoreService } from 'src/app/services/firebase/firestore.service';
 })
 export class LectureSchedulePage implements OnInit {
 
-  currentDateTimeObject;
-  currentDateTimeUnix;
-  currentTime;
-  currentTimeMilli;
-
-  currentDateTimeMidnightUnix;
-
-  remainingMilliUntilMidnight;
-  dateTimeAtUpcomingMidnightUnix;
+  currentDate;
+  nextDate;
 
   constructor(
     private lectureScheduleService: FirestoreService,
@@ -26,57 +19,38 @@ export class LectureSchedulePage implements OnInit {
 
   ngOnInit() {
 
-    this.currentDateTimeObject = new Date();
-    this.currentDateTimeUnix = this.currentDateTimeObject.getTime();
+    // Retrieving current date and time
+    // Sample: Sun Apr 19 2020 18:44:52 GMT+0530 (India Standard Time)
+    this.currentDate = new Date();
 
-    // 86,400,000 milliseconds in one day
-    // 3,600,000 milliseconds in one hour
-    // 60,000 milliseconds in one minute
-    // 1000 milliseconds in one second
-/*
-    this.currentTimeMilli = (this.currentDateTimeObject.getHours() * 3600000) + (this.currentDateTimeObject.getMinutes() * 60000) + (this.currentDateTimeObject.getSeconds() * 1000) + (this.currentDateTimeObject.getMilliseconds);
+    // Setting currentDate time section to zero leaving the date as it is
+    // Sample: Sun Apr 19 2020 00:00:00 GMT+0530 (India Standard Time)
+    this.currentDate.setHours(0,0,0,0);
 
-    this.currentDateTimeMidnightUnix = this.currentDateTimeUnix - this.currentTimeMilli;
+    // Retrieving current date and time
+    // Sample: Sun Apr 19 2020 18:44:52 GMT+0530 (India Standard Time)
+    this.nextDate = new Date();
 
+    // Setting nextDate time section to zero leaving the date as it is
+    // Sample: Sun Apr 19 2020 00:00:00 GMT+0530 (India Standard Time)
+    this.nextDate.setHours(0,0,0,0);
 
-    this.remainingMilliUntilMidnight = (86400000 - this.currentTimeMilli);
-    this.dateTimeAtUpcomingMidnightUnix = this.remainingMilliUntilMidnight + this.currentDateTimeUnix;
+    // Setting date section to increment by one
+    // Sample: Sun Apr 20 2020 00:00:00 GMT+0530 (India Standard Time)
+    this.nextDate.setDate(this.nextDate.getDate()+1);
 
-
-
-    console.log(this.currentDateTimeMidnightUnix);
-    console.log(this.dateTimeAtUpcomingMidnightUnix);*/
-
-   // this.retrievePublishedLectureSessionsLectureSchedule();
+    this.retrievePublishedLectureSessionsLectureSchedule();
   }
+  
 
-  lectureSessionBatch;
-  lectureSessionModuleCode;
-  lectureSessionModuleTitle;
-  lectureSessionStartTime;
-  lectureSessionEndTime;
-  lectureSessionLectureHall;
-  lectureSessionLecturer;
-  lectureSessionStatus;
-/*
+
   // Retreving the lecture sessions of the current date and their details from the firestore database
-  publishedCurentDateLectureSession;
+  publishedLectureSessionCurrentDate;
   retrievePublishedLectureSessionsLectureSchedule = () => {
-    this.lectureScheduleService.retrievePublishedLectureSessionsLectureSchedule(this.sideMenuPageUserFaculty.passUserFaculty(), this.currentDateTimeMidnightUnix, this.dateTimeAtUpcomingMidnightUnix).subscribe(response => 
-      (this.publishedCurentDateLectureSession = response.forEach(document => {
-        let firestoreDoc: any = document.payload.doc.data();
-        this.lectureSessionBatch = firestoreDoc.batch;
-        this.lectureSessionModuleCode = firestoreDoc.moduleCode;
-        this.lectureSessionModuleTitle = firestoreDoc.moduleTitle;
-        this.lectureSessionStartTime = firestoreDoc.startDateTime.toDate().getHours() + "-" + firestoreDoc.startDateTime.toDate().getMinutes();
-        this.lectureSessionEndTime = firestoreDoc.endDateTime.toDate().getHours() + "-" + firestoreDoc.endDateTime.toDate().getMinutes();
-        this.lectureSessionLectureHall = firestoreDoc.lectureHall;
-        this.lectureSessionLecturer = firestoreDoc.lecturer;
-        this.lectureSessionStatus = firestoreDoc.status;
-      })
-    ));
+    this.lectureScheduleService.retrievePublishedLectureSessionsLectureSchedule(this.sideMenuPageUserFaculty.passUserFaculty(), this.currentDate, this.nextDate).subscribe(response => (this.publishedLectureSessionCurrentDate = response));
+    console.log(this.publishedLectureSessionCurrentDate);
   }
-*/
+
 
 
 

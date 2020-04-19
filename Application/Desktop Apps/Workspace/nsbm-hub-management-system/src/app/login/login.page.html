@@ -138,6 +138,14 @@
       </ion-card-content>
     </ion-card>
 
+    <!-- Loading Spinner -->
+    <div style="position: absolute;
+                left: 50%;
+                transform: translateX(-50%);">
+      <ion-spinner name="crescent" color="primary" style="height: 100px;
+                                                            width: 100px;" *ngIf="loginLoadingSpinner"></ion-spinner>
+    </div>
+
     <button ion-button (click)="OpenAboutModal()" style="color: white;
                                                     background-color: #848484;
                                                     padding: 10px;

@@ -164,7 +164,7 @@ export class EditModuleModalPage implements OnInit {
 
 
 
-  // Implementation for closing rhe modal
+  // Implementation for closing the modal
   closeEditModule(){
     this.modalController.dismiss();
   }

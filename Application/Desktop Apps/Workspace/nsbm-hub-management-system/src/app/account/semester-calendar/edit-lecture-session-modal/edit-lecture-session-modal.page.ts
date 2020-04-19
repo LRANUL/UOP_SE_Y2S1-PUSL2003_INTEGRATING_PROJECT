@@ -88,6 +88,7 @@ export class EditLectureSessionModalPage implements OnInit {
     this.lectureSessionEndTime = this.passedLectureSessionEndDateTime.toISOString();
     console.log(this.passedLectureSessionAcademicSemester);
     console.log(this.publishedDegreeProgramNoOfSemestersAnnaully);
+    
   }
 
 

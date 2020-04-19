@@ -20,11 +20,17 @@ export class FirestoreService {
     private alertController: AlertController
   ) { }
 
+  // Logging the user by verifying the entered login credentials
   login(credentials: LoginCredential): Promise<any>{
     return this.angularFireAuth.auth.signInWithEmailAndPassword(
       credentials.email,
       credentials.password
     );
+  }
+
+  // Logging the currently logged in user
+  logout() {
+    this.angularFireAuth.auth.signOut();
   }
 
   // Retriving the current date and time from the localhost
@@ -131,7 +137,7 @@ export class FirestoreService {
     return firebase.auth().currentUser
   }
 
-  // Retrieving the details of the logged in user from firestore database with the use of firebasr authentication Uid
+  // Retrieving the details of the logged in user from firestore database with the use of firebase authentication Uid
   retrieveLoggedInUserDetailsFirestore(Uid){
     return this.fireStore.collection("users/userTypes/programOfficeUsers", ref => ref.where(firebase.firestore.FieldPath.documentId(), '==', Uid)).snapshotChanges();
   }
@@ -162,10 +168,11 @@ export class FirestoreService {
   }
 
   // Retrieving published lecture session and their detais from the firestore database for the lecture schedule page
-  retrievePublishedLectureSessionsLectureSchedule(userFaculty, currentDateMidnightUnix, nextDateMidnightUnix) {
+  retrievePublishedLectureSessionsLectureSchedule(userFaculty, currentDate, nextDate) {
     return this.fireStore.collection("faculties/"+ userFaculty +"/lectureSessions", ref => ref
-              .where("startDateTime", "<=", currentDateMidnightUnix)
-              .where("startDateTime", ">=", nextDateMidnightUnix)).snapshotChanges();
+              .where("startDateTime", ">=", new Date(currentDate))
+              .where("startDateTime", "<=", new Date(nextDate))
+              ).snapshotChanges();
   }
 
   // Retrieving published lecture sessions for the current date and their details from the firestore database fro the 
@@ -251,7 +258,7 @@ export class FirestoreService {
   updateLectureSession(userFaculty, id, value, userFormDataModuleCode, userFormDataSessionStartDateTime, userFormDataSessionEndDateTime) {
     return this.fireStore.doc("faculties/"+ userFaculty +"/lectureSessions/"+ id).update({
       batch: value.batch,
-      degreeProgram: value.degreeProgram,
+      degreeProgram: value.degreeProgram,  
       academicYear: value.academicYear,
       academicSemester: value.academicSemester,
       moduleCode: userFormDataModuleCode,
