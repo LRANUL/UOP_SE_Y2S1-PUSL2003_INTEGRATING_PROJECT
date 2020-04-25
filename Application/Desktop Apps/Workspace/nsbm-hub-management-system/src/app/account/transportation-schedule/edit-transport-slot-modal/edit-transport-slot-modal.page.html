@@ -23,7 +23,7 @@
             </ion-col>
             <ion-col size="7">
               <ion-item>
-                <ion-input type="text" inputClear placeholder="Enter Departure" value="{{ passedTransportSlotDeparture }}" formControlName="departure"></ion-input>
+                <ion-input type="text" inputClear placeholder="Enter Departure" formControlName="departure"></ion-input>
               </ion-item>
             </ion-col>
 
@@ -37,7 +37,7 @@
             </ion-col>
             <ion-col size="7">
               <ion-item>
-                <ion-input type="text" inputClear placeholder="Enter Destination" value="{{ passedTransportSlotDestination }}" formControlName="destination"></ion-input>
+                <ion-input type="text" inputClear placeholder="Enter Destination" formControlName="destination"></ion-input>
               </ion-item>
             </ion-col>
 
@@ -51,7 +51,7 @@
             </ion-col>
             <ion-col size="7">
               <ion-item>
-                <ion-input type="text" inputClear placeholder="Enter Departure Time (HH:mm [AM|PM])" value="{{ passedTransportSlotDepartureTime }}" formControlName="departureTime"></ion-input>
+                <ion-input type="text" inputClear placeholder="Enter Departure" formControlName="departureTime"></ion-input>
               </ion-item>
             </ion-col>
 
@@ -65,7 +65,7 @@
             </ion-col>
             <ion-col size="7">
               <ion-item>
-                <ion-input type="text" inputClear placeholder="Enter Arrival Time (HH:mm [AM|PM])" value="{{ passedTransportSlotApproArrivalTime }}" formControlName="approArrivalTime"></ion-input>
+                <ion-input type="text" inputClear placeholder="Enter Departure" formControlName="approArrivalTime"></ion-input>
               </ion-item>
             </ion-col>
 
@@ -80,7 +80,7 @@
             <ion-col size="7">
               <div style="border: #ccc solid 1px;
                           border-radius: 5px;">
-                <ion-select multiple="true" placeholder="Select Weekdays" value="{{ passedTransportSlotWeekdays }}" style="min-width: 100%;
+                <ion-select multiple="true" placeholder="Select Weekdays" style="min-width: 100%;
                                                             min-height: 100%;" okText="Continue" cancelText="Dismiss" formControlName="availableWeekdays">
                   <ion-select-option value="Monday">Monday</ion-select-option>
                   <ion-select-option value="Tuesday">Tuesday</ion-select-option>
@@ -90,7 +90,7 @@
                   <ion-select-option value="Saturday">Saturday</ion-select-option>
                   <ion-select-option value="Sunday">Sunday</ion-select-option>
                 </ion-select>
-                <ion-select multiple="true" placeholder="Select Weekends" value="{{ passedTransportSlotWeekends }}" style="min-width: 100%;
+                <ion-select multiple="true" placeholder="Select Weekends" style="min-width: 100%;
                                                             min-height: 100%;" okText="Continue" cancelText="Dismiss" formControlName="availableWeekends">
                   <ion-select-option value="Saturday">Saturday</ion-select-option>
                   <ion-select-option value="Sunday">Sunday</ion-select-option>

@@ -10,7 +10,7 @@ import { EventNoticeData, NoticeData } from '../../types';
 import { AlertController, PopoverController, ModalController } from '@ionic/angular';
 
 import { FirestoreService } from '../../services/firebase/firestore.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { SideMenuPage } from '../side-menu/side-menu.page';
 import { MoreDetailsNoticePopoverPage } from './more-details-notice-popover/more-details-notice-popover.page';
 import { ViewImageNoticeModalPage } from './view-image-notice-modal/view-image-notice-modal.page';
@@ -28,29 +28,38 @@ export class NoticesPage implements OnInit {
 
   loggedInUserFaculty;
 
+  currentDate;
+
+  dateThreeDaysBeformCurrentDate;
+
   // Retrieve notices current datetime
   currentDateTimeRNObject;
 
   // Retrieve notices current datetime
   currentDateTimeRN;
 
-  poToStudentNoticeForm: FormGroup;
+  noticePOToStudentForm: FormGroup;
+  noticePOToLecturerForm: FormGroup;
 
   ngOnInit() {
+
+    this.currentDate = new Date();
+
+    this.dateThreeDaysBeformCurrentDate = new Date();
+
+    this.dateThreeDaysBeformCurrentDate.setDate(this.currentDate.getDate()-3);
 
     this.retrieveRegisteredModules();
 
     this.retrievePublishedBatch();
 
-    this.loggedInUserId =  this.sideMenuPageUserFaculty.passUserId();
+    this.loggedInUserId = this.sideMenuPageUserFaculty.passUserId();
 
     this.loggedInUserFaculty = this.sideMenuPageUserFaculty.passUserFaculty();
 
-    console.log(this.loggedInUserId);
-
-    console.log(this.loggedInUserFaculty);
-
     this.retrieveRegisteredLecturers();
+
+    this.retrievePublishedSessionStatuses();
 
     this.currentDateTimeRNObject = new Date();
 
@@ -58,11 +67,42 @@ export class NoticesPage implements OnInit {
 
     console.log(this.currentDateTimeRN);
 
-    this.retrievePublishedNotices_Lecturers_To_PO();
+    // New Student Notice Form
+    this.noticePOToStudentForm = this.formBuilder.group({
+      noticeTitle: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      noticeDescription: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      noticeCategory: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      noticeRecipientModule: new FormControl(''),
+      noticeRecipientBatch: new FormControl(''),
+      noticeAuthor: new FormControl('', Validators.compose([
+        Validators.required
+      ]))
+    });
 
-    this.retrievePublishedNotices_PO_To_Students();
-
-    this.retrievePublishedNotices_PO_To_Lecturers();
+    // New Lecturer Notice Form
+    this.noticePOToLecturerForm = this.formBuilder.group({
+      noticeTitle: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      noticeDescription: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      noticeCategory: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      noticeRecipient: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      noticeAuthor: new FormControl('', Validators.compose([
+        Validators.required
+      ]))
+    });
     
   }
 
@@ -76,29 +116,35 @@ export class NoticesPage implements OnInit {
   retrievePublishedBatch = () => 
     this.noticesService.retrievePublishedBatch(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(response => (this.publishedBatches = response));
   
-
   // Retrieving the registered lecture users from the firestore database
   registeredLecturerUsers;
   retrieveRegisteredLecturers = () => 
     this.noticesService.retrieveRegisteredLecturers().subscribe(response => (this.registeredLecturerUsers = response));
 
-  // Retrieving published notices (Lecturers To Program Office (PO)) and assigning them
-  publishedNotices_Lecturers_To_PO;
-  retrievePublishedNotices_Lecturers_To_PO = () => 
-    this.noticesService.retrievePublishedNotices_Lecturers_To_PO().subscribe(response => (this.publishedNotices_Lecturers_To_PO = response));
+  // Retrieving the published session status from the firestore
+  publishedSessionStatuses;
+  retrievePublishedSessionStatuses = () => 
+    this.noticesService.retrievePublishedSessionStatuses().subscribe(response => (this.publishedSessionStatuses = response));
 
 
-  // Retrieving published notices (Program Office (PO) To Students) and assigning them
-  publishedNotices_PO_To_Students;
-  retrievePublishedNotices_PO_To_Students = () => {
-    this.noticesService.retrievePublishedNotices_PO_To_Students().subscribe(response => (this.publishedNotices_PO_To_Students = response));
-  }
 
+    
+  // Retrieving published lecturer to program office notice from the current date time to three days ago from the firestore database
+  publishedNoticesLecturerTOPO;
+  retrievePublishedLecturerToPONotice = () => 
+    this.noticesService.retrievePublishedLecturerToPONotice(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => (this.publishedNoticesLecturerTOPO = response));
 
-  // Retrieving published notices (Program Office (PO) To Lecturers) and assigning them
-  publishedNotices_PO_To_Lecturers;
-  retrievePublishedNotices_PO_To_Lecturers = () => 
-    this.noticesService.retrievePublishedNotices_PO_To_Lecturers().subscribe(response => (this.publishedNotices_PO_To_Lecturers = response));
+  // Retrieving published  program office to student notice from the current date time to three days ago from the firestore database
+  publishedNoticesPOTOStudent;
+  retrievePublishedPOToStudentNotice = () => 
+    this.noticesService.retrievePublishedPOToStudentNotice(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => (this.publishedNoticesPOTOStudent = response));
+  
+  // Retrieving published program office to lecturer notice from the current date time to three days ago from the firestore database
+  publishedNoticesPOToLecturer;
+  retrievePublishedPOToLecturerNotice = () => 
+    this.noticesService.retrievePublishedPOToLecturerNotice(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => (this.publishedNoticesPOToLecturer = response));
+  
+
 
 
   // More details of notice popover
@@ -168,46 +214,54 @@ export class NoticesPage implements OnInit {
 
   selectedNoticeCategoryValue: string;
 
-  changeUploadCoverImage(selectedNoticeCategoryValue){
-    console.info("Selected: " + selectedNoticeCategoryValue);
-    var withUploadEventCoverImage = document.getElementById("withEventCoverImage");
-    var withoutUploadEventCoverImage = document.getElementById("withoutEventCoverImage");
-    if(selectedNoticeCategoryValue == "Event"){
-      withoutUploadEventCoverImage.style.display = "none";
-      withUploadEventCoverImage.style.display = "inline";
+  static coverImageToggle: number = 0;
+  toggleResult: Boolean = false;
+
+  changeUploadCoverImage(toggleAction, formType){
+
+    /* Process of identifying toggle is toggled or not */
+    // Incrementing static variable by one with the previous if the event value is 'on'
+    if(toggleAction.detail.value == "on"){
+      NoticesPage.coverImageToggle++;
     }
-    else if(selectedNoticeCategoryValue != "Event"){
-      withoutUploadEventCoverImage.style.display = "inline";
-      withUploadEventCoverImage.style.display = "none";
+
+    // If toggling value modulus is 1, toggle result is true
+    // if 0, false is assigned
+    if(NoticesPage.coverImageToggle%2 == 1){
+      this.toggleResult = true;
     }
-    this.selectedNoticeCategoryValue = selectedNoticeCategoryValue;
+    else if(NoticesPage.coverImageToggle%2 == 0){
+      this.toggleResult = false;
+    }
+    console.log(this.toggleResult);
+
+    if(formType == "StudentForm"){
+      var withUploadEventCoverImage = document.getElementById("withEventCoverImage");
+      var withoutUploadEventCoverImage = document.getElementById("withoutEventCoverImage");
+
+      if(this.toggleResult == true){
+        withoutUploadEventCoverImage.style.display = "none";
+        withUploadEventCoverImage.style.display = "inline";
+      }
+      else if(this.toggleResult == false){
+        withoutUploadEventCoverImage.style.display = "inline";
+        withUploadEventCoverImage.style.display = "none";
+      }
+    }
+    else if(formType == "LecturerForm"){
+      var withUploadEventCoverImageLecturer = document.getElementById("withEventCoverImageLecturer");
+      var withoutUploadEventCoverImageLecturer = document.getElementById("withoutEventCoverImageLecturer");
+      if(this.toggleResult == true){
+        withoutUploadEventCoverImageLecturer.style.display = "none";
+        withUploadEventCoverImageLecturer.style.display = "inline";
+      }
+      else if(this.toggleResult == false){
+        withoutUploadEventCoverImageLecturer.style.display = "inline";
+        withUploadEventCoverImageLecturer.style.display = "none";
+      }
+    }
   }
 
-  selectedNoticeCategoryValueLecturer: string;
-
-  changeUploadCoverImageLecturer(selectedNoticeCategoryValueLecturer){
-    console.info("Selected: " + selectedNoticeCategoryValueLecturer);
-    var withUploadEventCoverImageLecturer = document.getElementById("withEventCoverImageLecturer");
-    var withoutUploadEventCoverImageLecturer = document.getElementById("withoutEventCoverImageLecturer");
-    if(selectedNoticeCategoryValueLecturer == "Event"){
-      withoutUploadEventCoverImageLecturer.style.display = "none";
-      withUploadEventCoverImageLecturer.style.display = "inline";
-    }
-    else if(selectedNoticeCategoryValueLecturer != "Event"){
-      withoutUploadEventCoverImageLecturer.style.display = "inline";
-      withUploadEventCoverImageLecturer.style.display = "none";
-    }
-    this.selectedNoticeCategoryValueLecturer = selectedNoticeCategoryValueLecturer;
-  }
-
-
-  // Declaring variables to store the user entered value from the new notice form
-  noticeTitle: string;
-  noticeDescription: string;
-  noticeCategory: string;
-  noticeRecipientModule: string;
-  noticeRecipientBatch: string;
-  noticeAuthor: string;
 
 
   // Upload Task
@@ -244,7 +298,8 @@ export class NoticesPage implements OnInit {
     private noticesService: FirestoreService,
     private sideMenuPageUserFaculty: SideMenuPage,
     private modalController: ModalController,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private formBuilder: FormBuilder
   ){
     this.isFileUploading = false;
     this.isFileUploaded = false;
@@ -257,7 +312,7 @@ export class NoticesPage implements OnInit {
 
 
   // Alert Box Implementation
-  async alertnotice ( title: string, content: string ) {
+  async alertNotice ( title: string, content: string ) {
 
     const alert = await this.alertController.create({
       header: title,
@@ -268,7 +323,6 @@ export class NoticesPage implements OnInit {
     await alert.present();
 
   }
-
 
   eventCoverImage;
   file;
@@ -284,7 +338,7 @@ export class NoticesPage implements OnInit {
     if(this.file.type.split('/')[0] !== 'image') {
       console.error('Unsupported File Type');
 
-      this.alertnotice('ERROR! ', 'Selected file type is not supported. <br> Please select an image with PNG or JPG formats.');
+      this.alertNotice('ERROR! ', 'Selected file type is not supported. <br> Please select an image with PNG or JPG formats.');
 
       return;
     }
@@ -303,28 +357,20 @@ export class NoticesPage implements OnInit {
   
 
   // Upload file process (Student)
-  uploadNewNoticeImageStudent() {
+  uploadNewNoticeImageStudent(value) {
 
-    // Checking if the selected notice category is event
-    if(this.selectedNoticeCategoryValue == 'Event'){
+    // Checking if the cover image was toggled
+    if(this.toggleResult == true){
     
       // Validating selection of files for only images
       if(this.file.type.split('/')[0] !== 'image') {
         console.error('Unsupported File Type');
 
-        this.alertnotice('ERROR! ', 'Selected file type is not supported. <br> Please select an image with PNG or JPG formats.');
+        this.alertNotice('ERROR! ', 'Selected file type is not supported. <br> Please select an image with PNG or JPG formats.');
 
         return;
       }
       else{
-        // Initializing previously declared variables with users entered values
-        const noticeTitle = this.noticeTitle;
-        const noticeDescription = this.noticeDescription;
-        const noticeCategory = this.noticeCategory;
-        const noticeRecipientModule = this.noticeRecipientModule;
-        const noticeRecipientBatch = this.noticeRecipientBatch;
-        const noticeAuthor = this.noticeAuthor;
-
         // File Object
         // const file = event.item(0);
 
@@ -365,89 +411,42 @@ export class NoticesPage implements OnInit {
             // Uploading notice document to firestore
             this.UploadedFileURL.subscribe(resp => {
 
-              if( noticeRecipientModule == "" ) {
-
-                this.addNewEventNoticeDocumentToDB_Student({
-                  noticeTitle: noticeTitle,
-                  noticeDescription: noticeDescription,
-                  noticeCategory: noticeCategory,
-                  noticeRecipient: {
-                    noticeRecipientModule: "NULL",
-                    noticeRecipientBatch: noticeRecipientBatch 
-                  },
-                  noticeCoverImage: {
-                    coverImageFileName: this.file.name,
-                    coverImageFilePath: resp,
-                    cooverImageFileSize: this.fileSize
-                  },
-                  noticeCreated: {
-                    noticeCreatedByUid: this.loggedInUserId,
-                    noticeCreatedByFaculty: noticeAuthor,
-                    noticeCreatedDateTime: new Date().toISOString()
-                  },
-                  noticeUpdate: {
-                    updatedByName: "NULL",
-                    updatedByFaculty: "NULL",
-                    updatedDateTime: "NULL",
-                    updatedSection: "NULL",
-                  }
-                });
-
+              if(value.noticeRecipientModule == "" ) {
+                this.noticesService.publishNotice(this.toggleResult, "notices-PO-To-Students", "Module", this.file.name, resp, this.fileSize, this.sideMenuPageUserFaculty.passUserId(), value)
+                  .then(success => {
+                    console.log("Notice Sent to Students: " + success);
+                    // Removing the user entered values from the input fields after the notice has been created
+                    this.noticePOToStudentForm.reset();
+                    
+                    // Displaying new notice successfully created
+                    this.alertNotice('Notice Successfully Sent', 
+                      'Notice has been sent. Notices can be viewed in the "Notices sent to students" section on the right side of the screen.');
+                  }, error => {
+                    console.log("Error: " + error);
+                    this.alertNotice("ERROR", "Error has occurred: " + error);
+                  });
               }
-              else if ( noticeRecipientBatch == "" ) {
-
-                this.addNewEventNoticeDocumentToDB_Student({
-                  noticeTitle: noticeTitle,
-                  noticeDescription: noticeDescription,
-                  noticeCategory: noticeCategory,
-                  noticeRecipient: {
-                    noticeRecipientModule: noticeRecipientModule,
-                    noticeRecipientBatch: "NULL" 
-                  },
-                  noticeCoverImage: {
-                    coverImageFileName: this.file.name,
-                    coverImageFilePath: resp,
-                    cooverImageFileSize: this.fileSize
-                  },
-                  noticeCreated: {
-                    noticeCreatedByUid: this.loggedInUserId,
-                    noticeCreatedByFaculty: noticeAuthor,
-                    noticeCreatedDateTime: this.currentDateTime
-                  },
-                  noticeUpdate: {
-                    updatedByName: "NULL",
-                    updatedByFaculty: "NULL",
-                    updatedDateTime: "NULL",
-                    updatedSection: "NULL",
-                  }
-                });
-
+              else if (value.noticeRecipientBatch == "" ) {
+                this.noticesService.publishNotice(this.toggleResult ,"notices-PO-To-Students", "Batch", this.file.name, resp, this.fileSize, this.sideMenuPageUserFaculty.passUserId(), value)
+                  .then(success => {
+                    console.log("Notice Sent to Students: " + success);
+                    // Removing the user entered values from the input fields after the notice has been created
+                    this.noticePOToStudentForm.reset();
+                    
+                    // Displaying new notice successfully created
+                    this.alertNotice('Notice Successfully Sent', 
+                      'Notice has been sent. Notices can be viewed in the "Notices sent to students" section on the right side of the screen.');
+                  }, error => {
+                    console.log("Error: " + error);
+                    this.alertNotice("ERROR", "Error has occurred: " + error);
+                  });
               }
-
-              
-
-              // Removing the user entered values from the input fields after the notice has been created
-              this.noticeTitle = "";
-              this.noticeDescription = "";
-              this.noticeCategory = "";
-              this.noticeRecipientModule = "";
-              this.noticeRecipientBatch = "";
-              this.noticeAuthor = "";
-
-
-
-              this.isFileUploading = false;
-              this.isFileUploaded = false;
-              
-              // Displaying new notice successfully created
-              this.alertnotice('Notice Successfully Created', 'Notice has been added to the system.<br>Notices Can be viewed in the "Notices Sent Sections" on the right side of the panel.');
-
-
-
             }, error => {
               console.error('Upload Error: ' + error);
-              this.alertnotice('ERROR! ', 'An error has occurred during the process. Error' + error + " <br>Please contact the system web administrator.");
+              this.alertNotice('ERROR! ', 'An error has occurred during the process. Error' + error + " <br>Please contact the system web administrator.");
             })
+            this.isFileUploading = false;
+            this.isFileUploaded = false;
           }),
           tap(snap => {
             this.fileSize = snap.totalBytes;
@@ -456,85 +455,38 @@ export class NoticesPage implements OnInit {
         )
       }
     }
-    else{
+    else if(this.toggleResult == false){
+      if( value.noticeRecipientModule == "" ) {
+        this.noticesService.publishNotice(this.toggleResult, "notices-PO-To-Students", "Module", "NULL", "NULL", "NULL", this.sideMenuPageUserFaculty.passUserId(), value)
+          .then(success => {
+            console.log("Notice Sent to Students: " + success);
+            // Displaying new notice successfully created
+            this.alertNotice('Notice Successfully Sent', 
+              'Notice has been sent. Notices can be viewed in the "Notices sent to students" section on the right side of the screen.');
 
-      // Initializing previously declared variables with users entered values
-      const noticeTitle = this.noticeTitle;
-      const noticeDescription = this.noticeDescription;
-      const noticeCategory = this.noticeCategory;
-      const noticeRecipientModule = this.noticeRecipientModule;
-      const noticeRecipientBatch = this.noticeRecipientBatch;
-      const noticeAuthor = this.noticeAuthor;
-
-
-      if( noticeRecipientModule == "" ) {
-
-        this.addNewNoticeDcouementToDB_Student({
-          noticeTitle: noticeTitle,
-          noticeDescription: noticeDescription,
-          noticeCategory: noticeCategory,
-          noticeRecipient: {
-            noticeRecipientModule: "NULL",
-            noticeRecipientBatch: noticeRecipientBatch 
-          },
-          noticeCreated: {
-            noticeCreatedByUid: this.loggedInUserId,
-            noticeCreatedByFaculty: noticeAuthor,
-            noticeCreatedDateTime: this.currentDateTime // firebase.firestore.Timestamp.fromDate(new Date(this.currentDateTime))
-          },
-          noticeUpdate: {
-            updatedByName: "NULL",
-            updatedByFaculty: "NULL",
-            updatedDateTime: "NULL",
-            updatedSection: "NULL",
-          }
-        });
-
+            // Removing the user entered values from the input fields after the notice has been created
+            this.noticePOToStudentForm.reset();
+          }, error => {
+            console.log("Error: " + error);
+            this.alertNotice("ERROR", "Error has occurred: " + error);
+          });
       }
-      else if( noticeRecipientBatch == "" ) {
+      else if( value.noticeRecipientBatch == "" ) {
+        this.noticesService.publishNotice(this.toggleResult, "notices-PO-To-Students", "Batch", "NULL", "NULL", "NULL", this.sideMenuPageUserFaculty.passUserId(), value)
+          .then(success => {
+            console.log("Notice Sent to Students: " + success);
+            // Displaying new notice successfully created
+            this.alertNotice('Notice Successfully Sent', 
+              'Notice has been sent. Notices can be viewed in the "Notices sent to students" section on the right side of the screen.');
 
-        this.addNewNoticeDcouementToDB_Student({
-          noticeTitle: noticeTitle,
-          noticeDescription: noticeDescription,
-          noticeCategory: noticeCategory,
-          noticeRecipient: {
-            noticeRecipientModule: noticeRecipientModule,
-            noticeRecipientBatch: "NULL" 
-          },
-          noticeCreated: {
-            noticeCreatedByUid: this.loggedInUserId,
-            noticeCreatedByFaculty: noticeAuthor,
-            noticeCreatedDateTime: this.currentDateTime // firebase.firestore.Timestamp.fromDate(new Date(this.currentDateTime))
-          },
-          noticeUpdate: {
-            updatedByName: "NULL",
-            updatedByFaculty: "NULL",
-            updatedDateTime: "NULL",
-            updatedSection: "NULL",
-          }
-        });
-
-
-      }
-
-      
-
-      
-
-      // Displaying new notice successfully created
-      this.alertnotice('Notice Successfully Created', 'Notice has been added to the system.<br>Notices can be viewed in the "Notices Sent Sections" on the right side of the panel.');
-
-      // Removing the user entered values from the input fields after the notice has been created
-      this.noticeTitle = "";
-      this.noticeDescription = "";
-      this.noticeCategory = "";
-      this.noticeRecipientModule = "";
-      this.noticeRecipientBatch = "";
-      this.noticeAuthor = "";
-
-
+            // Removing the user entered values from the input fields after the notice has been created
+            this.noticePOToStudentForm.reset();
+          }, error => {
+            console.log("Error: " + error);
+            this.alertNotice("ERROR", "Error has occurred: " + error);
+          });
+      }    
     }
-
   }
 
 
@@ -571,28 +523,20 @@ export class NoticesPage implements OnInit {
 
   
   // Upload file process (Lecturer)
-  uploadNewNoticeImageLecturer() {
+  uploadNewNoticeImageLecturer(value) {
 
     // Checking if the selected notice category is event
-    if(this.selectedNoticeCategoryValue == 'Event'){
+    if(this.toggleResult == true){
     
       // Validating selection of files for only images
       if(this.file.type.split('/')[0] !== 'image') {
         console.error('Unsupported File Type');
 
-        this.alertnotice('ERROR! ', 'Selected file type is not supported. <br> Please select an image with PNG or JPG formats.');
+        this.alertNotice('ERROR! ', 'Selected file type is not supported. Please select an image with PNG or JPG formats.');
 
         return;
       }
       else{
-        // Initializing previously declared variables with users entered values
-        const noticeTitle = this.noticeTitle;
-        const noticeDescription = this.noticeDescription;
-        const noticeCategory = this.noticeCategory;
-        const noticeRecipientModule = this.noticeRecipientModule;
-        const noticeRecipientBatch = this.noticeRecipientBatch;
-        const noticeAuthor = this.noticeAuthor;
-
         // File Object
         // const file = event.item(0);
 
@@ -632,177 +576,47 @@ export class NoticesPage implements OnInit {
             
             // Uploading notice document to firestore
             this.UploadedFileURL.subscribe(resp => {
+              this.noticesService.publishNotice(this.toggleResult, "notices-PO-To-Lecturers", "NULL", this.file.name, resp, this.fileSize, this.sideMenuPageUserFaculty.passUserId(), value)
+                .then(success => {
+                  console.log("Notice Sent to Lecturers: " + success);
+                  // Removing the user entered values from the input fields after the notice has been created
+                  this.noticePOToLecturerForm.reset();
 
-              if( noticeRecipientModule == "" ) {
-
-                this.addNewEventNoticeDocumentToDB_Lecturer({
-                  noticeTitle: noticeTitle,
-                  noticeDescription: noticeDescription,
-                  noticeCategory: noticeCategory,
-                  noticeRecipient: {
-                    noticeRecipientModule: "NULL",
-                    noticeRecipientBatch: noticeRecipientBatch 
-                  },
-                  noticeCoverImage: {
-                    coverImageFileName: this.file.name,
-                    coverImageFilePath: resp,
-                    cooverImageFileSize: this.fileSize
-                  },
-                  noticeCreated: {
-                    noticeCreatedByUid: this.loggedInUserId,
-                    noticeCreatedByFaculty: noticeAuthor,
-                    noticeCreatedDateTime: this.currentDateTime
-                  },
-                  noticeUpdate: {
-                    updatedByName: "NULL",
-                    updatedByFaculty: "NULL",
-                    updatedDateTime: "NULL",
-                    updatedSection: "NULL",
-                  }
-                });
-
-              }
-              else if ( noticeRecipientBatch == "" ) {
-
-                this.addNewEventNoticeDocumentToDB_Lecturer({
-                  noticeTitle: noticeTitle,
-                  noticeDescription: noticeDescription,
-                  noticeCategory: noticeCategory,
-                  noticeRecipient: {
-                    noticeRecipientModule: noticeRecipientModule,
-                    noticeRecipientBatch: "NULL" 
-                  },
-                  noticeCoverImage: {
-                    coverImageFileName: this.file.name,
-                    coverImageFilePath: resp,
-                    cooverImageFileSize: this.fileSize
-                  },
-                  noticeCreated: {
-                    noticeCreatedByUid: this.loggedInUserId,
-                    noticeCreatedByFaculty: noticeAuthor,
-                    noticeCreatedDateTime: this.currentDateTime
-                  },
-                  noticeUpdate: {
-                    updatedByName: "NULL",
-                    updatedByFaculty: "NULL",
-                    updatedDateTime: "NULL",
-                    updatedSection: "NULL",
-                  }
-                });
-
-              }
-
-              
-
-              // Removing the user entered values from the input fields after the notice has been created
-              this.noticeTitle = "";
-              this.noticeDescription = "";
-              this.noticeCategory = "";
-              this.noticeRecipientModule = "";
-              this.noticeRecipientBatch = "";
-              this.noticeAuthor = "";
-
-
-
-              this.isFileUploading = false;
-              this.isFileUploaded = false;
-              
-              // Displaying new notice successfully created
-              this.alertnotice('Notice Successfully Created', 'Notice has been added to the system.<br>Notices Can be viewed in the "Notices Sent Sections" on the right side of the panel.');
-
-
-
+                  // Displaying new notice successfully sent
+                  this.alertNotice('Notice Successfully Sent', 
+                    'Notice has been sent. Notices can be viewed in the "Notices sent to lecturers" section below this form');
+                }, error => {
+                  console.log("Error: " + error);
+                  this.alertNotice("ERROR", "Error has occurred: " + error);
+              });
             }, error => {
               console.error('Upload Error: ' + error);
-              this.alertnotice('ERROR! ', 'An error has occurred during the process. Error' + error + " <br>Please contact the system web administrator.");
-            })
+              this.alertNotice('ERROR! ', 'An error has occurred during the process. Error' + error + " <br>Please contact the system web administrator.");
+            });
+            this.isFileUploading = false;
+            this.isFileUploaded = false;
           }),
           tap(snap => {
             this.fileSize = snap.totalBytes;
           })
-
         )
       }
     }
-    else{
+    else if(this.toggleResult == false){
+      this.noticesService.publishNotice(this.toggleResult, "notices-PO-To-Lecturers", "NULL", "NULL", "NULL", "NULL", this.sideMenuPageUserFaculty.passUserId(), value)
+        .then(success => {
+          console.log("Notice Sent to Lecturers: " + success);
+          // Removing the user entered values from the input fields after the notice has been created
+          this.noticePOToLecturerForm.reset();
 
-      // Initializing previously declared variables with users entered values
-      const noticeTitle = this.noticeTitle;
-      const noticeDescription = this.noticeDescription;
-      const noticeCategory = this.noticeCategory;
-      const noticeRecipientModule = this.noticeRecipientModule;
-      const noticeRecipientBatch = this.noticeRecipientBatch;
-      const noticeAuthor = this.noticeAuthor;
-
-
-      if( noticeRecipientModule == "" ) {
-
-        this.addNewNoticeDcouementToDB_Lecturer({
-          noticeTitle: noticeTitle,
-          noticeDescription: noticeDescription,
-          noticeCategory: noticeCategory,
-          noticeRecipient: {
-            noticeRecipientModule: "NULL",
-            noticeRecipientBatch: noticeRecipientBatch 
-          },
-          noticeCreated: {
-            noticeCreatedByUid: this.loggedInUserId,
-            noticeCreatedByFaculty: noticeAuthor,
-            noticeCreatedDateTime: this.currentDateTime // firebase.firestore.Timestamp.fromDate(new Date(this.currentDateTime))
-          },
-          noticeUpdate: {
-            updatedByName: "NULL",
-            updatedByFaculty: "NULL",
-            updatedDateTime: "NULL",
-            updatedSection: "NULL",
-          }
+          // Displaying new notice successfully sent
+          this.alertNotice('Notice Successfully Sent', 
+            'Notice has been sent. Notices can be viewed in the "Notices sent to lecturers" section below this form');
+        }, error => {
+          console.log("Error: " + error);
+          this.alertNotice("ERROR", "Error has occurred: " + error);
         });
-
-      }
-      else if( noticeRecipientBatch == "" ) {
-
-        this.addNewNoticeDcouementToDB_Lecturer({
-          noticeTitle: noticeTitle,
-          noticeDescription: noticeDescription,
-          noticeCategory: noticeCategory,
-          noticeRecipient: {
-            noticeRecipientModule: noticeRecipientModule,
-            noticeRecipientBatch: "NULL" 
-          },
-          noticeCreated: {
-            noticeCreatedByUid: this.loggedInUserId,
-            noticeCreatedByFaculty: noticeAuthor,
-            noticeCreatedDateTime: this.currentDateTime // firebase.firestore.Timestamp.fromDate(new Date(this.currentDateTime))
-          },
-          noticeUpdate: {
-            updatedByName: "NULL",
-            updatedByFaculty: "NULL",
-            updatedDateTime: "NULL",
-            updatedSection: "NULL",
-          }
-        });
-
-
-      }
-
-      
-
-      
-
-      // Displaying new notice successfully created
-      this.alertnotice('Notice Successfully Created', 'Notice has been added to the system.<br>Notices can be viewed in the "Notices Sent Sections" on the right side of the panel.');
-
-      // Removing the user entered values from the input fields after the notice has been created
-      this.noticeTitle = "";
-      this.noticeDescription = "";
-      this.noticeCategory = "";
-      this.noticeRecipientModule = "";
-      this.noticeRecipientBatch = "";
-      this.noticeAuthor = "";
-
-
     }
-
   }
 
 

@@ -232,12 +232,10 @@ export class SemesterCalendarPage implements OnInit {
 
   // Confirm Box Implementation (Remove existing lecture session)
   async removeLectureSession ( title: string, content: string, value) {
-
     const alert = await this.alertController.create({
       header: title,
       message: content,
       buttons: [
-
         {
           text: 'Cancel',
           role: 'cancel',
@@ -252,15 +250,11 @@ export class SemesterCalendarPage implements OnInit {
 
             // Calling function to remove lecture session
             this.semesterCalendarService.removeLectureSession(this.sideMenuPageUserFaculty.passUserFaculty(), value);
-
           }
         }
-
       ]
     });
-
     await alert.present();
-
   }
 
 

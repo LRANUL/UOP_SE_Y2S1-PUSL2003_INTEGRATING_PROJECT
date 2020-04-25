@@ -68,590 +68,451 @@
     <ion-row>
       <ion-col>
 
-        <ion-card style="width: 98%;
-                        height: 65%;
-                        background-color: white;
-                        margin-left: 10px;">
-          <ion-card-header style="margin-top: -5px;">
-            <h4> Send New Notice </h4>
-          </ion-card-header>
-          <ion-card-content>
-
-            <ion-card id="newNoticeSection" style="background-color: #F3FAFC;
-                                                  margin-top: -15px;
-                                                  height: 740px;">
-              <ion-card-content style="margin-top: -20px;">
-
-                <ion-grid>
-                  <ion-row>
-                    <ion-col>
-                      <ion-button expand="full" id="newNoticeButtonStudent" (click)="showStudentForm()" style="--background: #02A5D7;
-                                                                                                              margin-left: -23px;
-                                                                                                              margin-right: -5px;">
-                        Student
-                      </ion-button> 
-                    </ion-col>
-                    
-                    <ion-col>
-                      <ion-button expand="full" id="newNoticeButtonLecturer" (click)="showLecturerForm()" style="--background: #0B80D3;
-                                                                                                                margin-left: -5px;
-                                                                                                                margin-right: -23px;">
-                        Lecturer
-                      </ion-button>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-
-                <!-- New Notice to Student Section -->
-                <div id="newNoticeSubmitStudent" style="display: inline">
-
-                
-                  <ion-grid>
-                    <ion-row>
-
-                      <ion-col size="3">
-                        <ion-label><h3 style="padding-top: 15px;
-                                              font-size: 15px;">Notice Title</h3></ion-label>
-                      </ion-col>
-                      <ion-col size="8">
-                        <ion-item>
-                          <ion-input type="text" clearInput [(ngModel)]="noticeTitle"></ion-input>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row>
-                    <ion-row>
-                      <ion-col size="3">
-                        <ion-label><h3 style="padding-top: 15px;
-                                              font-size: 15px;">Notice Description</h3></ion-label>
-                      </ion-col>
-                      <ion-col size="8">
-                        <ion-item>
-                          <ion-textarea [(ngModel)]="noticeDescription"></ion-textarea>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row>
-                    <ion-row>
-                      <ion-col size="3">
-                        <ion-label><h3 style="padding-top: 15px;
-                                              font-size: 15px;">Notice Category</h3></ion-label>
-                      </ion-col>
-                      <ion-col size="8">
-                        <ion-item>
-                          <ion-select interface="popover" style="min-width: 100%;" id="noticeCategory" [(ngModel)]="noticeCategory" [selectedText]="noticeCategory" (ionChange)="changeUploadCoverImage(noticeCategory)">
-                            <ion-select-option value="Lecture">Lecture</ion-select-option>
-                            <ion-select-option value="Module">Module</ion-select-option>
-                            <ion-select-option value="Event">Event</ion-select-option>
-                          </ion-select>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row style="margin-top: -14px;">
-                      <ion-col size="3">
-                        <ion-label><h3 style="padding-top: 15px;
-                                              font-size: 15px;">Notice Cover Image</h3></ion-label>
-                      </ion-col>
-                      <ion-col size="8">
-
-                      <!-- Code Block with upload event cover image -->
-                      <div id="withEventCoverImage" style="display: none;">
-                        <!-- Card Before Uploading an Image -->
-                        <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded" style="width: 350px;
-                                                                                                height: 300px;
-                                                                                                margin-left: 0px">
-                          <ion-card-header>
-                            <ion-card-title>Select Image to Upload</ion-card-title>
-                          </ion-card-header>
-                          <ion-card-content>
-                            
-                              <input type="file" name="eventCoverImage" accept="image/*" (change)="coverImageViewer($event)">
-                              <div style="margin: 10px; 
-                                          margin-top: 15px;
-                                          width: 200px;
-                                          position: absolute;
-                                          left: 50%;
-                                          transform: translateX(-50%);">
-                              <img *ngIf=" eventCoverImage != '' " src="{{ eventCoverImage }}"/>
-                              </div>
-                            <!--
-                            <div>
-                              <span>Upload Image</span> 
-                              <ion-input id="uploadBtn" type="file" class="upload" (change)="selectNewNoticeImage($event.target.files)"></ion-input>
-                            </div>
-                          -->
-                          </ion-card-content>
-                        </ion-card>
-
-                      
-                        <!-- Card During Uploading an Image -->
-                        <ion-card text-center *ngIf="isFileUploading && !isFileUploaded" style="width: 350px;
-                                                                                                height: 300px;
-                                                                                                margin-left: 0px;">
-                          <ion-card-header>
-                            <ion-card-title>Selected File: <i>{{ fileName }}</i></ion-card-title>
-                          </ion-card-header>
-                          <ion-card-content>
-                            <div *ngIf="percentage | async as percent">
-                              <p> Progress: {{ percent | number }}% </p>
-                              <ion-progress-bar value="{{ percent / 100 }}"></ion-progress-bar>
-                            </div>
-                            <div *ngIf="snapshot | async as snapt">
-                              <p> 
-                                File Size: {{ snapt.totalBytes | fileSizePipe }} <br>
-                                Transferred: {{ snapt.bytesTransferred | fileSizePipe }}
-                              </p>
-                              <!--
-                              <div *ngIf="snapshot && snapt.bytesTransferred != snapt.totalBytes">
-                                <ion-button color="warning" size="small" (click)="task.pause()" class="button is-warning">
-                                  Pause 
-                                </ion-button>
-                                <ion-button size="small" (click)="task.resume()" class="button is-info">
-                                  Resume 
-                                </ion-button>
-                                <ion-button color="danger" size="small" (click)="task.cancel()" class="button is-danger">
-                                  Cancel 
-                                </ion-button>
-                              </div>
-                              -->
-                            </div>
-                          </ion-card-content>
-                        </ion-card>
-
-                        <!-- Card After Uploading an Image -->
-                        <ion-card text-center *ngIf="!isFileUploading && isFileUploaded" style="width: 350px;
-                                                                                                height: 300px;
-                                                                                                margin-left: 0px;">
-                          <ion-card-header>
-                            <ion-card-title>Image Selected to Upload</ion-card-title>
-                          </ion-card-header>
-                          <ion-card-content>
-                            <div *ngIf="UploadedFileURL | async as ufurl">
-                              <ion-img [src]="ufurl"></ion-img>
-                              <a [href]="ufurl" target="_blank" rel="noopener" download> Download </a>
-                            </div>
-                            <p> File Size: {{ fileSize | fileSizePipe }} </p>
-                            <ion-button expand="full" color="success" (click)="isFileUploading = isFileUploaded = false"> Upload More </ion-button>
-                          </ion-card-content>
-                        </ion-card>
-                      </div>
-
-                      <!-- Code block without upload event cover image -->
-                      <div id="withoutEventCoverImage" style="display: inline">
-                        <ion-card style="width: 350px;
-                                        height: 300px;
-                                        margin-left: 0px;">
-                          <ion-card-content>
-                            <h2>Eligible only for events notice category</h2>
-                          </ion-card-content>
-                        </ion-card>
-                      </div>
-
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row style="margin-top: -12px;">
-                      <ion-col size="3">
-                        <ion-label><h3 style="padding-top: 15px;
-                                              font-size: 15px;">Notice Recipient</h3></ion-label>
-                      </ion-col>
-                      <ion-col size="4">
-                        <ion-item>
-                          <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Module" [(ngModel)]="noticeRecipientModule" style="min-width: 170px;">
-                            <ion-select-option *ngFor="let item of publishedModules" value="{{ item.payload.doc.data().moduleCode }}">{{ item.payload.doc.data().moduleCode }}</ion-select-option>
-                          </ion-select>
-                        </ion-item>
-                      </ion-col>
-                      <ion-label><p style="margin-top: 35px;">OR</p></ion-label>
-                      <ion-col size="4">
-                        <ion-item>
-                          <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Batch" [(ngModel)]="noticeRecipientBatch" style="min-width: 170px;">
-                            <ion-select-option *ngFor="let item of publishedBatches" value="{{ item.payload.doc.data().batch }}">{{ item.payload.doc.data().batch }}</ion-select-option>
-                          </ion-select>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row>
-                    <ion-row>
-                      <ion-col size="3">
-                        <ion-label><h3 style="padding-top: 15px;
-                                              font-size: 15px;">Notice Author</h3></ion-label>
-                      </ion-col>
-                      <ion-col size="8">
-                        <ion-item>
-                          <ion-input [(ngModel)]="noticeAuthor" style="min-width: 100%;" type="text" readOnly>Program Office: {{ loggedInUserFaculty }}</ion-input>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row>
-
-                    <div style="position: relative;
-                                top: 10px;">
-                      <ion-button expand="block" (click)="uploadNewNoticeImageStudent($event)">Send Notice</ion-button>
-                    </div>
-
-                  </ion-grid>
-                  
-                </div>
-                
-
-
-                <!-- Send New Notice to Lecturer -->
-                <div id="newNoticeSubmitLecturer" style="display: none;">
-
-                  <ion-grid>
-                    <ion-row>
-
-                      <ion-col size="3">
-                        <ion-label><h3 style="padding-top: 15px;
-                                              font-size: 15px;">Notice Title</h3></ion-label>
-                      </ion-col>
-                      <ion-col size="8">
-                        <ion-item>
-                          <ion-input type="text" clearInput [(ngModel)]="noticeTitle"></ion-input>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row>
-                    <ion-row>
-                      <ion-col size="3">
-                        <ion-label><h3 style="padding-top: 15px;
-                                              font-size: 15px;">Notice Description</h3></ion-label>
-                      </ion-col>
-                      <ion-col size="8">
-                        <ion-item>
-                          <ion-textarea [(ngModel)]="noticeDescription"></ion-textarea>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row>
-                    <ion-row>
-                      <ion-col size="3">
-                        <ion-label><h3 style="padding-top: 15px;
-                                              font-size: 15px;">Notice Category</h3></ion-label>
-                      </ion-col>
-                      <ion-col size="8">
-                        <ion-item>
-                          <ion-select interface="popover" style="min-width: 100%;" id="noticeCategoryLecturer" [(ngModel)]="noticeCategory" [selectedText]="noticeCategoryLecturer" (ionChange)="changeUploadCoverImageLecturer(noticeCategoryLecturer)">
-                            <ion-select-option value="Lecture">Lecture</ion-select-option>
-                            <ion-select-option value="Module">Module</ion-select-option>
-                            <ion-select-option value="Event">Event</ion-select-option>
-                          </ion-select>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row style="margin-top: -14px;">
-                      <ion-col size="3">
-                        <ion-label><h3 style="padding-top: 15px;
-                                              font-size: 15px;">Notice Cover Image</h3></ion-label>
-                      </ion-col>
-                      <ion-col size="8">
-
-                      <!-- Code Block with upload event cover image -->
-                      <div id="withEventCoverImageLecturer" style="display: none;">
-                        <!-- Card Before Uploading an Image -->
-                        <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded" style="width: 350px;
-                                                                                                height: 300px;
-                                                                                                margin-left: 0px">
-                          <ion-card-header>
-                            <ion-card-title>Select Image to Upload</ion-card-title>
-                          </ion-card-header>
-                          <ion-card-content>
-                            
-                              <input type="file" name="eventCoverImage" accept="image/*" (change)="coverImageViewer($event)">
-                              <div style="margin: 10px; 
-                                          margin-top: 15px;
-                                          width: 200px;
-                                          position: absolute;
-                                          left: 50%;
-                                          transform: translateX(-50%);">
-                              <img *ngIf=" eventCoverImage != '' " src="{{ eventCoverImage }}"/>
-                              </div>
-
-                          </ion-card-content>
-                        </ion-card>
-
-                      
-                        <!-- Card During Uploading an Image -->
-                        <ion-card text-center *ngIf="isFileUploading && !isFileUploaded" style="width: 350px;
-                                                                                                height: 300px;
-                                                                                                margin-left: 0px;">
-                          <ion-card-header>
-                            <ion-card-title>Selected File: <i>{{ fileName }}</i></ion-card-title>
-                          </ion-card-header>
-                          <ion-card-content>
-                            <div *ngIf="percentage | async as percent">
-                              <p> Progress: {{ percent | number }}% </p>
-                              <ion-progress-bar value="{{ percent / 100 }}"></ion-progress-bar>
-                            </div>
-                            <div *ngIf="snapshot | async as snapt">
-                              <p> 
-                                File Size: {{ snapt.totalBytes | fileSizePipe }} <br>
-                                Transferred: {{ snapt.bytesTransferred | fileSizePipe }}
-                              </p>
-
-                            </div>
-                          </ion-card-content>
-                        </ion-card>
-
-                        <!-- Card After Uploading an Image -->
-                        <ion-card text-center *ngIf="!isFileUploading && isFileUploaded" style="width: 350px;
-                                                                                                height: 300px;
-                                                                                                margin-left: 0px;">
-                          <ion-card-header>
-                            <ion-card-title>Image Selected to Upload</ion-card-title>
-                          </ion-card-header>
-                          <ion-card-content>
-                            <div *ngIf="UploadedFileURL | async as ufurl">
-                              <ion-img [src]="ufurl"></ion-img>
-                              <a [href]="ufurl" target="_blank" rel="noopener" download> Download </a>
-                            </div>
-                            <p> File Size: {{ fileSize | fileSizePipe }} </p>
-                            <ion-button expand="full" color="success" (click)="isFileUploading = isFileUploaded = false"> Upload More </ion-button>
-                          </ion-card-content>
-                        </ion-card>
-                      </div>
-
-                      <!-- Code block without upload event cover image -->
-                      <div id="withoutEventCoverImageLecturer" style="display: inline">
-                        <ion-card style="width: 350px;
-                                        height: 300px;
-                                        margin-left: 0px;">
-                          <ion-card-content>
-                            <h2>Eligible only for events notice category</h2>
-                          </ion-card-content>
-                        </ion-card>
-                      </div>
-
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row style="margin-top: -12px;">
-                      <ion-col size="3">
-                        <ion-label><h3 style="padding-top: 15px;
-                                              font-size: 15px;">Notice Recipient</h3></ion-label>
-                      </ion-col>
-                      <ion-col size="4">
-                        <ion-item>
-                          <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Lecturer"  [(ngModel)]="noticeRecipientModule" style="min-width: 170px;">
-                            <ion-select-option *ngFor="let item of registeredLecturerUsers" 
-                              value="{{ item.payload.doc.data().name.prefix }} {{ item.payload.doc.data().name.firstName }} {{ item.payload.doc.data().name.lastName }}">
-                              {{ item.payload.doc.data().name.prefix }} {{ item.payload.doc.data().name.firstName }} {{ item.payload.doc.data().name.lastName }}
-                            </ion-select-option>
-                          </ion-select>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row>
-                    <ion-row>
-                      <ion-col size="3">
-                        <ion-label><h3 style="padding-top: 15px;
-                                              font-size: 15px;">Notice Author</h3></ion-label>
-                      </ion-col>
-                      <ion-col size="8">
-                        <ion-item>
-                            <ion-input [(ngModel)]="noticeAuthor" style="min-width: 100%;" type="text" readOnly>Program Office: {{ loggedInUserFaculty }}</ion-input>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row>
-
-                    <div style="position: relative;
-                                top: 10px;">
-                      <ion-button expand="block" (click)="uploadNewNoticeImageLecturer($event)">Send Notice</ion-button>
-                    </div>
-
-                  </ion-grid>
-                  
-                        
-
-
-
-                </div>
-
-              </ion-card-content>
-            </ion-card>
-            
-          </ion-card-content>
-        </ion-card>
-
-      </ion-col>
-      <ion-col>
-
         <ion-row>
-
           <ion-col>
 
-            <!-- Notices From Lecturers -->
-            <ion-card style="width: 99%;
-                            height: 400px;
-                            background-color: white;
-                            margin-left: 4px;
-                            margin-top: 10px;">
-              <ion-card-header style="margin-top: 2px;">
-                <ion-grid>
-                  <ion-row>
-                    <ion-col>
-                      <h4> Notices From Lecturers </h4>
-                    </ion-col>
-                    <ion-col>
-                      <ion-item style="margin-top: -12px;
-                                      color: black;">
-                        <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
-                        <ion-label style="margin-left: 10px;">Select Date</ion-label>
-                        <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticeLecturesToPO($event, this)"></ion-datetime>
-                      </ion-item>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-                  
-
+            <ion-card style="width: 98%;
+                        background-color: white;
+                        margin-left: 10px;">
+              <ion-card-header style="margin-top: -5px;">
+                <h4> Send New Notice </h4>
               </ion-card-header>
               <ion-card-content>
 
-                <div style="border-top: #ccc solid 2px;
-                            width: 100%;
-                            margin-top: -20px;">
-                </div>
+                <ion-card id="newNoticeSection" style="background-color: #F3FAFC;
+                                                      margin-top: -15px;">
+                  <ion-card-content style="margin-top: -20px;">
 
-                <div style="overflow-y: scroll;
-                              width: 100%;
-                              height: 300px;">
                     <ion-grid>
                       <ion-row>
-                        <ion-col size="6" *ngFor="let list of publishedNotices_Lecturers_To_PO">
-
-                          <ion-card>
-                            <ion-card-header>
-                              <ion-label>
-                                <b>{{ list.payload.doc.data().noticeTitle }}</b>
-                              </ion-label>
-                            </ion-card-header>
-                            <ion-card-content>
-                              <ion-label>
-                                {{ list.payload.doc.data().noticeDescription }} <br>
-                              </ion-label>
-                              <ion-label>
-                                <b>Notice Category: </b>
-                                {{ list.payload.doc.data().noticeCategory }} <br>
-                              </ion-label>
-                              <ion-grid>
-                                <ion-row>
-                                  <ion-col style="width: 45px;">
-                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" color="secondary">
-                                    <ion-icon name="image-outline"></ion-icon>
-                                    </ion-button>
-                                  </ion-col>
-                                  <ion-col style="width: 45px;">
-                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;">
-                                      <ion-icon name="document-text-outline"></ion-icon>
-                                    </ion-button>
-                                  </ion-col>
-                                </ion-row>
-                              </ion-grid>
-                            </ion-card-content>
-                          </ion-card>
-
+                        <ion-col>
+                          <ion-button expand="full" id="newNoticeButtonStudent" (click)="showStudentForm()" style="--background: #02A5D7;
+                                                                                                                  margin-left: -23px;
+                                                                                                                  margin-right: -5px;">
+                            Student
+                          </ion-button> 
+                        </ion-col>
+                        
+                        <ion-col>
+                          <ion-button expand="full" id="newNoticeButtonLecturer" (click)="showLecturerForm()" style="--background: #0B80D3;
+                                                                                                                    margin-left: -5px;
+                                                                                                                    margin-right: -23px;">
+                            Lecturer
+                          </ion-button>
                         </ion-col>
                       </ion-row>
                     </ion-grid>
-                  </div>
-                
 
+                    <!-- New Notice to Student Section -->
+                    <div id="newNoticeSubmitStudent" style="display: inline">
+
+                    <form [formGroup]="noticePOToStudentForm" (ngSubmit)="uploadNewNoticeImageStudent(noticePOToStudentForm.value)">
+                      <ion-grid>
+                        <ion-row>
+
+                          <ion-col size="3">
+                            <ion-label><h3 style="padding-top: 15px;
+                                                  font-size: 15px;">Notice Title</h3></ion-label>
+                          </ion-col>
+                          <ion-col size="8">
+                            <ion-item>
+                              <ion-input type="text" clearInput formControlName="noticeTitle"></ion-input>
+                            </ion-item>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col size="3">
+                            <ion-label><h3 style="padding-top: 15px;
+                                                  font-size: 15px;">Notice Description</h3></ion-label>
+                          </ion-col>
+                          <ion-col size="8">
+                            <ion-item>
+                              <ion-textarea formControlName="noticeDescription"></ion-textarea>
+                            </ion-item>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col size="3">
+                            <ion-label><h3 style="padding-top: 15px;
+                                                  font-size: 15px;">Notice Category</h3></ion-label>
+                          </ion-col>
+                          <ion-col size="8">
+                            <ion-item>
+                              <ion-select interface="popover" style="min-width: 100%;" formControlName="noticeCategory">
+                                <ion-select-option *ngFor="let item of publishedSessionStatuses" 
+                                  value="{{ item.payload.doc.data().status }}">
+                                  {{ item.payload.doc.data().status }}
+                                </ion-select-option>
+                              </ion-select>
+                            </ion-item>
+                          </ion-col>
+                        </ion-row>
+
+                        <ion-row>
+                          <ion-col size="3">
+                            <ion-label>
+                              <h3 style="padding-top: 15px;
+                                        font-size: 15px;">
+                                Add Cover Image
+                              </h3>
+                            </ion-label>
+                          </ion-col>
+                          <ion-col size="8">
+                            <ion-item>
+                              <ion-label>Cover Image</ion-label>
+                              <ion-toggle (ionChange)="changeUploadCoverImage($event, 'StudentForm')"></ion-toggle>
+                            </ion-item>
+                          </ion-col>
+                        </ion-row>
+
+                        <ion-row style="margin-top: -14px;">
+                          <ion-col size="3">
+                            <ion-label><h3 style="padding-top: 15px;
+                                                  font-size: 15px;">Notice Cover Image</h3></ion-label>
+                          </ion-col>
+                          <ion-col size="8">
+
+                          <!-- Code Block with upload event cover image -->
+                          <div id="withEventCoverImage" style="display: none;">
+                            <!-- Card Before Uploading an Image -->
+                            <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded" style="width: 350px;
+                                                                                                    height: 300px;
+                                                                                                    margin-left: 0px">
+                              <ion-card-header>
+                                <ion-card-title>Select Image to Upload</ion-card-title>
+                              </ion-card-header>
+                              <ion-card-content>
+                                
+                                  <input type="file" name="eventCoverImage" accept="image/*" (change)="coverImageViewer($event)">
+                                  <div style="margin: 10px; 
+                                              margin-top: 15px;
+                                              width: 200px;
+                                              position: absolute;
+                                              left: 50%;
+                                              transform: translateX(-50%);">
+                                  <img *ngIf=" eventCoverImage != '' " src="{{ eventCoverImage }}"/>
+                                  </div>
+                                <!--
+                                <div>
+                                  <span>Upload Image</span> 
+                                  <ion-input id="uploadBtn" type="file" class="upload" (change)="selectNewNoticeImage($event.target.files)"></ion-input>
+                                </div>
+                              -->
+                              </ion-card-content>
+                            </ion-card>
+
+                          
+                            <!-- Card During Uploading an Image -->
+                            <ion-card text-center *ngIf="isFileUploading && !isFileUploaded" style="width: 350px;
+                                                                                                    height: 300px;
+                                                                                                    margin-left: 0px;">
+                              <ion-card-header>
+                                <ion-card-title>Selected File: <i>{{ fileName }}</i></ion-card-title>
+                              </ion-card-header>
+                              <ion-card-content>
+                                <div *ngIf="percentage | async as percent">
+                                  <p> Progress: {{ percent | number }}% </p>
+                                  <ion-progress-bar value="{{ percent / 100 }}"></ion-progress-bar>
+                                </div>
+                                <div *ngIf="snapshot | async as snapt">
+                                  <p> 
+                                    File Size: {{ snapt.totalBytes | fileSizePipe }} <br>
+                                    Transferred: {{ snapt.bytesTransferred | fileSizePipe }}
+                                  </p>
+                                  <!--
+                                  <div *ngIf="snapshot && snapt.bytesTransferred != snapt.totalBytes">
+                                    <ion-button color="warning" size="small" (click)="task.pause()" class="button is-warning">
+                                      Pause 
+                                    </ion-button>
+                                    <ion-button size="small" (click)="task.resume()" class="button is-info">
+                                      Resume 
+                                    </ion-button>
+                                    <ion-button color="danger" size="small" (click)="task.cancel()" class="button is-danger">
+                                      Cancel 
+                                    </ion-button>
+                                  </div>
+                                  -->
+                                </div>
+                              </ion-card-content>
+                            </ion-card>
+
+                            <!-- Card After Uploading an Image -->
+                            <ion-card text-center *ngIf="!isFileUploading && isFileUploaded" style="width: 350px;
+                                                                                                    height: 300px;
+                                                                                                    margin-left: 0px;">
+                              <ion-card-header>
+                                <ion-card-title>Image Selected to Upload</ion-card-title>
+                              </ion-card-header>
+                              <ion-card-content>
+                                <div *ngIf="UploadedFileURL | async as ufurl">
+                                  <ion-img [src]="ufurl"></ion-img>
+                                  <a [href]="ufurl" target="_blank" rel="noopener" download> Download </a>
+                                </div>
+                                <p> File Size: {{ fileSize | fileSizePipe }} </p>
+                                <ion-button expand="full" color="success" (click)="isFileUploading = isFileUploaded = false"> Upload More </ion-button>
+                              </ion-card-content>
+                            </ion-card>
+                          </div>
+
+                          <!-- Code block without upload cover image -->
+                          <div id="withoutEventCoverImage" style="display: inline">
+                            <ion-card style="width: 350px;
+                                            height: 300px;
+                                            margin-left: 0px;">
+                              <ion-card-content>
+                                <h2>Click On Cover Image Toggle</h2>
+                              </ion-card-content>
+                            </ion-card>
+                          </div>
+
+                          </ion-col>
+                        </ion-row>
+
+                        <ion-row style="margin-top: -12px;">
+                          <ion-col size="3">
+                            <ion-label><h3 style="padding-top: 15px;
+                                                  font-size: 15px;">Notice Recipient</h3></ion-label>
+                          </ion-col>
+                          <ion-col size="4">
+                            <ion-item>
+                              <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Module" formControlName="noticeRecipientModule" style="min-width: 100%;">
+                                <ion-select-option *ngFor="let item of publishedModules" value="{{ item.payload.doc.data().moduleCode }}">{{ item.payload.doc.data().moduleCode }}</ion-select-option>
+                              </ion-select>
+                            </ion-item>
+                          </ion-col>
+                          <ion-label><p style="margin-top: 35px;">OR</p></ion-label>
+                          <ion-col size="4">
+                            <ion-item>
+                              <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Batch" formControlName="noticeRecipientBatch" style="min-width: 100%;">
+                                <ion-select-option *ngFor="let item of publishedBatches" value="{{ item.payload.doc.data().batch }}">{{ item.payload.doc.data().batch }}</ion-select-option>
+                              </ion-select>
+                            </ion-item>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col size="3">
+                            <ion-label><h3 style="padding-top: 15px;
+                                                  font-size: 15px;">Notice Author</h3></ion-label>
+                          </ion-col>
+                          <ion-col size="8">
+                            <ion-item>
+                              <ion-input formControlName="noticeAuthor" style="min-width: 100%;" type="text" readOnly>Program Office: {{ loggedInUserFaculty }}</ion-input>
+                            </ion-item>
+                          </ion-col>
+                        </ion-row>
+
+                        <div style="position: relative;
+                                    top: 10px;">
+                          <ion-button expand="block" (click)="($event)" [disabled]="!noticePOToStudentForm.valid">Send Notice</ion-button>
+                        </div>
+
+                      </ion-grid>
+                    </form>
+                      
+                    </div>
+                    
+
+
+                    <!-- Send New Notice to Lecturer -->
+                    <div id="newNoticeSubmitLecturer" style="display: none;">
+                      <form [formGroup]="noticePOToLecturerForm" (ngSubmit)="uploadNewNoticeImageLecturer(noticePOToLecturerForm.value)">
+                        <ion-grid>
+                          <ion-row>
+
+                            <ion-col size="3">
+                              <ion-label><h3 style="padding-top: 15px;
+                                                    font-size: 15px;">Notice Title</h3></ion-label>
+                            </ion-col>
+                            <ion-col size="8">
+                              <ion-item>
+                                <ion-input type="text" clearInput formControlName="noticeTitle"></ion-input>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="3">
+                              <ion-label><h3 style="padding-top: 15px;
+                                                    font-size: 15px;">Notice Description</h3></ion-label>
+                            </ion-col>
+                            <ion-col size="8">
+                              <ion-item>
+                                <ion-textarea formControlName="noticeDescription"></ion-textarea>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="3">
+                              <ion-label><h3 style="padding-top: 15px;
+                                                    font-size: 15px;">Notice Category</h3></ion-label>
+                            </ion-col>
+                            <ion-col size="8">
+                              <ion-item>
+                                <ion-select interface="popover" style="min-width: 100%;" formControlName="noticeCategory">
+                                  <ion-select-option value="Lecture">Lecture</ion-select-option>
+                                  <ion-select-option value="Module">Module</ion-select-option>
+                                  <ion-select-option value="Event">Event</ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+
+                          <ion-row>
+                            <ion-col size="3">
+                              <ion-label>
+                                <h3 style="padding-top: 15px;
+                                          font-size: 15px;">
+                                  Add Cover Image
+                                </h3>
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="8">
+                              <ion-item>
+                                <ion-label>Cover Image</ion-label>
+                                <ion-toggle (ionChange)="changeUploadCoverImage($event, 'LecturerForm')"></ion-toggle>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+
+                          <ion-row style="margin-top: -14px;">
+                            <ion-col size="3">
+                              <ion-label><h3 style="padding-top: 15px;
+                                                    font-size: 15px;">Notice Cover Image</h3></ion-label>
+                            </ion-col>
+                            <ion-col size="8">
+
+                            <!-- Code Block with upload event cover image -->
+                            <div id="withEventCoverImageLecturer" style="display: none;">
+                              <!-- Card Before Uploading an Image -->
+                              <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded" style="min-width: 100%;
+                                                                                                      height: 300px;
+                                                                                                      margin-left: 0px">
+                                <ion-card-header>
+                                  <ion-card-title>Select Image to Upload</ion-card-title>
+                                </ion-card-header>
+                                <ion-card-content>
+                                  
+                                    <input type="file" name="eventCoverImage" accept="image/*" (change)="coverImageViewer($event)">
+                                    <div style="margin: 10px; 
+                                                margin-top: 15px;
+                                                width: 200px;
+                                                position: absolute;
+                                                left: 50%;
+                                                transform: translateX(-50%);">
+                                    <img *ngIf=" eventCoverImage != '' " src="{{ eventCoverImage }}"/>
+                                    </div>
+
+                                </ion-card-content>
+                              </ion-card>
+
+                            
+                              <!-- Card During Uploading an Image -->
+                              <ion-card text-center *ngIf="isFileUploading && !isFileUploaded" style="width: 350px;
+                                                                                                      height: 300px;
+                                                                                                      margin-left: 0px;">
+                                <ion-card-header>
+                                  <ion-card-title>Selected File: <i>{{ fileName }}</i></ion-card-title>
+                                </ion-card-header>
+                                <ion-card-content>
+                                  <div *ngIf="percentage | async as percent">
+                                    <p> Progress: {{ percent | number }}% </p>
+                                    <ion-progress-bar value="{{ percent / 100 }}"></ion-progress-bar>
+                                  </div>
+                                  <div *ngIf="snapshot | async as snapt">
+                                    <p> 
+                                      File Size: {{ snapt.totalBytes | fileSizePipe }} <br>
+                                      Transferred: {{ snapt.bytesTransferred | fileSizePipe }}
+                                    </p>
+
+                                  </div>
+                                </ion-card-content>
+                              </ion-card>
+
+                              <!-- Card After Uploading an Image -->
+                              <ion-card text-center *ngIf="!isFileUploading && isFileUploaded" style="width: 350px;
+                                                                                                      height: 300px;
+                                                                                                      margin-left: 0px;">
+                                <ion-card-header>
+                                  <ion-card-title>Image Selected to Upload</ion-card-title>
+                                </ion-card-header>
+                                <ion-card-content>
+                                  <div *ngIf="UploadedFileURL | async as ufurl">
+                                    <ion-img [src]="ufurl"></ion-img>
+                                    <a [href]="ufurl" target="_blank" rel="noopener" download> Download </a>
+                                  </div>
+                                  <p> File Size: {{ fileSize | fileSizePipe }} </p>
+                                  <ion-button expand="full" color="success" (click)="isFileUploading = isFileUploaded = false"> Upload More </ion-button>
+                                </ion-card-content>
+                              </ion-card>
+                            </div>
+
+                            <!-- Code block without upload cover image -->
+                            <div id="withoutEventCoverImageLecturer" style="display: inline">
+                              <ion-card style="width: 350px;
+                                              height: 300px;
+                                              margin-left: 0px;">
+                                <ion-card-content>
+                                  <h2>Click On Cover Image Toggle</h2>
+                                </ion-card-content>
+                              </ion-card>
+                            </div>
+
+                            </ion-col>
+                          </ion-row>
+
+                          <ion-row style="margin-top: -12px;">
+                            <ion-col size="3">
+                              <ion-label><h3 style="padding-top: 15px;
+                                                    font-size: 15px;">Notice Recipient</h3></ion-label>
+                            </ion-col>
+                            <ion-col size="4">
+                              <ion-item>
+                                <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Lecturer"  formControlName="noticeRecipient" style="min-width: 100%;">
+                                  <ion-select-option *ngFor="let item of registeredLecturerUsers" 
+                                    value="{{ item.payload.doc.data().name.prefix }} {{ item.payload.doc.data().name.firstName }} {{ item.payload.doc.data().name.lastName }}">
+                                    {{ item.payload.doc.data().name.prefix }} {{ item.payload.doc.data().name.firstName }} {{ item.payload.doc.data().name.lastName }}
+                                  </ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="3">
+                              <ion-label><h3 style="padding-top: 15px;
+                                                    font-size: 15px;">Notice Author</h3></ion-label>
+                            </ion-col>
+                            <ion-col size="8">
+                              <ion-item>
+                                  <ion-input formControlName="noticeAuthor" style="min-width: 100%;" type="text" readOnly>Program Office: {{ loggedInUserFaculty }}</ion-input>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+
+                          <div style="position: relative;
+                                      top: 10px;">
+                            <ion-button expand="block" [disabled]="!noticePOToLecturerForm.valid">Send Notice</ion-button>
+                          </div>
+
+                        </ion-grid>
+                      </form>
+                      
+
+                    </div>
+
+                  </ion-card-content>
+                </ion-card>
+                
               </ion-card-content>
             </ion-card>
 
 
           </ion-col>
-
-        </ion-row>
-        <ion-row>
-
-          <ion-col>
-
-             <!-- Notices Sent to Students -->
-              <ion-card style="width: 99%;
-                              height: 400px;
-                              background-color: white;
-                              margin-left: 4px;
-                              margin-top: 0px;">
-                <ion-card-header style="margin-top: 2px;">
-                  <ion-grid>
-                    <ion-row>
-                      <ion-col>
-                        <h4> Notices Sent to Students </h4>
-                      </ion-col>
-                      <ion-col>
-                        <ion-item style="margin-top: -12px;">
-                          <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
-                          <ion-label style="margin-left: 10px;">Select Date</ion-label>
-                          <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticePOToStudents($event, this)"></ion-datetime>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
-                  
-
-                </ion-card-header>
-                <ion-card-content>
-
-                  <div style="border-top: #ccc solid 2px;
-                              width: 100%;
-                              margin-top: -20px;">
-                  </div>
-
-                  <div style="overflow-y: scroll;
-                              width: 100%;
-                              height: 300px;">
-                    <ion-grid>
-                      <ion-row>
-                        <ion-col size="6" *ngFor="let list of publishedNotices_PO_To_Students">
-
-                          <ion-card>
-                            <ion-card-header>
-                              <ion-label>
-                                <b>{{ list.payload.doc.data().noticeTitle }}</b>
-                              </ion-label>
-                            </ion-card-header>
-                            <ion-card-content>
-                              <ion-label>
-                                {{ list.payload.doc.data().noticeDescription }} <br>
-                              </ion-label>
-                              <ion-label>
-                                <b>Notice Category: </b>
-                                {{ list.payload.doc.data().noticeCategory }} <br>
-                              </ion-label>
-                              <ion-grid>
-                                <ion-row>
-                                  <ion-col style="width: 45px;">
-                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" color="secondary" (click)="viewImageNotice(list)">
-                                    <ion-icon name="image-outline"></ion-icon>
-                                    </ion-button>
-                                  </ion-col>
-                                  <ion-col style="width: 45px;">
-                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" (click)="moreDetailsNotice($event, list)">
-                                      <ion-icon name="document-text-outline"></ion-icon>
-                                    </ion-button>
-                                  </ion-col>
-                                </ion-row>
-                              </ion-grid>
-                            </ion-card-content>
-                          </ion-card>
-
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </div>
-
-                </ion-card-content>
-              </ion-card>
-
-          </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            
+
             <!-- Notices Sent to Lecturers -->
             <ion-card style="width: 99%;
-                              height: 400px;
+                              height: 800px;
                               background-color: white;
                               margin-left: 4px;
                               margin-top: 0px;">
@@ -686,7 +547,7 @@
                               height: 300px;">
                     <ion-grid>
                       <ion-row>
-                        <ion-col size="6" *ngFor="let list of publishedNotices_PO_To_Lecturers">
+                        <ion-col size="6" *ngFor="let list of publishedNoticesPOToLecturer">
 
                           <ion-card>
                             <ion-card-header>
@@ -706,14 +567,44 @@
                                 <ion-row>
                                   <ion-col style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" color="secondary">
-                                    <ion-icon name="image-outline"></ion-icon>
+                                                                                               height: 40px;" color="secondary" (click)="viewImageNotice(list)">
+                                      <ion-icon name="image-outline" style="color: white;"></ion-icon>
+                                      <ion-label style="color: white;
+                                                        margin-left: 7px;">
+                                        VIEW <br> IMAGE
+                                      </ion-label>
                                     </ion-button>
                                   </ion-col>
                                   <ion-col style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;">
-                                      <ion-icon name="document-text-outline"></ion-icon>
+                                                                                               height: 40px;" (click)="moreDetailsNotice($event, list)">
+                                      <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
+                                      <ion-label style="color: white;
+                                                        margin-left: 7px;">
+                                        MORE <br> DETAILS
+                                      </ion-label>
+                                    </ion-button>
+                                  </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" color="warning" (click)="viewImageNotice(list)">
+                                      <ion-icon name="image-outline" style="color: white;"></ion-icon>
+                                      <ion-label style="color: white;
+                                                        margin-left: 5px;">
+                                        EDIT
+                                      </ion-label>
+                                    </ion-button>
+                                  </ion-col>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" color="danger" (click)="moreDetailsNotice($event, list)">
+                                      <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
+                                      <ion-label style="color: white;
+                                                        margin-left: 5px;">
+                                        REMOVE        
+                                      </ion-label>
                                     </ion-button>
                                   </ion-col>
                                 </ion-row>
@@ -731,11 +622,247 @@
                 </ion-card-content>
               </ion-card>
 
-            
 
           </ion-col>
         </ion-row>
 
+      </ion-col>
+      <ion-col>
+
+        <ion-row>
+
+          <ion-col>
+
+            <!-- Notices From Lecturers -->
+            <ion-card style="width: 99%;
+                            height: 800px;
+                            background-color: white;
+                            margin-left: 4px;
+                            margin-top: 10px;">
+              <ion-card-header style="margin-top: 2px;">
+                <ion-grid>
+                  <ion-row>
+                    <ion-col>
+                      <h4> Notices From Lecturers </h4>
+                    </ion-col>
+                    <ion-col>
+                      <ion-item style="margin-top: -12px;
+                                      color: black;">
+                        <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
+                        <ion-label style="margin-left: 10px;">Select Date</ion-label>
+                        <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticeLecturesToPO($event, this)"></ion-datetime>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+                  
+
+              </ion-card-header>
+              <ion-card-content>
+
+                <div style="border-top: #ccc solid 2px;
+                            width: 100%;
+                            margin-top: -20px;">
+                </div>
+
+                <div style="overflow-y: scroll;
+                              width: 100%;
+                              height: 300px;">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col size="6" *ngFor="let list of publishedNoticesLecturerTOPO">
+
+                          <ion-card>
+                            <ion-card-header>
+                              <ion-label>
+                                <b>{{ list.payload.doc.data().noticeTitle }}</b>
+                              </ion-label>
+                            </ion-card-header>
+                            <ion-card-content>
+                              <ion-label>
+                                {{ list.payload.doc.data().noticeDescription }} <br>
+                              </ion-label>
+                              <ion-label>
+                                <b>Notice Category: </b>
+                                {{ list.payload.doc.data().noticeCategory }} <br>
+                              </ion-label>
+                              <ion-grid>
+                                <ion-row>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" color="secondary" (click)="viewImageNotice(list)">
+                                      <ion-icon name="image-outline" style="color: white;"></ion-icon>
+                                      <ion-label style="color: white;
+                                                        margin-left: 7px;">
+                                        VIEW <br> IMAGE
+                                      </ion-label>
+                                    </ion-button>
+                                  </ion-col>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" (click)="moreDetailsNotice($event, list)">
+                                      <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
+                                      <ion-label style="color: white;
+                                                        margin-left: 7px;">
+                                        MORE <br> DETAILS
+                                      </ion-label>
+                                    </ion-button>
+                                  </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" color="warning" (click)="viewImageNotice(list)">
+                                      <ion-icon name="image-outline" style="color: white;"></ion-icon>
+                                      <ion-label style="color: white;
+                                                        margin-left: 5px;">
+                                        EDIT
+                                      </ion-label>
+                                    </ion-button>
+                                  </ion-col>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" color="danger" (click)="moreDetailsNotice($event, list)">
+                                      <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
+                                      <ion-label style="color: white;
+                                                        margin-left: 5px;">
+                                        REMOVE        
+                                      </ion-label>
+                                    </ion-button>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                            </ion-card-content>
+                          </ion-card>
+
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </div>
+                
+
+              </ion-card-content>
+            </ion-card>
+
+
+          </ion-col>
+
+        </ion-row>
+        <ion-row>
+
+          <ion-col>
+
+             <!-- Notices Sent to Students -->
+              <ion-card style="width: 99%;
+                              height: 800px;
+                              background-color: white;
+                              margin-left: 4px;
+                              margin-top: 0px;">
+                <ion-card-header style="margin-top: 2px;">
+                  <ion-grid>
+                    <ion-row>
+                      <ion-col>
+                        <h4> Notices Sent to Students </h4>
+                      </ion-col>
+                      <ion-col>
+                        <ion-item style="margin-top: -12px;">
+                          <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
+                          <ion-label style="margin-left: 10px;">Select Date</ion-label>
+                          <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticePOToStudents($event, this)"></ion-datetime>
+                        </ion-item>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                  
+
+                </ion-card-header>
+                <ion-card-content>
+
+                  <div style="border-top: #ccc solid 2px;
+                              width: 100%;
+                              margin-top: -20px;">
+                  </div>
+
+                  <div style="overflow-y: scroll;
+                              width: 100%;
+                              height: 300px;">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col size="6" *ngFor="let list of publishedNoticesPOTOStudent">
+
+                          <ion-card>
+                            <ion-card-header>
+                              <ion-label>
+                                <b>{{ list.payload.doc.data().noticeTitle }}</b>
+                              </ion-label>
+                            </ion-card-header>
+                            <ion-card-content>
+                              <ion-label>
+                                {{ list.payload.doc.data().noticeDescription }} <br>
+                              </ion-label>
+                              <ion-label>
+                                <b>Notice Category: </b>
+                                {{ list.payload.doc.data().noticeCategory }} <br>
+                              </ion-label>
+                              <ion-grid>
+                                <ion-row>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" color="secondary" (click)="viewImageNotice(list)">
+                                      <ion-icon name="image-outline" style="color: white;"></ion-icon>
+                                      <ion-label style="color: white;
+                                                        margin-left: 7px;">
+                                        VIEW <br> IMAGE
+                                      </ion-label>
+                                    </ion-button>
+                                  </ion-col>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" (click)="moreDetailsNotice($event, list)">
+                                      <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
+                                      <ion-label style="color: white;
+                                                        margin-left: 7px;">
+                                        MORE <br> DETAILS
+                                      </ion-label>
+                                    </ion-button>
+                                  </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" color="warning" (click)="viewImageNotice(list)">
+                                      <ion-icon name="image-outline" style="color: white;"></ion-icon>
+                                      <ion-label style="color: white;
+                                                        margin-left: 5px;">
+                                        EDIT
+                                      </ion-label>
+                                    </ion-button>
+                                  </ion-col>
+                                  <ion-col style="width: 45px;">
+                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
+                                                                                               height: 40px;" color="danger" (click)="moreDetailsNotice($event, list)">
+                                      <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
+                                      <ion-label style="color: white;
+                                                        margin-left: 5px;">
+                                        REMOVE        
+                                      </ion-label>
+                                    </ion-button>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                            </ion-card-content>
+                          </ion-card>
+
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </div>
+
+                </ion-card-content>
+              </ion-card>
+
+          </ion-col>
+        </ion-row>
       </ion-col>
     </ion-row>
 

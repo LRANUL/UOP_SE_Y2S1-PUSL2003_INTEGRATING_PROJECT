@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FirestoreService } from 'src/app/services/firebase/firestore.service';
 import { AlertController, ModalController, NavParams } from '@ionic/angular';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-transport-slot-modal',
@@ -12,17 +12,12 @@ export class EditTransportSlotModalPage implements OnInit {
 
   passedTransportSlotDocId = null;
   passedTransportSlotType = null;
-  passedTransportSlotDeparture = null;
-  passedTransportSlotDestination = null;
-  passedTransportSlotDepartureTime = null;
-  passedTransportSlotApproArrivalTime = null;
-  passedTransportSlotWeekdays = null;
-  passedTransportSlotWeekends = null;
-  passedTransportSlotStatus = null;
 
   transportSlotTypeDeparture: Boolean = false;
 
   transportSlotTypeDestination: Boolean = false;
+
+  editTransportSlotForm: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -38,13 +33,28 @@ export class EditTransportSlotModalPage implements OnInit {
     this.passedTransportSlotDocId = this.navParams.get('transportSlotDocId');
     this.passedTransportSlotType = this.navParams.get('transportSlotType');
 
-    this.passedTransportSlotDeparture = this.navParams.get('transportSlotDeparture');
-    this.passedTransportSlotDestination = this.navParams.get('transportSlotDestination');
-    this.passedTransportSlotDepartureTime = this.navParams.get('transportSlotDepartureTime');
-    this.passedTransportSlotApproArrivalTime = this.navParams.get('transportSlotApproArrivalTime');
-    this.passedTransportSlotWeekdays = this.navParams.get('transportSlotWeekdays');
-    this.passedTransportSlotWeekends = this.navParams.get('transportSlotWeekends');
-    this.passedTransportSlotStatus = this.navParams.get('transportSlotStatus');
+    this.editTransportSlotForm = this.formBuilder.group({
+      departure: new FormControl('', Validators.required),
+      destination: new FormControl('', Validators.required),
+      departureTime: new FormControl('', Validators.required),
+      approArrivalTime: new FormControl('', Validators.required),
+      availableWeekdays: new FormControl('', Validators.required),
+      availableWeekends: new FormControl('', Validators.required),
+      status: new FormControl('', Validators.required)
+    });
+
+
+    // Assigning the values to the formgroup
+    this.editTransportSlotForm.patchValue({
+      departure: this.navParams.get('transportSlotDeparture'),
+      destination: this.navParams.get('transportSlotDestination'),
+      departureTime: this.navParams.get('transportSlotDepartureTime'),
+      approArrivalTime: this.navParams.get('transportSlotApproArrivalTime'),
+      availableWeekdays: this.navParams.get('transportSlotWeekdays'),
+      availableWeekends: this.navParams.get('transportSlotWeekends'),
+      status: this.navParams.get('transportSlotStatus')
+    });
+
 
     if(this.passedTransportSlotType == "nsbmDeparture"){
       this.transportSlotTypeDestination = true;

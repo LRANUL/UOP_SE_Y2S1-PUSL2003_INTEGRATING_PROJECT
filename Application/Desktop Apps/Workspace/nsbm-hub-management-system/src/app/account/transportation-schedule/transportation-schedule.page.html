@@ -106,18 +106,24 @@
                                 <td>{{ item.payload.doc.data().departureTime }}</td>
                                 <td>{{ item.payload.doc.data().approximatedArrivalTime }}</td>
                                 <td>
-                                  <ion-grid>
-                                    <ion-row *ngFor="let itemDay of item.payload.doc.data().availableWeekdays">
-                                      <ion-col>
-                                        {{ itemDay }}
-                                      </ion-col>
-                                    </ion-row>
-                                    <ion-row *ngFor="let itemEnd of item.payload.doc.data().availableWeekends">
-                                      <ion-col>
-                                        {{ itemEnd }}
-                                      </ion-col>
-                                    </ion-row>
-                                  </ion-grid>
+                                  <div style="border: #ccc solid 1px;
+                                              border-radius: 5px;
+                                              padding: 5px;
+                                              height: 70px;
+                                              overflow-y: scroll;">
+                                    <ion-grid>
+                                      <ion-row *ngFor="let itemDay of item.payload.doc.data().availableWeekdays">
+                                        <ion-col>
+                                          {{ itemDay }}
+                                        </ion-col>
+                                      </ion-row>
+                                      <ion-row *ngFor="let itemEnd of item.payload.doc.data().availableWeekends">
+                                        <ion-col>
+                                          {{ itemEnd }}
+                                        </ion-col>
+                                      </ion-row>
+                                    </ion-grid>
+                                  </div>
                                 </td>
                                 <td>{{ item.payload.doc.data().status }}</td>
                                 <td>
@@ -182,18 +188,24 @@
                                 <td>{{ item.payload.doc.data().departureTime }}</td>
                                 <td>{{ item.payload.doc.data().approximatedArrivalTime }}</td>
                                 <td>
-                                  <ion-grid>
-                                    <ion-row *ngFor="let itemDay of item.payload.doc.data().availableWeekdays">
-                                      <ion-col>
-                                        {{ itemDay }}
-                                      </ion-col>
-                                    </ion-row>
-                                    <ion-row *ngFor="let itemEnd of item.payload.doc.data().availableWeekends">
-                                      <ion-col>
-                                        {{ itemEnd }}
-                                      </ion-col>
-                                    </ion-row>
-                                  </ion-grid>
+                                  <div style="border: #ccc solid 1px;
+                                              border-radius: 5px;
+                                              padding: 5px;
+                                              height: 70px;
+                                              overflow-y: scroll;">
+                                    <ion-grid>   
+                                      <ion-row *ngFor="let itemDay of item.payload.doc.data().availableWeekdays">
+                                        <ion-col>
+                                          {{ itemDay }}
+                                        </ion-col>
+                                      </ion-row>
+                                      <ion-row *ngFor="let itemEnd of item.payload.doc.data().availableWeekends">
+                                        <ion-col>
+                                          {{ itemEnd }}
+                                        </ion-col>
+                                      </ion-row>
+                                    </ion-grid>
+                                  </div>
                                 </td>
                                 <td>{{ item.payload.doc.data().status }}</td>
                                 <td>
@@ -307,8 +319,8 @@
                   </ion-col>
                   <ion-col>
                     <ion-item>
-                      <ion-input type="text" inputClear placeholder="Enter Departure Time (HH:mm [AM|PM])" formControlName="departureTime"></ion-input>
-                     </ion-item>
+                      <ion-input placeholder="Sample: 9:00 AM" inputClear formControlName="departureTime"></ion-input>
+                    </ion-item>
                   </ion-col>
 
                 </ion-row>
@@ -321,7 +333,7 @@
                   </ion-col>
                   <ion-col>
                     <ion-item>
-                      <ion-input type="text" inputClear placeholder="Enter Arrival Time (HH:mm [AM|PM])" formControlName="approArrivalTime"></ion-input>
+                      <ion-input placeholder="Sample: 10:00 AM" inputClear formControlName="approArrivalTime"></ion-input>
                     </ion-item>
                   </ion-col>
 

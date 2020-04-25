@@ -1,31 +1,34 @@
-<!--
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Login</ion-title>
-  </ion-toolbar>
-</ion-header>
--->
 
-<ion-content>
+<!-- Splash Screen -->
+<div *ngIf="splashContent" style="height: 100%;">
+  <ion-img src="assets/icon/splash.png" style="height: 80%;
+                                              width: 90%;
+                                              position: relative;
+                                              left: 50%;
+                                              transform: translateX(-50%);"></ion-img>
+  <br>
+  <ion-img src="assets/icon/loading.svg" style="height: 100px;
+                                                width: 100%;"></ion-img>
+</div>
+
+<!-- Login Screen Content -->
+<ion-content [hidden]="!loginContent">
   <div style="background-color: white;">
 
-    <button ion-button (click)="OpenRegisterModal()" style="color: white;
-                                                        background-color: #35C5E8;
-                                                        padding: 10px;
-                                                        border-radius: 20px;
-                                                        width: 130px;
-                                                        height: 40px;
-                                                        font-size: 20px;
+    <ion-button shape=round color="secondary" (click)="OpenRegisterModal()" style="color: white;
+                                                        width: 180px;
+                                                        height: 45px;
                                                         position: absolute;
                                                         top: 20px;
                                                         right: 70px;">
-      <ion-icon name="add-outline" style="margin-right: 10px;
-                                          position: absolute;
-                                          left: 10px;"></ion-icon>
-      <p style="position: relative;
-                top: -6px;
-                left: 5px;">Register</p>                 
-    </button>
+      <ion-icon name="person-add-outline" style="color: white;
+                                                font-size: 20px;"></ion-icon>
+      <ion-label style="margin-left: 7px;
+                        font-size: 18px;
+                        color: white;">
+        Register
+      </ion-label>              
+    </ion-button>
 
     <div style="position: relative;
                 top: 60px;">

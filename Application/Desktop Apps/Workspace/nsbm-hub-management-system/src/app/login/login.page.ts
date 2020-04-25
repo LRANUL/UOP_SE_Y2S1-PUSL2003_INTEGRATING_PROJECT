@@ -18,7 +18,14 @@ import * as firebase from 'firebase/app';
 })
 export class LoginPage implements OnInit {
 
+  // Loading spinner
   loginLoadingSpinner: Boolean = false;
+
+  // Splash screen
+  splashContent: Boolean = true;
+
+  // Login content
+  loginContent: Boolean = false;
 
   // Retrieving the user entered value
   get email() {
@@ -67,7 +74,14 @@ export class LoginPage implements OnInit {
   ) {}
 
 
+
   ngOnInit() {
+
+    // Setting timere for the splash screen
+    setTimeout(() => {
+      this.splashContent = false;
+      this.loginContent = true;
+    },3000);
 
     firebase.auth().onAuthStateChanged(async (user) => {
 
@@ -75,25 +89,17 @@ export class LoginPage implements OnInit {
       this.loginLoadingSpinner = true;
 
       if (user) {
-        
-        // If user is logged in
-        console.log('User is Logged In');
-        const loading = await this.loadingController.create({
-          message: 'Logging In..',
-          duration: 2000
-        });
-        await loading.present();
-
-        const { role, data } = await loading.onDidDismiss();
-        console.log('Loading spinner dismissed');
-
         // Navigating to the dashboard
         this._router.navigate(["/side-menu/dashboard"]);
+
+        this.loginLoadingSpinner = false;
 
       }
       else {
         // If user is not logged in
         console.log('User is NOT Logged In');
+
+        this.loginLoadingSpinner = false;
       }
     });
   }
@@ -125,13 +131,6 @@ export class LoginPage implements OnInit {
 
     // Setting loading spinner to spin
     this.loginLoadingSpinner = true;
-
-    const loading = await this.loadingController.create({
-      message: 'Logging In..',
-      duration: 2000
-    });
-
-    await loading.present();
 
     const loginCredentials: LoginCredential = this.loginForm.value;
     this._loginService.login(loginCredentials)

@@ -14,7 +14,7 @@ export class LectureSchedulePage implements OnInit {
 
   constructor(
     private lectureScheduleService: FirestoreService,
-    private sideMenuPageUserFaculty: SideMenuPage,
+    private sideMenuPageUserFaculty: SideMenuPage
   ) { }
 
   ngOnInit() {
@@ -48,7 +48,6 @@ export class LectureSchedulePage implements OnInit {
   publishedLectureSessionCurrentDate;
   retrievePublishedLectureSessionsLectureSchedule = () => {
     this.lectureScheduleService.retrievePublishedLectureSessionsLectureSchedule(this.sideMenuPageUserFaculty.passUserFaculty(), this.currentDate, this.nextDate).subscribe(response => (this.publishedLectureSessionCurrentDate = response));
-    console.log(this.publishedLectureSessionCurrentDate);
   }
 
 

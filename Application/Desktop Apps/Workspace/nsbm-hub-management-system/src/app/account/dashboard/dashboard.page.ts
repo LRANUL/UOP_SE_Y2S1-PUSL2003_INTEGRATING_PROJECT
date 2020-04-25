@@ -17,6 +17,9 @@ import { MoreDetailsLecturesPopoverPage } from './more-details-lectures-popover/
 })
 export class DashboardPage implements OnInit {
 
+  currentDate;
+
+  dateThreeDaysBeformCurrentDate;
 
   constructor(
     private dashboardService: FirestoreService,
@@ -28,7 +31,14 @@ export class DashboardPage implements OnInit {
 
   ngOnInit() {
 
-    this.retrievePublishedNotices_Lecturers_To_PO();
+    this.currentDate = new Date();
+
+    this.dateThreeDaysBeformCurrentDate = new Date();
+
+    this.dateThreeDaysBeformCurrentDate.setDate(this.currentDate.getDate()-3);
+
+
+
 
     // Retrieving user faculty from the sideMenu page
     console.log(this.sideMenuPageUserFaculty.passUserFaculty());
@@ -166,9 +176,9 @@ export class DashboardPage implements OnInit {
 
 
   // Retrieving published notices (Lecturers To Program Office (PO)) and assigning them
-  publishedNotices_Lecturers_To_PO;
-  retrievePublishedNotices_Lecturers_To_PO = () => 
-    this.dashboardService.retrievePublishedNotices_Lecturers_To_PO().subscribe(response => (this.publishedNotices_Lecturers_To_PO = response));
+  publishedNoticesLecturerToPO;
+  retrievePublishedLecturerToPONotice = () => 
+    this.dashboardService.retrievePublishedLecturerToPONotice(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => (this.publishedNoticesLecturerToPO = response));
 
 
   // Declared to hold the events as array to determine the no of lecture sessions

@@ -45,8 +45,8 @@ export class TransportationSchedulePage implements OnInit {
       destination: new FormControl(''),
       departureTime: new FormControl('', Validators.required),
       approArrivalTime: new FormControl('', Validators.required),
-      availableWeekdays: new FormControl('', Validators.required),
-      availableWeekends: new FormControl('', Validators.required),
+      availableWeekdays: new FormControl(''),
+      availableWeekends: new FormControl(''),
       status: new FormControl('', Validators.required)
     });
 
