@@ -6,16 +6,17 @@ ion-card{
     --ion-background-color: white;
 }
 
-ion-label{
-    color: black;
-}
-
 ion-item{
     border: #ccc solid 1px;
     border-radius: 5px;
 }
 
-.addNewNewsLabelForm{
+ion-label{
+    color: black;
+    font-size: 15px;
+}
+
+.editPOToStudentsFormLabel{
     position: relative;
-    top: 15px;
+    top: 25px;
 }

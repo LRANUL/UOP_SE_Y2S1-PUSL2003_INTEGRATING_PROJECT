@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { PopoverController, NavParams } from '@ionic/angular';
+import { NavParams, PopoverController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-more-details-notice-popover',
-  templateUrl: './more-details-notice-popover.page.html',
-  styleUrls: ['./more-details-notice-popover.page.scss'],
+  selector: 'app-more-details-po-students-popover',
+  templateUrl: './more-details-po-students-popover.page.html',
+  styleUrls: ['./more-details-po-students-popover.page.scss'],
 })
-export class MoreDetailsNoticePopoverPage implements OnInit {
+export class MoreDetailsPoStudentsPopoverPage implements OnInit {
 
   passedNoticeDocId = null;
   passedNoticeCreatedFaculty = null;
@@ -49,9 +49,8 @@ export class MoreDetailsNoticePopoverPage implements OnInit {
   }
 
   // Closing the popover
-  closeMoreDetailsNoticePopover() {
+  closeMoreDetailsPOStudentsNoticePopover() {
     this.popoverController.dismiss();
   }
-
 
 }

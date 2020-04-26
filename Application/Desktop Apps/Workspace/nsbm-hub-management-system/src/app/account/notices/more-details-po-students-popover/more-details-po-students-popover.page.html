@@ -1,9 +1,9 @@
-<ion-list style="min-width: 200px;">
+<ion-list style="min-width: 350px;">
   <ion-item>
     <ion-grid>
       <ion-row>
         <ion-col>
-          <ion-button (click)="closeMoreDetailsNoticePopover()" color="danger">
+          <ion-button (click)="closeMoreDetailsPOStudentsNoticePopover()" color="danger">
             <ion-icon name="close-outline"></ion-icon>
           </ion-button>
         </ion-col>
@@ -47,7 +47,7 @@
       <ion-row>
         <ion-col>
           <ion-label>
-            {{ passedNoticeCredtedDateTime }}
+            {{ passedNoticeCredtedDateTime.toDate() | date: 'dd-MM-yyy | h:mm a' }}
           </ion-label>
         </ion-col>
       </ion-row>
@@ -70,7 +70,9 @@
           <ion-label *ngIf="recipientBatchNone" style="margin-left: 30px;">
             None <br>
           </ion-label>
-          <ion-label *ngFor="let item of passedNoticeRecipientBatch" style="margin-left: 30px;">
+          <ion-label *ngFor="let item of passedNoticeRecipientBatch" style="margin-left: 30px;
+                                                                            height: 100px;
+                                                                            overflow-y: scroll;">
             {{ item }} <br>
           </ion-label>
           <ion-label style="font-size: 17px;
@@ -80,7 +82,9 @@
           <ion-label *ngIf="recipientModuleNone" style="margin-left: 30px;">
             None <br>
           </ion-label>
-          <ion-label *ngFor="let item of passedNoticeRecipientModule" style="margin-left: 30px;">
+          <ion-label *ngFor="let item of passedNoticeRecipientModule" style="margin-left: 30px;
+                                                                            height: 100px;
+                                                                            overflow-y: scroll;">
             {{ item }} <br>
           </ion-label>
         </ion-col>

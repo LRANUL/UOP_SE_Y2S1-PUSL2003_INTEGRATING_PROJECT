@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { MoreDetailsNoticePopoverPage } from './more-details-notice-popover.page';
+import { MoreDetailsLecturersPoPopoverPage } from './more-details-lecturers-po-popover.page';
 
-describe('MoreDetailsNoticePopoverPage', () => {
-  let component: MoreDetailsNoticePopoverPage;
-  let fixture: ComponentFixture<MoreDetailsNoticePopoverPage>;
+describe('MoreDetailsLecturersPoPopoverPage', () => {
+  let component: MoreDetailsLecturersPoPopoverPage;
+  let fixture: ComponentFixture<MoreDetailsLecturersPoPopoverPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MoreDetailsNoticePopoverPage ],
+      declarations: [ MoreDetailsLecturersPoPopoverPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MoreDetailsNoticePopoverPage);
+    fixture = TestBed.createComponent(MoreDetailsLecturersPoPopoverPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

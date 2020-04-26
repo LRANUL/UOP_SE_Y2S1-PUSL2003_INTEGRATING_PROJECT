@@ -1,0 +1,58 @@
+<ion-list style="min-width: 350px;">
+  <ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="closeMoreDetailsPOLecturersNoticePopover()" color="danger">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label style="font-size: 20px;">
+            <b>More Details</b>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+  <ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-label>
+            <b>Lecturer(s) Sent To:</b>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label *ngFor="let item of passedNoticeRecipient" style="margin-left: 30px;
+                                                                      height: 100px;
+                                                                      overflow-y: scroll;">
+            {{ item }} <br>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+  <ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-label>
+            <b>Created At:</b>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label>
+            {{ passedNoticeCredtedDateTime.toDate() | date: 'dd-MM-yyy | h:mm a' }}
+          </ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+</ion-list>

@@ -106,7 +106,7 @@
                     <!-- New Notice to Student Section -->
                     <div id="newNoticeSubmitStudent" style="display: inline">
 
-                    <form [formGroup]="noticePOToStudentForm" (ngSubmit)="uploadNewNoticeImageStudent(noticePOToStudentForm.value)">
+                    <form [formGroup]="noticePOToStudentForm" (ngSubmit)="sendStudentNotice('Confirmation','Do you want to send notice to students?',noticePOToStudentForm.value)">
                       <ion-grid>
                         <ion-row>
 
@@ -116,7 +116,7 @@
                           </ion-col>
                           <ion-col size="8">
                             <ion-item>
-                              <ion-input type="text" clearInput formControlName="noticeTitle"></ion-input>
+                              <ion-input type="text" placeholder="Enter Title" clearInput formControlName="noticeTitle"></ion-input>
                             </ion-item>
                           </ion-col>
                         </ion-row>
@@ -127,7 +127,7 @@
                           </ion-col>
                           <ion-col size="8">
                             <ion-item>
-                              <ion-textarea formControlName="noticeDescription"></ion-textarea>
+                              <ion-textarea placeholder="Enter Description" formControlName="noticeDescription"></ion-textarea>
                             </ion-item>
                           </ion-col>
                         </ion-row>
@@ -138,10 +138,10 @@
                           </ion-col>
                           <ion-col size="8">
                             <ion-item>
-                              <ion-select interface="popover" style="min-width: 100%;" formControlName="noticeCategory">
-                                <ion-select-option *ngFor="let item of publishedSessionStatuses" 
-                                  value="{{ item.payload.doc.data().status }}">
-                                  {{ item.payload.doc.data().status }}
+                              <ion-select placeholder="Select Category" interface="popover" style="min-width: 100%;" formControlName="noticeCategory">
+                                <ion-select-option *ngFor="let item of publishedNoticeCategories" 
+                                  value="{{ item.payload.doc.data().category }}">
+                                  {{ item.payload.doc.data().category }}
                                 </ion-select-option>
                               </ion-select>
                             </ion-item>
@@ -159,8 +159,8 @@
                           </ion-col>
                           <ion-col size="8">
                             <ion-item>
-                              <ion-label>Cover Image</ion-label>
-                              <ion-toggle (ionChange)="changeUploadCoverImage($event, 'StudentForm')"></ion-toggle>
+                              <ion-label style="color: #ccc;">Cover Image</ion-label>
+                              <ion-toggle (ionChange)="changeUploadCoverImageStudent($event)"></ion-toggle>
                             </ion-item>
                           </ion-col>
                         </ion-row>
@@ -175,7 +175,7 @@
                           <!-- Code Block with upload event cover image -->
                           <div id="withEventCoverImage" style="display: none;">
                             <!-- Card Before Uploading an Image -->
-                            <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded" style="width: 350px;
+                            <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded" style="min-width: 100%;
                                                                                                     height: 300px;
                                                                                                     margin-left: 0px">
                               <ion-card-header>
@@ -203,7 +203,7 @@
 
                           
                             <!-- Card During Uploading an Image -->
-                            <ion-card text-center *ngIf="isFileUploading && !isFileUploaded" style="width: 350px;
+                            <ion-card text-center *ngIf="isFileUploading && !isFileUploaded" style="min-width: 100%;
                                                                                                     height: 300px;
                                                                                                     margin-left: 0px;">
                               <ion-card-header>
@@ -237,7 +237,7 @@
                             </ion-card>
 
                             <!-- Card After Uploading an Image -->
-                            <ion-card text-center *ngIf="!isFileUploading && isFileUploaded" style="width: 350px;
+                            <ion-card text-center *ngIf="!isFileUploading && isFileUploaded" style="min-width: 100%;
                                                                                                     height: 300px;
                                                                                                     margin-left: 0px;">
                               <ion-card-header>
@@ -256,11 +256,11 @@
 
                           <!-- Code block without upload cover image -->
                           <div id="withoutEventCoverImage" style="display: inline">
-                            <ion-card style="width: 350px;
+                            <ion-card style="min-width: 100%;
                                             height: 300px;
                                             margin-left: 0px;">
                               <ion-card-content>
-                                <h2>Click On Cover Image Toggle</h2>
+                                <h2 style="color: #ccc;">Click On Cover Image Toggle</h2>
                               </ion-card-content>
                             </ion-card>
                           </div>
@@ -296,14 +296,14 @@
                           </ion-col>
                           <ion-col size="8">
                             <ion-item>
-                              <ion-input formControlName="noticeAuthor" style="min-width: 100%;" type="text" readOnly>Program Office: {{ loggedInUserFaculty }}</ion-input>
+                              <ion-input formControlName="noticeAuthor" style="min-width: 100%;" type="text" readOnly></ion-input>
                             </ion-item>
                           </ion-col>
                         </ion-row>
 
                         <div style="position: relative;
                                     top: 10px;">
-                          <ion-button expand="block" (click)="($event)" [disabled]="!noticePOToStudentForm.valid">Send Notice</ion-button>
+                          <ion-button expand="block" (click)="($event)" type="submit" [disabled]="!noticePOToStudentForm.valid">Send Notice</ion-button>
                         </div>
 
                       </ion-grid>
@@ -315,7 +315,7 @@
 
                     <!-- Send New Notice to Lecturer -->
                     <div id="newNoticeSubmitLecturer" style="display: none;">
-                      <form [formGroup]="noticePOToLecturerForm" (ngSubmit)="uploadNewNoticeImageLecturer(noticePOToLecturerForm.value)">
+                      <form [formGroup]="noticePOToLecturerForm" (ngSubmit)="sendLecturerNotice('Confirmation','Do you want to send notice to lecturer(s)?',noticePOToLecturerForm.value)">
                         <ion-grid>
                           <ion-row>
 
@@ -325,7 +325,7 @@
                             </ion-col>
                             <ion-col size="8">
                               <ion-item>
-                                <ion-input type="text" clearInput formControlName="noticeTitle"></ion-input>
+                                <ion-input type="text" placeholder="Enter Title" clearInput formControlName="noticeTitle"></ion-input>
                               </ion-item>
                             </ion-col>
                           </ion-row>
@@ -336,7 +336,7 @@
                             </ion-col>
                             <ion-col size="8">
                               <ion-item>
-                                <ion-textarea formControlName="noticeDescription"></ion-textarea>
+                                <ion-textarea placeholder="Enter Description" formControlName="noticeDescription"></ion-textarea>
                               </ion-item>
                             </ion-col>
                           </ion-row>
@@ -347,10 +347,11 @@
                             </ion-col>
                             <ion-col size="8">
                               <ion-item>
-                                <ion-select interface="popover" style="min-width: 100%;" formControlName="noticeCategory">
-                                  <ion-select-option value="Lecture">Lecture</ion-select-option>
-                                  <ion-select-option value="Module">Module</ion-select-option>
-                                  <ion-select-option value="Event">Event</ion-select-option>
+                                <ion-select interface="popover" placeholder="Select Category" style="min-width: 100%;" formControlName="noticeCategory">
+                                  <ion-select-option *ngFor="let item of publishedNoticeCategories" 
+                                    value="{{ item.payload.doc.data().category }}">
+                                    {{ item.payload.doc.data().category }}
+                                  </ion-select-option>
                                 </ion-select>
                               </ion-item>
                             </ion-col>
@@ -367,8 +368,8 @@
                             </ion-col>
                             <ion-col size="8">
                               <ion-item>
-                                <ion-label>Cover Image</ion-label>
-                                <ion-toggle (ionChange)="changeUploadCoverImage($event, 'LecturerForm')"></ion-toggle>
+                                <ion-label style="color: #ccc;">Cover Image</ion-label>
+                                <ion-toggle (ionChange)="changeUploadCoverImageLecturer($event)"></ion-toggle>
                               </ion-item>
                             </ion-col>
                           </ion-row>
@@ -406,7 +407,7 @@
 
                             
                               <!-- Card During Uploading an Image -->
-                              <ion-card text-center *ngIf="isFileUploading && !isFileUploaded" style="width: 350px;
+                              <ion-card text-center *ngIf="isFileUploading && !isFileUploaded" style="min-width: 100%;
                                                                                                       height: 300px;
                                                                                                       margin-left: 0px;">
                                 <ion-card-header>
@@ -428,7 +429,7 @@
                               </ion-card>
 
                               <!-- Card After Uploading an Image -->
-                              <ion-card text-center *ngIf="!isFileUploading && isFileUploaded" style="width: 350px;
+                              <ion-card text-center *ngIf="!isFileUploading && isFileUploaded" style="min-width: 100%;
                                                                                                       height: 300px;
                                                                                                       margin-left: 0px;">
                                 <ion-card-header>
@@ -447,11 +448,11 @@
 
                             <!-- Code block without upload cover image -->
                             <div id="withoutEventCoverImageLecturer" style="display: inline">
-                              <ion-card style="width: 350px;
+                              <ion-card style="min-width: 100%;
                                               height: 300px;
                                               margin-left: 0px;">
                                 <ion-card-content>
-                                  <h2>Click On Cover Image Toggle</h2>
+                                  <h2 style="color: #ccc;">Click On Cover Image Toggle</h2>
                                 </ion-card-content>
                               </ion-card>
                             </div>
@@ -464,7 +465,7 @@
                               <ion-label><h3 style="padding-top: 15px;
                                                     font-size: 15px;">Notice Recipient</h3></ion-label>
                             </ion-col>
-                            <ion-col size="4">
+                            <ion-col size="8">
                               <ion-item>
                                 <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Lecturer"  formControlName="noticeRecipient" style="min-width: 100%;">
                                   <ion-select-option *ngFor="let item of registeredLecturerUsers" 
@@ -482,14 +483,14 @@
                             </ion-col>
                             <ion-col size="8">
                               <ion-item>
-                                  <ion-input formControlName="noticeAuthor" style="min-width: 100%;" type="text" readOnly>Program Office: {{ loggedInUserFaculty }}</ion-input>
+                                  <ion-input formControlName="noticeAuthor" style="min-width: 100%;" type="text" readOnly></ion-input>
                               </ion-item>
                             </ion-col>
                           </ion-row>
 
                           <div style="position: relative;
                                       top: 10px;">
-                            <ion-button expand="block" [disabled]="!noticePOToLecturerForm.valid">Send Notice</ion-button>
+                            <ion-button expand="block" type="submit" [disabled]="!noticePOToLecturerForm.valid">Send Notice</ion-button>
                           </div>
 
                         </ion-grid>
@@ -527,7 +528,7 @@
                                         color: black;">
                           <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
                           <ion-label style="margin-left: 10px;">Select Date</ion-label>
-                          <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticePOToLecturers($event, this)"></ion-datetime>
+                          <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticePOToLecturersSelectedDate($event)"></ion-datetime>
                         </ion-item>
                       </ion-col>
                     </ion-row>
@@ -542,30 +543,52 @@
                               margin-top: -20px;">
                   </div>
 
+                  <!-- No Notices Available Text -->
+                  <div *ngIf="noNoticePOToLecturersText" style="position: absolute;
+                                                top: 50px;
+                                                left: 50%;
+                                                transform: translateX(-50%);">
+                    <ion-item style="border: #ccc solid 1px;
+                                    border-radius: 5px;
+                                    padding: 5px;">
+                      <ion-label style="font-size: 17px;">
+                        No Notices were sent to lecturers on the selected date
+                      </ion-label>
+                    </ion-item>
+                  </div>
+
+                  <!-- Loading Spinner -->
+                  <ion-spinner name="dots" style="position: absolute;
+                                                  left: 50%;
+                                                  transform: translateX(-50%);
+                                                  margin-top: 20px;
+                                                  height: 100px;
+                                                  width: 100px;" *ngIf="loadingSpinnerPOToLecturer"></ion-spinner>
+
                   <div style="overflow-y: scroll;
                               width: 100%;
-                              height: 300px;">
+                              height: 720px;">
                     <ion-grid>
                       <ion-row>
                         <ion-col size="6" *ngFor="let list of publishedNoticesPOToLecturer">
 
                           <ion-card>
                             <ion-card-header>
-                              <ion-label>
-                                <b>{{ list.payload.doc.data().noticeTitle }}</b>
-                              </ion-label>
+                              <ion-card-title>
+                                {{ list.payload.doc.data().noticeTitle }}
+                              </ion-card-title>
+                              <ion-card-subtitle>
+                                {{ list.payload.doc.data().noticeDescription }}
+                              </ion-card-subtitle>
                             </ion-card-header>
                             <ion-card-content>
-                              <ion-label>
-                                {{ list.payload.doc.data().noticeDescription }} <br>
-                              </ion-label>
                               <ion-label>
                                 <b>Notice Category: </b>
                                 {{ list.payload.doc.data().noticeCategory }} <br>
                               </ion-label>
                               <ion-grid>
                                 <ion-row>
-                                  <ion-col style="width: 45px;">
+                                  <ion-col style="width: 45px;" *ngIf="list.payload.doc.data().noticeCoverImage">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
                                                                                                height: 40px;" color="secondary" (click)="viewImageNotice(list)">
                                       <ion-icon name="image-outline" style="color: white;"></ion-icon>
@@ -577,7 +600,7 @@
                                   </ion-col>
                                   <ion-col style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" (click)="moreDetailsNotice($event, list)">
+                                                                                               height: 40px;" (click)="moreDetailsPOLecturersNotice($event, list)">
                                       <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
                                       <ion-label style="color: white;
                                                         margin-left: 7px;">
@@ -599,7 +622,8 @@
                                   </ion-col>
                                   <ion-col style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" color="danger" (click)="moreDetailsNotice($event, list)">
+                                                                                               height: 40px;" color="danger" 
+                                        (click)="removePOLecturersNotice('Confirmation','This notice will be removed, do you want to continue?', list)">
                                       <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
                                       <ion-label style="color: white;
                                                         margin-left: 5px;">
@@ -650,7 +674,7 @@
                                       color: black;">
                         <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
                         <ion-label style="margin-left: 10px;">Select Date</ion-label>
-                        <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticeLecturesToPO($event, this)"></ion-datetime>
+                        <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticeLecturersToPOSelectedDate($event)"></ion-datetime>
                       </ion-item>
                     </ion-col>
                   </ion-row>
@@ -665,23 +689,45 @@
                             margin-top: -20px;">
                 </div>
 
+                <!-- No Notices Available Text -->
+                <div *ngIf="noNoticeLecturersToPOText" style="position: absolute;
+                                            top: 50px;
+                                            left: 50%;
+                                            transform: translateX(-50%);">
+                  <ion-item style="border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  padding: 5px;">
+                    <ion-label style="font-size: 17px;">
+                      No Notices were sent from lecturers on the selected date
+                    </ion-label>
+                  </ion-item>
+                </div>
+
+                <!-- Loading Spinner -->
+                <ion-spinner name="dots" style="position: absolute;
+                                                left: 50%;
+                                                transform: translateX(-50%);
+                                                margin-top: 20px;
+                                                height: 100px;
+                                                width: 100px;" *ngIf="loadingSpinnerLecturerToPO"></ion-spinner>
+
                 <div style="overflow-y: scroll;
                               width: 100%;
-                              height: 300px;">
+                              height: 720px;">
                     <ion-grid>
                       <ion-row>
                         <ion-col size="6" *ngFor="let list of publishedNoticesLecturerTOPO">
 
                           <ion-card>
                             <ion-card-header>
-                              <ion-label>
-                                <b>{{ list.payload.doc.data().noticeTitle }}</b>
-                              </ion-label>
+                              <ion-card-title>
+                                {{ list.payload.doc.data().noticeTitle }}
+                              </ion-card-title>
+                              <ion-card-subtitle>
+                                {{ list.payload.doc.data().noticeDescription }}
+                              </ion-card-subtitle>
                             </ion-card-header>
                             <ion-card-content>
-                              <ion-label>
-                                {{ list.payload.doc.data().noticeDescription }} <br>
-                              </ion-label>
                               <ion-label>
                                 <b>Notice Category: </b>
                                 {{ list.payload.doc.data().noticeCategory }} <br>
@@ -690,17 +736,7 @@
                                 <ion-row>
                                   <ion-col style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" color="secondary" (click)="viewImageNotice(list)">
-                                      <ion-icon name="image-outline" style="color: white;"></ion-icon>
-                                      <ion-label style="color: white;
-                                                        margin-left: 7px;">
-                                        VIEW <br> IMAGE
-                                      </ion-label>
-                                    </ion-button>
-                                  </ion-col>
-                                  <ion-col style="width: 45px;">
-                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" (click)="moreDetailsNotice($event, list)">
+                                                                                               height: 40px;" (click)="moreDetailsLecturersPONotice($event, list)">
                                       <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
                                       <ion-label style="color: white;
                                                         margin-left: 7px;">
@@ -713,20 +749,16 @@
                                   <ion-col style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
                                                                                                height: 40px;" color="warning" (click)="viewImageNotice(list)">
-                                      <ion-icon name="image-outline" style="color: white;"></ion-icon>
-                                      <ion-label style="color: white;
-                                                        margin-left: 5px;">
-                                        EDIT
+                                      <ion-label style="color: white;">
+                                        MARK AS READ
                                       </ion-label>
                                     </ion-button>
                                   </ion-col>
                                   <ion-col style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" color="danger" (click)="moreDetailsNotice($event, list)">
-                                      <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
-                                      <ion-label style="color: white;
-                                                        margin-left: 5px;">
-                                        REMOVE        
+                                                                                               height: 40px;" color="medium" (click)="moreDetailsNotice($event, list)">
+                                      <ion-label style="color: white;">
+                                        MARK AS UNREAD        
                                       </ion-label>
                                     </ion-button>
                                   </ion-col>
@@ -768,7 +800,7 @@
                         <ion-item style="margin-top: -12px;">
                           <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
                           <ion-label style="margin-left: 10px;">Select Date</ion-label>
-                          <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticePOToStudents($event, this)"></ion-datetime>
+                          <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticePOToStudentsSelectedDate($event, this)"></ion-datetime>
                         </ion-item>
                       </ion-col>
                     </ion-row>
@@ -783,30 +815,52 @@
                               margin-top: -20px;">
                   </div>
 
+                   <!-- No Notices Available Text -->
+                  <div *ngIf="noNoticePOToStudentsText" style="position: absolute;
+                                            top: 50px;
+                                            left: 50%;
+                                            transform: translateX(-50%);">
+                    <ion-item style="border: #ccc solid 1px;
+                                    border-radius: 5px;
+                                    padding: 5px;">
+                      <ion-label style="font-size: 17px;">
+                        No Notices were sent to students for the selected date
+                      </ion-label>
+                    </ion-item>
+                  </div>
+
+                  <!-- Loading Spinner -->
+                  <ion-spinner name="dots" style="position: absolute;
+                                                  left: 50%;
+                                                  transform: translateX(-50%);
+                                                  margin-top: 20px;
+                                                  height: 100px;
+                                                  width: 100px;" *ngIf="loadingSpinnerPOToStudent"></ion-spinner>
+
                   <div style="overflow-y: scroll;
                               width: 100%;
-                              height: 300px;">
+                              height: 720px;">
                     <ion-grid>
                       <ion-row>
                         <ion-col size="6" *ngFor="let list of publishedNoticesPOTOStudent">
 
                           <ion-card>
                             <ion-card-header>
-                              <ion-label>
-                                <b>{{ list.payload.doc.data().noticeTitle }}</b>
-                              </ion-label>
+                              <ion-card-title>
+                                {{ list.payload.doc.data().noticeTitle }}
+                              </ion-card-title>
+                              <ion-card-subtitle>
+                                {{ list.payload.doc.data().noticeDescription }}
+                              </ion-card-subtitle>
                             </ion-card-header>
                             <ion-card-content>
-                              <ion-label>
-                                {{ list.payload.doc.data().noticeDescription }} <br>
-                              </ion-label>
                               <ion-label>
                                 <b>Notice Category: </b>
                                 {{ list.payload.doc.data().noticeCategory }} <br>
                               </ion-label>
                               <ion-grid>
                                 <ion-row>
-                                  <ion-col style="width: 45px;">
+                                  <ion-col style="width: 45px;" *ngIf="list.payload.doc.data().noticeCoverImage">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
                                                                                                height: 40px;" color="secondary" (click)="viewImageNotice(list)">
                                       <ion-icon name="image-outline" style="color: white;"></ion-icon>
@@ -818,7 +872,7 @@
                                   </ion-col>
                                   <ion-col style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" (click)="moreDetailsNotice($event, list)">
+                                                                                               height: 40px;" (click)="moreDetailsPOStudentsNotice($event, list)">
                                       <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
                                       <ion-label style="color: white;
                                                         margin-left: 7px;">
@@ -830,7 +884,7 @@
                                 <ion-row>
                                   <ion-col style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" color="warning" (click)="viewImageNotice(list)">
+                                                                                               height: 40px;" color="warning" (click)="editPOToStudentsNotices(list)">
                                       <ion-icon name="image-outline" style="color: white;"></ion-icon>
                                       <ion-label style="color: white;
                                                         margin-left: 5px;">
@@ -840,7 +894,8 @@
                                   </ion-col>
                                   <ion-col style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" color="danger" (click)="moreDetailsNotice($event, list)">
+                                                                                               height: 40px;" color="danger" 
+                                        (click)="removePOStudentsNotice('Confirmation','This notice will be removed, do you want to continue?',list)">
                                       <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
                                       <ion-label style="color: white;
                                                         margin-left: 5px;">

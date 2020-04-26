@@ -27,8 +27,9 @@ export class ViewImageNoticeModalPage implements OnInit {
     this.passedCoverImageFileSize = this.navParams.get('coverImageFileSize');
     this.passedCoverImageFilePath = this.navParams.get('coverImageFilePath');
 
-  }
+    
 
+  }
 
   // Implementation for closing the modal
   closeViewImageNoticeModal(){

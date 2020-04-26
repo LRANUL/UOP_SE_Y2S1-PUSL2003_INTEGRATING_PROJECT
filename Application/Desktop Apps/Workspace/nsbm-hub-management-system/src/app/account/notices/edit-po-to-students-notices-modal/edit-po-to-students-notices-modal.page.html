@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Edit Details of Lecture Series</ion-title>
+    <ion-button (click)="closeEditPOStudentsModal()" slot="end" shape="round" fill="outline" color="danger" style="margin-right: 20px;">
+      <ion-icon name="close-outline" style="font-size: 30px;"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card>
+    <ion-card-content>
+      <form [formGroup]="editPOToStudentsNoticeForm" (ngSubmit)="doEditPOToStudentsNotice(editPOToStudentsNoticeForm.value)"> 
+        <ion-grid>
+          <ion-row>
+            <ion-col size="4">
+              <ion-label>
+                Notice Title
+              </ion-label>
+            </ion-col>
+            <ion-col size="8">
+              <ion-input type="text" clearInput></ion-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="4">
+              <ion-label>
+                Notice Description
+              </ion-label>
+            </ion-col>
+            <ion-col size="8">
+              <ion-textarea row="10"></ion-textarea>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="4">
+              <ion-label>
+                Notice Category
+              </ion-label>
+            </ion-col>
+            <ion-col size="8">
+              <ion-select placeholder="Select Category" interface="popover" style="min-width: 100%;">
+                <ion-select-option *ngFor="let item of publishedSessionStatuses" 
+                  value="{{ item.payload.doc.data().status }}">
+                  {{ item.payload.doc.data().status }}
+                </ion-select-option>
+              </ion-select>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-button type="submit" [disabled]="!editPOToStudentsNoticeForm.valid">
+                UPDATE
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>  
+      </form>  
+    </ion-card-content>
+  </ion-card>
+  
+</ion-content>

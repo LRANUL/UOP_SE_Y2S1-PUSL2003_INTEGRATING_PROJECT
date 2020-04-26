@@ -33,6 +33,11 @@ export class FirestoreService {
     this.angularFireAuth.auth.signOut();
   }
 
+  // Retrieving the auth details of the logged in user from firebase authentication
+  retrieveLoggedInUserDetailsAuth(){
+    return firebase.auth().currentUser
+  }
+
   // Retriving the current date and time from the localhost
   currentDT = new Date();
   currentDateTime = this.currentDT.getDate() + "/" + this.currentDT.getMonth() + "/" + this.currentDT.getFullYear() + " " + this.currentDT.getHours() + ":" + this.currentDT.getMinutes() + ":" + this.currentDT.getSeconds();
@@ -54,6 +59,81 @@ export class FirestoreService {
         createdDatetime: new Date()
       })
 
+    })
+  }
+
+  // Publishing news by creating a new document and adding details into firestore database
+  publishNews(coverImageSection, attachmentLinkSection, coverImageFileName, coverImageFilePath, coverImageFileSize, loggedInUserFaculty, loggedInUserId, value){
+    return new Promise<any>((resolve, reject) => {
+      // Creating a new ID for the document
+      const docId = this.fireStore.createId();
+
+      if(coverImageSection == true && attachmentLinkSection == true){
+        this.fireStore.collection("news/").doc(docId).set({
+          title: value.newsTitle,
+          description: value.newsDescription,
+          category: value.newsCategory,
+          newsCreatedUid: loggedInUserId,
+          newsCreatedFaculty: loggedInUserFaculty,
+          attachmentLink: value.newsAttachmentLink,
+          coverImage: {
+            coverImageFileName: coverImageFileName,
+            coverImageFilePath: coverImageFilePath,
+            coverImageFileSize: coverImageFileSize,
+          }
+        }).then(success => {
+          resolve(success);
+        }, error => {
+          reject(error);
+        });
+      }
+      else if(coverImageSection == true || attachmentLinkSection == true){
+        if(coverImageSection == true && attachmentLinkSection == false){
+          this.fireStore.collection("news/").doc(docId).set({
+            title: value.newsTitle,
+            description: value.newsDescription,
+            category: value.newsCategory,
+            newsCreatedUid: loggedInUserId,
+            newsCreatedFaculty: loggedInUserFaculty,
+            coverImage: {
+              coverImageFileName: coverImageFileName,
+              coverImageFilePath: coverImageFilePath,
+              coverImageFileSize: coverImageFileSize,
+            }
+          }).then(success => {
+            resolve(success);
+          }, error => {
+            reject(error);
+          });
+        }
+        else if(coverImageSection == false && attachmentLinkSection == true){
+          this.fireStore.collection("news/").doc(docId).set({
+            title: value.newsTitle,
+            description: value.newsDescription,
+            category: value.newsCategory,
+            newsCreatedUid: loggedInUserId,
+            newsCreatedFaculty: loggedInUserFaculty,
+            attachmentLink: value.newsAttachmentLink,
+          }).then(success => {
+            resolve(success);
+          }, error => {
+            reject(error);
+          });
+        }
+        else if(coverImageSection == false && attachmentLinkSection == false){
+          this.fireStore.collection("news/").doc(docId).set({
+            title: value.newsTitle,
+            description: value.newsDescription,
+            category: value.newsCategory,
+            newsCreatedUid: loggedInUserId,
+            newsCreatedFaculty: loggedInUserFaculty
+          }).then(success => {
+            resolve(success);
+          }, error => {
+            reject(error);
+          });
+        }
+      }
     })
   }
 
@@ -84,7 +164,7 @@ export class FirestoreService {
                 noticeCreated: {
                   noticeCreatedByUid: loggedInUserId,
                   noticeCreatedByFaculty: value.noticeAuthor,
-                  noticeCreatedDateTime: this.currentDateTime
+                  noticeCreatedDateTime: new Date()
                 },
                 noticeUpdate: {
                   updatedByName: "NULL",
@@ -137,6 +217,32 @@ export class FirestoreService {
               noticeDescription: value.noticeDescription,
               noticeCategory: value.noticeCategory,
               noticeRecipient: {
+                noticeRecipientModule: value.noticeRecipientModule,
+                noticeRecipientBatch: "NULL"
+              },
+              noticeCreated: {
+                noticeCreatedByUid: loggedInUserId,
+                noticeCreatedByFaculty: value.noticeAuthor,
+                noticeCreatedDateTime: new Date()
+              },
+              noticeUpdate: {
+                updatedByName: "NULL",
+                updatedByFaculty: "NULL",
+                updatedDateTime: "NULL",
+                updatedSection: "NULL",
+              }
+            }).then(success => {
+              resolve(success);
+            }, error => {
+              reject(error);
+            });
+          }
+          else if(recipientType == "Batch"){ // If recipient type is 'Batch'
+            this.fireStore.collection("notices/noticeTypes/"+ noticeType +"/").doc(docId).set({
+              noticeTitle: value.noticeTitle,
+              noticeDescription: value.noticeDescription,
+              noticeCategory: value.noticeCategory,
+              noticeRecipient: {
                 noticeRecipientModule: "NULL",
                 noticeRecipientBatch: value.noticeRecipientBatch 
               },
@@ -157,32 +263,6 @@ export class FirestoreService {
               reject(error);
             });
           }
-        }
-        else if(recipientType == "Batch"){ // If recipient type is 'Batch'
-          this.fireStore.collection("notices/noticeTypes/"+ noticeType +"/").doc(docId).set({
-            noticeTitle: value.noticeTitle,
-            noticeDescription: value.noticeDescription,
-            noticeCategory: value.noticeCategory,
-            noticeRecipient: {
-              noticeRecipientModule: value.noticeRecipientModule,
-              noticeRecipientBatch: "NULL" 
-            },
-            noticeCreated: {
-              noticeCreatedByUid: loggedInUserId,
-              noticeCreatedByFaculty: value.noticeAuthor,
-              noticeCreatedDateTime: new Date()
-            },
-            noticeUpdate: {
-              updatedByName: "NULL",
-              updatedByFaculty: "NULL",
-              updatedDateTime: "NULL",
-              updatedSection: "NULL",
-            }
-          }).then(success => {
-            resolve(success);
-          }, error => {
-            reject(error);
-          });
         }
       }
       else if(noticeType == "notices-PO-To-Lecturers"){
@@ -236,8 +316,8 @@ export class FirestoreService {
             }, error => {
               reject(error);
             });
-          }
         }
+      }
     }) 
   }
 
@@ -317,40 +397,67 @@ export class FirestoreService {
   }
 
 
+
   // Retrieving published Lectuers to PO notices from current date to three days before from the firestore database
   retrievePublishedLecturerToPONotice(currentDate, dateThreeDaysBeforeCurrentDate) {
     return this.fireStore.collection("notices/noticeTypes/notices-Lecturers-To-PO/", ref => ref
-        .where("noticeCreatedInfo.createdDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))
-        .where("noticeCreatedInfo.createdDateTime", "<=", new Date(currentDate))
-        .orderBy("noticeCreatedInfo.createdDateTime", "desc")
+        .where("noticeCreated.noticeCreatedDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))
+        .where("noticeCreated.noticeCreatedDateTime", "<=", new Date(currentDate))
+        .orderBy("noticeCreated.noticeCreatedDateTime", "desc")
     ).snapshotChanges();
   }
 
   // Retrieving published PO to Students notices from current date to three days before from the firestore database
   retrievePublishedPOToStudentNotice(currentDate, dateThreeDaysBeforeCurrentDate) {
       return this.fireStore.collection("notices/noticeTypes/notices-PO-To-Students/", ref => ref
-          .where("noticeCreatedInfo.createdDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))
-          .where("noticeCreatedInfo.createdDateTime", "<=", new Date(currentDate))
-          .orderBy("noticeCreatedInfo.createdDateTime", "desc")
+          .where("noticeCreated.noticeCreatedDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))
+          .where("noticeCreated.noticeCreatedDateTime", "<=", new Date(currentDate))
+          .orderBy("noticeCreated.noticeCreatedDateTime", "desc")
       ).snapshotChanges();
   }
 
   // Retrieving published PO to Lectuers notices from current date to three days before from the firestore database
   retrievePublishedPOToLecturerNotice(currentDate, dateThreeDaysBeforeCurrentDate) {
-      return this.fireStore.collection("notices/noticeTypes/notices-PO-To-Lecturers", ref => ref
-          .where("noticeCreatedInfo.createdDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))
-          .where("noticeCreatedInfo.createdDateTime", "<=", new Date(currentDate))
-          .orderBy("noticeCreatedInfo.createdDateTime", "desc")
+      return this.fireStore.collection("notices/noticeTypes/notices-PO-To-Lecturers/", ref => ref
+          .where("noticeCreated.noticeCreatedDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))
+          .where("noticeCreated.noticeCreatedDateTime", "<=", new Date(currentDate))
+          .orderBy("noticeCreated.noticeCreatedDateTime", "desc")
+      ).snapshotChanges();
+  }
+
+
+
+  // Retrieving published Lecturers to PO notices for the selected date from the firestore database
+  retrievePublishedLecturerToPONoticeSelectedDate(selectedDate, nextDate) {
+    return this.fireStore.collection("notices/noticeTypes/notices-Lecturers-To-PO/", ref => ref
+        .where("noticeCreated.noticeCreatedDateTime", ">=", new Date(selectedDate))
+        .where("noticeCreated.noticeCreatedDateTime", "<=", new Date(nextDate))
+        .orderBy("noticeCreatedInfo.noticeCreatedDateTime", "desc")
+    ).snapshotChanges();
+  }
+
+  // Retrieving published PO to Students notices for the selected date from the firestore database
+  retrievePublishedPOToStudentNoticeSelectedDate(selectedDate, nextDate) {
+      return this.fireStore.collection("notices/noticeTypes/notices-PO-To-Students/", ref => ref
+          .where("noticeCreated.noticeCreatedDateTime", ">=", new Date(selectedDate))
+          .where("noticeCreated.noticeCreatedDateTime", "<=", new Date(nextDate))
+          .orderBy("noticeCreatedInfo.noticeCreatedDateTime", "desc")
+      ).snapshotChanges();
+  }
+
+  // Retrieving published PO to Lecturers notices for the selected date from the firestore database
+  retrievePublishedPOToLecturerSelectedDate(selectedDate, nextDate) {
+      return this.fireStore.collection("notices/noticeTypes/notices-PO-To-Lecturers/", ref => ref
+          .where("noticeCreated.noticeCreatedDateTime", ">=", new Date(selectedDate))
+          .where("noticeCreated.noticeCreatedDateTime", "<=", new Date(nextDate))
+          .orderBy("noticeCreated.noticeCreatedDateTime", "desc")
       ).snapshotChanges();
   }
 
 
 
 
-  // Retrieving the auth details of the logged in user from firebase authentication
-  retrieveLoggedInUserDetailsAuth(){
-    return firebase.auth().currentUser
-  }
+  
 
   // Retrieving the details of the logged in user from firestore database with the use of firebase authentication Uid
   retrieveLoggedInUserDetailsFirestore(Uid){
@@ -442,6 +549,23 @@ export class FirestoreService {
   retrievePublishedSessionStatuses() {
     return this.fireStore.collection("sessionStatuses").snapshotChanges();
   }
+
+
+  // Retrieving published notice categories and their details from the firestore database
+  retrievePublishedNoticeCategories() {
+    return this.fireStore.collection("categories/categoryTypes/noticeCategories", ref => ref
+          .orderBy("category")
+          ).snapshotChanges();
+  }
+
+  // Retrieving published news categories and their details from the firestore database
+  retrievePublishedNewsCategories(){
+    return this.fireStore.collection("categories/categoryTypes/newsCategories", ref => ref
+            .orderBy("category")
+            ).snapshotChanges();
+  }
+
+
 
   // Retrieving published module credits weighting and their details from the firestore database
   retrievePublishedModuleCreditsWeighting() {
@@ -555,6 +679,16 @@ export class FirestoreService {
   // Removing published transport schedule from the firestore database
   removePublishedTransportSlot(transportSlotType, docId){
     this.fireStore.doc("transportationSchedule/transportScheduleType/"+ transportSlotType + "/" + docId).delete();
+  }
+
+  // Removing PO to Students notice from the firestore database
+  removePublishedPOTOStudentsNotice(docId){
+    this.fireStore.doc("notices/noticeTypes/notices-PO-To-Students/"+ docId).delete();
+  }
+
+  // Removing PO to Lecturers notice from the firestore database
+  removePublishedPOTOLecturersNotice(docId){
+    this.fireStore.doc("notices/noticeTypes/notices-PO-To-Lecturers/"+ docId).delete();
   }
 
 

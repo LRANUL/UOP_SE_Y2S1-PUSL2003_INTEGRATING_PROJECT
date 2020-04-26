@@ -181,69 +181,205 @@
           </ion-card-header>
           <ion-card-content>
 
-            <ion-grid>
-              <ion-row>
-                <ion-col size="12" size-md="12" size-lg="6">
-                  <ion-label>
-                    Title
-                  </ion-label>
-                </ion-col>
-                <ion-col size="12" size-md="12" size-lg="6">
-                  <ion-item>
-                    <ion-input type="text" clearInput></ion-input>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
+            <form [formGroup]="addNewNewsForm" (ngSubmit)="doAddNewNews(addNewNewsForm.value)">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="4">
+                    <ion-label class="addNewNewsLabelForm">
+                      Title
+                    </ion-label>
+                  </ion-col>
+                  <ion-col size="8">
+                    <ion-item>
+                      <ion-input type="text" clearInput formControlName="newsTitle"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
 
-              <ion-row>
-                <ion-col size="12" size-md="12" size-lg="6">
-                  <ion-label>
-                    Description
-                  </ion-label>
-                </ion-col>
-                <ion-col size="12" size-md="12" size-lg="6">
-                  <ion-item>
-                    <ion-textarea clearInput></ion-textarea>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
+                <ion-row>
+                  <ion-col size="4">
+                    <ion-label class="addNewNewsLabelForm">
+                      Description
+                    </ion-label>
+                  </ion-col>
+                  <ion-col size="8">
+                    <ion-item>
+                      <ion-textarea clearInput formControlName="newsDescription"></ion-textarea>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
 
-              <ion-row>
-                <ion-col size="12" size-md="12" size-lg="6">
-                  <ion-label>
-                    Cover Image
-                  </ion-label>
-                </ion-col>
-                <ion-col size="12" size-md="12" size-lg="6">
-                  <ion-item>
-                    Add Image
-                  </ion-item>
-                </ion-col>
-              </ion-row>
+                <ion-row>
+                  <ion-col size="4">
+                    <ion-label class="addNewNewsLabelForm">
+                      Category
+                    </ion-label>
+                  </ion-col>
+                  <ion-col size="8">
+                    <ion-item>
+                      <ion-select cancelText="Close" okText="SELECT" placeholder="Select Category" style="min-width: 100%;" formControlName="newsCategory">
+                        <ion-select-option *ngFor="let item of publishedNewsCategories" value="{{ item.payload.doc.data().category }}">
+                          {{ item.payload.doc.data().category }}
+                        </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
 
-              <ion-row>
-                <ion-col>
-                  <ion-checkbox checked="true"></ion-checkbox>
-                  <p style="position: absolute;
-                            top: 5px;
-                            left: 30px;">
-                    Send Email to Subscribed Members (Outlook)
-                  </p>
-                </ion-col>
-                
-              </ion-row>
+                <ion-row>
+                  <ion-col size="4">
+                    <ion-label class="addNewNewsLabelForm">
+                      <h3 style="font-size: 15px;">
+                        Add Cover Image
+                      </h3>
+                    </ion-label>
+                  </ion-col>
+                  <ion-col size="8">
+                    <ion-item>
+                      <ion-label style="color: #ccc;">Cover Image</ion-label>
+                      <ion-toggle (ionChange)="addNewsCoverImage($event)"></ion-toggle>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
 
-              <ion-row>
-                <ion-col>
-                  <ion-button style="position: relative;
-                                    left: 50%;
-                                    transform: translateX(-50%);" expand="block">
-                    Add
-                  </ion-button>
-                </ion-col>
-              </ion-row>
+                <ion-row style="margin-top: -14px;" *ngIf="addNewsCoverImageSection">
+                  <ion-col size="3">
+                    <ion-label><h3 style="padding-top: 15px;
+                                          font-size: 15px;">News Cover Image</h3></ion-label>
+                  </ion-col>
+                  <ion-col size="8">
 
-            </ion-grid>
+                    <!-- Code Block with upload event cover image -->
+                    <div id="withEventCoverImage" style="display: none;">
+                      <!-- Card Before Uploading an Image -->
+                      <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded" style="min-width: 100%;
+                                                                                              height: 300px;
+                                                                                              margin-left: 0px">
+                        <ion-card-header>
+                          <ion-card-title>Select Image to Upload</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>
+                          
+                            <input type="file" name="eventCoverImage" accept="image/*" (change)="coverImageViewer($event)">
+                            <div style="margin: 10px; 
+                                        margin-top: 15px;
+                                        width: 200px;
+                                        position: absolute;
+                                        left: 50%;
+                                        transform: translateX(-50%);">
+                            <img *ngIf=" eventCoverImage != '' " src="{{ eventCoverImage }}"/>
+                            </div>
+                        </ion-card-content>
+                      </ion-card>
+
+                    
+                      <!-- Card During Uploading an Image -->
+                      <ion-card text-center *ngIf="isFileUploading && !isFileUploaded" style="min-width: 100%;
+                                                                                              height: 300px;
+                                                                                              margin-left: 0px;">
+                        <ion-card-header>
+                          <ion-card-title>Selected File: <i>{{ fileName }}</i></ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>
+                          <div *ngIf="percentage | async as percent">
+                            <p> Progress: {{ percent | number }}% </p>
+                            <ion-progress-bar value="{{ percent / 100 }}"></ion-progress-bar>
+                          </div>
+                          <div *ngIf="snapshot | async as snapt">
+                            <p> 
+                              File Size: {{ snapt.totalBytes | fileSizePipe }} <br>
+                              Transferred: {{ snapt.bytesTransferred | fileSizePipe }}
+                            </p>
+                          </div>
+                        </ion-card-content>
+                      </ion-card>
+
+                      <!-- Card After Uploading an Image -->
+                      <ion-card text-center *ngIf="!isFileUploading && isFileUploaded" style="min-width: 100%;
+                                                                                              height: 300px;
+                                                                                              margin-left: 0px;">
+                        <ion-card-header>
+                          <ion-card-title>Image Selected to Upload</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>
+                          <div *ngIf="UploadedFileURL | async as ufurl">
+                            <ion-img [src]="ufurl"></ion-img>
+                            <a [href]="ufurl" target="_blank" rel="noopener" download> Download </a>
+                          </div>
+                          <p> File Size: {{ fileSize | fileSizePipe }} </p>
+                          <ion-button expand="full" color="success" (click)="isFileUploading = isFileUploaded = false"> Upload More </ion-button>
+                        </ion-card-content>
+                      </ion-card>
+                    </div>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row>
+                  <ion-col size="4">
+                    <ion-label class="addNewNewsLabelForm">
+                      <h3 style="font-size: 15px;">
+                        Add Website Attachment Link
+                      </h3>
+                    </ion-label>
+                  </ion-col>
+                  <ion-col size="8">
+                    <ion-item>
+                      <ion-label style="color: #ccc;">Link</ion-label>
+                      <ion-toggle (ionChange)="addAttachmentLink($event)"></ion-toggle>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row *ngIf="addAttachmentLinkSection">
+                  <ion-col size="4">
+                    <ion-label class="addNewNewsLabelForm">
+                      Website Attachment Link
+                    </ion-label>
+                  </ion-col>
+                  <ion-col size="8">
+                    <ion-item>
+                      <ion-input placeholder="Enter Link" type="text" clearInput formControlName="newsAttachmentLink"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+          
+                <ion-row>
+                  <ion-col size="4">
+                    <ion-label class="addNewNewsLabelForm">
+                      News Published By:
+                    </ion-label>
+                  </ion-col>
+                  <ion-col size="8">
+                    <ion-item>
+                      <ion-input type="text" readOnly clearInput formControlName="newsPublisher"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row>
+                  <ion-col>
+                    <ion-checkbox checked="false"></ion-checkbox>
+                    <p style="position: absolute;
+                              top: 5px;
+                              left: 30px;">
+                      Send Email to Subscribed Members (Outlook)
+                    </p>
+                  </ion-col>
+                  
+                </ion-row>
+
+                <ion-row>
+                  <ion-col>
+                    <ion-button style="position: relative;
+                                      left: 50%;
+                                      transform: translateX(-50%);" expand="block" type="submit" [disabled]="!addNewNewsForm.valid">
+                      Add
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+
+              </ion-grid>
+            </form>
 
           </ion-card-content>
         </ion-card>
@@ -254,11 +390,4 @@
 
 
   </ion-grid>
-
-
-
-
-
-
-
 </ion-content>

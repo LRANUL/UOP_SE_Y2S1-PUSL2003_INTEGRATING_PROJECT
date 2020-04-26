@@ -36,11 +36,15 @@ import { MoreDetailsModulePopoverPageModule } from './account/modules/more-detai
 import { EditModuleModalPageModule } from './account/modules/edit-module-modal/edit-module-modal.module';
 import { MoreDetailsTodaysLecturesPopoverPageModule } from './account/dashboard/more-details-todays-lectures-popover/more-details-todays-lectures-popover.module';
 import { MoreDetailsEventSessionsPopoverPageModule } from './account/dashboard/more-details-event-sessions-popover/more-details-event-sessions-popover.module';
-import { MoreDetailsNoticePopoverPageModule } from './account/notices/more-details-notice-popover/more-details-notice-popover.module';
 import { ViewImageNoticeModalPageModule } from './account/notices/view-image-notice-modal/view-image-notice-modal.module';
 import { MoreDetailsLecturesPopoverPageModule } from './account/dashboard/more-details-lectures-popover/more-details-lectures-popover.module';
 import { EditEventSessionModalPageModule } from './account/events/edit-event-session-modal/edit-event-session-modal.module';
 import { EditTransportSlotModalPageModule } from './account/transportation-schedule/edit-transport-slot-modal/edit-transport-slot-modal.module';
+import { MoreDetailsLecturersPoPopoverPageModule } from './account/notices/more-details-lecturers-po-popover/more-details-lecturers-po-popover.module';
+import { MoreDetailsPoLecturersPopoverPageModule } from './account/notices/more-details-po-lecturers-popover/more-details-po-lecturers-popover.module';
+import { MoreDetailsPoStudentsPopoverPageModule } from './account/notices/more-details-po-students-popover/more-details-po-students-popover.module';
+import { EditPoToLecturersNoticesModalPageModule } from './account/notices/edit-po-to-lecturers-notices-modal/edit-po-to-lecturers-notices-modal.module';
+import { EditPoToStudentsNoticesModalPageModule } from './account/notices/edit-po-to-students-notices-modal/edit-po-to-students-notices-modal.module';
 
 
 @NgModule({
@@ -68,9 +72,12 @@ import { EditTransportSlotModalPageModule } from './account/transportation-sched
     MoreDetailsTodaysLecturesPopoverPageModule,
     MoreDetailsLecturesPopoverPageModule,
     ViewImageNoticeModalPageModule,
-    MoreDetailsNoticePopoverPageModule,
     EditEventSessionModalPageModule,
-    EditTransportSlotModalPageModule
+    EditTransportSlotModalPageModule,
+    MoreDetailsPoStudentsPopoverPageModule,
+    MoreDetailsPoLecturersPopoverPageModule,
+    EditPoToStudentsNoticesModalPageModule,
+    EditPoToLecturersNoticesModalPageModule
   ],
   providers: [
     StatusBar,
