@@ -89,10 +89,80 @@ export class LoginPage implements OnInit {
       this.loginLoadingSpinner = true;
 
       if (user) {
-        // Navigating to the dashboard
-        this._router.navigate(["/side-menu/dashboard"]);
 
-        this.loginLoadingSpinner = false;
+
+        // Checking if logged in user type in a lecturer user
+        this._loginService.retrieveLoggedInUserDetailsLecturer(this._loginService.retrieveLoggedInUserDetailsAuth().uid).subscribe(response => {
+          if (response.length > 0) {
+
+            // Setting loading spinner to stop spinning
+            this.loginLoadingSpinner = false;
+
+            this._router.navigate(["/login"]);
+
+            if(firebase.auth().currentUser){
+              firebase.auth().signOut()
+                .then(() => {
+                  console.log("Logout Successful");
+                }).catch((error) => {
+                  console.log("Logout Process Failed, " + error);
+                  this.alertNotice("Error", "Logout Process Failed, " + error);
+                });
+            }
+
+          }
+          else {
+            // console.log("Record not found in lecturer users collection");
+          }
+        }, error => {
+            // Setting loading spinner to spin
+            this.loginLoadingSpinner = true;
+            console.log("Error: " + error);
+            this.alertNotice("Error", "An error has occurred: " + error);
+        });
+
+        // Checking if logged in user type in a program office user
+        this._loginService.retrieveLoggedInUserDetailsProgramOffice(this._loginService.retrieveLoggedInUserDetailsAuth().uid).subscribe(response => {
+            if (response.length > 0) {
+
+                // Setting loading spinner to stop spinning
+                this.loginLoadingSpinner = false;
+
+                /* Process of checking account status is ACTIVE or not */
+                let resgisteredProgramOfficeUser = response;
+                let programOfficeUserAccountStatus;
+
+                // Retrieving the account status of this program office user account
+                resgisteredProgramOfficeUser.forEach(document => {
+                    let firestoreDoc: any = document.payload.doc.data();
+                    programOfficeUserAccountStatus = firestoreDoc.status;
+                });
+                
+                // Checking if the program office user account is active
+                if(programOfficeUserAccountStatus == "Active"){
+
+                  // Navigating to the dashboard
+                  this._router.navigate(["/side-menu/dashboard"]);
+
+                }
+                else{
+                  this.alertNotice("Account Deactivated", "Account has been deactivated. Please contact Web Administrator.");
+                  this._loginService.logout();
+                  this._router.navigate(["/login"]);
+                }
+
+            }
+            else {
+                // console.log("Record not found in program office users collection");
+            }
+        }, error => {
+            // Setting loading spinner to stop spinning
+            this.loginLoadingSpinner = false;
+
+            // console.log("Error: " + error);
+            this.alertNotice("Error", "An error has occurred: " + error);
+        });
+
 
       }
       else {

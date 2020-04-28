@@ -75,82 +75,147 @@
           <ion-card-content>
 
             <ion-item style="border: #ccc solid 1px;">
-              <ion-label>Select Date</ion-label>
-              <ion-datetime value="2020-03-09" placeholder="Select Date"></ion-datetime>
+              <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
+              <ion-label style="margin-left: 15px;">Select Date</ion-label>
+              <ion-datetime placeholder="Select Date" (ionChange)="retrieveNewsSelectedDate($event)"></ion-datetime>
             </ion-item>      
 
             <div style="overflow-y: scroll;
-                        height: 500px;">
+                        height: 700px;">
+
+
+              <!-- No News Available Text -->
+              <div *ngIf="noNewsText" style="position: absolute;
+                                            top: 50%;
+                                            left: 50%;
+                                            transform: translate(-50%,-50%);">
+                <ion-item style="border: #ccc solid 1px;
+                                border-radius: 5px;
+                                padding: 5px;">
+                  <ion-label style="font-size: 17px;">
+                    No News were published on the selected date
+                  </ion-label>
+                </ion-item>
+              </div>
+
+              <!-- Select Past Date Text -->
+              <div *ngIf="pastDateText" style="position: absolute;
+                                            top: 50%;
+                                            left: 50%;
+                                            transform: translate(-50%,-50%);">
+                <ion-item style="border: #ccc solid 1px;
+                                border-radius: 5px;
+                                padding: 5px;">
+                  <ion-label style="font-size: 17px;">
+                    Please select a Date that has passed.
+                  </ion-label>
+                </ion-item>
+              </div>
+
+
+              <!-- Loading Spinner -->
+              <ion-spinner name="dots" style="position: absolute;
+                                              left: 50%;
+                                              top: 50%;
+                                              transform: translate(-50%,-50%);
+                                              margin-top: 20px;
+                                              height: 100px;
+                                              width: 100px;" *ngIf="loadingSpinnerNews"></ion-spinner>
+
 
               <ion-grid>
 
                 <ion-row>
-                  <ion-col size="12" size-sm="12" size-md="6" size-lg="4">
+                  <ion-col size="4" size-sm="12" size-md="4" size-lg="4" *ngFor="let item of publishedNews">
 
                     <ion-card>
-                      <img src="../../../assets/images/account/news/sample.png" style="height: 120px;
-                                                                                      position: relative;
-                                                                                      left: 50%;
-                                                                                      transform: translateX(-50%);" />
+                      <ion-button *ngIf="item.payload.doc.data().coverImage" fill="clear">
+                        <ion-img src="{{ item.payload.doc.data().coverImage.coverImageFilePath }}" style="height: 120px;
+                                                                                                          position: relative;
+                                                                                                          left: 50%;
+                                                                                                          transform: translateX(-50%);">
+                                                                                                          </ion-img>
+                        </ion-button>
                       <ion-card-header>
                         <ion-card-title>
-                          Sports Meet Success
+                          {{ item.payload.doc.data().title }}
                         </ion-card-title>
-                        <ion-card-subtitle>
-                          Yestaday the sports meet was held with a wonderful awards ceremony.
+                        <ion-card-subtitle style="text-align: justify;">
+                          {{ item.payload.doc.data().description }}
                         </ion-card-subtitle>
                       </ion-card-header>
                       <ion-card-content>
-                        Publication Date Time: 01/03/2020 09:15am
-                        Author: Program Office: School of Computing
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col size="5">
+                              <ion-label>
+                                <b>News Category:</b>
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-label>
+                                {{ item.payload.doc.data().category }}
+                              </ion-label>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="5">
+                              <ion-label>
+                                <b>Publication Date Time:</b>
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-label>
+                                {{ item.payload.doc.data().newsCreatedDateTime.toDate() | date: 'dd-MM-yyyy | hh:mm a' }}
+                              </ion-label>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="5">
+                              <ion-label>
+                                <b>Author:</b>
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-label>
+                                Program Office: {{ item.payload.doc.data().newsCreatedFaculty }}
+                              </ion-label>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row *ngIf="item.payload.doc.data().attachmentLink">
+                            <ion-col size="12">
+                              <ion-button style="min-width: 100%;">
+                                <ion-icon name="link-outline" style="color: white;"></ion-icon>
+                                <ion-label style="color: white;
+                                                  margin-left: 10px;">
+                                  Open Attachment Link
+                                </ion-label>
+                              </ion-button>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="6">
+                              <ion-button color="secondary" style="min-width: 100%;">
+                                <ion-icon name="create-outline" style="color: white;"></ion-icon>
+                                <ion-label style="color: white;
+                                                  margin-left: 10px;">
+                                  Edit
+                                </ion-label>
+                              </ion-button>
+                            </ion-col>
+                            <ion-col size="6">
+                              <ion-button color="danger" style="min-width: 100%;">
+                                <ion-icon name="trash-outline" style="color: white;"></ion-icon>
+                                <ion-label style="color: white;
+                                                  margin-left: 10px;">
+                                  Remove
+                                </ion-label>
+                              </ion-button>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
                       </ion-card-content>
                     </ion-card>
-
-                  </ion-col>
-                  <ion-col size="12" size-sm="12" size-md="6" size-lg="4">
-
-                    <ion-card>
-                      <img src="../../../assets/images/account/news/sample.png" style="height: 120px;
-                                                                                      position: relative;
-                                                                                      left: 50%;
-                                                                                      transform: translateX(-50%);" />
-                      <ion-card-header>
-                        <ion-card-title>
-                          Sports Meet Success
-                        </ion-card-title>
-                        <ion-card-subtitle>
-                          Yestaday the sports meet was held with a wonderful awards ceremony.
-                        </ion-card-subtitle>
-                      </ion-card-header>
-                      <ion-card-content>
-                        Publication Date Time: 01/03/2020 09:15am
-                        Author: Program Office: School of Computing
-                      </ion-card-content>
-                    </ion-card>
-
-
-                  </ion-col>
-                  <ion-col size="12" size-sm="12" size-md="6" size-lg="4">
-
-                    <ion-card>
-                      <img src="../../../assets/images/account/news/sample.png" style="height: 120px;
-                                                                                      position: relative;
-                                                                                      left: 50%;
-                                                                                      transform: translateX(-50%);" />
-                      <ion-card-header>
-                        <ion-card-title>
-                          Sports Meet Success
-                        </ion-card-title>
-                        <ion-card-subtitle>
-                          Yestaday the sports meet was held with a wonderful awards ceremony.
-                        </ion-card-subtitle>
-                      </ion-card-header>
-                      <ion-card-content>
-                        Publication Date Time: 01/03/2020 09:15am
-                        Author: Program Office: School of Computing
-                      </ion-card-content>
-                    </ion-card>
-
 
                   </ion-col>
                 </ion-row>
@@ -181,7 +246,8 @@
           </ion-card-header>
           <ion-card-content>
 
-            <form [formGroup]="addNewNewsForm" (ngSubmit)="doAddNewNews(addNewNewsForm.value)">
+            <form [formGroup]="addNewNewsForm" (ngSubmit)="publishedNewNews('Confirmation',
+              'News will be published with these details, do you want to continue?', addNewNewsForm.value)">
               <ion-grid>
                 <ion-row>
                   <ion-col size="4">
@@ -204,7 +270,7 @@
                   </ion-col>
                   <ion-col size="8">
                     <ion-item>
-                      <ion-textarea clearInput formControlName="newsDescription"></ion-textarea>
+                      <ion-textarea rows="10" clearInput formControlName="newsDescription"></ion-textarea>
                     </ion-item>
                   </ion-col>
                 </ion-row>
@@ -243,14 +309,14 @@
                 </ion-row>
 
                 <ion-row style="margin-top: -14px;" *ngIf="addNewsCoverImageSection">
-                  <ion-col size="3">
+                  <ion-col size="4">
                     <ion-label><h3 style="padding-top: 15px;
                                           font-size: 15px;">News Cover Image</h3></ion-label>
                   </ion-col>
                   <ion-col size="8">
 
                     <!-- Code Block with upload event cover image -->
-                    <div id="withEventCoverImage" style="display: none;">
+                    <div>
                       <!-- Card Before Uploading an Image -->
                       <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded" style="min-width: 100%;
                                                                                               height: 300px;
@@ -260,14 +326,14 @@
                         </ion-card-header>
                         <ion-card-content>
                           
-                            <input type="file" name="eventCoverImage" accept="image/*" (change)="coverImageViewer($event)">
+                            <input type="file" name="coverImage" accept="image/*" (change)="coverImageViewer($event)">
                             <div style="margin: 10px; 
                                         margin-top: 15px;
                                         width: 200px;
                                         position: absolute;
                                         left: 50%;
                                         transform: translateX(-50%);">
-                            <img *ngIf=" eventCoverImage != '' " src="{{ eventCoverImage }}"/>
+                            <img *ngIf=" coverImage != '' " src="{{ coverImage }}"/>
                             </div>
                         </ion-card-content>
                       </ion-card>
@@ -351,7 +417,7 @@
                   </ion-col>
                   <ion-col size="8">
                     <ion-item>
-                      <ion-input type="text" readOnly clearInput formControlName="newsPublisher"></ion-input>
+                      <ion-input type="url" readOnly clearInput formControlName="newsPublisher"></ion-input>
                     </ion-item>
                   </ion-col>
                 </ion-row>

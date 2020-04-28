@@ -16,13 +16,13 @@ export class ProfilePage implements OnInit {
 
   ngOnInit() {
 
-    this.retrieveLoggedInUserDetailsFirestore();
+    this.retrieveLoggedInUserDetailsProgramOffice();
 
   }
 
   loggedInProgramOfficeUser;
-  retrieveLoggedInUserDetailsFirestore = () => 
-    this.profileService.retrieveLoggedInUserDetailsFirestore(this.sideMenuPageUserFaculty.passUserId()).subscribe(response  => (this.loggedInProgramOfficeUser = response));
+  retrieveLoggedInUserDetailsProgramOffice = () => 
+    this.profileService.retrieveLoggedInUserDetailsProgramOffice(this.sideMenuPageUserFaculty.passUserId()).subscribe(response  => (this.loggedInProgramOfficeUser = response));
 
 
 }

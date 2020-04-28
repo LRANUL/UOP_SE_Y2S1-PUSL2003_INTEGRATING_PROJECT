@@ -45,6 +45,16 @@ import { MoreDetailsPoLecturersPopoverPageModule } from './account/notices/more-
 import { MoreDetailsPoStudentsPopoverPageModule } from './account/notices/more-details-po-students-popover/more-details-po-students-popover.module';
 import { EditPoToLecturersNoticesModalPageModule } from './account/notices/edit-po-to-lecturers-notices-modal/edit-po-to-lecturers-notices-modal.module';
 import { EditPoToStudentsNoticesModalPageModule } from './account/notices/edit-po-to-students-notices-modal/edit-po-to-students-notices-modal.module';
+import { EditBatchModalPageModule } from './account/settings/editModals/edit-batch-modal/edit-batch-modal.module';
+import { EditDegreeProgramModalPageModule } from './account/settings/editModals/edit-degree-program-modal/edit-degree-program-modal.module';
+import { EditCreditWeightingModalPageModule } from './account/settings/editModals/edit-credit-weighting-modal/edit-credit-weighting-modal.module';
+import { EditLectureHallModalPageModule } from './account/settings/editModals/edit-lecture-hall-modal/edit-lecture-hall-modal.module';
+import { EditSessionStatusModalPageModule } from './account/settings/editModals/edit-session-status-modal/edit-session-status-modal.module';
+import { EditUserAccountStatusModalPageModule } from './account/settings/editModals/edit-user-account-status-modal/edit-user-account-status-modal.module';
+import { EditNoticeCategoryModalPageModule } from './account/settings/editModals/edit-notice-category-modal/edit-notice-category-modal.module';
+import { EditNewsCategoryModalPageModule } from './account/settings/editModals/edit-news-category-modal/edit-news-category-modal.module';
+import { UpdateAccountDetailsModalPageModule } from './account/settings/update-account-details-modal/update-account-details-modal.module';
+import { UpdateAccountPasswordModalPageModule } from './account/settings/update-account-password-modal/update-account-password-modal.module';
 
 
 @NgModule({
@@ -77,7 +87,18 @@ import { EditPoToStudentsNoticesModalPageModule } from './account/notices/edit-p
     MoreDetailsPoStudentsPopoverPageModule,
     MoreDetailsPoLecturersPopoverPageModule,
     EditPoToStudentsNoticesModalPageModule,
-    EditPoToLecturersNoticesModalPageModule
+    EditPoToLecturersNoticesModalPageModule,
+    EditBatchModalPageModule,
+    EditDegreeProgramModalPageModule,
+    EditBatchModalPageModule,
+    EditCreditWeightingModalPageModule,
+    EditLectureHallModalPageModule,
+    EditSessionStatusModalPageModule,
+    EditUserAccountStatusModalPageModule,
+    EditNoticeCategoryModalPageModule,
+    EditNewsCategoryModalPageModule,
+    UpdateAccountDetailsModalPageModule,
+    UpdateAccountPasswordModalPageModule
   ],
   providers: [
     StatusBar,

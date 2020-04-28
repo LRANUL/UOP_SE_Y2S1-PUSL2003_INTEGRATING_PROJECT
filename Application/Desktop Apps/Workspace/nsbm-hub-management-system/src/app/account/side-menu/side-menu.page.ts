@@ -89,6 +89,8 @@ export class SideMenuPage implements OnInit {
   // Declaring variable to store the faculty of the logged in user
   userFacultyFirestore;
 
+  userEmailAddress;
+
   userDetailsAuth: any;
 
   ngOnInit() {
@@ -106,8 +108,9 @@ export class SideMenuPage implements OnInit {
 
   // Retrieving the faculty of the logged in user and assign it the 'userFacultyFirestore' variable
   retrieveLoggedInUserDetailsFirestore = () =>
-    this.sideMenuService.retrieveLoggedInUserDetailsFirestore(this.userDetailsAuth.uid).subscribe(userFacultyFirestore => (
+    this.sideMenuService.retrieveLoggedInUserDetailsProgramOffice(this.userDetailsAuth.uid).subscribe(userFacultyFirestore => (
       userFacultyFirestore.forEach(document => {
+        this.userEmailAddress = document.payload.doc.id;
         let firestoreDoc:any = document.payload.doc.data();
         firestoreDoc = firestoreDoc.faculty;
 
@@ -123,6 +126,10 @@ export class SideMenuPage implements OnInit {
   // Passing user id
   passUserId() {
     return this.userDetailsAuth.uid;
+  }
+
+  passUserEmailAddress() {
+    return this.userEmailAddress;
   }
 
 

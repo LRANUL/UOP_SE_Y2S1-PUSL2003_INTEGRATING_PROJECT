@@ -38,6 +38,36 @@ export class FirestoreService {
     return firebase.auth().currentUser
   }
 
+  // Verifying entered login credentials after the user has already logged in
+  verifyLoginCredentials(value) {
+    return new Promise<any>((resolve, reject) => {
+        const loginCredentials = firebase.auth.EmailAuthProvider.credential(
+            value.emailAddress,
+            value.password
+        )
+        let currentUser = firebase.auth().currentUser;
+        currentUser.reauthenticateWithCredential(loginCredentials).then(
+            response => resolve(response),
+            error => reject(error)
+        );
+    });
+  }
+
+
+  // Retrieving the details of the logged in user from firestore database with the use of firebase authentication Uid
+  retrieveLoggedInUserDetailsLecturer(Uid) {
+    return this.fireStore.collection("users/userTypes/lecturerUsers", ref => ref
+            .where("userId", '==', Uid)).snapshotChanges();
+  }
+
+  // Retrieving the details of the logged in user from firestore database with the use of firebase authentication Uid
+  retrieveLoggedInUserDetailsProgramOffice(Uid) {
+      return this.fireStore.collection("users/userTypes/programOfficeUsers", ref => ref
+              .where("userId", '==', Uid)).snapshotChanges();
+  }
+
+
+
   // Retriving the current date and time from the localhost
   currentDT = new Date();
   currentDateTime = this.currentDT.getDate() + "/" + this.currentDT.getMonth() + "/" + this.currentDT.getFullYear() + " " + this.currentDT.getHours() + ":" + this.currentDT.getMinutes() + ":" + this.currentDT.getSeconds();
@@ -62,6 +92,48 @@ export class FirestoreService {
     })
   }
 
+  // Implementation of Registering a new lecturer into the system (firebase authentication)
+  lecturerRegistrationDetails(value, loggedInUserId, loggedInUserFaculty) {
+    return new Promise<any>((resolve, reject) => { // Adding new record into firebase auth
+
+        // Creating new firebase authentication user
+        firebase.auth().createUserWithEmailAndPassword(value.nsbmEmail, value.confirmPassword).then(success => {
+
+            // Adding lecturer details into firestore
+            this.fireStore.collection("users/userTypes/lecturerUsers/").doc(value.nsbmEmail).set({
+                nsbmLecturerId: value.nsbmLecturerId,
+                name: {
+                    prefix: value.nameTitle,
+                    firstName: value.firstName,
+                    middleName: value.middleName,
+                    lastName: value.lastName
+                },
+                specializedFaculty: value.specializedFaculty,
+                specialization: value.specialization,
+                createdDetails: {
+                    createdByPOUserId: loggedInUserId,
+                    createdDateTime: new Date(),
+                    createdFaculty: loggedInUserFaculty
+                },
+                editedDetails: {
+                    editedByUserId: "Registration Phase",
+                    editedDateTime: new Date(),
+                    editedSection: "Registration Phase"
+                },
+                sessionDetails: {
+                    loginDateTime: [new Date()],
+                    logoutDateTime: [new Date()]
+                },
+                status: value.lecturerStatus,
+                accountActivity: "Offline",
+                userId: success.user.uid
+            });
+            resolve(success);
+        }, error => reject(error))
+
+    })
+  }
+
   // Publishing news by creating a new document and adding details into firestore database
   publishNews(coverImageSection, attachmentLinkSection, coverImageFileName, coverImageFilePath, coverImageFileSize, loggedInUserFaculty, loggedInUserId, value){
     return new Promise<any>((resolve, reject) => {
@@ -75,6 +147,7 @@ export class FirestoreService {
           category: value.newsCategory,
           newsCreatedUid: loggedInUserId,
           newsCreatedFaculty: loggedInUserFaculty,
+          newsCreatedDateTime: new Date(),
           attachmentLink: value.newsAttachmentLink,
           coverImage: {
             coverImageFileName: coverImageFileName,
@@ -87,52 +160,53 @@ export class FirestoreService {
           reject(error);
         });
       }
-      else if(coverImageSection == true || attachmentLinkSection == true){
-        if(coverImageSection == true && attachmentLinkSection == false){
-          this.fireStore.collection("news/").doc(docId).set({
-            title: value.newsTitle,
-            description: value.newsDescription,
-            category: value.newsCategory,
-            newsCreatedUid: loggedInUserId,
-            newsCreatedFaculty: loggedInUserFaculty,
-            coverImage: {
-              coverImageFileName: coverImageFileName,
-              coverImageFilePath: coverImageFilePath,
-              coverImageFileSize: coverImageFileSize,
-            }
-          }).then(success => {
-            resolve(success);
-          }, error => {
-            reject(error);
-          });
-        }
-        else if(coverImageSection == false && attachmentLinkSection == true){
-          this.fireStore.collection("news/").doc(docId).set({
-            title: value.newsTitle,
-            description: value.newsDescription,
-            category: value.newsCategory,
-            newsCreatedUid: loggedInUserId,
-            newsCreatedFaculty: loggedInUserFaculty,
-            attachmentLink: value.newsAttachmentLink,
-          }).then(success => {
-            resolve(success);
-          }, error => {
-            reject(error);
-          });
-        }
-        else if(coverImageSection == false && attachmentLinkSection == false){
-          this.fireStore.collection("news/").doc(docId).set({
-            title: value.newsTitle,
-            description: value.newsDescription,
-            category: value.newsCategory,
-            newsCreatedUid: loggedInUserId,
-            newsCreatedFaculty: loggedInUserFaculty
-          }).then(success => {
-            resolve(success);
-          }, error => {
-            reject(error);
-          });
-        }
+      else if(coverImageSection == true && attachmentLinkSection == false){
+        this.fireStore.collection("news/").doc(docId).set({
+          title: value.newsTitle,
+          description: value.newsDescription,
+          category: value.newsCategory,
+          newsCreatedUid: loggedInUserId,
+          newsCreatedDateTime: new Date(),
+          newsCreatedFaculty: loggedInUserFaculty,
+          coverImage: {
+            coverImageFileName: coverImageFileName,
+            coverImageFilePath: coverImageFilePath,
+            coverImageFileSize: coverImageFileSize,
+          }
+        }).then(success => {
+          resolve(success);
+        }, error => {
+          reject(error);
+        });
+      }
+      else if(coverImageSection == false && attachmentLinkSection == true){
+        this.fireStore.collection("news/").doc(docId).set({
+          title: value.newsTitle,
+          description: value.newsDescription,
+          category: value.newsCategory,
+          newsCreatedUid: loggedInUserId,
+          newsCreatedDateTime: new Date(),
+          newsCreatedFaculty: loggedInUserFaculty,
+          attachmentLink: value.newsAttachmentLink,
+        }).then(success => {
+          resolve(success);
+        }, error => {
+          reject(error);
+        });
+      }
+      else if(coverImageSection == false && attachmentLinkSection == false){
+        this.fireStore.collection("news/").doc(docId).set({
+          title: value.newsTitle,
+          description: value.newsDescription,
+          category: value.newsCategory,
+          newsCreatedUid: loggedInUserId,
+          newsCreatedDateTime: new Date(),
+          newsCreatedFaculty: loggedInUserFaculty
+        }).then(success => {
+          resolve(success);
+        }, error => {
+          reject(error);
+        });
       }
     })
   }
@@ -390,10 +464,136 @@ export class FirestoreService {
       })
     }
   }
+
+  // Adding new degree program by creating a new document and assigning the values to firestore database
+  addNewDegreeProgram(value, userFaculty){
+    this.fireStore.collection("faculties/"+ userFaculty +"/degreePrograms/").add({
+        degreeCode: value.degreeCode,
+        degree: value.degree,
+        awardingBodyUniversity: value.awardingBodyUniversity,
+        deliveryNoOfYears: value.academicPeriodYear,
+        deliveryNoOfSemestersAnnually: value.academicPeriodSemester,
+        programDelivery: value.programDelivery,
+        programCoordinator: value.programCoordinator
+    });
+  }
+
+  // Adding new batch by creating a new document and assigning the values to firestore database
+  addNewBatch(value, awardingBodyUniversity, userFaculty){
+      this.fireStore.collection("faculties/"+ userFaculty +"/batches/").add({
+          batch: value.batch,
+          degree: value.degreeProgram,
+          awardingBodyUniversity: awardingBodyUniversity,
+          status: value.status
+      });
+  }
+
+  // Adding new credit weighting by creating a new document and assigning the values to firestore database
+  addNewCreditWeighting(value){
+      this.fireStore.collection("noOfModuleCreditsWeighting/").add({
+          creditsWeighting: value.creditWeighting,
+          description: value.description,
+          status: value.status
+      });
+  }
+
+  // Adding new lecture hall by creating a new document and assigning the values to firestore database
+  addNewLectureHall(value, userFaculty){
+      this.fireStore.collection("faculties/"+ userFaculty +"/lectureHalls/").add({
+          lectureHall: value.lectureHall,
+          level: value.level,
+          approximateNoOfSeatsAvailable: value.approximateNoOfSeatsAvailable
+      });
+  }
+
+
+
+  // Adding new session status by creating a new document and assigning the values to firestore database
+  addNewSessionStatus(value){
+      this.fireStore.collection("sessionStatuses/").add({
+          status: value.status,
+          description: value.description
+      });
+  }
+
+  // Adding new user account status by creating a new document and assigning the values to firestore database
+  addNewUserAccountStatus(value){
+      this.fireStore.collection("userStatuses/").add({
+          status: value.status,
+          description: value.description
+      });
+  }
+
+
+  // Adding new notice category by creating a new document and assigning the values to firestore database
+  addNewNoticeCategory(value){
+      this.fireStore.collection("categories/noticeCategories/").add({
+          category: value.category,
+          description: value.description
+      });
+  }
+
+  // Adding new news category by creating a new document and assigning the values to firestore database
+  addNewNewsCategory(value){
+    this.fireStore.collection("categories/newsCategories/").add({
+        category: value.category,
+        description: value.description
+    });
+  }
+  
   
   // Publishing new notice by adding the details to the firestore database
   createNewNotice(record) {
     return this.fireStore.collection('Notices').add(record);
+  }
+
+
+  // Searching for registered student details with the user entered nsbm id
+  searchRegisteredStudentNSBMId(nsbmStudentId) {
+    return this.fireStore.collection("users/userTypes/studentUsers", ref => ref
+        .where("nsbmStudentID", "==", nsbmStudentId)).snapshotChanges();
+  }
+
+  // Searching for registered student details with the user entered nsbm email address
+  searchRegisteredStudentNSBMEmail(nsbmEmailAddress) {
+      return this.fireStore.collection("users/userTypes/studentUsers", ref => ref
+          .where("Email", "==", nsbmEmailAddress)).snapshotChanges();
+  }
+
+
+
+  // Searching for registered lecturer details with the user entered nsbm id
+  searchRegisteredLecturerNSBMId(nsbmLecturerId) {
+      return this.fireStore.collection("users/userTypes/lecturerUsers", ref => ref
+          .where("nsbmLecturerId", "==", nsbmLecturerId)).snapshotChanges();
+  }
+
+  // Searching for registered lecturer details with the user entered nsbm email address
+  searchRegisteredLecturerNSBMEmail(nsbmEmailAddress) {
+      return this.fireStore.collection("users/userTypes/lecturerUsers", ref => ref
+          .where("nsbmEmailAddress", "==", nsbmEmailAddress)).snapshotChanges();
+  }
+
+
+
+
+
+  // Retrieving published news from current date to three days before from the firestore database
+  retrievePublishedNews(currentDate, dateThreeDaysBeforeCurrentDate){
+    return this.fireStore.collection("news", ref => ref
+            .where("newsCreatedDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))
+            .where("newsCreatedDateTime", "<=", new Date(currentDate))
+            .orderBy("newsCreatedDateTime", "desc")
+    ).snapshotChanges();
+  }
+
+  // Retrieving published news for selected date from the firestore database
+  retrievePublishedNewsSelectedDate(selectedDate, nextDate){
+    return this.fireStore.collection("news", ref => ref 
+              .where("newsCreatedDateTime", ">=", new Date(selectedDate))
+              .where("newsCreatedDateTime", "<=", new Date(nextDate))
+              .orderBy("newsCreatedDateTime", "desc")
+    ).snapshotChanges();
   }
 
 
@@ -424,6 +624,7 @@ export class FirestoreService {
           .orderBy("noticeCreated.noticeCreatedDateTime", "desc")
       ).snapshotChanges();
   }
+
 
 
 
@@ -458,11 +659,6 @@ export class FirestoreService {
 
 
   
-
-  // Retrieving the details of the logged in user from firestore database with the use of firebase authentication Uid
-  retrieveLoggedInUserDetailsFirestore(Uid){
-    return this.fireStore.collection("users/userTypes/programOfficeUsers", ref => ref.where(firebase.firestore.FieldPath.documentId(), '==', Uid)).snapshotChanges();
-  }
 
   // Retrieving published lecture session and their detais from the firestore database for the semester calendar page
   retrievePublishedLectureSessionsSemesterCalendar(userFaculty, value, userSelectedAwardingBodyUniversity) {
@@ -547,7 +743,16 @@ export class FirestoreService {
 
   // Retrieving published session statuses and their details from the firestore database
   retrievePublishedSessionStatuses() {
-    return this.fireStore.collection("sessionStatuses").snapshotChanges();
+    return this.fireStore.collection("sessionStatuses", ref => ref
+            .orderBy("status")
+            ).snapshotChanges();
+  }
+
+  // Retrieving published user account statuses and their details from the firestore database
+  retrievePublishedUserStatuses() {
+    return this.fireStore.collection("userStatuses", ref => ref
+            .orderBy("status")
+            ).snapshotChanges();
   }
 
 
@@ -576,6 +781,29 @@ export class FirestoreService {
   // Retrieving published transportation schedules and their details from the firestore database
   retrievePublishedTransportationSchedules(transportSlotType) {
     return this.fireStore.collection("transportationSchedule/transportScheduleType/"+ transportSlotType + "/").snapshotChanges();
+  }
+
+  // Retrieving the awardingBodyUniversity from the selected degree from the firestore database
+  retrievingAwardingBodyUniversityOfDegree(degree, userFaculty) {
+    return this.fireStore.collection("faculties/" + userFaculty + "/degreePrograms", ref => ref
+        .where("degree", "==", degree)).snapshotChanges();
+  }
+
+  // Updating account details of logged in program office user by updating the document in the firestore database
+  updateProgramOfficeUser(value, docId){
+    return new Promise<any>((resolve, reject) => {
+        this.fireStore.doc("/users/userTypes/programOfficeUsers/"+ docId).update({
+            name: {
+                prefix: value.prefixName,
+                firstName: value.firstName,
+                middleName: value.middleName,
+                lastName: value.lastName
+            },
+            faculty: value.faculty
+        })
+        .then(response => resolve(response),
+            error => reject(error))
+    });  
   }
 
   // Updating lecture session values in the firestore database
@@ -690,6 +918,69 @@ export class FirestoreService {
   removePublishedPOTOLecturersNotice(docId){
     this.fireStore.doc("notices/noticeTypes/notices-PO-To-Lecturers/"+ docId).delete();
   }
+
+  //Removing degree program fron the firestore database
+  removeDegreeProgram(docId, userFaculty) {
+    return this.fireStore.doc("faculties/" + userFaculty + "/degreePrograms/" + docId).delete();
+  }
+
+  // Removing published batch from the firestore database
+  removeBatch(docId, userFaculty){
+      return this.fireStore.doc("faculties/"+ userFaculty +"/batches/"+ docId).delete();
+  }
+
+  // Removing published credit weighting from the firestore database
+  removeCreditWeighting(docId){
+      return this.fireStore.doc("noOfModuleCreditsWeighting/"+ docId).delete();
+  }
+
+  // Removing published lecture hall from the firestore database
+  removeLectureHall(docId, userFaculty){
+      return this.fireStore.doc("faculties/"+ userFaculty +"/lectureHalls/"+ docId).delete();
+  }
+
+  // Removing published session status from the firestore database
+  removeSessionStatus(docId){
+      return this.fireStore.doc("sessionStatuses/"+ docId).delete();
+  }
+
+  // Removing published user account status from the firestore database
+  removeUserAccountStatus(docId){
+      return this.fireStore.doc("userStatuses/"+ docId).delete();
+  }
+
+  // Removing published notice category from the firestore database
+  removeNoticeCategory(docId){
+      return this.fireStore.doc("categories/noticeCategories/"+ docId).delete();
+  }
+
+  // Removing published news category from the firestore database
+  removeNewsCategory(docId){
+    return this.fireStore.doc("categories/newsCategories/"+ docId).delete();
+  }
+
+
+
+
+
+
+  // Disabling the user acount by updating user account status to 'disabled' in the firestore database
+  disableUserAccount(userType, docId) {
+    return this.fireStore.doc("users/userTypes/" + userType + "/" + docId).update({
+        status: "Disabled"
+    }).then(function () {
+        console.log("User Account has been disabled");
+    });
+  }
+
+  // Enabling the user acount by updating user account status to 'disabled' in the firestore database
+  enableUserAccount(userType, docId) {
+    return this.fireStore.doc("users/userTypes/" + userType + "/" + docId).update({
+        status: "Active"
+    }).then(function () {
+        console.log("User Account has been disabled");
+    });
+  } 
 
 
 }
