@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mobile App Guest Dasboard</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Bootstrap links - begin -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+	<!-- Bootstrap links - end -->
+
+
+	<style>
+		* { /*this sets all the settings to default (0)*/
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+
+		/*mobile view and default view css code - start*/
+			/*tiles container css code*/
+			.main-tile-section-container{
+				height: 1800px;
+			  width: auto;
+				background-color: #818181;
+			}
+
+			.grid-container-block_1{
+				/*Holds:
+				 1 - Weather plugin
+				 2 - Show recent news
+				 3 - Upcoming Events*/
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+				grid-template-rows: 150px 150px 150px 150px;
+				grid-gap: 10px;
+				padding: 20px;
+			}
+
+			.grid-container-block_2{
+				/*Holds:
+					4 - News & Media
+					5 - Event Calendar
+					6 - Programs
+					7 - Facilities
+					8 - Club & Societies
+					9- Sports*/
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+				grid-template-rows: 150px 150px 150px 150px 150px;
+				grid-gap: 10px;
+				padding: 20px;
+				position: relative;
+				top: -30px;
+			}
+
+			.grid-container-block_3{
+				/*Holds:
+					10 - Facebook plugin*/
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+				grid-template-rows: 150px 150px 150px 150px;
+				grid-gap: 10px;
+				padding: 20px;
+				position: relative;
+				top: -380px;
+			}
+
+			.grid-container-block_4{
+				/*Holds:
+					11 - Videos
+					12 - Connect with Us */
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+				grid-template-rows: 150px 150px;
+				grid-gap: 10px;
+				padding: 20px;
+				position: relative;
+				top: -730px;
+			}
+
+			.grid-container-block_1 > div, .grid-container-block_2 > div, .grid-container-block_3 > div, .grid-container-block_4 > div{
+				border: 1px;
+				border-radius: 8px;
+				box-shadow: 0 2px 7px rgba(0, 0, 0, 0.12), 0 2px 5px rgba(0, 0, 0, 0.24);
+			}
+
+			.grid-item_1{ /* 1 - Weather plugin */
+				order: 1;
+				grid-column: 1 / 3;
+				position: relative;
+				top: -320px;
+				background-color: #143851;
+			}
+
+			.grid-item_2{ /* 2 - Recent news */
+				order: 2;
+				grid-area: 1 / 1 / 3 / 3;
+				position: relative;
+				top: 160px;
+			}
+
+			/* Recent News heading css code */
+			.grid-item_2 p{
+				text-align: left;
+				margin-left: 4%;
+			}
+
+			.grid-item_3{ /* 3 - Upcoming events */
+				order: 3;
+				grid-column: 1 / 3;
+			}
+
+			/* 3. Upcoming Events tile icon css */
+			.grid-item_3 img{
+				width: 140px;
+				height: 100px;
+				margin-top: -5px;
+			}
+
+			.grid-item_4{ /* 4 - News & Media */
+				order: 4;
+			}
+
+			.grid-item_5{ /* 5 - Event calendar */
+				order: 5;
+			}
+
+			.grid-item_6{ /* 6 - Programs */
+				order: 6;
+			}
+
+			.grid-item_7{ /* 7 - Facilities */
+				order: 7;
+			}
+
+			.grid-item_8{ /* 8 - Clubs & Societies */
+				order: 8;
+			}
+
+			.grid-item_9{ /* 9 - Sports */
+				order: 9;
+			}
+
+			.grid-item_11{ /* 11 - Videos */
+				order: 11;
+				grid-column: 1 / 3;
+			}
+
+			/* videos tile icon heading style*/
+			.grid-item_11 p{
+				position: relative;
+				top: -8px;
+			}
+
+			/* videos tile icon style*/
+			.grid-item_11 img{
+				position: relative;
+				top: -20px;
+			}
+
+			.grid-item_12{ /* 12 - Connect with Us */
+				order: 12;
+			}
+
+			.grid-item_10{ /* 10 - Facebook plugin */
+				order: 10;
+				grid-area: 1 / 1 / 3 / 3;
+				background-color: #ECECEC;
+			}
+
+			/* grid item 10 - facebook plugin tile css code */
+			.grid-item_10_facebook_plugin{
+				border: none;
+				height: 98%;
+				width: 95%;
+				position: relative;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+			}
+
+			/* tile icon styles */
+			.tile_icon{
+				position: relative;
+				top: -5px;
+				width: 125px;
+				height: 105px;
+			}
+
+			/* tile heading styles */
+			.tile_heading{
+				font-family: 'Open Sans', sans-serif;
+				margin-top: 4%;
+				font-size: 20px;
+				text-align: center;
+				font-weight: 600;
+				color: White;
+				line-height: 19px;
+			}
+
+			/* upcoming events tile icon style*/
+			.tile_icon_upcoming_events{
+				margin-top: -15px;
+			}
+
+			/* clubs and societies tile icon style*/
+			.tile_icon_clubs_and_societies{
+				width: 90px;
+				height: 90px;
+			}
+
+			/* clubs and societies tile icon style*/
+			.tile_icon_connect_with_us{
+				margin-top: -12px;
+			}
+
+			/* programs tile icon style*/
+			.tile_icon_programs{
+				width: 130px;
+				height: 100px;
+			}
+
+			/* Weather slideshow css code - begin */
+			.carousel{
+					width: 99%;
+					position: relative;
+					left: 50%;
+					top: 50%;
+					transform: translate(-50%, -50%);
+			}
+
+			.carousel-indicators{
+				position: absolute;
+				top: 96%;
+			}
+
+			.carousel-control-prev{
+				position: absolute;
+				left: -4%;
+			}
+
+			.carousel-control-next{
+				position: absolute;
+				right: -4%;
+			}
+			/* Weather slideshow css code - end */
+
+
+			/* popup button styling css */
+			.popup-button{
+				height: 100%;
+				width: 100%;
+				border-radius: 8px;
+			}
+
+
+			/* popup button background - begin */
+			.grid-item_3 button{
+				background-color: #2098FB;
+			}
+
+			.grid-item_4 button{
+				background-color: #1ABC9C;
+			}
+
+			.grid-item_5 button{
+				background-color: #36688D;
+			}
+
+			.grid-item_6 button{
+				background-color: #333333;
+			}
+
+			.grid-item_7 button{
+				background-color: #B0426E;
+			}
+
+			.grid-item_8 button{
+				background-color: #3668;
+			}
+
+			.grid-item_9 button{
+				background-color: #5F4B8BFF;
+			}
+
+			.grid-item_11 button{
+				background-color: #4EB9B0;
+			}
+
+			.grid-item_12 button{
+				background-color: #243665;
+			}
+			/* popup button background - end */
+
+		/*mobile view and default view css code - end*/
+
+
+		/* mobile view for small phone css code - begin */
+		@media screen and (max-width: 375px) {
+			/* tiles container css code */
+			.main-tile-section-container{
+				height: 2270px;
+			  width: auto;
+				background-color: #818181;
+			}
+
+			/* Grid container block 3 -
+				10 - Facebook plugin */
+			.grid-container-block_3{
+				position: relative;
+				top: -60px;
+			}
+
+			/* Grid container block 4 -
+				11 - Videos
+				12 - Connect with Us */
+			.grid-container-block_4{
+				position: relative;
+				top: -410px;
+			}
+		}
+
+		/* mobile view for small phone css code - end */
+
+
+		/*desktop view css code - start*/
+		@media screen and (min-width: 505px) {
+				/* main tiles container css code */
+				.main-tile-section-container{
+					height: 1300px;
+					width: 880px;
+				}
+
+				.grid-container-block_1{
+					/*Holds:
+					 1 - Weather plugin
+					 2 - Show recent news
+					 3 - Upcoming Events*/
+					grid-template-columns: 200px 200px;
+					grid-template-rows: 200px 200px 200px 200px;
+				}
+
+				.grid-container-block_2{
+					/*Holds:
+						4 - News & Media
+						5 - Event Calendar
+						6 - Programs
+						7 - Facilities
+						8 - Club & Societies
+						9- Sports*/
+					grid-template-columns: 200px 200px;
+					grid-template-rows: 200px 200px 200px 200px 200px 200px 200px;
+					position: relative;
+					top: -450px;
+				}
+
+				.grid-container-block_3{
+					/*Holds:
+						10 - Facebook plugin*/
+					grid-template-columns: 200px 200px;
+					grid-template-rows: 200px 200px;
+					position: relative;
+					top: -1950px;
+					left: 420px;
+				}
+
+				.grid-container-block_4{
+					/*Holds:
+					11 - Connect with Us
+					12 - Videos*/
+					grid-template-columns: 200px 200px;
+					grid-template-rows: 200px 200px;
+					position: relative;
+					top: -1770px;
+					left: 840px;
+				}
+
+				.grid-item_1{ /* 1 - Weather plugin */
+					order: 2;
+					position: relative;
+					top: -420px;
+					left: 420px;
+				}
+
+				.grid-item_2{ /* 2 - Recent news */
+					order: 1;
+					position: relative;
+					top: -0px;
+				}
+
+				.grid-item_3{ /* 3 - Upcoming events */
+					order: 3;
+					position: relative;
+					top: -420px;
+					left: 420px;
+				}
+
+				/* 3. Upcoming events icon css */
+				.grid-item_3 img{
+					height: 140px;
+					width: 200px;
+				}
+
+				.grid-item_4{ /* 4 - News & Media */
+					order: 1;
+				}
+
+				.grid-item_5{ /* 5 - Event calendar */
+					order: 2;
+				}
+
+				.grid-item_6{ /* 6 - Programs */
+					order: 3;
+				}
+
+				/* 6 - Programs heading css */
+				.grid-item_6 p{
+					margin-top: 6px;
+				}
+
+				/* 6 - Programs icon css */
+				.grid-item_6 img{
+					margin-top: -3px;
+					width: 190px;
+					height: 140px;
+				}
+
+				.grid-item_7{ /* 7 - Facilities */
+					order: 4;
+				}
+
+				.grid-item_8{ /* 8 - Clubs & Societies */
+					order: 5;
+				}
+
+				.grid-item_9{ /* 9 - Sports */
+					order: 6;
+				}
+
+				.grid-item_11{ /* 11 - Videos */
+					order: 7;
+					position: relative;
+					top: -210px;
+					left: -420px;
+				}
+
+				.grid-item_12{ /* 12 - Connect with Us */
+					order: 8;
+					position: relative;
+					top: -210px;
+					left: -840px;
+				}
+
+				.grid-item_10{ /* 10 - Facebook plugin */
+					order: 1;
+				}
+
+				/* grid item 10 - facebook plugin tile css code */
+				.grid-item_10_facebook_plugin{
+					height: 400px;
+					width: 410px;
+					padding: 1px 35px;
+				}
+
+				/* tile icon styles for desktop viewing*/
+				.tile_icon{
+					bottom: 3px;
+					width: 170px;
+					height: 140px;
+				}
+
+				/* clubs and societies tile icon style for desktop viewing*/
+				.tile_icon_clubs_and_societies{
+					width: 130px;
+					height: 130px;
+					margin-top: -6px;
+				}
+
+				.tile_icon_sports{
+					width: 130px;
+					height: 130px;
+					margin-top: -6px;
+				}
+
+				.tile_heading{
+					font-size: 22px;
+					position: relative;
+					top: -8px;
+				}
+			}
+
+		/*loading bar css code - start*/
+		//.loading_bar{
+			width: 100%;
+			height: 3px;
+			background-color: red;
+
+			animation: bar 10s ease-in-out;
+		}
+
+		@keyframes bar {
+			0% {
+				width: 0%;
+			}
+			25% {
+				width: 23%;
+			}
+			50% {
+				width: 50%;
+			}
+			75% {
+				width: 83%
+			}
+			100% {
+				width: 100%;
+			}
+		}
+		/*loading bar css code - end*/
+	</style>
+</head>
+<body>
+
+	<div class="loading_bar">
+
+	</div>
+
+	<div class="main-tile-section-container">
+		<div class="grid-container-block_1">
+			<div class="grid-item_1">
+				<!-- Weather plugin - begin -->
+
+				<!-- Bootstrap Carousel code - begin -->
+				<div id="weather_slideshow" class="carousel slide" data-ride="carousel">
+
+						<!-- Slideshow bottom navigation location  -->
+						<ol class="carousel-indicators">
+								<li data-target="#weather_slideshow" data-slide-to="0" class="active"></li>
+								<li data-target="#weather_slideshow" data-slide-to="1"></li>
+								<li data-target="#weather_slideshow" data-slide-to="2"></li>
+								<li data-target="#weather_slideshow" data-slide-to="3"></li>
+								<li data-target="#weather_slideshow" data-slide-to="4"></li>
+								<li data-target="#weather_slideshow" data-slide-to="5"></li>
+						</ol>
+
+						<!-- Slideshow item contents -->
+						<div class="carousel-inner">
+								<div class="carousel-item active">
+									<!-- Colombo Slide - Begin -->
+										<a class="weatherwidget-io" href="https://forecast7.com/en/6d9379d86/colombo/" data-label_1="COLOMBO" data-label_2="WEATHER" data-icons="Climacons Animated" data-mode="Current" data-days="3" data-theme="weather_one" >COLOMBO WEATHER</a>
+											<script>
+												!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+											</script>
+									<!-- Colombo Slide - End -->
+								</div>
+								<div class="carousel-item">
+									<!-- Homagama Slide - Begin -->
+										<a class="weatherwidget-io" href="https://forecast7.com/en/6d8480d00/homagama/" data-label_1="HOMAGAMA" data-label_2="WEATHER" data-font="Roboto" data-icons="Climacons Animated" data-mode="Current" data-days="3" data-theme="weather_one" >HOMAGAMA WEATHER</a>
+											<script>
+												!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+										</script>
+									<!-- Plymouth Slide - End -->
+								</div>
+								<div class="carousel-item">
+									<!-- Plymouth Slide - Begin -->
+										<a class="weatherwidget-io" href="https://forecast7.com/en/50d38n4d14/plymouth/" data-label_1="PLYMOUTH" data-label_2="WEATHER" data-font="Roboto" data-icons="Climacons Animated" data-mode="Current" data-days="3" data-theme="weather_one" >PLYMOUTH WEATHER</a>
+											<script>
+												!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+										</script>
+									<!-- Plymouth Slide - End -->
+								</div>
+								<div class="carousel-item">
+									<!-- Dublin Slide - Begin -->
+										<a class="weatherwidget-io" href="https://forecast7.com/en/53d35n6d26/dublin/" data-label_1="DUBLIN" data-label_2="WEATHER" data-font="Roboto" data-icons="Climacons Animated" data-mode="Current" data-days="3" data-theme="weather_one" >DUBLIN WEATHER</a>
+											<script>
+												!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+											</script>
+									<!-- Dublin Slide - End -->
+								</div>
+								<div class="carousel-item">
+									<!-- Melbourne Slide - Begin -->
+										<a class="weatherwidget-io" href="https://forecast7.com/en/n37d81144d96/melbourne/" data-label_1="MELBOURNE" data-label_2="WEATHER" data-font="Roboto" data-icons="Climacons Animated" data-mode="Current" data-days="3" data-theme="weather_one" >MELBOURNE WEATHER</a>
+											<script>
+												!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+											</script>
+									<!-- Melbourne Slide - End -->
+								</div>
+								<div class="carousel-item">
+									<!-- Perth Slide - Begin -->
+										<a class="weatherwidget-io" href="https://forecast7.com/en/n31d95115d86/perth/" data-label_1="PERTH" data-label_2="WEATHER" data-font="Roboto" data-icons="Climacons Animated" data-mode="Current" data-days="3" data-theme="weather_one" >PERTH WEATHER</a>
+											<script>
+												!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+											</script>
+									<!-- Perth Slide - End -->
+								</div>
+						</div>
+
+						<!-- Controls for previous and next slide -->
+						<a class="carousel-control-prev" href="#weather_slideshow" data-slide="prev">
+								<span class="carousel-control-prev-icon"></span>
+						</a>
+						<a class="carousel-control-next" href="#weather_slideshow" data-slide="next">
+								<span class="carousel-control-next-icon"></span>
+						</a>
+				</div>
+				<!-- Bootstrap Carousel code - end -->
+
+
+				<!-- Weather plugin - end -->
+			</div>
+			<div class="grid-item_2">
+				<p class="tile_heading">RECENT NEWS</p>
+			</div>
+			<div class="grid-item_3">
+
+				<!--  Button initiating popup -->
+				<button type="button" data-toggle="modal" data-target="#popup_upcoming_events" class="popup-button">
+					<p class="tile_heading">UPCOMING EVENTS</p>
+					<img src="images/tile_icons/3.upcoming_events_tile_icon.png" class="tile_icon">
+				</button>
+
+								<!-- Popup - Bootstrap Modal -->
+								<div class="modal fade" id="popup_upcoming_events">
+								  <div class="modal-dialog modal-dialog-centered">
+								    <div class="modal-content">
+
+								      <!-- Header Section of Modal -->
+								      <div class="modal-header">
+								        <h4 class="modal-title">Modal Heading</h4>
+								        <button type="button" class="close" data-dismiss="modal">&times;</button>
+								      </div>
+
+								      <!-- Body Section of Modal -->
+								      <div class="modal-body">
+								        Modal body..
+								      </div>
+
+								      <!-- Footer Section of Modal -->
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+								      </div>
+
+								    </div>
+								  </div>
+								</div>
+
+			</div>
+		</div>
+
+		<div class="grid-container-block_2">
+			<div class="grid-item_4">
+
+				<!--  Button initiating popup -->
+				<button type="button" data-toggle="modal" data-target="#popup_news_and_media" class="popup-button">
+					<p class="tile_heading">NEWS & MEDIA</p>
+					<img src="images/tile_icons/4.news_and_media_tile_icon.png" class="tile_icon">
+				</button>
+
+								<!-- Popup - Bootstrap Modal -->
+								<div class="modal fade" id="popup_news_and_media">
+								  <div class="modal-dialog modal-dialog-centered">
+								    <div class="modal-content">
+
+								      <!-- Header Section of Modal -->
+								      <div class="modal-header">
+								        <h4 class="modal-title">Modal Heading</h4>
+								        <button type="button" class="close" data-dismiss="modal">&times;</button>
+								      </div>
+
+								      <!-- Body Section of Modal -->
+								      <div class="modal-body">
+								        Modal body..
+								      </div>
+
+								      <!-- Footer Section of Modal -->
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+								      </div>
+
+								    </div>
+								  </div>
+								</div>
+
+			</div>
+			<div class="grid-item_5">
+
+				<!--  Button initiating popup -->
+				<button type="button" data-toggle="modal" data-target="#popup_events_calendar" class="popup-button">
+					<p class="tile_heading">EVENTS <br> CALENDAR</p>
+					<img src="images/tile_icons/5.events_calendar_tile_icon.png" class="tile_icon tile_icon_upcoming_events">
+				</button>
+
+								<!-- Popup - Bootstrap Modal -->
+								<div class="modal fade" id="popup_events_calendar">
+								  <div class="modal-dialog modal-xl modal-dialog-centered" style="height: 90%; width: 900px;">
+								    <div class="modal-content">
+
+								      <!-- Header Section of Modal -->
+								      <div class="modal-header">
+								        <h4 class="modal-title">Modal Heading</h4>
+								        <button type="button" class="close" data-dismiss="modal">&times;</button>
+								      </div>
+
+								      <!-- Body Section of Modal -->
+								      <div class="modal-body">
+
+												<div id="divContainer" style="position: fixed">
+											    <div id="frameContainer" style="overflow:hidden;width: 790px;height: 500px;position: fixed;">
+											        <iframe src="http://www.nsbm.lk" style="width: 790px; height: 8000px; margin-top: -7060px; margin-bottom: 3000px;"  scrolling="no">
+											        </iframe>
+											    </div>
+												</div>
+
+								      </div>
+
+								      <!-- Footer Section of Modal -->
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+								      </div>
+
+								    </div>
+								  </div>
+								</div>
+
+			</div>
+			<div class="grid-item_6">
+
+				<!--  Button initiating popup -->
+				<button type="button" data-toggle="modal" data-target="#popup_programs" class="popup-button">
+					<p class="tile_heading">PROGRAMS</p>
+					<img src="images/tile_icons/6.programs_tile_icon.png" class="tile_icon tile_icon_programs">
+				</button>
+
+								<!-- Popup - Bootstrap Modal -->
+								<div class="modal fade" id="popup_programs">
+								  <div class="modal-dialog modal-dialog-centered">
+								    <div class="modal-content">
+
+								      <!-- Header Section of Modal -->
+								      <div class="modal-header">
+								        <h4 class="modal-title">Modal Heading</h4>
+								        <button type="button" class="close" data-dismiss="modal">&times;</button>
+								      </div>
+
+								      <!-- Body Section of Modal -->
+								      <div class="modal-body">
+								        Modal body..
+								      </div>
+
+								      <!-- Footer Section of Modal -->
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+								      </div>
+
+								    </div>
+								  </div>
+								</div>
+
+			</div>
+			<div class="grid-item_7">
+
+					<!--  Button initiating popup -->
+					<button type="button" data-toggle="modal" data-target="#popup_facilities" class="popup-button">
+						<p class="tile_heading">FACILITIES</p>
+						<img src="images/tile_icons/7.facilities_tile_icon.png" class="tile_icon">
+					</button>
+
+									<!-- Popup - Bootstrap Modal -->
+									<div class="modal fade" id="popup_facilities">
+									  <div class="modal-dialog modal-dialog-centered">
+									    <div class="modal-content">
+
+									      <!-- Header Section of Modal -->
+									      <div class="modal-header">
+									        <h4 class="modal-title">Modal Heading</h4>
+									        <button type="button" class="close" data-dismiss="modal">&times;</button>
+									      </div>
+
+									      <!-- Body Section of Modal -->
+									      <div class="modal-body">
+									        Modal body..
+									      </div>
+
+									      <!-- Footer Section of Modal -->
+									      <div class="modal-footer">
+									        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+									      </div>
+
+									    </div>
+									  </div>
+									</div>
+
+			</div>
+			<div class="grid-item_8">
+
+				<!--  Button initiating popup -->
+				<button type="button" data-toggle="modal" data-target="#popup_clubs_and_societies" class="popup-button">
+					<p class="tile_heading">CLUBS & <br> SOCIETIES</p>
+					<img src="images/tile_icons/9.clubs_and_societies.png" class="tile_icon tile_icon_clubs_and_societies">
+				</button>
+
+								<!-- Popup - Bootstrap Modal -->
+								<div class="modal fade" id="popup_clubs_and_societies">
+								  <div class="modal-dialog modal-dialog-centered">
+								    <div class="modal-content">
+
+								      <!-- Header Section of Modal -->
+								      <div class="modal-header">
+								        <h4 class="modal-title">Modal Heading</h4>
+								        <button type="button" class="close" data-dismiss="modal">&times;</button>
+								      </div>
+
+								      <!-- Body Section of Modal -->
+								      <div class="modal-body">
+								        Modal body..
+								      </div>
+
+								      <!-- Footer Section of Modal -->
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+								      </div>
+
+								    </div>
+								  </div>
+								</div>
+
+			</div>
+			<div class="grid-item_9">
+
+				<!--  Button initiating popup -->
+				<button type="button" data-toggle="modal" data-target="#popup_sports" class="popup-button">
+					<p class="tile_heading">SPORTS</p>
+					<img src="images/tile_icons/10.sports_tile_icon.png" class="tile_icon tile_icon_sports">
+				</button>
+
+								<!-- Popup - Bootstrap Modal -->
+								<div class="modal fade" id="popup_sports">
+								  <div class="modal-dialog modal-dialog-centered">
+								    <div class="modal-content">
+
+								      <!-- Header Section of Modal -->
+								      <div class="modal-header">
+								        <h4 class="modal-title">Modal Heading</h4>
+								        <button type="button" class="close" data-dismiss="modal">&times;</button>
+								      </div>
+
+								      <!-- Body Section of Modal -->
+								      <div class="modal-body">
+								        Modal body..
+								      </div>
+
+								      <!-- Footer Section of Modal -->
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+								      </div>
+
+								    </div>
+								  </div>
+								</div>
+
+			</div>
+		</div>
+
+		<div class="grid-container-block_3">
+			<div class="grid-item_10">
+				<!-- Facebook plugin -->
+				<iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fnsbm.lk%2F&tabs=timeline&width=340&height=500&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
+				class="grid-item_10_facebook_plugin" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
+			</div>
+		</div>
+
+		<div class="grid-container-block_4">
+				<div class="grid-item_11">
+
+					<!--  Button initiating popup -->
+					<button type="button" data-toggle="modal" data-target="#popup_videos" class="popup-button">
+						<p class="tile_heading">VIDEOS</p>
+						<img src="images/tile_icons/11.videos_tile_icon.png" class="tile_icon">
+					</button>
+
+									<!-- Popup - Bootstrap Modal -->
+									<div class="modal fade" id="popup_videos">
+									  <div class="modal-dialog modal-dialog-centered">
+									    <div class="modal-content">
+
+									      <!-- Header Section of Modal -->
+									      <div class="modal-header">
+									        <h4 class="modal-title">Modal Heading</h4>
+									        <button type="button" class="close" data-dismiss="modal">&times;</button>
+									      </div>
+
+									      <!-- Body Section of Modal -->
+									      <div class="modal-body">
+									        Modal body..
+									      </div>
+
+									      <!-- Footer Section of Modal -->
+									      <div class="modal-footer">
+									        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+									      </div>
+
+									    </div>
+									  </div>
+									</div>
+
+				</div>
+				<div class="grid-item_12">
+
+					<!--  Button initiating popup -->
+					<button type="button" data-toggle="modal" data-target="#popup_connect_with_us" class="popup-button">
+						<p class="tile_heading">CONNECT <br> WITH US</p>
+						<img src="images/tile_icons/12.connect_with_us_tile_icon.png" class="tile_icon tile_icon_connect_with_us">
+					</button>
+
+									<!-- Popup - Bootstrap Modal -->
+									<div class="modal fade" id="popup_connect_with_us">
+									  <div class="modal-dialog modal-dialog-centered">
+									    <div class="modal-content">
+
+									      <!-- Header Section of Modal -->
+									      <div class="modal-header">
+									        <h4 class="modal-title">Modal Heading</h4>
+									        <button type="button" class="close" data-dismiss="modal">&times;</button>
+									      </div>
+
+									      <!-- Body Section of Modal -->
+									      <div class="modal-body">
+									        Modal body..
+									      </div>
+
+									      <!-- Footer Section of Modal -->
+									      <div class="modal-footer">
+									        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+									      </div>
+
+									    </div>
+									  </div>
+									</div>
+
+				</div>
+		</div>
+	</div>
+
+
+
+</body>
+</html>
