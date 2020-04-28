@@ -30,7 +30,7 @@ export class homePage implements OnInit {
     if (this.authService.userDetails()) {
       this.userEmail = this.authService.userDetails().email;
       this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().email).set({
-        Activity: 'Online',
+        accountActivity: 'Online',
       }, { merge: true });
       this.firestore.collection('userActivityMonitoring').add({
         loginDateTime: new Date(),

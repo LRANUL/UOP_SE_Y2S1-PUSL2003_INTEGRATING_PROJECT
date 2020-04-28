@@ -103,7 +103,7 @@ export class settingsPage {
 
   async logout() {
     this.firestore.collection('/users/userTypes/studentUsers').doc(this.authService.userDetails().email).set({
-      Activity: 'Offline',
+      accountActivity: 'Offline',
     }, { merge: true });
     this.authService
       .logoutUser()

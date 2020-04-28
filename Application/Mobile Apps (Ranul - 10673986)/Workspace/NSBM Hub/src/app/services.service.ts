@@ -45,19 +45,20 @@ export class ServicesService {
           degreeCode: value.DegreeCode,
           degree: value.degree,
           batch: value.batch,
+          uID: this.userDetails().uid,
           createdDateTime: new Date(),
           // ServerTime:firebase.firestore.FieldValue.serverTimestamp(),
           edited: {
-            editedByUID: [''],
+            editedByUID: [this.userDetails().uid],
             editedDateTime: [new Date()],
             editedSection: ["Initial Register"]
           },
           sessionDateTime: {
             loginDateTime: [new Date()],
-            logoutDateTime: [new Date()]
+            logoutDateTime: ['']
           },
           faculty: value.faculty,
-          status: "active"
+          status: "Active"
 
         })
           .then(

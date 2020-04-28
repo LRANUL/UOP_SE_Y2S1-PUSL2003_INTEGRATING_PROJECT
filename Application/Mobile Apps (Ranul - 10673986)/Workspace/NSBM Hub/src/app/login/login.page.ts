@@ -13,6 +13,7 @@ import {
 } from "@angular/forms";
 import { NavController } from "@ionic/angular";
 import { constructor } from 'firebase';
+import { AngularFirestore } from '@angular/fire/firestore';
 @Component({
   selector: "app-login",
   templateUrl: "./login.page.html",
@@ -24,7 +25,7 @@ export class Login implements OnInit {
   errorMessage: string = "";
   userEmail: string;
   public show: boolean = false;
-  
+
   slideOpts = {
     initialSlide: 1,
     speed: 400
@@ -35,25 +36,48 @@ export class Login implements OnInit {
     private authService: ServicesService,
     private formBuilder: FormBuilder,
     public loadingController: LoadingController,
-    private network: Network
-  ) {}
+    private network: Network,
+    private firestore: AngularFirestore,
+    public alertController: AlertController,
+  ) { }
 
   ngOnInit() {
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        // User is signed in.
-        console.log('User is signed in');
-        const loading = await this.loadingController.create({
-          message: 'Please wait...',
-          duration: 2000
-        });
-        await loading.present();
+        this.firestore.collection('/users/userTypes/studentUsers').doc(this.authService.userDetails().email).ref.get().then(async (doc) => {
+          if (doc.data().status.toString() == "Active") {
+            // User is signed in.
+            console.log('User is signed in');
+            const loading = await this.loadingController.create({
+              message: 'Please wait...',
+              duration: 2000
+            });
+            await loading.present();
 
-        const { role, data } = await loading.onDidDismiss();
-        console.log('Loading dismissed!');
-      
-        this.userEmail = this.authService.userDetails().email;
-        this.navCtrl.navigateForward("tabs/home");
+            const { role, data } = await loading.onDidDismiss();
+            console.log('Loading dismissed!');
+
+            this.userEmail = this.authService.userDetails().email;
+            this.navCtrl.navigateForward("tabs/home");
+          }
+          else {
+            this.authService.logoutUser()
+            const loading = await this.loadingController.create({
+              message: 'Session Closing...',
+              duration: 2000
+            });
+            await loading.present();
+            const { role, data } = await loading.onDidDismiss();
+            console.log('Loading dismissed!');
+            const alert = await this.alertController.create({
+              header: 'Account Disabled',
+              subHeader: 'Contact Program Office',
+              message: 'You cannot access the NSBM HUB as your account is disabled !',
+              buttons: ['OK']
+            });
+            await alert.present();
+          }
+        })
       }
       else {
         // No user is signed in.
@@ -91,22 +115,41 @@ export class Login implements OnInit {
   };
 
   async loginUser(value) {
-    const loading = await this.loadingController.create({
-      message: 'Logging in...',
-      duration: 2000
-    });
-
-    await loading.present();
-
-    const { role, data } = await loading.onDidDismiss();
-    console.log('Loading dismissed!');
-  
     this.authService.loginUser(value).then(
       async res => {
         console.log(res);
         this.errorMessage = "";
-        
-        this.navCtrl.navigateForward("tabs/home");
+        this.firestore.collection('/users/userTypes/studentUsers').doc(this.authService.userDetails().email).ref.get().then(async (doc) => {
+          if (doc.data().status.toString() == "Active") {
+            const loading = await this.loadingController.create({
+              message: 'Logging in...',
+              duration: 2000
+            });
+
+            await loading.present();
+
+            const { role, data } = await loading.onDidDismiss();
+            console.log('Loading dismissed!');
+            this.navCtrl.navigateForward("tabs/home");
+          }
+          else {
+            this.authService.logoutUser()
+            const loading = await this.loadingController.create({
+              message: 'Session Closing...',
+              duration: 2000
+            });
+            await loading.present();
+            const { role, data } = await loading.onDidDismiss();
+            console.log('Loading dismissed!');
+            const alert = await this.alertController.create({
+              header: 'Account Disabled',
+              subHeader: 'Contact Program Office',
+              message: 'You cannot access the NSBM HUB as your account is disabled !',
+              buttons: ['OK']
+            });
+            await alert.present();
+          }
+        })
       },
       err => {
         this.errorMessage = err.message;

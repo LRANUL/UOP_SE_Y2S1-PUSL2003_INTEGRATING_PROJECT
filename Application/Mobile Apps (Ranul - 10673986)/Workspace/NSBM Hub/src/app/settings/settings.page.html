@@ -12,9 +12,9 @@
 
     <ion-content>
       <ion-list>
-        <ion-item>
-          <ion-label>Dark Theme</ion-label>
-          <ion-toggle [(ngModel)]="Status" (click)="DarkMode()" (ionChange)="Toggle();"></ion-toggle>
+        <ion-item [(ngModel)]="Status" (click)="DarkMode()" (ionChange)="Toggle();">
+          <ion-label>Change Theme</ion-label>
+          <ion-icon name="contrast-outline"></ion-icon>
         </ion-item>
         <ion-item>
           <ion-label>Email: {{userEmail}}</ion-label>
