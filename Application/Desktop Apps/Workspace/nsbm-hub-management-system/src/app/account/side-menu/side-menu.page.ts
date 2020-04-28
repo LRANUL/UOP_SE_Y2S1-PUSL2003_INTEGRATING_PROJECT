@@ -106,7 +106,7 @@ export class SideMenuPage implements OnInit {
 
   // Retrieving the faculty of the logged in user and assign it the 'userFacultyFirestore' variable
   retrieveLoggedInUserDetailsFirestore = () =>
-    this.sideMenuService.retrieveLoggedInUserDetailsFirestore(this.userDetailsAuth.uid).subscribe(userFacultyFirestore => (
+    this.sideMenuService.retrieveLoggedInUserDetailsProgramOffice(this.userDetailsAuth.uid).subscribe(userFacultyFirestore => (
       userFacultyFirestore.forEach(document => {
         let firestoreDoc:any = document.payload.doc.data();
         firestoreDoc = firestoreDoc.faculty;

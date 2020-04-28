@@ -308,16 +308,16 @@ export class NoticesPage implements OnInit {
       this.toggleResultStudent = false;
     }
 
-    var withUploadEventCoverImage = document.getElementById("withEventCoverImage");
-    var withoutUploadEventCoverImage = document.getElementById("withoutEventCoverImage");
+    var withUploadcoverImage = document.getElementById("withcoverImage");
+    var withoutUploadcoverImage = document.getElementById("withoutcoverImage");
 
     if(this.toggleResultStudent == true){
-      withoutUploadEventCoverImage.style.display = "none";
-      withUploadEventCoverImage.style.display = "inline";
+      withoutUploadcoverImage.style.display = "none";
+      withUploadcoverImage.style.display = "inline";
     }
     else if(this.toggleResultStudent == false){
-      withoutUploadEventCoverImage.style.display = "inline";
-      withUploadEventCoverImage.style.display = "none";
+      withoutUploadcoverImage.style.display = "inline";
+      withUploadcoverImage.style.display = "none";
     }
   }
 
@@ -342,15 +342,15 @@ export class NoticesPage implements OnInit {
       this.toggleResultLecturer = false;
     }
 
-    var withUploadEventCoverImageLecturer = document.getElementById("withEventCoverImageLecturer");
-    var withoutUploadEventCoverImageLecturer = document.getElementById("withoutEventCoverImageLecturer");
+    var withUploadcoverImageLecturer = document.getElementById("withcoverImageLecturer");
+    var withoutUploadcoverImageLecturer = document.getElementById("withoutcoverImageLecturer");
     if(this.toggleResultLecturer == true){
-      withoutUploadEventCoverImageLecturer.style.display = "none";
-      withUploadEventCoverImageLecturer.style.display = "inline";
+      withoutUploadcoverImageLecturer.style.display = "none";
+      withUploadcoverImageLecturer.style.display = "inline";
     }
     else if(this.toggleResultLecturer == false){
-      withoutUploadEventCoverImageLecturer.style.display = "inline";
-      withUploadEventCoverImageLecturer.style.display = "none";
+      withoutUploadcoverImageLecturer.style.display = "inline";
+      withUploadcoverImageLecturer.style.display = "none";
     }
   }
 
@@ -401,7 +401,7 @@ export class NoticesPage implements OnInit {
     await alert.present();
   }
 
-  eventCoverImage;
+  coverImage;
   file;
 
   // Cover Image Viewer Process
@@ -421,7 +421,7 @@ export class NoticesPage implements OnInit {
     }
 
     fileReader.onload = ($event:any) => {
-      this.eventCoverImage = $event.target.result;
+      this.coverImage = $event.target.result;
     }
 
     fileReader.readAsDataURL($event.target.files[0]);

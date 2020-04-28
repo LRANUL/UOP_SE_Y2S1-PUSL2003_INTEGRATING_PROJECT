@@ -173,7 +173,7 @@
                           <ion-col size="8">
 
                           <!-- Code Block with upload event cover image -->
-                          <div id="withEventCoverImage" style="display: none;">
+                          <div id="withcoverImage" style="display: none;">
                             <!-- Card Before Uploading an Image -->
                             <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded" style="min-width: 100%;
                                                                                                     height: 300px;
@@ -183,14 +183,14 @@
                               </ion-card-header>
                               <ion-card-content>
                                 
-                                  <input type="file" name="eventCoverImage" accept="image/*" (change)="coverImageViewer($event)">
+                                  <input type="file" name="coverImage" accept="image/*" (change)="coverImageViewer($event)">
                                   <div style="margin: 10px; 
                                               margin-top: 15px;
                                               width: 200px;
                                               position: absolute;
                                               left: 50%;
                                               transform: translateX(-50%);">
-                                  <img *ngIf=" eventCoverImage != '' " src="{{ eventCoverImage }}"/>
+                                  <img *ngIf=" coverImage != '' " src="{{ coverImage }}"/>
                                   </div>
                                 <!--
                                 <div>
@@ -255,7 +255,7 @@
                           </div>
 
                           <!-- Code block without upload cover image -->
-                          <div id="withoutEventCoverImage" style="display: inline">
+                          <div id="withoutcoverImage" style="display: inline">
                             <ion-card style="min-width: 100%;
                                             height: 300px;
                                             margin-left: 0px;">
@@ -382,7 +382,7 @@
                             <ion-col size="8">
 
                             <!-- Code Block with upload event cover image -->
-                            <div id="withEventCoverImageLecturer" style="display: none;">
+                            <div id="withcoverImageLecturer" style="display: none;">
                               <!-- Card Before Uploading an Image -->
                               <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded" style="min-width: 100%;
                                                                                                       height: 300px;
@@ -392,14 +392,14 @@
                                 </ion-card-header>
                                 <ion-card-content>
                                   
-                                    <input type="file" name="eventCoverImage" accept="image/*" (change)="coverImageViewer($event)">
+                                    <input type="file" name="coverImage" accept="image/*" (change)="coverImageViewer($event)">
                                     <div style="margin: 10px; 
                                                 margin-top: 15px;
                                                 width: 200px;
                                                 position: absolute;
                                                 left: 50%;
                                                 transform: translateX(-50%);">
-                                    <img *ngIf=" eventCoverImage != '' " src="{{ eventCoverImage }}"/>
+                                    <img *ngIf=" coverImage != '' " src="{{ coverImage }}"/>
                                     </div>
 
                                 </ion-card-content>
@@ -447,7 +447,7 @@
                             </div>
 
                             <!-- Code block without upload cover image -->
-                            <div id="withoutEventCoverImageLecturer" style="display: inline">
+                            <div id="withoutcoverImageLecturer" style="display: inline">
                               <ion-card style="min-width: 100%;
                                               height: 300px;
                                               margin-left: 0px;">
@@ -594,7 +594,7 @@
                                       <ion-icon name="image-outline" style="color: white;"></ion-icon>
                                       <ion-label style="color: white;
                                                         margin-left: 7px;">
-                                        VIEW <br> IMAGE
+                                        VIEW <br> COVER IMAGE
                                       </ion-label>
                                     </ion-button>
                                   </ion-col>
@@ -613,7 +613,7 @@
                                   <ion-col style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
                                                                                                height: 40px;" color="warning" (click)="viewImageNotice(list)">
-                                      <ion-icon name="image-outline" style="color: white;"></ion-icon>
+                                      <ion-icon name="create-outline" style="color: white;"></ion-icon>
                                       <ion-label style="color: white;
                                                         margin-left: 5px;">
                                         EDIT
@@ -624,7 +624,7 @@
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
                                                                                                height: 40px;" color="danger" 
                                         (click)="removePOLecturersNotice('Confirmation','This notice will be removed, do you want to continue?', list)">
-                                      <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
+                                      <ion-icon name="trash-outline" style="color: white;"></ion-icon>
                                       <ion-label style="color: white;
                                                         margin-left: 5px;">
                                         REMOVE        
@@ -866,7 +866,7 @@
                                       <ion-icon name="image-outline" style="color: white;"></ion-icon>
                                       <ion-label style="color: white;
                                                         margin-left: 7px;">
-                                        VIEW <br> IMAGE
+                                        VIEW <br> COVER IMAGE
                                       </ion-label>
                                     </ion-button>
                                   </ion-col>
@@ -885,7 +885,7 @@
                                   <ion-col style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
                                                                                                height: 40px;" color="warning" (click)="editPOToStudentsNotices(list)">
-                                      <ion-icon name="image-outline" style="color: white;"></ion-icon>
+                                      <ion-icon name="create-outline" style="color: white;"></ion-icon>
                                       <ion-label style="color: white;
                                                         margin-left: 5px;">
                                         EDIT
@@ -896,7 +896,7 @@
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
                                                                                                height: 40px;" color="danger" 
                                         (click)="removePOStudentsNotice('Confirmation','This notice will be removed, do you want to continue?',list)">
-                                      <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
+                                      <ion-icon name="trash-outline" style="color: white;"></ion-icon>
                                       <ion-label style="color: white;
                                                         margin-left: 5px;">
                                         REMOVE        
