@@ -6,6 +6,7 @@ import { ThemeService } from './../theme.service';
 import { AlertController } from '@ionic/angular';
 import { Network } from '@ionic-native/network/ngx';
 import { async } from 'rxjs/internal/scheduler/async';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: "app-home",
@@ -20,12 +21,23 @@ export class homePage implements OnInit {
     private authService: ServicesService,
     private ThemeService: ThemeService,
     private InAppBrowser: InAppBrowser,
-    private network: Network
+    private network: Network,
+    private firebase: ServicesService,
+    private firestore: AngularFirestore,
   ) { }
 
   ngOnInit() {
     if (this.authService.userDetails()) {
       this.userEmail = this.authService.userDetails().email;
+      this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().email).set({
+        Activity: 'Online',
+      }, { merge: true });
+      this.firestore.collection('userActivityMonitoring').add({
+        loginDateTime: new Date(),
+        userId: this.firebase.userDetails().uid,
+        userEmail: this.firebase.userDetails().email,
+
+      })
     } else {
       this.navCtrl.navigateBack("");
     }

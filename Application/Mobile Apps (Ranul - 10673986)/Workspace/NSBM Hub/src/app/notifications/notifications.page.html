@@ -15,12 +15,12 @@
     <ion-card-title>
       {{ Notice.noticeTitle }}
     </ion-card-title>
-    <ion-card-subtitle>{{ Notice.createdDateTime }}</ion-card-subtitle>
   </ion-card-header>
   <ion-card-content>
     <img [src]="Notice.coverImageFilePath" align="middle"/>
     <p>{{ Notice.noticeDescription }}</p>
   </ion-card-content>
+  <p style="font-size: x-small;">{{ Notice.createdDateTime }}</p>
 </ion-card>
 </ion-content>
 
