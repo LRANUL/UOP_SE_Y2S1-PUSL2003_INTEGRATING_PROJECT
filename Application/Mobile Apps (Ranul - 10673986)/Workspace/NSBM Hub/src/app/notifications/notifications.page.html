@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Notices
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ion-refresher slot="fixed" (ionRefresh)="getNotices($event)">
+  <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
+<ion-card color="light" text-center *ngFor="let Notice of Notices">
+  <ion-card-header>
+    <ion-card-title>
+      {{ Notice.noticeTitle }}
+    </ion-card-title>
+    <ion-card-subtitle>{{ Notice.createdDateTime }}</ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    <img [src]="Notice.coverImageFilePath" align="middle"/>
+    <p>{{ Notice.noticeDescription }}</p>
+  </ion-card-content>
+</ion-card>
+</ion-content>
+

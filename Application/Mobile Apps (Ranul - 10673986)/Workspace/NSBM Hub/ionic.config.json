@@ -1,0 +1,8 @@
+{
+  "name": "NSBM",
+  "integrations": {
+    "cordova": {},
+    "capacitor": {}
+  },
+  "type": "angular"
+}
