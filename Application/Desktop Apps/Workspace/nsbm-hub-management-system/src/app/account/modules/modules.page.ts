@@ -5,6 +5,7 @@ import { SideMenuPage } from '../side-menu/side-menu.page';
 import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { EditModuleModalPage } from './edit-module-modal/edit-module-modal.page';
 import { MoreDetailsModulePopoverPage } from './more-details-module-popover/more-details-module-popover.page';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 @Component({
   selector: 'app-modules',
@@ -23,21 +24,22 @@ export class ModulesPage implements OnInit {
   // Page load search module text variable declaration
   pageLoadSearchModuleText: Boolean = true;
 
+
   constructor(
     private modulesService: FirestoreService,
     private formBuilder: FormBuilder,
-    private sideMenuPageUserFaculty: SideMenuPage,
     private alertController: AlertController,
     private modalController: ModalController,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private sideMenuPageUserFaculty: SideMenuPage
   ) { }
 
   ngOnInit() {
-    
+
     // Disabling the button to search for registered modules upon load
     this.searchRegisteredModuleButtonDisabled = "true";
    
-    this.retrievePublishedModuleCreditsWeighting();
+    this.retrievePublishedModuleCreditsWeightingActive();
 
     this.retrievePublishedDegreeProgram();
 
@@ -63,35 +65,37 @@ export class ModulesPage implements OnInit {
       assignedLecturer: new FormControl('', Validators.required),
       assignedLectureHall: new FormControl('', Validators.required)
     });
-
   }
+
+
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
+
+  
+
 
   // Retrieving the published module credits weighting and their details from the firestore database
   publishedModuleCreditsWeighting;
 
-  retrievePublishedModuleCreditsWeighting = () => {
-    this.modulesService.retrievePublishedModuleCreditsWeighting().subscribe(response => (this.publishedModuleCreditsWeighting = response));
+  retrievePublishedModuleCreditsWeightingActive = () => {
+    this.modulesService.retrievePublishedModuleCreditsWeightingActive().subscribe(response => (this.publishedModuleCreditsWeighting = response));
   }
 
 
   // Retrieving the published degree programs and their details from the firestore database
   publishedDegreePrograms;
 
-  publishedDegreeProgramDegree;
-  publishedDegreeProgramAwardingBodyUniversity;
-  publishedDegreeProgramNoOfYears;
-  publishedDegreeProgramNoOfSemestersAnnaully;
-
   retrievePublishedDegreeProgram = () => {
-    this.modulesService.retrievePublishedDegreeProgram(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(response => (this.publishedDegreePrograms = 
-       response.forEach(document => {
-        let firestoreDoc: any = document.payload.doc.data();
-        this.publishedDegreeProgramDegree = firestoreDoc.degree;
-        this.publishedDegreeProgramAwardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
-        this.publishedDegreeProgramNoOfYears = firestoreDoc.deliveryNoOfYears;
-        this.publishedDegreeProgramNoOfSemestersAnnaully = firestoreDoc.deliveryNoOfSemestersAnnually;
-      })
-    ));
+    this.modulesService.retrievePublishedDegreeProgram(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(response => (this.publishedDegreePrograms = response));
   }
 
   // Implementation of generating an array for the count of, no of years and no of semesters
@@ -115,6 +119,24 @@ export class ModulesPage implements OnInit {
     this.modulesService.retrievePublishedLectureHalls(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(response => (this.publishedLectureHalls = response))
   }
 
+  
+  publishedDegreeProgram;
+  awardingBodyUniversity;
+
+  async retrieveAwardingBodyUniversity(event){
+
+    let selectedDegree = event.detail.value;
+
+    // Retrieving the awardingBody University of the selected degree
+    this.modulesService.retrievingAwardingBodyUniversityOfDegree(selectedDegree, this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(response => (this.publishedDegreeProgram =
+      response.forEach(document => {
+        let firestoreDoc: any = document.payload.doc.data();
+        this.awardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
+        console.log(this.awardingBodyUniversity);
+      })
+    ));
+
+  }
 
 
   // Declaring variable to store the string value of true or false for the search registered modules button
@@ -137,7 +159,7 @@ export class ModulesPage implements OnInit {
 
   // Checking if user entered a value to module title field (Search Registered Module section)
   validateModuleTitleInput(evModuleTitle: any){
-  
+
     // Assigning entered value into this variable
     let moduleTitleValue = evModuleTitle.target.value;
 
@@ -264,16 +286,11 @@ export class ModulesPage implements OnInit {
       }
       if(value.degreeProgram != ""){
 
-        // Identifying the awardingBodyUniversity from the user selected degree
-        if(value.degreeProgram == this.publishedDegreeProgramDegree){
-          this.userDataAwardingBodyUniversity = this.publishedDegreeProgramAwardingBodyUniversity;
-        }
-
         // Retrieving registered modules with the search value of degreeProgram
-        this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passUserFaculty(), value.degreeProgram, this.userDataAwardingBodyUniversity).subscribe(response => (this.registeredModules = response));
+        this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passUserFaculty(), value.degreeProgram, this.awardingBodyUniversity).subscribe(response => (this.registeredModules = response));
         
         // Assigning loading spinner to false upon the necessary content has loaded
-        this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passUserFaculty(), value.degreeProgram, this.userDataAwardingBodyUniversity).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+        this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passUserFaculty(), value.degreeProgram, this.awardingBodyUniversity).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
 
       }
 
@@ -281,11 +298,11 @@ export class ModulesPage implements OnInit {
 
   }
 
-  
 
 
-   // Opening more details module popover
-   async moreDetailsRegisteredModule(ev: Event, value){
+
+  // Opening more details module popover
+  async moreDetailsRegisteredModule(ev: Event, value){
     const moreDetailsModulePopover = await this.popoverController.create({
       component: MoreDetailsModulePopoverPage,
       componentProps: {
@@ -362,23 +379,23 @@ export class ModulesPage implements OnInit {
   }
 
 
-  
+
 
 
 
   // Function for the process of searching modules
   doRegisterModule(value){
 
-    // Identifying the awardingBodyUniversity from the user selected degree
-    if(value.degreeProgram == this.publishedDegreeProgramDegree){
-      this.userDataAwardingBodyUniversity = this.publishedDegreeProgramAwardingBodyUniversity;
-    }
+    console.log(value);
 
     // Calling the function to add the details into firestore database by passing the necessary value.
-    this.modulesService.registerModule(this.sideMenuPageUserFaculty.passUserFaculty(), value, this.userDataAwardingBodyUniversity);
+    this.modulesService.registerModule(this.sideMenuPageUserFaculty.passUserFaculty(), value, this.awardingBodyUniversity);
 
     this.alertNotice("Module Registered", "Module has been registered.");
 
   }
+
+
+
 
 }

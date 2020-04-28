@@ -67,6 +67,15 @@ export class FirestoreService {
   }
 
 
+  // Creating new document into user activity monitoring collection in firestore database
+  userActivityMonitoring(loggedInUserId, loggedInUserEmail){
+    this.fireStore.collection("userActivityMonitoring/").add({
+      loginDateTime: new Date(),
+      userEmail: loggedInUserEmail,
+      userId: loggedInUserId
+    }); 
+  }
+
 
   // Retriving the current date and time from the localhost
   currentDT = new Date();
@@ -527,7 +536,7 @@ export class FirestoreService {
 
   // Adding new notice category by creating a new document and assigning the values to firestore database
   addNewNoticeCategory(value){
-      this.fireStore.collection("categories/noticeCategories/").add({
+      this.fireStore.collection("categories/categoryTypes/noticeCategories/").add({
           category: value.category,
           description: value.description
       });
@@ -535,7 +544,7 @@ export class FirestoreService {
 
   // Adding new news category by creating a new document and assigning the values to firestore database
   addNewNewsCategory(value){
-    this.fireStore.collection("categories/newsCategories/").add({
+    this.fireStore.collection("categories/categoryTypes/newsCategories/").add({
         category: value.category,
         description: value.description
     });
@@ -676,6 +685,12 @@ export class FirestoreService {
               .where("startDateTime", ">=", new Date(currentDate))
               .where("startDateTime", "<=", new Date(nextDate))
               ).snapshotChanges();
+  }
+
+  // Retrieving published ACTIVE module credits weighting and their details from the firestore database
+  retrievePublishedModuleCreditsWeightingActive() {
+    return this.fireStore.collection("noOfModuleCreditsWeighting", ref => ref
+        .where("status", "==", "Active")).snapshotChanges();
   }
 
   // Retrieving published lecture sessions for the current date and their details from the firestore database fro the 
@@ -951,12 +966,12 @@ export class FirestoreService {
 
   // Removing published notice category from the firestore database
   removeNoticeCategory(docId){
-      return this.fireStore.doc("categories/noticeCategories/"+ docId).delete();
+      return this.fireStore.doc("categories/categoryTypes/noticeCategories/"+ docId).delete();
   }
 
   // Removing published news category from the firestore database
   removeNewsCategory(docId){
-    return this.fireStore.doc("categories/newsCategories/"+ docId).delete();
+    return this.fireStore.doc("categories/categoryTypes/newsCategories/"+ docId).delete();
   }
 
 

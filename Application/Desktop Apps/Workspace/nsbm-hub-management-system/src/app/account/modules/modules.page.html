@@ -52,7 +52,6 @@
 
 <ion-content>
 
-
   <ion-grid>
 
     <ion-row>
@@ -101,16 +100,15 @@
                         <ion-label style="color: #ccc;">
                           Select Degree Program
                         </ion-label>
-                        <ion-select cancelText="Cancel" okText="Continue" style="min-width: 40%;" formControlName="degreeProgram" (ionChange)="validateDegreeProgramSelect($event)">
-                          <ion-select-option value=""></ion-select-option>
-                          <ion-select-option value="{{ publishedDegreeProgramDegree }}">{{ publishedDegreeProgramDegree }}, {{ publishedDegreeProgramAwardingBodyUniversity }}</ion-select-option>
+                        <ion-select cancelText="Cancel" okText="Continue" style="min-width: 40%;" formControlName="degreeProgram" (ionChange)="retrieveAwardingBodyUniversity($event)">
+                          <ion-select-option *ngFor="let item of publishedDegreePrograms" value="{{ item.payload.doc.data().degree }}">{{ item.payload.doc.data().degree }}, {{ item.payload.doc.data().awardingBodyUniversity }}</ion-select-option>
                         </ion-select>
                       </ion-item>
                     </ion-col>
                     <ion-col size="2">
                       <ion-button expand="block" type="submit" style="margin-top: 0px;
                                                                       min-height: 50px;
-                                                                      font-size: 18px;" [disabled]="searchRegisteredModuleButtonDisabled">
+                                                                      font-size: 18px;" [disabled]="!searchRegisteredModuleForm.valid">
                         <ion-icon name="search-outline" style="margin-right: 10px;"></ion-icon>
                         SEARCH
                       </ion-button>
@@ -123,7 +121,7 @@
 
 
             <div style="overflow-y: scroll; 
-                        height: 500px;
+                        height: 700px;
                         margin-top: 15px;
                         border-top: #ccc solid 1px;">
 
@@ -136,8 +134,7 @@
                                                           font-size: 18px;
                                                           border: rgb(100, 116, 121) solid 2px;
                                                           border-radius: 5px;
-                                                          padding: 15px;
-                                                          min-width: 53%;">
+                                                          padding: 15px;">
                 <ion-icon name="chevron-up-circle-outline" style="color: rgb(8, 177, 219);
                                                                   font-size: 30px;
                                                                   margin-top: 2px;
@@ -208,7 +205,7 @@
                               </ion-button>
                             </ion-col>
                             <ion-col>
-                              <ion-button expand="block" color="danger" style="min-width: 100%;" (click)="removeRegisteredModule('Confirmation', 'Module will be removed, do you want to continue?' , item.payload.doc.id)">
+                              <ion-button expand="block" color="danger" style="min-width: 100%;" (click)="removeRegisteredModule('Confirmation Required', 'Module will be removed, do you want to continue?' , item.payload.doc.id)">
                                 <ion-icon name="trash" style="font-size: 25px;
                                                               margin-right: 5px;"></ion-icon>
                                 Remove
@@ -308,8 +305,10 @@
 
                           <ion-item class="registerModuleFormItem">
                             <ion-label class="registerModuleUserInputLabel">Degree</ion-label>
-                            <ion-select cancelText="Cancel" okText="Continue" style="min-width: 80%;" formControlName="degreeProgram">
-                              <ion-select-option value="{{ publishedDegreeProgramDegree }}">{{ publishedDegreeProgramDegree }}, {{ publishedDegreeProgramAwardingBodyUniversity }}</ion-select-option>
+                            <ion-select cancelText="Cancel" okText="Continue" style="min-width: 80%;" formControlName="degreeProgram" (ionChange)="retrieveAwardingBodyUniversity($event)">
+                              <ion-select-option *ngFor="let item of publishedDegreePrograms" 
+                                value="{{ item.payload.doc.data().degree }}">
+                                {{ item.payload.doc.data().degree }}, {{ item.payload.doc.data().awardingBodyUniversity }}</ion-select-option>
                             </ion-select>
                           </ion-item>
 
@@ -330,12 +329,18 @@
 
                             <ion-row>
                               <ion-select placeholder="Year" style="min-width: 95%;" formControlName="academicPeriodYear">
-                                <ion-select-option *ngFor="let item of convertToArray(publishedDegreeProgramNoOfYears); let i = index" value="{{ i + 1 }}">Year {{ i + 1 }}</ion-select-option>
+                                <ion-select-option value="1">Year 1</ion-select-option>
+                                <ion-select-option value="2">Year 2</ion-select-option>
+                                <ion-select-option value="3">Year 3</ion-select-option>
+                                <ion-select-option value="4">Year 4</ion-select-option>
                               </ion-select>
                             </ion-row>
                             <ion-row>
                               <ion-select placeholder="Semester" style="min-width: 95%;" formControlName="academicPeriodSemester">
-                                <ion-select-option *ngFor="let item of convertToArray(publishedDegreeProgramNoOfSemestersAnnaully); let i = index" value="{{ i + 1 }}">Semester {{ i + 1 }}</ion-select-option>
+                                <ion-select-option value="1">Semester 1</ion-select-option>
+                                <ion-select-option value="2">Semester 2</ion-select-option>
+                                <ion-select-option value="3">Semester 3</ion-select-option>
+                                <ion-select-option value="4">Semester 4</ion-select-option>
                               </ion-select>
                             </ion-row>
 
@@ -400,7 +405,7 @@
                           <ion-item class="registerModuleFormItem">
                             <ion-label class="registerModuleUserInputLabel">Assigned Lecture Hall</ion-label>
                             <ion-select placeholder="Lecture Hall" cancelText="Cancel" okText="Continue" style="min-width: 100%;" formControlName="assignedLectureHall">
-                              <ion-select-option *ngFor="let item of publishedLectureHalls" value="{{ item.payload.doc.id }}">{{ item.payload.doc.id }}</ion-select-option>
+                              <ion-select-option *ngFor="let item of publishedLectureHalls" value="{{ item.payload.doc.data().lectureHall }}">{{ item.payload.doc.data().lectureHall }}</ion-select-option>
                             </ion-select>
                           </ion-item>
 

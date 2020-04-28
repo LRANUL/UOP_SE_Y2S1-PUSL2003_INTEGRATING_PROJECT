@@ -100,6 +100,7 @@ export class SideMenuPage implements OnInit {
 
     console.log(this.userDetailsAuth);
     console.log(this.userDetailsAuth.uid);
+    console.log(this.userDetailsAuth.email);
 
     this.retrieveLoggedInUserDetailsFirestore();
 
