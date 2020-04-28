@@ -9,6 +9,10 @@ const routes: Routes = [
   {
     path: '',
     component: SemesterCalendarPage
+  },
+  {
+    path: 'edit-lecture-series-modal',
+    loadChildren: () => import('./edit-lecture-series-modal/edit-lecture-series-modal.module').then( m => m.EditLectureSeriesModalPageModule)
   }
 ];
 

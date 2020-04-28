@@ -7,11 +7,13 @@ import { IonicModule } from '@ionic/angular';
 import { LectureSchedulePageRoutingModule } from './lecture-schedule-routing.module';
 
 import { LectureSchedulePage } from './lecture-schedule.page';
+import { NgCalendarModule } from 'ionic2-calendar';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    NgCalendarModule,
     IonicModule,
     LectureSchedulePageRoutingModule
   ],

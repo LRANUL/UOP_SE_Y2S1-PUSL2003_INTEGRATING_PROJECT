@@ -149,16 +149,17 @@
                                                             width: 100px;" *ngIf="loginLoadingSpinner"></ion-spinner>
     </div>
 
-    <button ion-button (click)="OpenAboutModal()" style="color: white;
-                                                    background-color: #848484;
-                                                    padding: 10px;
-                                                    border-radius: 5px;
-                                                    width: 90px;
-                                                    height: 35px;
-                                                    font-size: 16px;
-                                                    position: absolute; 
-                                                    top: 800px;
-                                                    right: 70px;">About</button>
+    <ion-button color="medium" (click)="OpenAboutModal()" style="padding: 10px;
+                                                                border-radius: 5px;
+                                                                height: 60px;
+                                                                font-size: 16px;
+                                                                position: absolute; 
+                                                                top: 800px;
+                                                                right: 70px;">
+      <ion-label>
+        About
+      </ion-label>
+    </ion-button>
 
 
   </div>

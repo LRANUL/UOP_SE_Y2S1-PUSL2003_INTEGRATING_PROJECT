@@ -428,6 +428,40 @@ export class FirestoreService {
     });
   }
 
+   // Adding new lecture session by creating a new document in firestore database
+   addNewLectureSession(userFaculty, value, degreeCode, awardingBodyUniversity, moduleTitle, sessionStartDateTime, sessionEndDateTime){
+    this.fireStore.collection("faculties/" + userFaculty + "/lectureSessions/").add({
+        academicSemester: parseInt(value.academicPeriodSemester),
+        academicYear: parseInt(value.academicPeriodYear),
+        degree: value.degreeProgram,
+        awardingBodyUniversity: awardingBodyUniversity,
+        degreeCode: degreeCode,
+        batch: value.batch,
+        startDateTime: new Date(sessionStartDateTime),
+        endDateTime: new Date(sessionEndDateTime),
+        lectureHall: value.lectureHall,
+        lecturer: value.lecturer,
+        moduleCode: value.module,
+        moduleTitle: moduleTitle,
+        status: value.status
+    });
+  }
+
+  // Adding new lecture series by creating a new document in firestore database
+  createNewLectureSeries(value, userFaculty, awardingBodyUniversity, moduleTitle) {
+    this.fireStore.collection("faculties/" + userFaculty + "/lectureSeries/").add({
+        degree: value.degreeProgram,
+        awardingBodyUniversity: awardingBodyUniversity,
+        batch: value.batch,
+        enrollmentKey: value.enrollmentKey,
+        noOfLectures: value.noOfLectures,
+        moduleCode: value.module,
+        moduleTitle: moduleTitle,
+        enrolledStudents: ["Initial Series Creation"]
+    });
+  }
+
+
   // Publishing new event session by adding the details to the firestore database
   publishNewEventSession(userFaculty, value, eventStartDateTime, eventEndDateTime){
     // Creating an ID for the document
@@ -584,8 +618,15 @@ export class FirestoreService {
   }
 
 
-
-
+  // Retrieving published lecture series and their details from the firestore database
+  retrievePublishedLectureSeries(userFaculty, value, awardingBodyUniversity, moduleTitle) {
+    return this.fireStore.collection("faculties/" + userFaculty + "/lectureSeries/", ref => ref
+        .where("degree", "==", value.degreeProgram)
+        .where("awardingBodyUniversity", "==", awardingBodyUniversity)
+        .where("moduleCode", "==", value.module)
+        .where("moduleTitle", "==", moduleTitle)
+        .where("batch", "==", value.batch)).snapshotChanges();
+  }
 
   // Retrieving published news from current date to three days before from the firestore database
   retrievePublishedNews(currentDate, dateThreeDaysBeforeCurrentDate){
@@ -666,8 +707,19 @@ export class FirestoreService {
 
 
 
+  // Retrieving published lecture sessions and their details from the firestore database
+  retrieveAllPublishedLectureSessions(userFaculty) {
+    return this.fireStore.collection("faculties/" + userFaculty + "/lectureSessions").snapshotChanges();
+  }
 
-  
+  // Retrieving published lecture sessions and their detais from the firestore database for the current date
+  retrievePublishedLectureSessionsCurrentDate(userFaculty, currentDate, nextDate) {
+    return this.fireStore.collection("faculties/"+ userFaculty +"/lectureSessions", ref => ref
+            .where("startDateTime", ">=", new Date(currentDate))
+            .where("startDateTime", "<=", new Date(nextDate))
+            .orderBy("startDateTime")
+            ).snapshotChanges();
+  }
 
   // Retrieving published lecture session and their detais from the firestore database for the semester calendar page
   retrievePublishedLectureSessionsSemesterCalendar(userFaculty, value, userSelectedAwardingBodyUniversity) {
@@ -693,10 +745,10 @@ export class FirestoreService {
         .where("status", "==", "Active")).snapshotChanges();
   }
 
-  // Retrieving published lecture sessions for the current date and their details from the firestore database fro the 
-  // dashboard page, today's lectures section
-  retrievePublishedLectureSessionsDashboardTodayLectures(userFaculty) {
-    return this.fireStore.collection("faculties/"+ userFaculty +"/lectureSessions").snapshotChanges();
+  // Retrieving the moduleTitle from the selected module title from the firestore database
+  retrievingModuleTitleOfModuleCode(moduleCode, userFaculty) {
+    return this.fireStore.collection("faculties/" + userFaculty + "/modules", ref => ref
+        .where("moduleCode", "==", moduleCode)).snapshotChanges();
   }
 
   // Retrieving published oncoming lecture sessions from the current date and their details from the firestore database
@@ -974,8 +1026,10 @@ export class FirestoreService {
     return this.fireStore.doc("categories/categoryTypes/newsCategories/"+ docId).delete();
   }
 
-
-
+  // Removing published lecture series from the firestore database
+  removeLectureSeries(docId, userFaculty){
+    return this.fireStore.doc("faculties/"+ userFaculty +"/lectureSeries/"+ docId).delete();
+  }
 
 
 

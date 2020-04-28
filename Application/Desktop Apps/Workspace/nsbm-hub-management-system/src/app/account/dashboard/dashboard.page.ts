@@ -19,19 +19,54 @@ export class DashboardPage implements OnInit {
 
   currentDate;
 
+  nextDate;
+
   dateThreeDaysBeformCurrentDate;
+
+  showLoadingDotsTodaysLectureSession: Boolean = true;
+
+  noLectureSessionsTodayText: Boolean = false;
+
+  noLectureSessionText: Boolean = false;
+
+  showLoadingDotsUpcomingLectureSession: Boolean = false;
+
+
 
   constructor(
     private dashboardService: FirestoreService,
     private sideMenuPageUserFaculty: SideMenuPage,
     private popoverController: PopoverController
-  ) {
+  ) { }
 
-   }
+  // Calling the ngOnInit() function when page is rendered on the user's screen
+  ionViewWillEnter(){
+    this.ngOnInit();
+  }
 
   ngOnInit() {
 
+    // Retrieving current date and time
+    // Sample: Sun Apr 19 2020 18:44:52 GMT+0530 (India Standard Time)
     this.currentDate = new Date();
+
+    // Setting currentDate time section to zero leaving the date as it is
+    // Sample: Sun Apr 19 2020 00:00:00 GMT+0530 (India Standard Time)
+    this.currentDate.setHours(0,0,0,0);
+
+    // Retrieving current date and time
+    // Sample: Sun Apr 19 2020 18:44:52 GMT+0530 (India Standard Time)
+    this.nextDate = new Date();
+
+    // Setting nextDate time section to zero leaving the date as it is
+    // Sample: Sun Apr 19 2020 00:00:00 GMT+0530 (India Standard Time)
+    this.nextDate.setHours(0,0,0,0);
+
+    // Setting date section to increment by one
+    // Sample: Sun Apr 20 2020 00:00:00 GMT+0530 (India Standard Time)
+    this.nextDate.setDate(this.nextDate.getDate()+1);
+
+
 
     this.dateThreeDaysBeformCurrentDate = new Date();
 
@@ -44,7 +79,7 @@ export class DashboardPage implements OnInit {
     console.log(this.sideMenuPageUserFaculty.passUserFaculty());
 
 
-    this.retrievePublishedLectureSessionsDashboardTodayLectures();
+    this.retrievePublishedLectureSessionsCurrentDate();
 
     this.retrievePublishedLectureSessionsDashboardUpcomingLecturers();
 
@@ -53,30 +88,20 @@ export class DashboardPage implements OnInit {
   }
   
 
-  // Retrieving the published lecture sessions fro the current date from the firestore database
-  todaysLectureSessions;
-
-  publishedDocId;
-
-  /*
-  publishedDegree;
-  publishedAwardingBodyUniversity;
-  publishedAcademicPeriodYear;
-  publishedAcademicPeriodSemester;
-  */
-
-  retrievePublishedLectureSessionsDashboardTodayLectures = () => {
-    this.dashboardService.retrievePublishedLectureSessionsDashboardTodayLectures(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(response => (this.todaysLectureSessions = 
-      response/*.forEach(document => {
-        let firestoreDoc: any = document.payload.doc.data();
-        this.publishedDocId = document.payload.doc.id;
-        this.publishedDegree = firestoreDoc.degree;
-        this.publishedAwardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
-        this.publishedAcademicPeriodYear = firestoreDoc.academicYear;
-        this.publishedAcademicPeriodSemester = firestoreDoc.academicSemester;
-      }) */
-    ));
-  }
+  
+  // Retrieving published lecture sessions for the current date from the firestore datbase
+  publishedLectureSessionsCurrentDate;
+  retrievePublishedLectureSessionsCurrentDate = () => 
+    this.dashboardService.retrievePublishedLectureSessionsCurrentDate(this.sideMenuPageUserFaculty.passUserFaculty(), this.currentDate, this.nextDate).subscribe(response => {
+      if (response.length > 0) {
+        this.showLoadingDotsTodaysLectureSession = false;
+        this.publishedLectureSessionsCurrentDate = response;
+      }
+      else {
+        this.showLoadingDotsTodaysLectureSession = false;
+        this.noLectureSessionsTodayText = true;
+      }
+  });
 
   // More details of today's lecture sessions popover
   async moreDetailsTodaysLectureSession(ev: Event, value){
@@ -101,22 +126,32 @@ export class DashboardPage implements OnInit {
   retrievePublishedLectureSessionsDashboardUpcomingLecturers = () => {
     // Retrieving the published oncoming lecture sessions from the current date from the firestore database
     this.dashboardService.retrievePublishedLectureSessionsDashboardUpcomingLectures(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(response => {
-      this.eventSourceLecture = []; // Clearing the existing events on the calendar before syncing 
-      (
-        this.lectureSlots = response.forEach(snap => {
-        let eventLecture:any = snap.payload.doc.data();
-        eventLecture.id = snap.payload.doc.id;
-        eventLecture.title = eventLecture.moduleCode + "-" + eventLecture.moduleTitle + " | Status: " + eventLecture.status;
-        eventLecture.startTime = eventLecture.startDateTime.toDate();
-        eventLecture.endTime = eventLecture.endDateTime.toDate();
+      // Setting loading spinner in upcoming lecture sessions to stop spinning
+      this.showLoadingDotsUpcomingLectureSession = false;
 
-        console.log(eventLecture)
+      this.eventSourceLecture = []; // Clearing the existing lecture sessions on the calendar before syncing 
+      response.forEach(snap => {
+        let eventLectureSession:any = snap.payload.doc.data();
+        eventLectureSession.id = snap.payload.doc.id;
+        eventLectureSession.title = eventLectureSession.moduleCode + "-" + eventLectureSession.moduleTitle;
+        eventLectureSession.startTime = eventLectureSession.startDateTime.toDate();
+        eventLectureSession.endTime = eventLectureSession.endDateTime.toDate();
 
-        this.eventSourceLecture.push(eventLecture);
-      })
-    )}
-    );
+        this.eventSourceLecture.push(eventLectureSession);
+      });
+
+    }, error => {
+      // Setting loading spinner in upcoming lecture sessions to stop spinning
+      this.showLoadingDotsUpcomingLectureSession = false;
+
+      console.log("Error: " + error);
+      this.alertNotice("Error", "An error has occurred: " + error);
+    });
+
+
   }
+
+
 
   // More details of Upcoming lecture sessions popover
   async moreDetailsUpcomingLectureSession(ev: Event, value){
@@ -181,9 +216,8 @@ export class DashboardPage implements OnInit {
     this.dashboardService.retrievePublishedLecturerToPONotice(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => (this.publishedNoticesLecturerToPO = response));
 
 
-  // Declared to hold the events as array to determine the no of lecture sessions
-  noOfLectureSessions = [];
-
+  // Declared to hold the events as array to store the sessions
+  lectureSessionDocuments = [];
 
   // Lecture Calendar
   eventSourceLecture;
@@ -197,17 +231,16 @@ export class DashboardPage implements OnInit {
   selectedDate = new Date();
 
   nextMonthLecture(){
-    var frontSwipeLecture = document.getElementById('LectureCalendar').querySelector('.swiper-container')['swiper'];
+    var frontSwipeLecture = document.getElementById('weeksLectureCalendar').querySelector('.swiper-container')['swiper'];
     frontSwipeLecture.slideNext();
   }
 
   previousMonthLecture(){
-    var backSwipeLecture = document.getElementById('LectureCalendar').querySelector('.swiper-container')['swiper'];
+    var backSwipeLecture = document.getElementById('weeksLectureCalendar').querySelector('.swiper-container')['swiper'];
     backSwipeLecture.slidePrev();
   }
 
   onViewTitleChangedLecture(title){
-    console.log(title);
     this.viewingMonthLecture = title; 
   }
 
@@ -220,23 +253,26 @@ export class DashboardPage implements OnInit {
       ", disabled: " + evt.disabled);
 
       if((evt.events !== undefined && evt.events.length !== 0) == false){
-        this.noOfLectureSessions = [];
+        this.noLectureSessionText = true;
+        this.lectureSessionDocuments = [];
       }
       else if ((evt.events !== undefined && evt.events.length !== 0) == true){
-        this.noOfLectureSessions = evt.events;
+        this.noLectureSessionText = false;
+        this.lectureSessionDocuments = evt.events;
       }
-      console.log(this.noOfLectureSessions);
   }
 
   onCurrentDateChangedLecture(event: Date){
     console.log("Current Lecture Session Date Change: " + event);
 
-    this.noOfLectureSessions = [];
+    this.lectureSessionDocuments = [];
   }
 
   onRangeChangedLecture(evt) {
     console.log("Lecture Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
   }
+ 
+ 
 
 
   // Declared to hold the events as array to determine the no of event sessions

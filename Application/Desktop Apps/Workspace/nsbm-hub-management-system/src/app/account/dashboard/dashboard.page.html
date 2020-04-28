@@ -66,56 +66,165 @@
       <ion-col size="9">
         <ion-row>
           <ion-col>
-
-            <ion-card style="height: 430px;">
+            <ion-card style="height: 580px;">
               <ion-card-header>
-                <h4>Today's Lectures</h4>
+                <ion-card-title>
+                  Today's Lecturers
+                </ion-card-title>
               </ion-card-header>
               <ion-card-content>
 
-                <ion-grid>
+                <ion-grid style="height: 510px;
+                                overflow-y: scroll;">
                   <ion-row>
-                    <ion-col size="3" size-sm="3" size-lg="3" *ngFor="let item of todaysLectureSessions">
+                    <ion-col size="3" size-sm="12" size-lg="3" size-xl="3" *ngFor="let item of publishedLectureSessionsCurrentDate">
 
-
-
-                      <ion-card style="height: 210px;
-                                        width: 230px;
-                                        margin-top: -10px;">
-                      <ion-card-header>
-                        <ion-button shape="round" color="primary" size="small" style="position: absolute;
+                      <ion-card style="margin-top: -5px;">
+                        <ion-card-header>
+                          <ion-button shape="round" color="primary" size="small" style="position: absolute;
                                                                                       top: 0px;
-                                                                                      left: 185px;
+                                                                                      left: 75%;
                                                                                       width: 40px;
                                                                                       height: 40px;" (click)="moreDetailsTodaysLectureSession($event, item)">
-                          <ion-icon name="document-text-outline"></ion-icon>
-                        </ion-button>
-                        <ion-label>
-                          {{ item.payload.doc.data().moduleCode }}
-                        </ion-label>
-                      </ion-card-header>
-                      <ion-card-content>
-                        <ion-label>
-                          {{ item.payload.doc.data().moduleTitle }} <br>
-                          <b>Lecture Hall: </b> {{ item.payload.doc.data().lectureHall }} <br>
-                          <b>Batch:  </b> {{ item.payload.doc.data().batch }} <br>
-                          <b>Lecturer:  </b> {{ item.payload.doc.data().lecturer }} <br>
-                          <b>Start Time: </b> {{ (item.payload.doc.data().startDateTime.toDate()).getHours() }} : {{ (item.payload.doc.data().startDateTime.toDate()).getMinutes() }} <br>
-                          <b>End Time: </b> {{ (item.payload.doc.data().endDateTime.toDate()).getHours() }} : {{ (item.payload.doc.data().endDateTime.toDate()).getMinutes() }}<br>
-                          <b>Status: </b> {{ item.payload.doc.data().status }}
-                        </ion-label>
-                      </ion-card-content>
-                    </ion-card>
-
-
+                            <ion-icon name="document-text-outline"></ion-icon>
+                          </ion-button>
+                          <ion-card-title>
+                            <ion-label>
+                              {{ item.payload.doc.data().moduleCode }}
+                            </ion-label>
+                          </ion-card-title>
+                          <ion-card-subtitle>
+                            <ion-label>
+                              {{ item.payload.doc.data().moduleTitle }}
+                            </ion-label>
+                          </ion-card-subtitle>
+                        </ion-card-header>
+                        <ion-card-content>
+                          <ion-grid>
+                            <ion-row>
+                              <ion-col size="6">
+                                <ion-label>
+                                  <b>Lecture Hall: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col size="6">
+                                <ion-label>
+                                  {{ item.payload.doc.data().lectureHall }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <ion-label>
+                                  <b>Batch: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col>
+                                <ion-label>
+                                  {{ item.payload.doc.data().batch }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <ion-label>
+                                  <b>Degree Code: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col>
+                                <ion-label>
+                                  {{ item.payload.doc.data().degreeCode }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <ion-label>
+                                  <b>Lecturer: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col>
+                                <ion-label>
+                                  {{ item.payload.doc.data().lecturer }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <ion-label>
+                                  <b>Start Time: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col>
+                                <ion-label>
+                                  {{ item.payload.doc.data().startDateTime.toDate() | date: 'h:mm a' }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <ion-label>
+                                  <b>End Time: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col>
+                                <ion-label>
+                                  {{ item.payload.doc.data().endDateTime.toDate() | date: 'h:mm a' }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <ion-label>
+                                  <b>Status: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col>
+                                <ion-label>
+                                  {{ item.payload.doc.data().status }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-card-content>
+                      </ion-card>
 
                     </ion-col>
                   </ion-row>
                 </ion-grid>
 
+                <!-- Loading Spinner -->
+                <ion-spinner name="dots" style="position: absolute;
+                                                left: 50%;
+                                                top: 40%;
+                                                transform: translate(-50%,-60%);
+                                                margin-top: 20px;
+                                                height: 100px;
+                                                width: 100px;" *ngIf="showLoadingDotsTodaysLectureSession"></ion-spinner>
+
+                  <!-- Page loading search module text -->
+                <div *ngIf="noLectureSessionsTodayText" style="position: absolute;
+                                                            top: 150px;
+                                                            left: 50%;
+                                                            transform: translateX(-50%);
+                                                            font-size: 18px;
+                                                            border: #ccc solid 2px;
+                                                            border-radius: 5px;
+                                                            padding: 15px;
+                                                            min-width: 200px;">
+                  <ion-icon name="close-circle-outline" style="color: rgb(8, 177, 219);
+                                                              font-size: 30px;
+                                                              margin-top: 2px;
+                                                              margin-right: 10px;"></ion-icon>
+                  <ion-label style="position: relative;
+                                    top: -8px;
+                                    text-align: center;">
+                    No Lecture Sessions assigned for today.
+                  </ion-label>
+                </div>
+
               </ion-card-content>
             </ion-card>
-
           </ion-col>
         </ion-row>
         <ion-row>
@@ -155,7 +264,7 @@
                     [calendarMode]="calendarLecture.mode"
                     [currentDate]="calendarLecture.currentDate"
                     (onCurrentDateChanged)="onCurrentDateChangedLecture($event)"
-                    (onRangeChanged)="reloadSourceLecture(startTime, endTime)"
+                    (onRangeChanged)="onRangeChangedLecture($event)"
                     (onEventSelected)="onEventSelectedLecture($event)"
                     (onTitleChanged)="onViewTitleChangedLecture($event)"
                     (onTimeSelected)="onTimeSelectedLecture($event)"
@@ -179,6 +288,28 @@
                     <ion-icon name="document-text" style="font-size: 30px;"></ion-icon>
                   </ion-button>
                 </div>
+
+                <div style="position: absolute;
+                            left: 50%;
+                            top: 60%;
+                            transform: translate(-50%,-40%);" *ngIf="noLectureSessionText">
+                  <ion-item style="border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  padding: 5px;">
+                    <ion-label style="font-size: 17px;">
+                      No Lecture Sessions on the selected date
+                    </ion-label>
+                  </ion-item>
+                </div>
+
+                <!-- Loading Spinner -->
+                <ion-spinner name="dots" style="position: absolute;
+                                                left: 50%;
+                                                top: 50%;
+                                                transform: translate(-50%,-50%);
+                                                margin-top: 20px;
+                                                height: 100px;
+                                                width: 100px;" *ngIf="showLoadingDotsUpcomingLectureSession"></ion-spinner>
 
               </ion-card-content>
             </ion-card>

@@ -55,6 +55,7 @@ import { EditNoticeCategoryModalPageModule } from './account/settings/editModals
 import { EditNewsCategoryModalPageModule } from './account/settings/editModals/edit-news-category-modal/edit-news-category-modal.module';
 import { UpdateAccountDetailsModalPageModule } from './account/settings/update-account-details-modal/update-account-details-modal.module';
 import { UpdateAccountPasswordModalPageModule } from './account/settings/update-account-password-modal/update-account-password-modal.module';
+import { EditLectureSeriesModalPageModule } from './account/semester-calendar/edit-lecture-series-modal/edit-lecture-series-modal.module';
 
 
 @NgModule({
@@ -98,7 +99,8 @@ import { UpdateAccountPasswordModalPageModule } from './account/settings/update-
     EditNoticeCategoryModalPageModule,
     EditNewsCategoryModalPageModule,
     UpdateAccountDetailsModalPageModule,
-    UpdateAccountPasswordModalPageModule
+    UpdateAccountPasswordModalPageModule,
+    EditLectureSeriesModalPageModule
   ],
   providers: [
     StatusBar,
