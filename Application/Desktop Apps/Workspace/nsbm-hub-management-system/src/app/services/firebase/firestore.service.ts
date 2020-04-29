@@ -38,6 +38,17 @@ export class FirestoreService {
     return firebase.auth().currentUser
   }
 
+  // Updating account activity field in the logged in program office user document in the firestore database
+  updateProgramOfficeUserActivity(accountActivity, docId){
+    return new Promise<any>((resolve, reject) => {
+        this.fireStore.doc("/users/userTypes/programOfficeUsers/"+ docId).update({
+            accountActivity: accountActivity
+        })
+        .then(response => resolve(response),
+            error => reject(error))
+    });
+  }
+
   // Verifying entered login credentials after the user has already logged in
   verifyLoginCredentials(value) {
     return new Promise<any>((resolve, reject) => {
@@ -428,8 +439,8 @@ export class FirestoreService {
     });
   }
 
-   // Adding new lecture session by creating a new document in firestore database
-   addNewLectureSession(userFaculty, value, degreeCode, awardingBodyUniversity, moduleTitle, sessionStartDateTime, sessionEndDateTime){
+  // Adding new lecture session by creating a new document in firestore database
+  addNewLectureSession(userFaculty, value, degreeCode, awardingBodyUniversity, moduleTitle, sessionStartDateTime, sessionEndDateTime){
     this.fireStore.collection("faculties/" + userFaculty + "/lectureSessions/").add({
         academicSemester: parseInt(value.academicPeriodSemester),
         academicYear: parseInt(value.academicPeriodYear),
@@ -683,7 +694,7 @@ export class FirestoreService {
     return this.fireStore.collection("notices/noticeTypes/notices-Lecturers-To-PO/", ref => ref
         .where("noticeCreated.noticeCreatedDateTime", ">=", new Date(selectedDate))
         .where("noticeCreated.noticeCreatedDateTime", "<=", new Date(nextDate))
-        .orderBy("noticeCreatedInfo.noticeCreatedDateTime", "desc")
+        .orderBy("noticeCreated.noticeCreatedDateTime", "desc")
     ).snapshotChanges();
   }
 
@@ -692,7 +703,7 @@ export class FirestoreService {
       return this.fireStore.collection("notices/noticeTypes/notices-PO-To-Students/", ref => ref
           .where("noticeCreated.noticeCreatedDateTime", ">=", new Date(selectedDate))
           .where("noticeCreated.noticeCreatedDateTime", "<=", new Date(nextDate))
-          .orderBy("noticeCreatedInfo.noticeCreatedDateTime", "desc")
+          .orderBy("noticeCreated.noticeCreatedDateTime", "desc")
       ).snapshotChanges();
   }
 

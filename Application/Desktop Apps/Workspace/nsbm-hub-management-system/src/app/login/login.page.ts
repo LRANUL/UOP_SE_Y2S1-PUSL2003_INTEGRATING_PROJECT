@@ -142,7 +142,7 @@ export class LoginPage implements OnInit {
                 if(programOfficeUserAccountStatus == "Active"){
 
                   // Adding new login record to user activity monitoring collection to firestore database
-                 // this._loginService.userActivityMonitoring(this._loginService.retrieveLoggedInUserDetailsAuth().uid, this._loginService.retrieveLoggedInUserDetailsAuth().email);
+                  this._loginService.userActivityMonitoring(this._loginService.retrieveLoggedInUserDetailsAuth().uid, this._loginService.retrieveLoggedInUserDetailsAuth().email);
 
                   // Navigating to the dashboard
                   this._router.navigate(["/side-menu/dashboard"]);

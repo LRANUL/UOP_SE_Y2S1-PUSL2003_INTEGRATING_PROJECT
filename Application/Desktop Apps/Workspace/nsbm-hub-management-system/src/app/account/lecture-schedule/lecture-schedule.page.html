@@ -1,53 +1,46 @@
 <ion-header style="height: 70px;">
   <ion-toolbar>
-    <ion-title style="margin-top: 15px;">Lecture Schedule</ion-title>
+
+    <!-- This will add a button to show the side menu when the side menu is hidden in small screens -->
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title style="position: absolute;
+                      top: 40%;">Lecture Schedule</ion-title>
 
     <!-- Header Contents Section -->
     <div style="position: absolute;
-                right: 25px;
+                right: 5px;
                 top: 8px;">
+                
       <!-- Notification Bell, Unread Notifications Count, Drop Down -->          
-      <div>
-        <button ion-button style="width: 100px;
-                      height: 45px;
-                      background-color: white;">
+      <ion-button fill="clear" color="dark" style="width: 100px;
+                                                  height: 45px;
+                                                  background-color: white;" (click)="openNotificationPopover($event)">
 
-          <!-- Notification Bell Icon -->
-          <div style="height: 42px;
-                      width: 42px;
-                      border-radius: 5px;
-                      position: absolute;
-                      top: 3px;
-                      left: 10px;"> 
-            <ion-icon name="notifications-outline" style="font-size: 35px;
-                                                          position: absolute;
-                                                          top: 5px;
-                                                          left: 0px;"></ion-icon>
-          </div>
-
-          <!-- Unread Notifications Count -->
-          <div style="position: absolute;
-                      top: 5px;
-                      left: 40px;">
-            <ion-label style="color: red;">
-              10
-            </ion-label>
-          </div>
+        <!-- Notification Bell Icon -->
+        <div style="height: 42px;
+                  width: 42px;"> 
+          <ion-icon name="notifications-outline" style="font-size: 35px;
+                                                        position: absolute;
+                                                        top: 5px;
+                                                        left: 0px;"></ion-icon>
+        </div>
 
           <!-- Arrow Icon -->
-          <div style="position: absolute;
-                      top: 13px;
-                      left: 70px;
-                      font-size: 26px;">
-            <ion-icon name="arrow-down-outline"></ion-icon>
-          </div>
-          
-        </button>
-      </div>
+        <div style="position: absolute;
+                    left: 50px;
+                    top: 10px;
+                    font-size: 26px;">
+          <ion-icon name="chevron-down-outline"></ion-icon>
+        </div>
+      </ion-button>
+
     </div>
 
-    
   </ion-toolbar>
+  
 </ion-header>
 
 <ion-content>
@@ -56,7 +49,7 @@
     <ion-row>
       <ion-col size="12">
 
-        <ion-card style="height: 670px;">
+        <ion-card>
           <ion-card-header>
             <ion-card-title>
               Today's Lectures
@@ -64,7 +57,37 @@
           </ion-card-header>
           <ion-card-content>
 
-            <div style="width: 100%;
+            <div style="width: 500px;
+                        height: 60px;
+                        position: absolute;
+                        top: -60px;
+                        right: 1%;">
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    <ion-button style="min-width: 100%;" color="medium">
+                      <ion-icon name="refresh-outline"></ion-icon>
+                      <ion-label style="color: white;
+                                        margin-left: 10px;">
+                        Generate PDF
+                      </ion-label>
+                    </ion-button>
+                  </ion-col>
+                  <ion-col>
+                    <ion-button style="min-width: 100%;" color="medium">
+                      <ion-icon name="cloud-download-outline"></ion-icon>
+                      <ion-label style="color: white;
+                                        margin-left: 10px;">
+                        Download PDF
+                      </ion-label>
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+
+            <div style="margin-top: 10px;
+                        width: 100%;
                         height: 600px;
                         overflow-y: scroll;">
               <table class="table">

@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { FirestoreService } from '../../services/firebase/firestore.service';
 
 import { SideMenuPage } from '../side-menu/side-menu.page';
 
-import { PopoverController } from '@ionic/angular';
+import { Chart } from 'chart.js';
+
+import { PopoverController, AlertController } from '@ionic/angular';
 import { MoreDetailsEventSessionsPopoverPage } from './more-details-event-sessions-popover/more-details-event-sessions-popover.page';
 import { MoreDetailsTodaysLecturesPopoverPage } from './more-details-todays-lectures-popover/more-details-todays-lectures-popover.page';
 import { MoreDetailsLecturesPopoverPage } from './more-details-lectures-popover/more-details-lectures-popover.page';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 
 @Component({
@@ -36,7 +39,8 @@ export class DashboardPage implements OnInit {
   constructor(
     private dashboardService: FirestoreService,
     private sideMenuPageUserFaculty: SideMenuPage,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private alertController: AlertController
   ) { }
 
   // Calling the ngOnInit() function when page is rendered on the user's screen
@@ -45,6 +49,9 @@ export class DashboardPage implements OnInit {
   }
 
   ngOnInit() {
+
+    // Initiating the user activity chart
+    this.userActivityAreaChart();
 
     // Retrieving current date and time
     // Sample: Sun Apr 19 2020 18:44:52 GMT+0530 (India Standard Time)
@@ -83,9 +90,75 @@ export class DashboardPage implements OnInit {
 
     this.retrievePublishedLectureSessionsDashboardUpcomingLecturers();
 
+    this.retrievePublishedNews();
+
+    this.retrievePublishedLecturerToPONotice();
+
     this.retrievePublishedEventSessions();
 
   }
+
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
+  
+
+  // User activity area chart (daily no of active users)
+  bars: any;
+  colorArray: any;
+  
+  @ViewChild('userActivityAreaChart', {static: true}) barChart;
+
+  userActivityAreaChart() {
+    this.bars = new Chart(this.barChart.nativeElement, {
+      type: 'line',
+      data: {
+        labels: ['22-4-2020', '23-4-2020', '24-4-2020', '25-4-2020', '26-4-2020', '27-4-2020', '28-4-2020', '29-4-2020'],
+        datasets: [{
+          label: 'User Activity',
+          data: [8, 10, 12, 5, 3, 15, 14, 16],
+          backgroundColor: 'rgb(109, 156, 235)', 
+          borderColor: 'rgb(109, 219, 235)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+          display: false
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: false,
+              display: false
+            },
+            gridLines: {
+              display: false,
+            },
+          }],
+          xAxes: [{
+            ticks: {
+              display: false
+            },
+            gridLines: {
+              display: false,
+            },
+          }],
+        }
+      }
+    });
+  }
+
   
 
   
@@ -102,6 +175,17 @@ export class DashboardPage implements OnInit {
         this.noLectureSessionsTodayText = true;
       }
   });
+
+  // Retrieving published news from the firestore database
+  publishedNews;
+  retrievePublishedNews = () =>
+    this.dashboardService.retrievePublishedNews(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => (this.publishedNews = response));
+
+  // Retrieving published notices (Lecturers To Program Office (PO)) and assigning them
+  publishedNoticesLecturerToPO;
+  retrievePublishedLecturerToPONotice = () => 
+    this.dashboardService.retrievePublishedLecturerToPONotice(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => (this.publishedNoticesLecturerToPO = response));
+
 
   // More details of today's lecture sessions popover
   async moreDetailsTodaysLectureSession(ev: Event, value){
@@ -210,11 +294,7 @@ export class DashboardPage implements OnInit {
 
 
 
-  // Retrieving published notices (Lecturers To Program Office (PO)) and assigning them
-  publishedNoticesLecturerToPO;
-  retrievePublishedLecturerToPONotice = () => 
-    this.dashboardService.retrievePublishedLecturerToPONotice(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => (this.publishedNoticesLecturerToPO = response));
-
+  
 
   // Declared to hold the events as array to store the sessions
   lectureSessionDocuments = [];
@@ -330,6 +410,15 @@ export class DashboardPage implements OnInit {
     console.log("Event Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
   }
 
+  // Alert Box Implementation
+  async alertNotice ( title: string, content: string ) {
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
 
 
 }

@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { FirestoreService } from 'src/app/services/firebase/firestore.service';
 import { SideMenuPage } from '../side-menu/side-menu.page';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { EditTransportSlotModalPage } from './edit-transport-slot-modal/edit-transport-slot-modal.page';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 @Component({
   selector: 'app-transportation-schedule',
@@ -35,6 +36,7 @@ export class TransportationSchedulePage implements OnInit {
     private sideMenuPageUserFaculty: SideMenuPage,
     private transportationScheduleService: FirestoreService,
     private modalController: ModalController,
+    private popoverController: PopoverController
   ) { }
 
   ngOnInit() {
@@ -56,6 +58,20 @@ export class TransportationSchedulePage implements OnInit {
     this.retrievePublishedSessionStatuses();
     
   }
+
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
+
+  
 
   publishedTransportationSlotsDestination;
   publishedTransportationSlotsDeparture;

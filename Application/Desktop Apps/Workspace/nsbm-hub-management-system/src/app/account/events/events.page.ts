@@ -4,6 +4,7 @@ import { AlertController, ModalController, PopoverController } from '@ionic/angu
 import { SideMenuPage } from '../side-menu/side-menu.page';
 import { FirestoreService } from 'src/app/services/firebase/firestore.service';
 import { EditEventSessionModalPage } from './edit-event-session-modal/edit-event-session-modal.page';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 @Component({
   selector: 'app-events',
@@ -46,6 +47,17 @@ export class EventsPage implements OnInit {
 
   }
 
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
 
 
   retrievePublishedEventSessions = () => {

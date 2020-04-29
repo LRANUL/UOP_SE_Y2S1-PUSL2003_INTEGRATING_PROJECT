@@ -15,6 +15,7 @@ import { MoreDetailsPoStudentsPopoverPage } from './more-details-po-students-pop
 import { MoreDetailsPoLecturersPopoverPage } from './more-details-po-lecturers-popover/more-details-po-lecturers-popover.page';
 import { MoreDetailsLecturersPoPopoverPage } from './more-details-lecturers-po-popover/more-details-lecturers-po-popover.page';
 import { EditPoToStudentsNoticesModalPage } from './edit-po-to-students-notices-modal/edit-po-to-students-notices-modal.page';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 
 
@@ -39,12 +40,25 @@ export class NoticesPage implements OnInit {
 
 
   
-  noNoticePOToLecturersText: Boolean = false;
+  noNoticePOToLecturersSelectedDateText: Boolean = false;
 
-  noNoticeLecturersToPOText: Boolean = false;
+  noNoticeLecturersToPOSelectedDateText: Boolean = false;
 
-  noNoticePOToStudentsText: Boolean = false;
+  noNoticePOToStudentsSelectedDateText: Boolean = false;
 
+
+  noNoticePOToLecturersPastThreeDaysText: Boolean = false;
+
+  noNoticeLecturersToPOPastThreeDaysText: Boolean = false;
+
+  noNoticePOToStudentsPastThreeDaysText: Boolean = false;
+
+
+  noticesPOToLecturersSelectPastDateText: Boolean = false;
+
+  noticesLecturersToPOSelectPastDateText: Boolean = false;
+
+  noticesPOToStudentsSelectPastDateText: Boolean = false;
 
 
   loadingSpinnerPOToLecturer: Boolean = true;
@@ -126,6 +140,21 @@ export class NoticesPage implements OnInit {
 
   }
 
+
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
+
+  
+
   // Retrieving published modules from the firestore database
   publishedModules;
   retrieveRegisteredModules = () => 
@@ -154,24 +183,42 @@ export class NoticesPage implements OnInit {
   retrievePublishedLecturerToPONotice = () => 
     this.noticesService.retrievePublishedLecturerToPONotice(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => 
       {
-        this.loadingSpinnerLecturerToPO = false;
-        this.publishedNoticesLecturerTOPO = response;
+        if(response.length > 0){
+          this.loadingSpinnerLecturerToPO = false;
+          this.publishedNoticesLecturerTOPO = response;
+        }
+        else{
+          this.loadingSpinnerLecturerToPO = false;
+          this.noNoticeLecturersToPOPastThreeDaysText = true;
+        }
       });
 
-  // Retrieving published  program office to student notice from the current date time to three days ago from the firestore database
+  // Retrieving published program office to student notice from the current date time to three days ago from the firestore database
   publishedNoticesPOTOStudent;
   retrievePublishedPOToStudentNotice = () => 
     this.noticesService.retrievePublishedPOToStudentNotice(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => {
-      this.loadingSpinnerPOToStudent = false;
-      this.publishedNoticesPOTOStudent = response;
+      if(response.length > 0){
+        this.loadingSpinnerPOToStudent = false;
+        this.publishedNoticesPOTOStudent = response;
+      }
+      else{
+        this.loadingSpinnerPOToStudent = false;
+        this.noNoticePOToStudentsPastThreeDaysText = true;
+      }
     });
   
   // Retrieving published program office to lecturer notice from the current date time to three days ago from the firestore database
   publishedNoticesPOToLecturer;
   retrievePublishedPOToLecturerNotice = () => 
     this.noticesService.retrievePublishedPOToLecturerNotice(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => {
-      this.loadingSpinnerPOToLecturer = false;
-      this.publishedNoticesPOToLecturer = response;
+      if(response.length > 0){
+        this.loadingSpinnerPOToLecturer = false;
+        this.publishedNoticesPOToLecturer = response;
+      }
+      else{
+        this.loadingSpinnerPOToLecturer = false;
+        this.noNoticePOToLecturersPastThreeDaysText = true;
+      }
     });
   
 
@@ -765,7 +812,11 @@ export class NoticesPage implements OnInit {
   // Process of retrieving notices sent to lecturers for the selected date from the firestore database
   retrieveNoticePOToLecturersSelectedDate(event){
 
-    this.noNoticePOToLecturersText = false;
+    this.noticesPOToLecturersSelectPastDateText = false;
+
+    this.noNoticePOToLecturersPastThreeDaysText = false;
+
+    this.noNoticePOToLecturersSelectedDateText = false;
 
     // Assigning existing notices on frontend to null
     this.publishedNoticesPOToLecturer = null;
@@ -782,27 +833,37 @@ export class NoticesPage implements OnInit {
 
     nextDate.setDate(selectedDate.getDate()+1);
 
-    this.noticesService.retrievePublishedPOToLecturerSelectedDate(selectedDate, nextDate).subscribe(response => {
-      if(response.length > 0){
-        this.loadingSpinnerPOToLecturer = false;
+    let currentDate = new Date();
 
-        // Setting no notices text to hide
-        this.noNoticePOToLecturersText = false;
-
-        // Assigning retrieved document details
-        this.publishedNoticesPOToLecturer = response;
-      }
-      else {
-        this.loadingSpinnerPOToLecturer = false;
-
-        // Setting no notices text to show
-        this.noNoticePOToLecturersText = true;
-      }
-    }, error => {
+    currentDate.setHours(0,0,0,0);
+    
+    if(selectedDate > currentDate){
       this.loadingSpinnerPOToLecturer = false;
-      console.log("Error: " + error);
-      this.alertNotice("Error", "An error has occurred: " + error);
-    });
+      this.noticesPOToLecturersSelectPastDateText = true;
+    }
+    else{
+      this.noticesService.retrievePublishedPOToLecturerSelectedDate(selectedDate, nextDate).subscribe(response => {
+        if(response.length > 0){
+          this.loadingSpinnerPOToLecturer = false;
+  
+          // Setting no notices text to hide
+          this.noNoticePOToLecturersSelectedDateText = false;
+  
+          // Assigning retrieved document details
+          this.publishedNoticesPOToLecturer = response;
+        }
+        else {
+          this.loadingSpinnerPOToLecturer = false;
+  
+          // Setting no notices text to show
+          this.noNoticePOToLecturersSelectedDateText = true;
+        }
+      }, error => {
+        this.loadingSpinnerPOToLecturer = false;
+        console.log("Error: " + error);
+        this.alertNotice("Error", "An error has occurred: " + error);
+      });
+    }
   }
 
 
@@ -810,7 +871,9 @@ export class NoticesPage implements OnInit {
   // Process of retrieving notices sent from lectures for the selected date from the firestore database
   retrieveNoticeLecturersToPOSelectedDate(event){
 
-    this.noNoticeLecturersToPOText = false;
+    this.noNoticeLecturersToPOPastThreeDaysText = false;
+
+    this.noNoticeLecturersToPOSelectedDateText = false;
   
     // Assigning existing notices on frontend to null
     this.publishedNoticesLecturerTOPO = null;
@@ -827,27 +890,37 @@ export class NoticesPage implements OnInit {
 
     nextDate.setDate(selectedDate.getDate()+1);
 
-    this.noticesService.retrievePublishedLecturerToPONoticeSelectedDate(selectedDate, nextDate).subscribe(response => {
-      if(response.length > 0){
-        this.loadingSpinnerLecturerToPO = false;
+    let currentDate = new Date();
 
-        // Setting no notices text to hide
-        this.noNoticeLecturersToPOText = false;
-
-        // Assigning retrieved document details
-        this.publishedNoticesLecturerTOPO = response;
-      }
-      else {
-        this.loadingSpinnerLecturerToPO = false;
-
-        // Setting no notices text to show
-        this.noNoticeLecturersToPOText = true;
-      }
-    }, error => {
+    currentDate.setHours(0,0,0,0);
+    
+    if(selectedDate > currentDate){
       this.loadingSpinnerLecturerToPO = false;
-      console.log("Error: " + error);
-      this.alertNotice("Error", "An error has occurred: " + error);
-    });
+      this.noticesLecturersToPOSelectPastDateText = true;
+    }
+    else{
+      this.noticesService.retrievePublishedLecturerToPONoticeSelectedDate(selectedDate, nextDate).subscribe(response => {
+        if(response.length > 0){
+          this.loadingSpinnerLecturerToPO = false;
+
+          // Setting no notices text to hide
+          this.noNoticeLecturersToPOSelectedDateText = false;
+
+          // Assigning retrieved document details
+          this.publishedNoticesLecturerTOPO = response;
+        }
+        else {
+          this.loadingSpinnerLecturerToPO = false;
+
+          // Setting no notices text to show
+          this.noNoticeLecturersToPOSelectedDateText = true;
+        }
+      }, error => {
+        this.loadingSpinnerLecturerToPO = false;
+        console.log("Error: " + error);
+        this.alertNotice("Error", "An error has occurred: " + error);
+      });
+    }
   }
 
 
@@ -855,7 +928,9 @@ export class NoticesPage implements OnInit {
   // Process of retrieving notices sent to students for the selected date from the firestore database
   retrieveNoticePOToStudentsSelectedDate(event){
 
-    this.noNoticePOToStudentsText = false;
+    this.noNoticePOToStudentsPastThreeDaysText = false;
+
+    this.noNoticePOToStudentsSelectedDateText = false;
 
     // Assigning existing notices on frontend to null
     this.publishedNoticesPOTOStudent = null;
@@ -872,27 +947,37 @@ export class NoticesPage implements OnInit {
 
     nextDate.setDate(selectedDate.getDate()+1);
 
-    this.noticesService.retrievePublishedPOToStudentNoticeSelectedDate(selectedDate, nextDate).subscribe(response => {
-      if(response.length > 0){
-        this.loadingSpinnerPOToStudent = false;
+    let currentDate = new Date();
 
-        // Setting no notices text to hide
-        this.noNoticePOToStudentsText = false;
-
-        // Assigning retrieved document details
-        this.publishedNoticesPOTOStudent = response;
-      }
-      else {
-        this.loadingSpinnerPOToStudent = false;
-
-        // Setting no notices text to show
-        this.noNoticePOToStudentsText = true;
-      }
-    }, error => {
+    currentDate.setHours(0,0,0,0);
+    
+    if(selectedDate > currentDate){
       this.loadingSpinnerPOToStudent = false;
-      console.log("Error: " + error);
-      this.alertNotice("Error", "An error has occurred: " + error);
-    });
+      this.noticesPOToStudentsSelectPastDateText = true;
+    }
+    else{
+      this.noticesService.retrievePublishedPOToStudentNoticeSelectedDate(selectedDate, nextDate).subscribe(response => {
+        if(response.length > 0){
+          this.loadingSpinnerPOToStudent = false;
+
+          // Setting no notices text to hide
+          this.noNoticePOToStudentsSelectedDateText = false;
+
+          // Assigning retrieved document details
+          this.publishedNoticesPOTOStudent = response;
+        }
+        else {
+          this.loadingSpinnerPOToStudent = false;
+
+          // Setting no notices text to show
+          this.noNoticePOToStudentsSelectedDateText = true;
+        }
+      }, error => {
+        this.loadingSpinnerPOToStudent = false;
+        console.log("Error: " + error);
+        this.alertNotice("Error", "An error has occurred: " + error);
+      });
+    }
   }
 
 

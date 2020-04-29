@@ -104,6 +104,17 @@ export class SideMenuPage implements OnInit {
 
     this.retrieveLoggedInUserDetailsFirestore();
 
+    // Updating the program office user account activity to ONLINE
+    this.sideMenuService.updateProgramOfficeUserActivity("Online", this.userDetailsAuth.email)
+    .then(
+        async response => {
+            console.log("Program Office Account Activity Updated - ONLINE");
+        }, 
+        error => {
+            this.alertNotice("Error", "An error has occurred: " + error);
+        }
+    );
+
   }
 
 
@@ -111,7 +122,6 @@ export class SideMenuPage implements OnInit {
   retrieveLoggedInUserDetailsFirestore = () =>
     this.sideMenuService.retrieveLoggedInUserDetailsProgramOffice(this.userDetailsAuth.uid).subscribe(userFacultyFirestore => (
       userFacultyFirestore.forEach(document => {
-        this.userEmailAddress = document.payload.doc.id;
         let firestoreDoc:any = document.payload.doc.data();
         firestoreDoc = firestoreDoc.faculty;
 
@@ -130,7 +140,7 @@ export class SideMenuPage implements OnInit {
   }
 
   passUserEmailAddress() {
-    return this.userEmailAddress;
+    return this.userDetailsAuth.email;
   }
 
 
@@ -182,6 +192,17 @@ export class SideMenuPage implements OnInit {
           handler: () => {
             
             this.logoutProcessApproved();
+
+            // Updating the program office user account activity to OFFLINE
+            this.sideMenuService.updateProgramOfficeUserActivity("Offline", this.userDetailsAuth.email)
+            .then(
+                async response => {
+                    console.log("Program Office Account Activity Updated - OFFLINE");
+                }, 
+                error => {
+                    this.alertNotice("Error", "An error has occurred: " + error);
+                }
+            );
 
           }
         }

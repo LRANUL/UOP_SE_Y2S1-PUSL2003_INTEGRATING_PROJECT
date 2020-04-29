@@ -30,6 +30,7 @@
     "@ionic/angular": "^5.0.0",
     "@types/jquery": "^3.3.34",
     "bootstrap": "^4.4.1",
+    "chart.js": "^2.9.3",
     "cordova-plugin-inappbrowser": "^3.2.0",
     "cordova-plugin-splashscreen": "^5.0.2",
     "core-js": "^2.5.4",
