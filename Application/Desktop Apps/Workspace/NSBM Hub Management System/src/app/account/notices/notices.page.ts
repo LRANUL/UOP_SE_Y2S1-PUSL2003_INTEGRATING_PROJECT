@@ -550,7 +550,7 @@ export class NoticesPage implements OnInit {
           console.log("DateTime: " + currentDateTimeUnix + " FileName: " + currentFileName);
 
           // Storage path of the file in the firebase storage
-          var path = 'files/images/notices/events/' + currentDateTimeUnix + '_' + currentFileName;
+          var path = 'files/images/notices/noticeCoverImages/' + currentDateTimeUnix + '_' + currentFileName;
 
           // Custom metadata
           const customMetadata = { app: 'Event Notice Cover Image File' };
@@ -734,7 +734,7 @@ export class NoticesPage implements OnInit {
         console.log("DateTime: " + currentDateTimeUnix + " FileName: " + currentFileName);
 
         // Storage path of the file in the firebase storage
-        var path = 'files/images/notices/events/' + currentDateTimeUnix + '_' + currentFileName;
+        var path = 'files/images/notices/noticeCoverImages/' + currentDateTimeUnix + '_' + currentFileName;
 
         // Custom metadata
         const customMetadata = { app: 'Event Notice Cover Image File' };

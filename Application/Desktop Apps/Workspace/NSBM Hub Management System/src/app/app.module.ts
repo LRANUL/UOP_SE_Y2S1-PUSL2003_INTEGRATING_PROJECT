@@ -35,7 +35,6 @@ import { MoreDetailsSessionPopoverPageModule } from './account/semester-calendar
 import { MoreDetailsModulePopoverPageModule } from './account/modules/more-details-module-popover/more-details-module-popover.module';
 import { EditModuleModalPageModule } from './account/modules/edit-module-modal/edit-module-modal.module';
 import { MoreDetailsTodaysLecturesPopoverPageModule } from './account/dashboard/more-details-todays-lectures-popover/more-details-todays-lectures-popover.module';
-import { MoreDetailsEventSessionsPopoverPageModule } from './account/dashboard/more-details-event-sessions-popover/more-details-event-sessions-popover.module';
 import { ViewImageNoticeModalPageModule } from './account/notices/view-image-notice-modal/view-image-notice-modal.module';
 import { MoreDetailsLecturesPopoverPageModule } from './account/dashboard/more-details-lectures-popover/more-details-lectures-popover.module';
 import { EditEventSessionModalPageModule } from './account/events/edit-event-session-modal/edit-event-session-modal.module';
@@ -57,6 +56,7 @@ import { UpdateAccountDetailsModalPageModule } from './account/settings/update-a
 import { UpdateAccountPasswordModalPageModule } from './account/settings/update-account-password-modal/update-account-password-modal.module';
 import { EditLectureSeriesModalPageModule } from './account/semester-calendar/edit-lecture-series-modal/edit-lecture-series-modal.module';
 import { NotificationsPopoverPageModule } from './account/notifications-popover/notifications-popover.module';
+import { MoreDetailsEventPopoverPageModule } from './account/dashboard/more-details-event-popover/more-details-event-popover.module';
 
 
 @NgModule({
@@ -80,7 +80,7 @@ import { NotificationsPopoverPageModule } from './account/notifications-popover/
     MoreDetailsSessionPopoverPageModule,
     MoreDetailsModulePopoverPageModule,
     EditModuleModalPageModule,
-    MoreDetailsEventSessionsPopoverPageModule,
+    MoreDetailsEventPopoverPageModule,
     MoreDetailsTodaysLecturesPopoverPageModule,
     MoreDetailsLecturesPopoverPageModule,
     ViewImageNoticeModalPageModule,

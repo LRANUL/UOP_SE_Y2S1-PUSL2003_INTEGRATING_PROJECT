@@ -7,10 +7,10 @@ import { SideMenuPage } from '../side-menu/side-menu.page';
 import { Chart } from 'chart.js';
 
 import { PopoverController, AlertController } from '@ionic/angular';
-import { MoreDetailsEventSessionsPopoverPage } from './more-details-event-sessions-popover/more-details-event-sessions-popover.page';
 import { MoreDetailsTodaysLecturesPopoverPage } from './more-details-todays-lectures-popover/more-details-todays-lectures-popover.page';
 import { MoreDetailsLecturesPopoverPage } from './more-details-lectures-popover/more-details-lectures-popover.page';
 import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
+import { MoreDetailsEventPopoverPage } from './more-details-event-popover/more-details-event-popover.page';
 
 
 @Component({
@@ -46,9 +46,6 @@ export class DashboardPage implements OnInit {
   // Calling the ngOnInit() function when page is rendered on the user's screen
   ionViewWillEnter(){
     this.ngOnInit();
-  }
-
-  ngOnInit() {
 
     // Initiating the user activity chart
     this.userActivityAreaChart();
@@ -85,6 +82,7 @@ export class DashboardPage implements OnInit {
     // Retrieving user faculty from the sideMenu page
     console.log(this.sideMenuPageUserFaculty.passUserFaculty());
 
+    this.retrievePublishedLecturerToPONotice();
 
     this.retrievePublishedLectureSessionsCurrentDate();
 
@@ -92,11 +90,11 @@ export class DashboardPage implements OnInit {
 
     this.retrievePublishedNews();
 
-    this.retrievePublishedLecturerToPONotice();
-
     this.retrievePublishedEventSessions();
 
   }
+
+  ngOnInit() { }
 
   // Opening notifications popover
   async openNotificationPopover(ev: Event){
@@ -164,17 +162,22 @@ export class DashboardPage implements OnInit {
   
   // Retrieving published lecture sessions for the current date from the firestore datbase
   publishedLectureSessionsCurrentDate;
-  retrievePublishedLectureSessionsCurrentDate = () => 
-    this.dashboardService.retrievePublishedLectureSessionsCurrentDate(this.sideMenuPageUserFaculty.passUserFaculty(), this.currentDate, this.nextDate).subscribe(response => {
-      if (response.length > 0) {
-        this.showLoadingDotsTodaysLectureSession = false;
-        this.publishedLectureSessionsCurrentDate = response;
-      }
-      else {
-        this.showLoadingDotsTodaysLectureSession = false;
-        this.noLectureSessionsTodayText = true;
-      }
-  });
+  retrievePublishedLectureSessionsCurrentDate = () => {
+      this.dashboardService.retrievePublishedLectureSessionsCurrentDate(this.sideMenuPageUserFaculty.passUserFaculty(), this.currentDate, this.nextDate).subscribe(response => {
+        if (response.length > 0) {
+          this.showLoadingDotsTodaysLectureSession = false;
+          this.publishedLectureSessionsCurrentDate = response;
+        }
+        else{
+          this.showLoadingDotsTodaysLectureSession = false;
+          this.noLectureSessionsTodayText = true;
+        }
+    }, error => {
+      this.showLoadingDotsTodaysLectureSession = false;
+      console.log("Error: " + error);
+      this.alertNotice("Error", "An error has occurred: " + error);
+    });
+  }
 
   // Retrieving published news from the firestore database
   publishedNews;
@@ -279,7 +282,7 @@ export class DashboardPage implements OnInit {
    // More details of event sessions popover
    async moreDetailsEventSession(ev: Event, value){
     const moreDetailsEventSessionPopover = await this.popoverController.create({
-      component: MoreDetailsEventSessionsPopoverPage,
+      component: MoreDetailsEventPopoverPage,
       componentProps: {
         eventSessionDocId: value.payload.doc.id,
         status: value.status

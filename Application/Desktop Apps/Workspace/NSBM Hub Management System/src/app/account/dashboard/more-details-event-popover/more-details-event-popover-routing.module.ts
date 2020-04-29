@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { MoreDetailsEventSessionsPopoverPage } from './more-details-event-sessions-popover.page';
+import { MoreDetailsEventPopoverPage } from './more-details-event-popover.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: MoreDetailsEventSessionsPopoverPage
+    component: MoreDetailsEventPopoverPage
   }
 ];
 
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class MoreDetailsEventSessionsPopoverPageRoutingModule {}
+export class MoreDetailsEventPopoverPageRoutingModule {}
