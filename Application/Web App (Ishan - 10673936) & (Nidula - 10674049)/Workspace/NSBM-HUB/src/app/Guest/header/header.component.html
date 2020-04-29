@@ -1,0 +1,24 @@
+<nav class="navbar bg-dark">
+
+  <div id="mySidenav" class="sidenav">
+    <a class="closebtn" (click)="closeNav()">&times;</a>
+    <a href="guest">Home</a>
+    <a routerLink="/about us">About Us</a>
+    <a (click)="opensocial()" style="cursor: pointer;">Social Media</a>
+    <a  (click)="openContactsModal()" style="cursor: pointer;">Contacts</a>
+  </div>
+
+  <div id="main">
+    <i class="fas fa-bars fa-lg" style=" color: white; font-size:30px;cursor:pointer;" (click)="openNav()"></i>
+  </div>
+  <div>
+    <a class="navbar-brand text-left" style="color: white;" href="guest"><strong> NSBM HUB</strong></a>
+  </div>
+    <a  class="navbar-nav ml-auto" routerLink="/login">
+      <i class="fa fa-user fa-lg icon " style="color: white; padding-bottom: 20px;"> Login</i>
+    </a>
+  </nav>
+
+
+
+

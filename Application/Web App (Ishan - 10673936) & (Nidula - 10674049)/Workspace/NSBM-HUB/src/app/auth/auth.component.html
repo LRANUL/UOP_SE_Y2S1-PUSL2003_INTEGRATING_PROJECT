@@ -1,0 +1,50 @@
+<div class="w-100 h-auto">
+  <img src="../../assets/image/nsbmlog.png"  class="back">
+  </div>
+  <hr class="new5">
+  <div class=" container" style="padding-top: 30px; padding-bottom: 100px;">
+    <div>
+      <img src="../../assets/image/profile.png" class="rounded mx-auto d-block pb-2" style="width: 150px; height: 150px;" alt="...">
+      <h1 class=" text-center">Welcome to NSBM HUB</h1>
+    </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+        <div class="row" *ngIf="authError">
+          <div class="col-12 alert alert-danger">{{ authError?.message }}</div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <label for="email" style="font-size: 20px;">Email</label>
+            <input ngModel #email="ngModel" name="email" type="email" class="form-control" required>
+          </div>
+          <div class="ml-3" *ngIf="email.value=='' && email.touched">
+            <label style="color: red;">E-mail address cannot be left blank</label>
+          </div>
+          <div *ngIf="!email.valid && email.touched && email.value!=''">
+            <label style="color: red;"> Enter a vaild email address</label>
+          </div>
+        </div>
+        <div class="row pt-2">
+          <div class="col-12">
+            <label for="password" style="font-size: 20px;">Password</label>
+            <input ngModel #password="ngModel" name="password" type="password" class="form-control" minlength="6" required >
+          </div>
+          <div class="ml-3" *ngIf="password.value=='' && password.touched">
+            <label style="color: red;">The password cannot be left blank</label>
+          </div>
+          <br>
+          <div class="ml-3" *ngIf="password.touched && password.hasError('minlength')">
+            <label style="color: red;">The password need to have atleast 6 characters</label>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12 text-center">
+            <button class="btn btn-success w-25" type="submit" style="align-items: left;" [disabled]="!loginForm.valid" >Login</button>
+            <button class="btn btn-primary w-25 ml-5" style="align-items: right;" routerLink="/guest">Continue as guest</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+

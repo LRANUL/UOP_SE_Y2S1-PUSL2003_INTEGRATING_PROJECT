@@ -1,0 +1,12 @@
+.back{
+  width: 100%;
+  height: 600px;
+  background-position: center;
+  background-repeat: no-repeat;
+  align-items: inherit;
+}
+
+hr.new5 {
+  border: 10px solid green;
+  border-radius: 5px;
+}
