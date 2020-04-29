@@ -81,7 +81,7 @@ export class LoginPage implements OnInit {
     setTimeout(() => {
       this.splashContent = false;
       this.loginContent = true;
-    },3000);
+    },5000);
 
     firebase.auth().onAuthStateChanged(async (user) => {
 

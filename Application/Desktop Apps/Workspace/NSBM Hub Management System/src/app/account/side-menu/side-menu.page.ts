@@ -18,52 +18,52 @@ export class SideMenuPage implements OnInit {
     {
       title: 'Dashboard',
       url: '/side-menu/dashboard',
-      icon: '../../../assets/images/account/side-menu_icons/dashboard.png'
+      icon: 'assets/images/account/side-menu_icons/dashboard.png'
     },
     {
       title: 'Notices',
       url: '/side-menu/notices',
-      icon: '../../../assets/images/account/side-menu_icons/notices.png'
+      icon: 'assets/images/account/side-menu_icons/notices.png'
     },
     {
       title: 'Lecture Schedule',
       url: '/side-menu/lecture-schedule',
-      icon: '../../../assets/images/account/side-menu_icons/lecture_schedule.png'
+      icon: 'assets/images/account/side-menu_icons/lecture_schedule.png'
     },
     {
       title: 'Semester Calendar',
       url: '/side-menu/semester-calendar',
-      icon: '../../../assets/images/account/side-menu_icons/semester_calendar.png'
+      icon: 'assets/images/account/side-menu_icons/semester_calendar.png'
     },
     {
       title: 'Modules',
       url: '/side-menu/modules',
-      icon: '../../../assets/images/account/side-menu_icons/modules.png'
+      icon: 'assets/images/account/side-menu_icons/modules.png'
     },
     {
       title: 'Events',
       url: '/side-menu/events',
-      icon: '../../../assets/images/account/side-menu_icons/events.png'
+      icon: 'assets/images/account/side-menu_icons/events.png'
     },
     {
       title: 'News',
       url: '/side-menu/news',
-      icon: '../../../assets/images/account/side-menu_icons/news.png'
+      icon: 'assets/images/account/side-menu_icons/news.png'
     },
     {
       title: 'Transportation Schedule',
       url: '/side-menu/transportation-schedule',
-      icon: '../../../assets/images/account/side-menu_icons/transportation_schedule.png'
+      icon: 'assets/images/account/side-menu_icons/transportation_schedule.png'
     },
     {
       title: 'Students',
       url: '/side-menu/students',
-      icon: '../../../assets/images/account/side-menu_icons/students.png'
+      icon: 'assets/images/account/side-menu_icons/students.png'
     },
     {
       title: 'Lecturers',
       url: '/side-menu/lecturers',
-      icon: '../../../assets/images/account/side-menu_icons/lecturers.png'
+      icon: 'assets/images/account/side-menu_icons/lecturers.png'
     }
   ];
 
