@@ -1,0 +1,145 @@
+<ion-header style="height: 70px;">
+  <ion-toolbar>
+
+    <!-- This will add a button to show the side menu when the side menu is hidden in small screens -->
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title style="position: absolute;
+                      top: 40%;">Profile</ion-title>
+
+    <!-- Header Contents Section -->
+    <div style="position: absolute;
+                right: 5px;
+                top: 8px;">
+      <!-- Notification Bell, Unread Notifications Count, Drop Down -->          
+
+      <ion-button fill="clear" color="dark" style="width: 100px;
+                                                  height: 45px;
+                                                  background-color: white;" (click)="openNotificationPopover($event)">
+
+        <!-- Notification Bell Icon -->
+        <div style="height: 42px;
+                  width: 42px;"> 
+          <ion-icon name="notifications-outline" style="font-size: 35px;
+                                                        position: absolute;
+                                                        top: 5px;
+                                                        left: 0px;"></ion-icon>
+        </div>
+
+          <!-- Arrow Icon -->
+        <div style="position: absolute;
+                    left: 50px;
+                    top: 10px;
+                    font-size: 26px;">
+          <ion-icon name="chevron-down-outline"></ion-icon>
+        </div>
+      </ion-button>
+
+    </div>
+
+  </ion-toolbar>
+  
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+
+    <ion-row>
+
+      <ion-col>
+
+        <ion-avatar style="position: absolute;
+                          background-color: white;
+                          top: 50px;
+                          left: 50%;
+                          height: 100px;
+                          width: 100px;
+                          transform: translateX(-50%);">
+          <ion-img src="/assets/images/account/profile/profileIcon.png" height="100px" width="100px"></ion-img>
+        </ion-avatar>
+
+      </ion-col>
+
+    </ion-row>
+    <ion-row>
+
+      <ion-col>
+
+        <ion-card style="width: 50%;
+                        position: absolute;
+                        top: 150px;
+                        left: 50%;
+                        transform: translateX(-50%);">
+
+          <ion-card-content>
+
+            <ion-grid *ngFor="let item of loggedInProgramOfficeUser" style="position: relative;
+                                                                            left: 50%;
+                                                                            transform: translateX(-50%);">
+              <ion-row>
+                <ion-col>
+                  <ion-label style="font-size: 25px;">
+                    Profile Details
+                  </ion-label>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="5">
+                  <ion-label style="font-size: 17px;">
+                    Name: 
+                  </ion-label>
+                </ion-col>
+                <ion-col size="7">
+                  <ion-label style="font-size: 15px;">
+                    {{ item.payload.doc.data().name.prefix }} 
+                    {{ item.payload.doc.data().name.firstName }}
+                    {{ item.payload.doc.data().name.middleName }}
+                    {{ item.payload.doc.data().name.lastName }}
+                  </ion-label>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="5">
+                  <ion-label style="font-size: 17px;">
+                    NSBM University Email Address: 
+                  </ion-label>
+                </ion-col>
+                <ion-col size="7">
+                  <ion-label style="font-size: 15px;
+                                    position: absolute;
+                                    top: 7px;">
+                    {{ item.payload.doc.id }}
+                  </ion-label>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="5">
+                  <ion-label style="font-size: 17px;">
+                    Faculty:
+                  </ion-label>
+                </ion-col>
+                <ion-col size="7">
+                  <ion-label style="font-size: 15px;
+                                    position: absolute;
+                                    top: 7px;">
+                    {{ item.payload.doc.data().faculty }}
+                  </ion-label>
+                </ion-col>
+              </ion-row>
+              
+            </ion-grid>
+
+          </ion-card-content>
+
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>
