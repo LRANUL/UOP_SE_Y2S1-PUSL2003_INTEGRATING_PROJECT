@@ -1,7 +1,14 @@
  <ion-header>
   <ion-toolbar>
     <ion-title>notices</ion-title>
-    
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/t1/Dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-button [routerLink]="['/','tabs','t1','Dashboard','notices','new']" routerLinkActive="router-link-active" >
+        <ion-icon name="add" slot="icon-only" color="primary"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

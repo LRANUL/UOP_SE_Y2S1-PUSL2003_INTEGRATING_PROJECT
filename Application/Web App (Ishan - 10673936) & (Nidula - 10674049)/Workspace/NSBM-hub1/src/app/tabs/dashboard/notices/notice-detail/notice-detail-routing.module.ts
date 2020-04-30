@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: NoticeDetailPage
+  },
+  {
+    path: 'edit/:noticeId',
+    loadChildren: () => import('./notice-edit/notice-edit.module').then( m => m.NoticeEditPageModule)
   }
 ];
 

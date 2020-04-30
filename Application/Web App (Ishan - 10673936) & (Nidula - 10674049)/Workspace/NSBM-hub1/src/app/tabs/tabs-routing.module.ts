@@ -15,6 +15,7 @@ const routes: Routes = [
         {path:'notices',children:[
           {path:'',loadChildren:'./dashboard/notices/notes.module#NoticesPageModule' ,pathMatch:'full'},
           {path:'new',loadChildren:'./dashboard/notices/new-notice/new-notice.module#NewNoticePageModule'},
+          {path: 'edit/:noticeId', loadChildren: './dashboard/notices/notice-detail/notice-edit/notice-edit.module#NoticeEditPageModule' ,pathMatch:'full'},
           {path:':noticeId',loadChildren:'./dashboard/notices/notice-detail/notice-detail.module#NoticeDetailPageModule'}
         ]},
         {path:'shuttle-schedule',loadChildren:'./dashboard/shuttle-schedule/shuttle-schedule.module#ShuttleSchedulePageModule'},
