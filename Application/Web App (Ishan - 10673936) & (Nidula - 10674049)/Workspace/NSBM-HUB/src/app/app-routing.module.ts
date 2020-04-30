@@ -19,6 +19,7 @@ import { LifeAtNsbmComponent } from './Guest/life-at-nsbm/life-at-nsbm.component
 import { CalendarComponent } from './Guest/calendar/calendar.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthComponent } from './auth/auth.component';
+import { RegistrationComponent } from './auth/registration/registration.component';
 
 
 const routes: Routes = [
@@ -41,6 +42,7 @@ const routes: Routes = [
 {path: 'news' , component: NewsComponent},
 {path: 'life at NSBM' , component: LifeAtNsbmComponent},
 {path: 'calender' , component: CalendarComponent},
+{path: 'registration' , component: RegistrationComponent},
 {path: '**', component: PageNotFoundComponent}
 ];
 

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { notice } from '../notices.model';
 import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { NavController, ModalController } from '@ionic/angular';
 import { NoticeService } from '../notice.service';
+import { EditComponent } from '../edit/edit.component';
 
 @Component({
   selector: 'app-notice-detail',
@@ -11,7 +12,12 @@ import { NoticeService } from '../notice.service';
 })
 export class NoticeDetailPage implements OnInit {
   notices:notice;
-  constructor(private activeRoute: ActivatedRoute,private navCon:NavController,private noticeServ:NoticeService) { }
+  constructor(
+    private activeRoute: ActivatedRoute,
+    private navCon:NavController,
+    private noticeServ:NoticeService,
+    private modalCtrl:ModalController
+    ) { }
 
   ngOnInit() {
     this.activeRoute.paramMap.subscribe(param =>{
@@ -20,6 +26,12 @@ export class NoticeDetailPage implements OnInit {
          return;
        }
        this.notices = this.noticeServ.getNotice(param.get('noticeId'));
+    });
+  }
+
+  onEdit(){
+    this.modalCtrl.create({component:EditComponent}).then(modEle =>{
+      modEle.present();
     });
   }
 
