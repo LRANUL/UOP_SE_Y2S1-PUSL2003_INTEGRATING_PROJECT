@@ -27,8 +27,8 @@ export class notificationsPage {
 
   ngOnInit() {
     this.Service.NoticesPull().subscribe(data => {
-
       this.Notices = data.map(e => {
+        if (e.payload.doc.data()['noticeCategory'] == "Event"){
         return {
           id: e.payload.doc.id,
           isEdit: false,
@@ -37,6 +37,16 @@ export class notificationsPage {
           noticeDescription: e.payload.doc.data()['noticeDescription'],
           createdDateTime: (e.payload.doc.data()['noticeCreated']['noticeCreatedDateTime']).toDate(),
         };
+        } else {
+          return {
+            id: e.payload.doc.id,
+            isEdit: false,
+            noticeTitle: e.payload.doc.data()['noticeTitle'],
+            noticeDescription: e.payload.doc.data()['noticeDescription'],
+            coverImageFilePath: 'assets/noticedefault.png',
+            createdDateTime: (e.payload.doc.data()['noticeCreated']['noticeCreatedDateTime']).toDate(),
+          };
+        }
       })
       console.log(this.Notices);
     });

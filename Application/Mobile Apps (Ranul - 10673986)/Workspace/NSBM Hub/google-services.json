@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "435147747566",
+    "firebase_url": "https://pusl2003-be5c8.firebaseio.com",
+    "project_id": "pusl2003-be5c8",
+    "storage_bucket": "pusl2003-be5c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435147747566:android:b15133f0eb6502f86a43ff",
+        "android_client_info": {
+          "package_name": "lk.nsbmhub.rpls"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "435147747566-pkrqhhfij1hje2ip3pjapa1lbmcnic7p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBas-ign536mHRaesOvl8D3Pi57seQGnWY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "435147747566-pkrqhhfij1hje2ip3pjapa1lbmcnic7p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
