@@ -33,6 +33,7 @@ import { LocationComponent } from './Guest/location/location.component';
 import { NewsComponent } from './Guest/news/news.component';
 import { ReligiousComponent } from './Guest/religious/religious.component';
 import { SportsComponent } from './Guest/sports/sports.component';
+import { RegistrationComponent } from './auth/registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { SportsComponent } from './Guest/sports/sports.component';
     LocationComponent,
     NewsComponent,
     ReligiousComponent,
-    SportsComponent
+    SportsComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,
