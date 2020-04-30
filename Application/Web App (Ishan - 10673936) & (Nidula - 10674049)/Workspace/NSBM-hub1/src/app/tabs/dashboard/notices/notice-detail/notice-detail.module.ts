@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { NoticeDetailPageRoutingModule } from './notice-detail-routing.module';
 
 import { NoticeDetailPage } from './notice-detail.page';
+import { EditComponent } from '../edit/edit.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { NoticeDetailPage } from './notice-detail.page';
     IonicModule,
     NoticeDetailPageRoutingModule
   ],
-  declarations: [NoticeDetailPage]
+  declarations: [NoticeDetailPage,EditComponent],
+  entryComponents:[EditComponent]
 })
 export class NoticeDetailPageModule {}

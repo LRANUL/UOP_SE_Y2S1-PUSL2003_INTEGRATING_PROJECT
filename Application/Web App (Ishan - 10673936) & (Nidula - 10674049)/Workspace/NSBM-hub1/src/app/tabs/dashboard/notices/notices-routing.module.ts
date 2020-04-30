@@ -8,15 +8,21 @@ const routes: Routes = [
     path: '',
     component: NoticesPage,
     
-  },
-  {
-    path: 'notice-detail',
-    loadChildren: () => import('./notice-detail/notice-detail.module').then( m => m.NoticeDetailPageModule)
+    
   },
   {
     path: 'new',
     loadChildren: () => import('./new-notice/new-notice.module').then( m => m.NewNoticePageModule)
-  }
+  },
+
+  
+
+  {
+    path: ':noticeId',
+    loadChildren: () => import('./notice-detail/notice-detail.module').then( m => m.NoticeDetailPageModule),
+    
+  },
+  
 ];
 
 @NgModule({

@@ -1,20 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { NoticeDetailPage } from './notice-detail.page';
+import { AuthPage } from './auth.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: NoticeDetailPage,
-    
-    
-  },
-  
+    component: AuthPage,
+    pathMatch:'full'
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class NoticeDetailPageRoutingModule {}
+export class AuthPageRoutingModule {}
