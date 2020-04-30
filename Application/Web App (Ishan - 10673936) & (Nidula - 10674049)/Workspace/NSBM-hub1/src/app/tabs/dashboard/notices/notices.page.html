@@ -1,0 +1,50 @@
+ <ion-header>
+  <ion-toolbar>
+    <ion-title>notices</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/t1/Dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-button [routerLink]="['/','tabs','t1','Dashboard','notices','new']" routerLinkActive="router-link-active" >
+        <ion-icon name="add" slot="icon-only" color="primary"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+ <ion-grid>
+  <ion-row>
+    <ion-col size="12" size-sm="8" offset-sm="2" >
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>{{ lNotices[0].title }}</ion-card-title>
+          <ion-card-subtitle >{{ lNotices[0].createDate | date  }} </ion-card-subtitle>
+          <!-- <ion-card-content>{{ lNotices[0].createDate | date  }} </ion-card-content> -->
+        </ion-card-header>
+        <!-- <ion-img [src]="lNotices[0].imageUrl" ></ion-img> -->
+        <ion-img [src]="lNotices[0].imageUrl" ></ion-img>
+        <ion-card-content class="ion-text-center">
+          <p> {{ lNotices[0].desc }} </p>
+        </ion-card-content>
+        <div class="ion-text-right">
+          <ion-button fill="clear" color="primary" [routerLink]="['/','tabs','t1','Dashboard','notices',lNotices[0].id]" routerDirection="forward" >More</ion-button>
+        </div>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="12" size-sm="8" offset-sm="2" >
+      <ion-list>
+        <ion-item *ngFor="let item of lNotices.slice(1)" [routerLink]="['/','tabs','t1','Dashboard','notices',item.id]" detail >
+          <ion-thumbnail slot="start">
+            <ion-img [src]="item.imageUrl"></ion-img>
+          </ion-thumbnail>
+          <ion-label><h2>{{ item.title }}</h2><p>{{ item.desc }}</p></ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+</ion-grid> 
+</ion-content>
