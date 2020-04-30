@@ -22,7 +22,7 @@ export class ServicesService {
     });
   }
   NoticesPull() {
-    return this.firestore.collection('notices/notices-PO-To-Students/').snapshotChanges();
+    return this.firestore.collection('/notices/noticeTypes/notices-PO-To-Students/').snapshotChanges();
   }
   registerUser(value) {
     return new Promise<any>((resolve, reject) => {
@@ -39,24 +39,26 @@ export class ServicesService {
             middleName: value.mName,
             lastName: value.lName
           },
+          awardingBodyUniversity: value.awardingBodyUniversity,
           Email: value.email,
           nsbmStudentID: value.sid,
+          degreeCode: value.DegreeCode,
           degree: value.degree,
           batch: value.batch,
-          uID: user.uid,
+          uID: this.userDetails().uid,
           createdDateTime: new Date(),
           // ServerTime:firebase.firestore.FieldValue.serverTimestamp(),
           edited: {
-            editedByUID: [user.uid],
+            editedByUID: [this.userDetails().uid],
             editedDateTime: [new Date()],
             editedSection: ["Initial Register"]
           },
           sessionDateTime: {
             loginDateTime: [new Date()],
-            logoutDateTime: [new Date()]
+            logoutDateTime: ['']
           },
           faculty: value.faculty,
-          status: "active"
+          status: "Active"
 
         })
           .then(

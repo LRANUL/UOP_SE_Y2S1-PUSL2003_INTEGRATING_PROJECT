@@ -1,0 +1,166 @@
+
+<!-- Splash Screen -->
+<div *ngIf="splashContent" style="height: 100%;">
+  <ion-img src="assets/icon/splash.png" style="height: 80%;
+                                              width: 90%;
+                                              position: relative;
+                                              left: 50%;
+                                              transform: translateX(-50%);"></ion-img>
+  <br>
+  <ion-img src="assets/icon/loading.svg" style="height: 100px;
+                                                width: 100%;"></ion-img>
+</div>
+
+<!-- Login Screen Content -->
+<ion-content [hidden]="!loginContent">
+  <div style="background-color: white;">
+
+    <ion-button shape=round color="secondary" (click)="OpenRegisterModal()" style="color: white;
+                                                        width: 180px;
+                                                        height: 45px;
+                                                        position: absolute;
+                                                        top: 20px;
+                                                        right: 70px;">
+      <ion-icon name="person-add-outline" style="color: white;
+                                                font-size: 20px;"></ion-icon>
+      <ion-label style="margin-left: 7px;
+                        font-size: 18px;
+                        color: white;">
+        Register
+      </ion-label>              
+    </ion-button>
+
+    <div style="position: relative;
+                top: 60px;">
+      <div>
+        <ion-img src="assets/images/NSBM_Hub_Logo.png" alt="NSBM Hub Logo" style="width: 280px;
+                                                                                position: absolute;
+                                                                                left: 50%;
+                                                                                transform: translateX(-50%);"></ion-img>
+      </div>
+      
+      <h3 style="color: black;
+                text-align: center;
+                position: relative;
+                top: 300px;">National School of Business Management</h3>
+      <h4 style="color: black;
+                text-align: center;
+                position: relative;
+                top: 290px;">Green University Town</h4>
+    </div>
+
+    <ion-card style="width: 750px;
+                    background: white;
+                    margin-top: 380px;
+                    position: relative;
+                    left: 50%;
+                    transform: translateX(-50%);">
+      <ion-card-header>
+        <ion-card-title>
+          <h1 style="color: black;
+                    text-align: center;">NSBM Hub Management System</h1>
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form [formGroup] = "loginForm">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                
+                <ion-label style="font-size: 18px; 
+                                  margin-bottom: 4px;
+                                  color: #272727" position="floating">Email Address</ion-label>
+                <div class="inputBorder">
+                  <ion-item>
+                    <ion-icon name="mail-outline" style="font-size: 30px;
+                                                          margin-left: -2px;
+                                                          color: #0192B6;"></ion-icon>
+                    <ion-input type="email" clearInput formControlName="email" style="font-size: 18px;
+                                                                                      margin-left: 10px;"></ion-input>
+                  </ion-item>
+                </div>
+                
+
+
+                <!-- Displaying the error message -->
+              <!--
+                <div *ngFor="let error of errorMessages.email">
+                  <ng-container *ngIf="email.hasError(email.type) && (email.dirty || email.touched)">
+                    <small class="error-message">{{error.message}}</small>
+                  </ng-container>
+                </div>
+              -->
+
+              </ion-col>
+              <ion-col>
+
+                <ion-label style="font-size: 18px; 
+                                  margin-bottom: 4px;
+                                  color: #272727;">Password</ion-label>
+                <div class="inputBorder">
+                  <ion-item>
+                    <ion-icon name="key-outline" style="font-size: 30px;
+                                                          margin-left: -1.5px;
+                                                          color: #0192B6"></ion-icon>
+                    <ion-input type="password" clearInput formControlName="password" style="font-size: 18px;
+                                                                                            margin-left: 10px;"></ion-input>
+                  </ion-item>
+                </div>
+
+                  <!-- Displaying the error message -->
+                <!--
+                  <div *ngFor="let error of errorMessages.password">
+                    <ng-container *ngIf="password.hasError(password.type) && (password.dirty || password.touched)">
+                      <small class="error-message">{{password.message}}</small>
+                    </ng-container>
+                  </div>
+                -->
+
+                <p style="margin-left: 200px;">Forgot the password?</p>
+              </ion-col>
+
+            </ion-row>
+            <ion-row>
+
+              <ion-col>
+                <ion-button [disabled]="!loginForm.valid" (click)="login()" style="border-radius: 4px;
+                                                                                width: 270px;
+                                                                                height: 40px;
+                                                                                margin-top: 10px;
+                                                                                font-size: 20px;
+                                                                                color: white;
+                                                                                position: relative;
+                                                                                left: 50%;
+                                                                                transform: translateX(-50%);">LOGIN</ion-button>
+              </ion-col>
+
+            </ion-row>
+          </ion-grid>
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Loading Spinner -->
+    <div style="position: absolute;
+                left: 50%;
+                transform: translateX(-50%);">
+      <ion-spinner name="crescent" color="primary" style="height: 100px;
+                                                            width: 100px;" *ngIf="loginLoadingSpinner"></ion-spinner>
+    </div>
+
+    <ion-button color="medium" (click)="OpenAboutModal()" style="padding: 10px;
+                                                                border-radius: 5px;
+                                                                height: 60px;
+                                                                font-size: 16px;
+                                                                position: absolute; 
+                                                                top: 800px;
+                                                                right: 70px;">
+      <ion-label>
+        About
+      </ion-label>
+    </ion-button>
+
+
+  </div>
+</ion-content>

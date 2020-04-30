@@ -13,6 +13,9 @@ export class EditTransportSlotModalPage implements OnInit {
   passedTransportSlotDocId = null;
   passedTransportSlotType = null;
 
+  passedTransportSlotDepartureTime = null;
+  passedTransportSlotApproArrivalTime = null;
+
   transportSlotTypeDeparture: Boolean = false;
 
   transportSlotTypeDestination: Boolean = false;
@@ -33,6 +36,9 @@ export class EditTransportSlotModalPage implements OnInit {
     this.passedTransportSlotDocId = this.navParams.get('transportSlotDocId');
     this.passedTransportSlotType = this.navParams.get('transportSlotType');
 
+    this.passedTransportSlotDepartureTime = this.navParams.get('transportSlotDepartureTime');
+    this.passedTransportSlotApproArrivalTime = this.navParams.get('transportSlotApproArrivalTime');
+
     this.editTransportSlotForm = this.formBuilder.group({
       departure: new FormControl('', Validators.required),
       destination: new FormControl('', Validators.required),
@@ -48,8 +54,8 @@ export class EditTransportSlotModalPage implements OnInit {
     this.editTransportSlotForm.patchValue({
       departure: this.navParams.get('transportSlotDeparture'),
       destination: this.navParams.get('transportSlotDestination'),
-      departureTime: this.navParams.get('transportSlotDepartureTime'),
-      approArrivalTime: this.navParams.get('transportSlotApproArrivalTime'),
+      departureTime: this.passedTransportSlotDepartureTime,
+      approArrivalTime: this.passedTransportSlotApproArrivalTime,
       availableWeekdays: this.navParams.get('transportSlotWeekdays'),
       availableWeekends: this.navParams.get('transportSlotWeekends'),
       status: this.navParams.get('transportSlotStatus')

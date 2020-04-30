@@ -28,6 +28,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatTooltipModule } from '@angular/material';
 
+import { MaterialModule } from './material.module';
+
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+
 import { EditLectureSessionModalPageModule } from './account/semester-calendar/edit-lecture-session-modal/edit-lecture-session-modal.module';
 
 import { MoreDetailsSessionPopoverPageModule } from './account/semester-calendar/more-details-session-popover/more-details-session-popover.module';
@@ -59,6 +63,7 @@ import { NotificationsPopoverPageModule } from './account/notifications-popover/
 import { MoreDetailsEventPopoverPageModule } from './account/dashboard/more-details-event-popover/more-details-event-popover.module';
 
 
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -74,6 +79,8 @@ import { MoreDetailsEventPopoverPageModule } from './account/dashboard/more-deta
     AboutModalPageModule,
     RegisterModalPageModule,
     NgCalendarModule,
+    MaterialModule,
+    NgxMaterialTimepickerModule,
     BrowserAnimationsModule,
     MatTooltipModule,
     EditLectureSessionModalPageModule,

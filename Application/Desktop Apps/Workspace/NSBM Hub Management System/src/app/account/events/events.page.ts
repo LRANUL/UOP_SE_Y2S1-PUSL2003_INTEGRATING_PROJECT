@@ -155,6 +155,34 @@ export class EventsPage implements OnInit {
 
   }
 
+  // Confirm Box Implementation (Published Event Session)
+  async publishedEventSession ( title: string, content: string, value) {
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: [
+
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log("Alert Box: Publish Event Session Request Denied");
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            console.log("Alert Box: Publish Event Session Request Accepted");
+
+          }
+        }
+
+      ]
+    });
+    await alert.present();
+  }
+
+
 
   doAddNewEvent(value){
     console.log(value);
@@ -213,17 +241,17 @@ export class EventsPage implements OnInit {
   }
 
   onViewTitleChangedEvent(title){
-    console.log(title);
+  //  console.log(title);
     this.viewingMonthEvent = title;
   }
 
   onEventSelectedEvent(event) {
-    console.log("Event Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title);
+  //  console.log("Event Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title);
   }
 
   onTimeSelectedEvent(evt){
-    console.log("Event Session Selected Time: " + evt.selectedTime + ", has sessions: " + (evt.events !== undefined && evt.events.length !== 0) +
-      ", disabled: " + evt.disabled);
+  //  console.log("Event Session Selected Time: " + evt.selectedTime + ", has sessions: " + (evt.events !== undefined && evt.events.length !== 0) +
+  //    ", disabled: " + evt.disabled);
 
       if((evt.events !== undefined && evt.events.length !== 0) == false){
         this.noOfEventSessions = [];
@@ -235,13 +263,13 @@ export class EventsPage implements OnInit {
   }
 
   onCurrentDateChangedEvent(event: Date){
-    console.log("Current Event Session Date Change: " + event);
+  //  console.log("Current Event Session Date Change: " + event);
 
     this.noOfEventSessions = [];
   }
 
   onRangeChangedEvent(evt) {
-    console.log("Event Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
+  //  console.log("Event Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
   }
 
 

@@ -11,6 +11,7 @@ import { SideMenuPage } from '../side-menu/side-menu.page';
 import { FirestoreService } from 'src/app/services/firebase/firestore.service';
 import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 import { EditLectureSeriesModalPage } from './edit-lecture-series-modal/edit-lecture-series-modal.page';
+import { MatDatepickerInputEvent } from '@angular/material';
 
 @Component({
   selector: 'app-semester-calendar',
@@ -19,6 +20,11 @@ import { EditLectureSeriesModalPage } from './edit-lecture-series-modal/edit-lec
 })
 export class SemesterCalendarPage implements OnInit {
 
+  // Setting min validation for angular material calendar
+  minDate: Date;
+
+  // Setting max validation for angular matrerial calendar
+  maxDate: Date;
   
   searchSemesterCalendar: FormGroup;
 
@@ -39,7 +45,16 @@ export class SemesterCalendarPage implements OnInit {
     private popoverController: PopoverController,
     private sideMenuPageUserFaculty: SideMenuPage,
     private semesterCalendarService: FirestoreService
-  ) { }
+  ) { 
+
+    // Retrieving current date and setting as min data
+    this.minDate = new Date();
+
+    // Retriving the current year
+    const currentYear = new Date().getFullYear();
+    // Setting the max date december 31st two years in the future
+    this.maxDate = new Date(currentYear + 2, 11, 31);
+  }
 
   ngOnInit() {
 
@@ -371,53 +386,189 @@ export class SemesterCalendarPage implements OnInit {
     else if(this.userSelectedOption == "lectureAssignGroup"){
       this.userSelectionLectureAssignGroup = true;
     }
+  }
+
+
+  // Reseting lecture session start and end date angular material calendar
+  resetSessionStartEndDate(value){
+
+    if (value.detail.value != "") {
+      this.assignNewLectureSlotSC.controls['sessionStartDateMultiple'].setValue(null);
+      this.assignNewLectureSlotSC.controls['sessionEndDateMultiple'].setValue(null);
+    }
 
   }
 
-  
+  // Reseting lecture session end date angular material calendar
+  resetSessionEndDate(event: MatDatepickerInputEvent<Date>) {
+    if(event.value != null){
+      this.assignNewLectureSlotSC.controls['sessionEndDateMultiple'].setValue(null);
+    }
+  }
 
 
-  // (Publishing new lecture sessions section) and retrieving published lecture sessions 
+  // Confirm Box Implementation (Publish lecture session)
+  async publishLectureSession (title: string, content: string, value) {
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log("Alert Box: Published Lecture Session Request Denied");
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            console.log("Alert Box: Published Lecture Session Request Accepted");
+
+            this.doPublishLectureSlotSC(value);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  // (Publishing new lecture sessions section) and retrieving the newly published lecture sessions 
   doPublishLectureSlotSC(value){
 
-    // Retrieving selected session date
-    // Mon Apr 20 2020 10:13:54 GMT+0530 (India Standard Time)
-    let selectedSessionDateTime = new Date(value.sessionDateSingle);
 
-    let selectedSessionDate = selectedSessionDateTime.getFullYear() + "-" + selectedSessionDateTime.getMonth() + "-" + selectedSessionDateTime.getDate();
-    console.log(selectedSessionDate);
-    // Retrieving selected session start time
-    // Mon Apr 20 2020 09:07:54 GMT+0530 (India Standard Time)
-    let selectedSessionStartTime = new Date(value.sessionStartTimeSingle);
-
-    // Retrieving selected session end time
-    // Mon Apr 20 2020 12:02:54 GMT+0530 (India Standard Time)
-    let selectedSessionEndTime = new Date(value.sessionEndTimeSingle);
-
-    // taking the sesion date and session start time and merging them together. Assign this value to a variable
-    // Mon Apr 20 2020 09:07:00 GMT+0530 (India Standard Time)
-    let selectedSessionStartDateTime = new Date(selectedSessionDateTime.getFullYear(), selectedSessionDateTime.getMonth(), selectedSessionDateTime.getDate(), 
-      selectedSessionStartTime.getHours(), selectedSessionStartTime.getMinutes(), 0, 0);
-    
-      // taking the sesion date and session end time and merging them together. Assign this value to a variable
-    // Mon Apr 20 2020 12:02:00 GMT+0530 (India Standard Time)
-    let selectedSessionEndDateTime = new Date(selectedSessionDateTime.getFullYear(), selectedSessionDateTime.getMonth(), selectedSessionDateTime.getDate(), 
-      selectedSessionEndTime.getHours(), selectedSessionEndTime.getMinutes(), 0, 0);
-
-     
-      
     if(value.addLectureContentLoadOption == "lectureAssignIndividaully"){
       // If user selects 'lectureAssignIndividaully' option
 
+      // Extracting month, date and year from selected lecture session date, sample format - 04/30/2020
+      // Month has to be incremented by one because the month range is retrieve by - 0-11
+      let lectureSessionDate = (new Date(value.sessionDateSingle).getMonth()+1) + "/" + new Date(value.sessionDateSingle).getDate() + "/" + new Date(value.sessionDateSingle).getFullYear();
+
+      // Merging lecture session date and lecture session start time into date format
+      let lectureSessionStartDateTime = new Date(lectureSessionDate + " " + value.sessionStartTimeSingle);
+
+      // Merging lecture session date and lecture session end time into date format
+      let lectureSessionEndDateTime = new Date(lectureSessionDate + " " + value.sessionEndTimeSingle);
+
       // Adding the lecture session details into the firestore database
-      this.semesterCalendarService.addNewLectureSession(this.sideMenuPageUserFaculty.passUserFaculty(), value, this.degreeCode, this.awardingBodyUniversity, this.moduleTitle, selectedSessionStartDateTime, selectedSessionEndDateTime);
-      
-      this.alertNotice("Lecture Session Added", "New Lecture Session has been added.");
-
-
+      this.semesterCalendarService.addNewLectureSession(this.sideMenuPageUserFaculty.passUserFaculty(), value, this.degreeCode, this.awardingBodyUniversity, 
+        this.moduleTitle, lectureSessionStartDateTime, lectureSessionEndDateTime)
+        .then(success => {
+          this.alertNotice("Lecture Session Published", "New Lecture Session has been published.");
+        }, error => {
+          console.log("Error: " + error);
+          this.alertNotice("ERROR", "Error has occurred: " + error);
+      });
     }
     else if(value.addLectureContentLoadOption == "lectureAssignGroup"){
       // If user selects 'lectureAssignGroup' option
+
+      // Retrieving the user selected day value, ranging from 1 to 7 (Sunday to Saturday)
+      let userSelectedDay = value.sessionDayMultiple;
+
+      // Retieving the user selected session start date
+      let userSelectedSessionStartDate = value.sessionStartDateMultiple;
+
+      // Retrieving day value of the user selected session start date
+      let userSelectedSessionStartDateDay = (userSelectedSessionStartDate.getDay() + 1);
+
+      let firstSessionDateTime;
+
+      let firstSessionDateTimeUnix;
+
+      // Checking if user selected day value is equal to the day value of the user selected session start date 
+      if(userSelectedDay == userSelectedSessionStartDateDay){
+        firstSessionDateTime = userSelectedSessionStartDate;
+      }
+      else if(userSelectedDay != userSelectedSessionStartDateDay){
+        // For looping identifying the next date for the user selected day value
+        // Will be running seven loops until day value is found
+        for (let index = 0; index < 7; index++) {
+          // Retieving the date value (1 - 31) and increment it by one 
+          // This will be assigned to the user selected session start datetime value
+          userSelectedSessionStartDate.setDate(userSelectedSessionStartDate.getDate() + 1);
+
+          // Retriving the current day value of the user selected session start datetime value and incrementing it by one
+          // Because value is in range from 0-6 (Sunday to Saturday)
+          let currentDayValue = (userSelectedSessionStartDate.getDay() + 1);
+
+          // Checking if the user selected day value is equal to the iteration day value
+          if(currentDayValue == userSelectedDay){
+
+            firstSessionDateTime = userSelectedSessionStartDate;
+
+            // Exiting the for loop if the user selected day value is equal to the iteration day value
+            break;
+          }
+        }
+      }
+
+      // Extracting the UNIX timpastamp - no of seconds from the firstSessionDateTime
+      firstSessionDateTimeUnix = firstSessionDateTime.getTime();
+      
+      // Retrieving the user selected session end date
+      let userSelectedSessionEndDate = value.sessionEndDateMultiple;
+
+      // Extracting the unix timestamp from the selected session end date
+      let sessionEndDateTimeUnix = userSelectedSessionEndDate.getTime();
+
+      let sessionPeriodTimeDifference;
+
+      // Getting the count of seconds within the session period
+      if(sessionEndDateTimeUnix > firstSessionDateTimeUnix){
+        sessionPeriodTimeDifference = (sessionEndDateTimeUnix - firstSessionDateTimeUnix);
+      }
+
+      // Converting the number of session period seconds to days
+      let sessionPeriodNoOfDays = (sessionPeriodTimeDifference / (1000 * 60 * 60 * 24));
+
+      // Dividing the no of days by seven to extract the number of session within the session period
+      let noOfSessions = sessionPeriodNoOfDays / 7;
+
+      let lecturePublicationCount = 0;
+
+      // Running a for loop untill the number of sessions with one addtional to iterate for the final week of the session period
+      for (let index = 0; index <= noOfSessions; index++) {
+
+        // Checking if the iterating session value is greater than the user selected session end date, 
+        // If equal - for loop will  be exited
+        // Else if - lecture sessions will be published with the entered details for the session period 
+        if(firstSessionDateTime > userSelectedSessionEndDate){
+          break;
+        }
+        else{
+          // Extracting month, date and year from iterating lecture session date, sample format - 04/30/2020
+          // Month has to be incremented by one because the month range is retrieve by - 0-11
+          let lectureSessionDate = (new Date(firstSessionDateTime).getMonth()+1) + "/" + new Date(firstSessionDateTime).getDate() + "/" + new Date(firstSessionDateTime).getFullYear();
+
+          // Merging lecture session date and user selected lecture session start time into date format
+          let lectureSessionStartDateTime = new Date(lectureSessionDate + " " + value.sessionStartTimeMultiple);
+
+          // Merging lecture session date and user selected lecture session end time into date format
+          let lectureSessionEndDateTime = new Date(lectureSessionDate + " " + value.sessionEndTimeMultiple);
+
+          // Adding the lecture session details into the firestore database
+          this.semesterCalendarService.addNewLectureSession(this.sideMenuPageUserFaculty.passUserFaculty(), value, this.degreeCode, this.awardingBodyUniversity, 
+            this.moduleTitle, lectureSessionStartDateTime, lectureSessionEndDateTime)
+            .then(success => {
+              lecturePublicationCount++;
+            }, error => {
+              console.log("Error: " + error);
+              this.alertNotice("ERROR", "Error has occurred: " + error);
+          });
+        }
+
+        if(lecturePublicationCount == (noOfSessions+1)){
+          this.alertNotice("Lecture Sessions Published", "New Lecture Sessions have been published. Check the 'Active Calander'.");
+        }
+        else if(lecturePublicationCount != (noOfSessions+1)){
+          this.alertNotice("ERROR", "Error has occurred. Not all lecture sessions were created.");
+        }
+
+        // Incrementing the days by seven days to retrieve lecture session date for every week of the session period
+        firstSessionDateTime.setDate(firstSessionDateTime.getDate() + 7);
+      }
+
 
     }
 
@@ -425,18 +576,23 @@ export class SemesterCalendarPage implements OnInit {
     this.semesterCalendarService.retrievePublishedLectureSessionsSemesterCalendar(this.sideMenuPageUserFaculty.passUserFaculty(), value, this.awardingBodyUniversity).subscribe(activeLectureSlots => {
       this.eventSourceASCalendar = []; // Clearing the existing lecture sessions on the calendar before syncing 
       activeLectureSlots.forEach(snap => {
+        console.log("Event " + activeLectureSlots);
         let eventASCalendar:any = snap.payload.doc.data();
         eventASCalendar.id = snap.payload.doc.id;
-        eventASCalendar.title = eventASCalendar.moduleCode + "-" + eventASCalendar.moduleTitle + "\n | Status: " + eventASCalendar.status;
+        eventASCalendar.title = eventASCalendar.moduleCode + "-" + eventASCalendar.moduleTitle + " | Status: " + eventASCalendar.status;
         eventASCalendar.startTime = eventASCalendar.startDateTime.toDate();
         eventASCalendar.endTime = eventASCalendar.endDateTime.toDate();
 
         this.eventSourceASCalendar.push(eventASCalendar);
       });
     });
-   
-
+    
   }
+
+
+  
+
+
 
   // Resetting search assigned semester calendar
   resetSearchAssignedSemesterCalendar(){
@@ -597,17 +753,17 @@ export class SemesterCalendarPage implements OnInit {
   }
 
   onViewTitleChangedPSCalendar(title){
-    console.log(title);
+  //  console.log(title);
     this.viewingMonthPSCalendar = title; 
   }
 
   onEventSelectedPSCalendar(event) {
-    console.log("Lecture Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title); 
+  //  console.log("Lecture Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title); 
   }
 
   onTimeSelectedPSCalendar(event){
-    console.log("Lecture Session Selected Time: " + event.selectedTime + ", has sessions: " + (event.events !== undefined && event.events.length !== 0) +
-      ", disabled: " + event.disabled);
+  //  console.log("Lecture Session Selected Time: " + event.selectedTime + ", has sessions: " + (event.events !== undefined && event.events.length !== 0) +
+  //    ", disabled: " + event.disabled);
 
       if((event.events !== undefined && event.events.length !== 0) == false){
         this.lectureSessionsDocuments = [];
@@ -615,17 +771,17 @@ export class SemesterCalendarPage implements OnInit {
       else if ((event.events !== undefined && event.events.length !== 0) == true){
         this.lectureSessionsDocuments = event.events;
       }
-      console.log(this.lectureSessionsDocuments);
+  //    console.log(this.lectureSessionsDocuments);
   }
 
   onCurrentDateChangedPSCalendar(event: Date){
-    console.log("Current Lecture Session Date Change: " + event);
+  //  console.log("Current Lecture Session Date Change: " + event);
 
     this.lectureSessionsDocuments = [];
   }
 
   onRangeChangedPSCalendar(evt) {
-    console.log("Lecture Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
+  //  console.log("Lecture Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
   }
 
 
@@ -644,35 +800,34 @@ export class SemesterCalendarPage implements OnInit {
   }
 
   nextMonthASCalendar(){
-    var frontSwipeASCalendar = document.getElementById('EventCalendar').querySelector('.swiper-container')['swiper'];
+    var frontSwipeASCalendar = document.getElementById('activeSemesterCalendar').querySelector('.swiper-container')['swiper'];
     frontSwipeASCalendar.slideNext();
   }
 
   previousMonthASCalendar(){
-    var backSwipeASCalendar = document.getElementById('EventCalendar').querySelector('.swiper-container')['swiper'];
+    var backSwipeASCalendar = document.getElementById('activeSemesterCalendar').querySelector('.swiper-container')['swiper'];
     backSwipeASCalendar.slidePrev();
   }
 
   onViewTitleChangedASCalendar(title){
-    console.log(title);
     this.viewingMonthASCalendar = title; 
   }
 
   onEventSelectedASCalendar(event) {
-    console.log("Lecture Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title);
+  //  console.log("Lecture Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title);
   }
 
   onTimeSelectedASCalendar(evt){
-    console.log("Lecture Session Selected Time: " + evt.selectedTime + ", has sessions: " + (evt.events !== undefined && evt.events.length !== 0) +
-      ", disabled: " + evt.disabled);
+  //  console.log("Lecture Session Selected Time: " + evt.selectedTime + ", has sessions: " + (evt.events !== undefined && evt.events.length !== 0) +
+  //    ", disabled: " + evt.disabled);
   }
 
   onCurrentDateChangedASCalendar(event: Date){
-    console.log("Current Lecture Session Date Change: " + event);
+  //  console.log("Current Lecture Session Date Change: " + event);
   }
 
   onRangeChangedASCalendar(evt) {
-    console.log("Lecture Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
+  //  console.log("Lecture Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
   }
 
 

@@ -1,6 +1,7 @@
 import { ServicesService } from './../services.service';
 import { Component } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-notes',
@@ -12,16 +13,15 @@ export class notesPage {
   Note = '';
   addNote: boolean;
   Notes = [];
-
+  StudentID = '';
   constructor(
-    public database: AngularFireDatabase, private firebase: ServicesService
+    public database: AngularFireDatabase, private firebase: ServicesService, private firestore: AngularFirestore
     ) {
 
     const date = new Date();
     const options = { weekday: 'long', month: 'long', day: 'numeric' };
     this.currentDate = date.toLocaleDateString('en-GB', options);
     this.autorefresh(event);
-
   }
 
 
@@ -31,30 +31,44 @@ export class notesPage {
   }
 
   addNoteToFirebase() {
-    this.database.list('/PrivateNotes/' + this.firebase.userDetails().email).push({
+    this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().email).ref.get().then((doc) => {
+      this.StudentID = doc.data().nsbmStudentID
+    
+    this.database.list('/PrivateNotes/' + this.StudentID).push({
       text: this.Note,
       date: new Date().toISOString(),
       checked: false
     });
     this.showForm();
+    })
   }
 
 
 
   changeCheckState(ev: any) {
+    this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().email).ref.get().then((doc) => {
+      this.StudentID = doc.data().nsbmStudentID
     console.log('checked: ' + ev.checked);
-    this.database.object('/PrivateNotes/' + this.firebase.userDetails().email + ev.key + '/checked/').set(ev.checked);
+    this.database.object('/PrivateNotes/' + this.StudentID + ev.key + '/checked/').set(ev.checked);
+    })
+
   }
 
   deleteNote(Note: any) {
-    this.database.list('/PrivateNotes/' + this.firebase.userDetails().email).remove(Note.key);
+    this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().email).ref.get().then((doc) => {
+      this.StudentID = doc.data().nsbmStudentID
+    this.database.list('/PrivateNotes/' + this.StudentID).remove(Note.key);
+    })
+
   }
 
 
   getNotes(event) {
+    this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().email).ref.get().then((doc) => {
+      this.StudentID = doc.data().nsbmStudentID
     console.log('Begin async operation');
     setTimeout(() => {
-      this.database.list('/PrivateNotes/' + this.firebase.userDetails().email).snapshotChanges(['child_added', 'child_removed']).subscribe(actions => {
+      this.database.list('/PrivateNotes/' + this.StudentID).snapshotChanges(['child_added', 'child_removed']).subscribe(actions => {
         this.Notes = [];
         actions.forEach(action => {
           this.Notes.push({
@@ -68,9 +82,12 @@ export class notesPage {
       console.log('Async operation has ended');
       event.target.complete();
     }, 3000);
+    })
   }
   autorefresh(event) {
-    this.database.list('/PrivateNotes/' + this.firebase.userDetails().email).snapshotChanges(['child_added', 'child_removed']).subscribe(actions => {
+    this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().email).ref.get().then((doc) => {
+      this.StudentID = doc.data().nsbmStudentID
+    this.database.list('/PrivateNotes/' + this.StudentID).snapshotChanges(['child_added', 'child_removed']).subscribe(actions => {
       this.Notes = [];
       actions.forEach(action => {
         this.Notes.push({
@@ -81,5 +98,6 @@ export class notesPage {
         });
       });
     });
+    })
   }
 }

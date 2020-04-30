@@ -10,9 +10,14 @@ import { SemesterCalendarPage } from './semester-calendar.page';
 
 import { NgCalendarModule } from 'ionic2-calendar';
 
-import { MatTooltipModule } from '@angular/material';
+import { MatTooltipModule, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 
 import { HttpClientModule } from '@angular/common/http';
+
+import { MaterialModule } from 'src/app/material.module';
+
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+
 
 @NgModule({
   imports: [
@@ -22,8 +27,10 @@ import { HttpClientModule } from '@angular/common/http';
     SemesterCalendarPageRoutingModule,
     ReactiveFormsModule,
     NgCalendarModule,
-    MatTooltipModule,
-    HttpClientModule
+    MatTooltipModule,     
+    HttpClientModule,
+    MaterialModule,
+    NgxMaterialTimepickerModule
   ],
   declarations: [SemesterCalendarPage]
 })

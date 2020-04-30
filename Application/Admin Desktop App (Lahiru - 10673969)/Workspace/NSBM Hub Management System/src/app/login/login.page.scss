@@ -1,0 +1,21 @@
+ion-content{
+    // Changing the background color from black to white
+    --ion-background-color: white;
+}
+
+ion-item{
+    // Changing the background color from black to white
+    --background: white;
+    border-radius: 5px;
+    color: rgb(10, 10, 10);
+}
+
+.inputBorder{
+    border: #ccc solid 1px;
+    border-radius: 5px;
+}
+
+.error-message {
+    color: var(--ion-color-danger);
+}
+

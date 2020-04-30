@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { EditTransportSlotModalPageRoutingModule } from './edit-transport-slot-modal-routing.module';
 
 import { EditTransportSlotModalPage } from './edit-transport-slot-modal.page';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { EditTransportSlotModalPage } from './edit-transport-slot-modal.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    EditTransportSlotModalPageRoutingModule
+    EditTransportSlotModalPageRoutingModule,
+    NgxMaterialTimepickerModule
   ],
   declarations: [EditTransportSlotModalPage]
 })

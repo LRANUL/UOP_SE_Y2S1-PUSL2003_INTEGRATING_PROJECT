@@ -1,0 +1,329 @@
+<ion-header style="height: 70px;">
+	<ion-toolbar>
+  
+	  <!-- This will add a button to show the side menu when the side menu is hidden in small screens -->
+	  <ion-buttons slot="start">
+		<ion-menu-button></ion-menu-button>
+	  </ion-buttons>
+  
+	  <ion-title style="position: absolute;
+						top: 40%;">EVENTS</ion-title>
+  
+	  <!-- Header Contents Section -->
+	  <div style="position: absolute;
+				  right: 5px;
+				  top: 8px;">
+				  
+		<!-- Notification Bell, Unread Notifications Count, Drop Down -->          
+		<ion-button fill="clear" color="dark" style="width: 100px;
+													height: 45px;
+													background-color: white;" (click)="openNotificationPopover($event)">
+  
+		  <!-- Notification Bell Icon -->
+		  <div style="height: 42px;
+					width: 42px;"> 
+			<ion-icon name="notifications-outline" style="font-size: 35px;
+														  position: absolute;
+														  top: 5px;
+														  left: 0px;"></ion-icon>
+		  </div>
+  
+			<!-- Arrow Icon -->
+		  <div style="position: absolute;
+					  left: 50px;
+					  top: 10px;
+					  font-size: 26px;">
+			<ion-icon name="chevron-down-outline"></ion-icon>
+		  </div>
+		</ion-button>
+  
+	  </div>
+  
+	</ion-toolbar>
+	
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+
+    <ion-row>
+
+      <ion-col>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              Event Calendar
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            
+            <ion-grid>
+
+              <ion-row>
+
+                <ion-col size="4">
+
+                  <ion-card>
+					<ion-card-header>
+						<ion-card-title>
+							Search for an Event
+						</ion-card-title>
+					</ion-card-header>
+                    <ion-card-content>
+
+						<form [formGroup]="searchEventForm" (ngSubmit)="doSearchEvent(searchEventForm.value)">
+							<ion-grid>
+								<ion-row>
+									<ion-col size="5">
+										<ion-label>
+											Event Title
+										</ion-label>
+									</ion-col>
+									<ion-col size="7">
+										<ion-item>
+											<ion-input type="text" clearText formControlName="eventTitle"></ion-input>
+										</ion-item>
+									</ion-col>
+								</ion-row>
+								<ion-row>
+									<ion-col size="5">
+										<ion-label>
+											Event Date 
+										</ion-label>
+									</ion-col>
+									<ion-col size="7">
+										<ion-item>
+											<ion-datetime placeholder="Select Date" formControlName="eventDate"></ion-datetime>
+										</ion-item>
+									</ion-col>
+								</ion-row>
+								<ion-row>
+									<ion-col>
+										<ion-button expand="block" type="submit" [disabled]="!searchEventForm.valid">
+											Search
+										</ion-button>
+									</ion-col>
+								</ion-row>
+							</ion-grid>
+						</form>
+
+                    </ion-card-content>
+                  </ion-card>
+
+                </ion-col>
+                <ion-col size="8">
+
+                  <ion-card>
+					<ion-card-header>
+						<ion-card-title>
+							Published Events 
+						</ion-card-title>
+					</ion-card-header>
+                    <ion-card-content>
+
+						<div style="position: absolute;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            top: -30px;">
+                
+							<ion-button fill="clear" (click)="previousMonthEvent()" style="margin-top: -12px;">
+								<ion-icon name="arrow-back"></ion-icon>
+							</ion-button>
+
+							<ion-label style="font-size: 20px;">
+								{{ viewingMonthEvent }}
+							</ion-label>
+
+							<ion-button fill="clear" (click)="nextMonthEvent()" style="margin-top: -12px;">
+								<ion-icon name="arrow-forward"></ion-icon>
+							</ion-button>
+
+						</div>
+						
+
+						<div style="overflow-y: scroll;
+									margin-top: 0px;">
+							<div style="height: 580px;">
+								<calendar [eventSource]="eventSourceEvent"
+								[calendarMode]="calendarEvent.mode"
+								[currentDate]="calendarEvent.currentDate"
+								(onCurrentDateChanged)="onCurrentDateChangedEvent($event)"
+								(onRangeChanged)="reloadSourceEvent(startTime, endTime)"
+								(onEventSelected)="onEventSelectedEvent($event)"
+								(onTitleChanged)="onViewTitleChangedEvent($event)"
+								(onTimeSelected)="onTimeSelectedEvent($event)"
+								startHour="1"
+								endHour="24"
+								step="30"
+								startingDayWeek="1" id="EventCalendar">
+								</calendar>
+							</div>
+						</div>
+
+
+						<ion-grid style="width: 140px;
+										position: absolute;
+										top: 280px;
+										right: 0%;
+										padding: 0;
+										margin: 0;">
+							<ion-row *ngFor="let session of noOfEventSessions">
+							<ion-col>
+								<ion-button size="small" title="Edit Event Session" color="warning" (click)="editEventSession(session)" style="width: 40px;
+																																				height: 40px;
+																																				border-radius: 5px;
+																																				margin-bottom: -5px;
+																																				margin-left: 5px;">
+								<ion-icon name="create" style="color: white;
+																font-size: 30px;"></ion-icon>
+								</ion-button>
+							</ion-col>
+							<ion-col>
+								<ion-button size="small" title="Remove Event Session" color="danger"
+								(click)="removeEventSession('Confirmation', 'This event session will be removed, do you want to continue?', session.id)" style="width: 40px;
+																																								height: 40px;
+																																								border-radius: 5px;
+																																								margin-bottom: -5px;
+																																								margin-left: -14px;">
+								<ion-icon name="trash" style="margin-left: -1px;
+																font-size: 30px;"></ion-icon>
+								</ion-button>
+							</ion-col>
+							</ion-row>
+						</ion-grid>
+
+                    </ion-card-content>
+                  </ion-card>
+
+                </ion-col>
+
+              </ion-row>
+
+            </ion-grid>
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+    <ion-row>
+
+      <ion-col>
+
+        <ion-card>
+        	<ion-card-header>
+				<ion-card-title>
+					Add New Event
+				</ion-card-title>
+        	</ion-card-header>
+        	<ion-card-content>
+				
+				<form [formGroup]="addNewEventForm" (ngSubmit)="doAddNewEvent(addNewEventForm.value)">
+					<ion-grid>
+						<ion-row>
+							<ion-col size="5">
+								
+								<ion-label class="addEventFormLabel">
+									Event Title
+								</ion-label>
+								
+							</ion-col>
+							<ion-col size="7">
+								<ion-item>
+									<ion-input type="text" placeholder="Enter Title" inputClear formControlName="eventTitle"></ion-input>
+								</ion-item>
+							</ion-col>
+						</ion-row>
+						<ion-row>
+							<ion-col size="5">
+								
+								<ion-label class="addEventFormLabel">
+									Event Date 
+								</ion-label>
+								
+							</ion-col>
+							<ion-col size="7">
+								<ion-item>
+									<ion-datetime placeholder="Pick Date" formControlName="eventDate"></ion-datetime>
+								</ion-item>
+							</ion-col>
+						</ion-row>
+						<ion-row>
+							<ion-col size="5">
+								
+								<ion-label class="addEventFormLabel">
+									Event Start Time
+								</ion-label>
+								
+							</ion-col>
+							<ion-col size="7">
+								<ion-item>
+									<ion-datetime display-format="h:mm A" picker-format="h:mm A" placeholder="Pick Start Time" formControlName="eventStartTime"></ion-datetime>
+								</ion-item>
+							</ion-col>
+						</ion-row>
+						<ion-row>
+							<ion-col size="5">
+								
+								<ion-label class="addEventFormLabel">
+									Event End Time
+								</ion-label>
+								
+							</ion-col>
+							<ion-col size="7">
+								<ion-item>
+									<ion-datetime display-format="h:mm A" picker-format="h:mm A" placeholder="Pick End Time" formControlName="eventEndTime"></ion-datetime>
+								</ion-item>
+							</ion-col>
+						</ion-row>
+						<ion-row>
+							<ion-col size="5">
+								
+								<ion-label class="addEventFormLabel">
+									Event Status
+								</ion-label>
+								
+							</ion-col>
+							<ion-col size="7">
+								<ion-item>
+									<ion-label>
+										Event Status
+									</ion-label>
+									<ion-select placeholder="Select Status" style="min-width: 100%;" formControlName="eventStatus">
+										<ion-select-option *ngFor="let item of publishedSessionStatuses" value="{{ item.payload.doc.data().status }}">
+											{{ item.payload.doc.data().status }}
+										</ion-select-option>
+									</ion-select>
+								</ion-item>
+							</ion-col>
+						</ion-row>
+						<ion-row>
+							<ion-col>
+								<ion-button type="submit" style="position: relative;
+																left: 50%;
+																transform: translateX(-50%);
+																top: 10px;" [disabled]="!addNewEventForm.valid">
+									Add Event
+								</ion-button>
+							</ion-col>
+						</ion-row>
+					</ion-grid>
+				</form>
+
+          	</ion-card-content>
+        </ion-card>
+
+      </ion-col>
+      <ion-col>
+
+       
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>

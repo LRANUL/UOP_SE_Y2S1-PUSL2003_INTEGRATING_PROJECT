@@ -1,0 +1,36 @@
+<!--
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Login - About Modal</ion-title>
+    </ion-toolbar>
+  </ion-header>
+-->
+
+<ion-content> 
+  <ion-item>
+    <ion-label>About</ion-label>
+    <ion-button (click)="CloseAboutModal()" size="small" slot="end">Close</ion-button>
+  </ion-item>
+
+  <ion-card style="height: 500px; 
+                  width: 400px;
+                  position: relative;
+                  margin-top: 20px;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  background-color: white;">
+    <ion-card-header>
+    <ion-img src="assets/images/Team_Logo.png" style="background-color: white;
+                                                           width: 150px;
+                                                           margin-top: 10px;
+                                                           margin-left: 30%;"></ion-img>
+    </ion-card-header>   
+    <ion-card-content>
+      <h2 style="text-align: center;
+                color: black;">NSBM Hub Platform built by University of Plymouth Second Year students <br> 
+                              following BSc(Hons) Software Engineering Degree</h2><br>
+      <h2 style="text-align: center;
+                color: black;">Assignment Title: Coursework PUSL2003 - Integrating Project</h2>
+    </ion-card-content>                                                   
+  </ion-card>
+</ion-content>

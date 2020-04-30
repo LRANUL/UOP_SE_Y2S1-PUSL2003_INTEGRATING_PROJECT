@@ -328,12 +328,12 @@ export class DashboardPage implements OnInit {
   }
 
   onEventSelectedLecture(event) {
-    console.log("Lecture Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title);
+  //  console.log("Lecture Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title);
   }
 
   onTimeSelectedLecture(evt){
-    console.log("Lecture Session Selected Time: " + evt.selectedTime + ", has sessions: " + (evt.events !== undefined && evt.events.length !== 0) +
-      ", disabled: " + evt.disabled);
+  //  console.log("Lecture Session Selected Time: " + evt.selectedTime + ", has sessions: " + (evt.events !== undefined && evt.events.length !== 0) +
+  //    ", disabled: " + evt.disabled);
 
       if((evt.events !== undefined && evt.events.length !== 0) == false){
         this.noLectureSessionText = true;
@@ -346,13 +346,13 @@ export class DashboardPage implements OnInit {
   }
 
   onCurrentDateChangedLecture(event: Date){
-    console.log("Current Lecture Session Date Change: " + event);
+  //  console.log("Current Lecture Session Date Change: " + event);
 
     this.lectureSessionDocuments = [];
   }
 
   onRangeChangedLecture(evt) {
-    console.log("Lecture Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
+  //  console.log("Lecture Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
   }
  
  

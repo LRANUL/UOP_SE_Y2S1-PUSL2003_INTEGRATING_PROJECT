@@ -6,6 +6,7 @@ import { NavController, LoadingController, ModalController, ToastController } fr
 import { Storage } from '@ionic/storage';
 import { AlertController } from '@ionic/angular';
 import { Network } from '@ionic-native/network/ngx';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 
 @Component({
@@ -25,7 +26,9 @@ export class settingsPage {
     public storage: Storage,
     private network: Network,
     public alertController: AlertController,
-    public toastController: ToastController
+    public toastController: ToastController,
+    private firebase: ServicesService,
+    private firestore: AngularFirestore,
   ) {
     storage.ready().then(() => {
       storage.get('Status').then((val) => {
@@ -99,7 +102,9 @@ export class settingsPage {
   }
 
   async logout() {
-
+    this.firestore.collection('/users/userTypes/studentUsers').doc(this.authService.userDetails().email).set({
+      accountActivity: 'Offline',
+    }, { merge: true });
     this.authService
       .logoutUser()
       .then(async res => {

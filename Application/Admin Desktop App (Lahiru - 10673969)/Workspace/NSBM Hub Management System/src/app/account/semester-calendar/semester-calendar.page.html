@@ -1,0 +1,1101 @@
+<ion-header style="height: 70px;">
+  <ion-toolbar>
+
+    <!-- This will add a button to show the side menu when the side menu is hidden in small screens -->
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title style="position: absolute;
+                      top: 40%;">Semester Calendar</ion-title>
+
+    <!-- Header Contents Section -->
+    <div style="position: absolute;
+                right: 5px;
+                top: 8px;">
+      <!-- Notification Bell, Unread Notifications Count, Drop Down -->          
+
+      <ion-button fill="clear" color="dark" style="width: 100px;
+                                                  height: 45px;
+                                                  background-color: white;" (click)="openNotificationPopover($event)">
+
+        <!-- Notification Bell Icon -->
+        <div style="height: 42px;
+                  width: 42px;"> 
+          <ion-icon name="notifications-outline" style="font-size: 35px;
+                                                        position: absolute;
+                                                        top: 5px;
+                                                        left: 0px;"></ion-icon>
+        </div>
+
+          <!-- Arrow Icon -->
+        <div style="position: absolute;
+                    left: 50px;
+                    top: 10px;
+                    font-size: 26px;">
+          <ion-icon name="chevron-down-outline"></ion-icon>
+        </div>
+      </ion-button>
+
+    </div>
+
+  </ion-toolbar>
+  
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-card style="min-height: 600px;">
+          <ion-card-header>
+            <ion-card-title>
+              Assigned Semester Calendars
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="5">
+
+                  <form [formGroup]="searchSemesterCalendar" (ngSubmit)="doSearchSemesterCalendar(searchSemesterCalendar.value)">
+                    <ion-row>
+                      <ion-col>
+                        <ion-item>
+                          <ion-label style="margin-left: 15px;">Batch</ion-label>
+                          <ion-select placeholder="Select Batch" okText="Select" id="batchOption" cancelText="Cancel" formControlName="batch" style="max-width: 100%;">
+                            <ion-select-option *ngFor="let item of publishedBatches" value="{{ item.payload.doc.data().batch }}">{{ item.payload.doc.data().batch }}</ion-select-option>
+                          </ion-select>
+                        </ion-item>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col>
+                        <ion-item style="margin-top: 10px;">
+                          <ion-label style="margin-left: 15px;">
+                            Degree Program
+                          </ion-label>
+                          <ion-select placeholder="Select Degree Program" okText="Select" cancelText="Cancel" formControlName="degreeProgram" style="max-width: 100% !important;" (ionChange)="retrieveAwardingBodyUniversity($event)">
+                              <ion-select-option *ngFor="let item of publishedDegreePrograms" value="{{ item.payload.doc.data().degree }}">
+                                {{ item.payload.doc.data().degree }}, {{ item.payload.doc.data().awardingBodyUniversity }}
+                              </ion-select-option>
+                          </ion-select>
+                        </ion-item>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col>
+                        <ion-item style="margin-top: 10px;">
+                          <ion-label style="margin-left: 15px;">
+                            Academic Period
+                          </ion-label>
+                          <ion-grid>
+                            <ion-row>
+                              <ion-col>
+                                <ion-select placeholder="Select Year" okText="Select" cancelText="Cancel" formControlName="academicPeriodYear" style="max-width: 100% !important;">
+                                  <ion-select-option value="1">Year 1</ion-select-option>
+                                  <ion-select-option value="2">Year 2</ion-select-option>
+                                  <ion-select-option value="3">Year 3</ion-select-option>
+                                  <ion-select-option value="4">Year 4</ion-select-option>
+                                </ion-select>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <ion-select placeholder="Select Semester" okText="Select" cancelText="Cancel" formControlName="academicPeriodSemester" style="max-width: 100% !important;">
+                                  <ion-select-option value="1">Semester 1</ion-select-option>
+                                  <ion-select-option value="2">Semester 2</ion-select-option>
+                                </ion-select>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-item>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col>
+                        <ion-button expand="block" type="submit" [disabled]="!searchSemesterCalendar.valid">
+                          <ion-icon name="search-outline"></ion-icon>
+                          <ion-label style="color: white;
+                                            margin-left: 10px;">
+                            SEARCH
+                          </ion-label>
+                        </ion-button>          
+                      </ion-col>
+                    </ion-row>
+                  </form>
+
+                  <!-- Loading Spinner -->
+                  <ion-spinner name="dots" style="position: absolute;
+                                              left: 50%;
+                                              transform: translateX(-50%);
+                                              margin-top: -25px;
+                                              height: 100px;
+                                              width: 100px;" *ngIf="loadingSpinnerPLS"></ion-spinner>
+
+                   <ion-grid style="margin-top: 50px;
+                                  padding-top: 100px;">
+                    <ion-row>
+                      <ion-col>
+                        <ion-button style="min-width: 100%;" color="medium">
+                          <ion-icon name="refresh-outline"></ion-icon>
+                          <ion-label style="color: white;
+                                            margin-left: 10px;">
+                            Generate PDF
+                          </ion-label>
+                        </ion-button>
+                      </ion-col>
+                      <ion-col>
+                        <ion-button style="min-width: 100%;" color="medium">
+                          <ion-icon name="cloud-download-outline"></ion-icon>
+                          <ion-label style="color: white;
+                                            margin-left: 10px;">
+                            Download PDF
+                          </ion-label>
+                        </ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+
+                </ion-col>
+
+                  <!-- Vertical line in the center of the page -->
+                  <div style="border-left: rgb(236, 236, 236) solid 2px;
+                              min-height: 600px;
+                              position: absolute;
+                              left: 41.7%;
+                              top: -40px;
+                              transform: translateX(-68.3%);">
+                  </div>
+
+                <ion-col size="7">
+
+                  <!-- Reset Button -->
+                  <ion-button style="width: 90px;
+                                    position: absolute;
+                                    top: -55px;
+                                    right: -1.5%;" color="dark" fill="outline" size="small" (click)="resetSearchAssignedSemesterCalendar()"> 
+                    <ion-icon name="refresh-outline"></ion-icon>
+                    <ion-label style="color: rgb(59, 59, 59);
+                                      margin-left: 5px;">
+                      Reset
+                    </ion-label>
+                  </ion-button>
+                  
+                  <div style="position: absolute;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            top: -40px;">
+                
+                    <ion-button fill="clear" (click)="previousMonthPSCalendar()" style="margin-top: -12px;">
+                      <ion-icon name="arrow-back"></ion-icon>
+                    </ion-button>
+
+                    <ion-label style="font-size: 20px;">
+                      {{ viewingMonthPSCalendar }}
+                    </ion-label>
+
+                    <ion-button fill="clear" (click)="nextMonthPSCalendar()" style="margin-top: -12px;">
+                      <ion-icon name="arrow-forward"></ion-icon>
+                    </ion-button>
+
+                  </div>
+                
+                  <div style="overflow-y: scroll;">
+                      <div style="height: 450px;">
+                      <calendar [eventSource]="eventSourcePSCalendar"
+                      [calendarMode]="calendarPSCalendar.mode"
+                      [currentDate]="calendarPSCalendar.currentDate"
+                      (onCurrentDateChanged)="onCurrentDateChangedPSCalendar($event)"
+                      (onRangeChanged)="onRangeChangedPSCalendar($event)"
+                      (onEventSelected)="onEventSelectedPSCalendar($event)"
+                      (onTitleChanged)="onViewTitleChangedPSCalendar($event)"
+                      (onTimeSelected)="onTimeSelectedPSCalendar($event)"
+                      startHour="9"
+                      endHour="17"
+                      step="30"
+                      startingDayWeek="1" id="publishedSemesterCalendar">
+                    
+                      </calendar>
+                    </div>
+                  </div>
+
+
+                  <ion-grid style="width: 140px;
+                                  position: absolute;
+                                  top: 282px;
+                                  right: 1%;
+                                  padding: 0;
+                                  margin: 0;">
+                    <ion-row *ngFor="let session of lectureSessionsDocuments">
+                      <ion-col>
+                        <ion-button size="small" title="Lecture Session Read More" color="secondary" (click)="moreDetailsLectureSession($event, session)" style="width: 40px;
+                                                                                                                                                                    height: 40px;
+                                                                                                                                                                    border-radius: 5px;
+                                                                                                                                                                    margin-bottom: -5px;
+                                                                                                                                                                    margin-left: -10px;">
+                          <ion-icon name="document-text" style="font-size: 30px;"></ion-icon>
+                        </ion-button>
+                      </ion-col>
+                      <ion-col>
+                        <ion-button size="small" title="Edit Lecture Session" color="warning" (click)="editLectureSession(session)" style="width: 40px;
+                                                                                                                                              height: 40px;
+                                                                                                                                              border-radius: 5px;
+                                                                                                                                              margin-bottom: -5px;
+                                                                                                                                              margin-left: -12px;">
+                          <ion-icon name="create" style="color: white;
+                                                        font-size: 30px;"></ion-icon>
+                        </ion-button>
+                      </ion-col>
+                      <ion-col>
+                        <ion-button size="small" title="Remove Lecture Session" color="danger"
+                          (click)="removeLectureSession('Confirmation Required', 'This lecture session will be removed, do you want to continue?', session.id)" style="width: 40px;
+                                                                                                                                                              height: 40px;
+                                                                                                                                                              border-radius: 5px;
+                                                                                                                                                              margin-bottom: -5px;
+                                                                                                                                                              margin-left: -14px;">
+                          <ion-icon name="trash" style="margin-left: -1px;
+                                                        font-size: 30px;"></ion-icon>
+                        </ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+
+
+              
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            
+            
+           
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              Create New Semeter Calendar / Add New Lecture Sessions
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="5.5" size-sm="12" size-lg="5.5">
+                  
+                  <ion-card>
+                    <ion-card-content>
+                      
+                      <p style="font-size: 20px;">
+                        <b>Semester Information</b>
+                      </p>
+
+                      <form [formGroup]="assignNewLectureSlotSC" (ngSubmit)="doPublishLectureSlotSC(assignNewLectureSlotSC.value)">
+
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label class="assignNewLectureSessionSlotFormLabel">
+                                Lecture Series - Batch
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-label>
+                                  Batch
+                                </ion-label>
+                                <ion-select placeholder="Batch" style="min-width: 100%;" formControlName="batch">
+                                  <ion-select-option *ngFor="let item of publishedBatches" value="{{ item.payload.doc.data().batch }}">
+                                    {{ item.payload.doc.data().batch }}
+                                  </ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label class="assignNewLectureSessionSlotFormLabel">
+                                Lecture Series - Degree Program
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-label>
+                                  Degree Program
+                                </ion-label>
+                                <ion-select placeholder="Degree Program" style="min-width: 100%;" formControlName="degreeProgram" (ionChange)="retrieveAwardingBodyUniversity($event)">
+                                  <ion-select-option *ngFor="let item of publishedDegreePrograms"  
+                                    value="{{ item.payload.doc.data().degree }}">
+                                    {{ item.payload.doc.data().degree }}, {{ item.payload.doc.data().awardingBodyUniversity }}
+                                  </ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label class="assignNewLectureSessionSlotFormLabel">
+                                Acadamic Year
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <div style="border: #ccc solid 1px;
+                                          border-radius: 5px;">
+
+                                <ion-row>
+                                  <ion-select placeholder="Select Year" okText="Select" cancelText="Cancel" style="max-width: 100% !important;" formControlName="academicPeriodYear">
+                                      <ion-select-option value="1">Year 1</ion-select-option>
+                                      <ion-select-option value="2">Year 2</ion-select-option>
+                                      <ion-select-option value="3">Year 3</ion-select-option>
+                                      <ion-select-option value="4">Year 4</ion-select-option>
+                                 </ion-select>
+                                </ion-row>
+                                <ion-row>
+                                  <ion-select placeholder="Select Semester" okText="Select" cancelText="Cancel" style="max-width: 100% !important;" formControlName="academicPeriodSemester">
+                                      <ion-select-option value="1">Semester 1</ion-select-option>
+                                      <ion-select-option value="2">Semester 2</ion-select-option>
+                                      <ion-select-option value="3">Semester 3</ion-select-option>
+                                      <ion-select-option value="4">Semester 4</ion-select-option>
+                                  </ion-select>
+                                </ion-row>
+
+                              </div>
+                            </ion-col>
+                          </ion-row>
+                          
+                        </ion-grid>
+
+
+                        <p style="font-size: 20px;">
+                          <b>Lecture Information</b>
+                        </p>
+
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label style="margin-left: 5px;" class="assignNewLectureSessionSlotFormLabel">
+                                Lecture Series - Module
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-label>
+                                  Module
+                                </ion-label>
+                                <ion-select placeholder="Module" style="min-width: 100%;" formControlName="module" (ionChange)="retrieveModuleTitle($event)">
+                                  <ion-select-option *ngFor="let item of publishedModules" value="{{ item.payload.doc.data().moduleCode }}">
+                                    {{ item.payload.doc.data().moduleCode }} - {{ item.payload.doc.data().moduleTitle }}
+                                  </ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label style="margin-left: 5px;" class="assignNewLectureSessionSlotFormLabel">
+                                Lecturer
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-label>
+                                  Lecturer
+                                </ion-label>
+                                <ion-select placeholder="Lecturer" style="min-width: 100%;" formControlName="lecturer">
+                                  <ion-select-option *ngFor="let item of registeredLecturers" 
+                                    value="
+                                      {{ item.payload.doc.data().name.prefix }}
+                                      {{ item.payload.doc.data().name.firstName }}
+                                      {{ item.payload.doc.data().name.lastName }}
+                                    ">
+                                    {{ item.payload.doc.data().name.prefix }}
+                                    {{ item.payload.doc.data().name.firstName }}
+                                    {{ item.payload.doc.data().name.lastName }}
+                                  </ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label style="margin-left: 5px;" class="assignNewLectureSessionSlotFormLabel">
+                                Lecture Hall
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-label>
+                                  Lecture Hall
+                                </ion-label>
+                                <ion-select placeholder="Lecture Hall" style="min-width: 100%;" formControlName="lectureHall">
+                                  <ion-select-option *ngFor="let item of publishedLectureHalls" value="{{ item.payload.doc.data().lectureHall }}">
+                                    {{ item.payload.doc.data().lectureHall }}
+                                  </ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label style="margin-left: 5px;" class="assignNewLectureSessionSlotFormLabel">
+                                Lecture Status
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-label>
+                                  Lecture Status
+                                </ion-label>
+                                <ion-select placeholder="Status" style="min-width: 100%;" formControlName="status">
+                                  <ion-select-option *ngFor="let item of publishedSessionStatuses" value="{{ item.payload.doc.data().status }}">
+                                    {{ item.payload.doc.data().status }}
+                                  </ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                        
+
+
+                        <ion-label style="font-size: 15px;
+                                  margin-left: 30px;">
+                          Select an Option
+                        </ion-label>
+
+                        
+                        <ion-grid>
+                          <ion-row style="padding-bottom: 5px;">
+                            <ion-col>
+                              <ion-radio-group (ionChange)="loadFormContent($event)" formControlName="addLectureContentLoadOption">
+                                <div style="border: #ccc 1px solid;
+                                                padding: 5px;
+                                                border-radius: 5px;">
+                                  <ion-grid>
+                                    <ion-row>
+                                      <ion-col>
+                                        <ion-item style="border: none;">
+                                          <ion-label>Assign Each Session Individually</ion-label>
+                                          <ion-radio slot="start" value="lectureAssignIndividaully"></ion-radio>
+                                        </ion-item>
+                                      </ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                      <ion-col>
+                                        <ion-item style="border: none;">
+                                          <ion-label>Assign Same Session on the same day for Multiple Weeks</ion-label>
+                                          <ion-radio slot="start" value="lectureAssignGroup"></ion-radio>
+                                        </ion-item>
+                                      </ion-col>
+                                    </ion-row>
+                                  </ion-grid>
+                               </div>
+                              </ion-radio-group>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+
+                        
+                        <!-- Assign Each Session Manually -->
+                        <ion-grid *ngIf="userSelectionLectureAssignIndividually">
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label style="margin-left: 50px;">
+                                Session Date
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-datetime placeholder="Pick Session Date" formControlName="sessionDateSingle"></ion-datetime>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label style="margin-left: 50px;">
+                                Session Start Time
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-datetime placeholder="Pick Start Time" display-format="h:mm A" formControlName="sessionStartTimeSingle"></ion-datetime>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label style="margin-left: 50px;">
+                                Session End Time
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-datetime placeholder="Pick End Time" display-format="h:mm A" formControlName="sessionEndTimeSingle"></ion-datetime>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+
+
+                        <!-- Assign Same Session on the same day for Multiple Weeks -->
+                        <ion-grid *ngIf="userSelectionLectureAssignGroup">
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label style="margin-left: 50px;" class="assignNewLectureSessionSlotFormLabel">
+                                Session Day
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-label>
+                                  Day
+                                </ion-label>
+                                <ion-select placeholder="Select Day" style="min-width: 100%;" formControlName="sessionDayMultiple">
+                                  <ion-select-option value="Mon">Monday</ion-select-option>
+                                  <ion-select-option value="Tue">Tuesday</ion-select-option>
+                                  <ion-select-option value="Wed">Wednesday</ion-select-option>
+                                  <ion-select-option value="Thu">Thrusday</ion-select-option>
+                                  <ion-select-option value="Fri">Friday</ion-select-option>
+                                  <ion-select-option value="Sat">Saturday</ion-select-option>
+                                  <ion-select-option value="Sun">Sunday</ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label style="margin-left: 50px;" class="assignNewLectureSessionSlotFormLabel">
+                                Session Start Date
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-datetime value="2020-03-02" formControlName="sessionStartDateMultiple"></ion-datetime>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label style="margin-left: 50px;" class="assignNewLectureSessionSlotFormLabel">
+                                Session End Date
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-datetime value="2020-03-02" formControlName="sessionEndDateMultiple"></ion-datetime>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label style="margin-left: 50px;" class="assignNewLectureSessionSlotFormLabel">
+                                Session Start Time
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="09:00" formControlName="sessionStartTimeMultiple"></ion-datetime>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-label style="margin-left: 50px;" class="assignNewLectureSessionSlotFormLabel">
+                                Session End Time
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="12" size-sm="12" size-lg="6">
+                              <ion-item>
+                                <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="12:00" formControlName="sessionEndTimeMultiple"></ion-datetime>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                        
+                        <!-- Horizontal line -->
+                        <div style="border-bottom: #ccc solid 2px;
+                                    width: 100%;
+                                    margin-top: 10px;
+                                    margin-bottom: 20px;">
+                        </div>
+
+                        <ion-button expand="block" type="submit" [disabled]="!assignNewLectureSlotSC.valid">
+                          Add Session
+                        </ion-button>
+
+                      </form>
+
+                    </ion-card-content>
+                  </ion-card>
+
+                </ion-col>
+                <ion-col size="6.5" size-sm="12" size-lg="6.5">
+                  
+                  <!-- Reset Button -->
+                  <ion-button style="width: 90px;
+                                    position: absolute;
+                                    top: -55px;
+                                    right: -1.5%;" color="dark" fill="outline" size="small" (click)="resetAssignSemesterCalendar()"> 
+                    <ion-icon name="refresh-outline"></ion-icon>
+                    <ion-label style="color: rgb(59, 59, 59);
+                                      margin-left: 5px;">
+                      Reset
+                    </ion-label>
+                  </ion-button>
+                  
+
+                  <ion-card>
+                    <ion-card-header>
+                      <p style="font-size: 20px;">
+                        <b>Active Calendar</b>
+                      </p>
+                    </ion-card-header>
+                    <ion-card-content>
+                      
+                      <div style="position: absolute;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            top: -50px;">
+                
+                        <ion-button fill="clear" (click)="previousMonthASCalendar()" style="margin-top: -12px;">
+                          <ion-icon name="arrow-back"></ion-icon>
+                        </ion-button>
+
+                        <ion-label style="font-size: 20px;">
+                          {{ viewingMonthASCalendar }}
+                        </ion-label>
+
+                        <ion-button fill="clear" (click)="nextMonthASCalendar()" style="margin-top: -12px;">
+                          <ion-icon name="arrow-forward"></ion-icon>
+                        </ion-button>
+
+                      </div>
+
+                      <div style="overflow-y: scroll;
+                                  margin-top: 20px;">
+                        <div style="height: 720px;">
+                          <calendar [eventSource]="eventSourceASCalendar"
+                          [calendarMode]="calendarASCalendar.mode"
+                          [currentDate]="calendarASCalendar.currentDate"
+                          (onCurrentDateChanged)="onCurrentDateChangedASCalendar($event)"
+                          (onRangeChanged)="onRangeChangedASCalendar($event)"
+                          (onEventSelected)="onEventSelectedASCalendar($event)"
+                          (onTitleChanged)="onViewTitleChangedASCalendar($event)"
+                          (onTimeSelected)="onTimeSelectedASCalendar($event)"
+                          startHour="9"
+                          endHour="17"
+                          step="30"
+                          startingDayWeek="1" id="activeSemesterCalendar">
+                        
+                          </calendar>
+                        </div>
+                      </div>
+
+                    </ion-card-content>
+                  </ion-card>
+
+                </ion-col>
+              </ion-row>
+
+            </ion-grid>
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+    <ion-row>
+
+      <ion-col>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              Lecture Series
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+
+            <ion-grid>
+              <ion-row>
+
+                <ion-col>
+      
+                  <ion-card>
+                    <ion-card-header>
+                      <p style="font-size: 20px;">
+                        <b>Create New Lecture Series</b>
+                      </p>
+                    </ion-card-header>
+                    <ion-card-content>
+                      
+                    <form [formGroup]="createNewLectureSeriesForm" (ngSubmit)="doCreateNewLectureSeries(createNewLectureSeriesForm.value)">
+                        <ion-grid>
+                          <ion-row>
+
+                            <ion-col size="5">
+                              <ion-label class="createNewLectureSeriesFormLabel">
+                                Degree Program
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-item>
+                                <ion-label>
+                                  Degree Program
+                                </ion-label>
+                                <ion-select placeholder="Select Program" style="min-width: 100%;" formControlName="degreeProgram" (ionChange)="retrieveAwardingBodyUniversity($event)">
+                                  <ion-select-option *ngFor="let item of publishedDegreePrograms" value="{{ item.payload.doc.data().degree }}" >
+                                    {{ item.payload.doc.data().degree }}, {{ item.payload.doc.data().awardingBodyUniversity }}
+                                  </ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+                            
+                          </ion-row>
+                          <ion-row>
+
+                            <ion-col size="5">
+                              <ion-label class="createNewLectureSeriesFormLabel">
+                                Batch
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-item>
+                                <ion-label>
+                                  Batch
+                                </ion-label>
+                                <ion-select placeholder="Select Batch" style="min-width: 100%;" formControlName="batch">
+                                  <ion-select-option *ngFor="let item of publishedBatches" value="{{ item.payload.doc.data().batch }}">
+                                    {{ item.payload.doc.data().batch }}
+                                  </ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+                            
+                          </ion-row>
+                          <ion-row>
+
+                            <ion-col size="5">
+                              <ion-label class="createNewLectureSeriesFormLabel">
+                                Module
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-item>
+                                <ion-label>
+                                  Module
+                                </ion-label>
+                                <ion-select placeholder="Select Module" style="min-width: 100%;" (ionChange)="retrieveModuleTitle($event)" formControlName="module">
+                                  <ion-select-option *ngFor="let item of publishedModules" 
+                                    value="{{ item.payload.doc.data().moduleCode }}" (ionChange)="retrieveModuleTitle($event)">
+                                      {{ item.payload.doc.data().moduleCode }} - {{ item.payload.doc.data().moduleTitle }}
+                                  </ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+
+                          </ion-row>
+                          <ion-row>
+
+                            <ion-col size="5">
+                              <ion-label class="createNewLectureSeriesFormLabel">
+                                Number of Lectures 
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-item>
+                                <ion-input type="number" clearInput placeholder="No Of Lectures" formControlName="noOfLectures"></ion-input>
+                              </ion-item>
+                            </ion-col>
+
+                          </ion-row>
+                          <ion-row>
+
+                            <ion-col size="5">
+                              <ion-label class="createNewLectureSeriesFormLabel">
+                                Enrollment KEY
+                              </ion-label>
+                              <ion-button style="position: absolute;
+                                                right: 5%;">
+                                Generate
+                              </ion-button>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-item>
+                                <ion-input type="text" placeholder="Key" formControlName="enrollmentKey"></ion-input>
+                              </ion-item>
+                            </ion-col>
+
+                          </ion-row>
+                          <ion-row>
+
+                            <ion-col>
+                              <ion-checkbox checked="false"></ion-checkbox>
+                              <p style="position: absolute;
+                                        top: 5px;
+                                        left: 30px;">Send Email to Batch Students (Outlook)</p>
+                            </ion-col>
+
+                          </ion-row>
+
+                          <ion-button expand="block" type="submit" [disabled]="!createNewLectureSeriesForm.valid">
+                            CREATE
+                          </ion-button>
+                          
+                        </ion-grid>
+                      </form>
+
+
+                      <!-- Reset Button -->
+                      <ion-button style="width: 90px;
+                                        position: absolute;
+                                        top: -55px;
+                                        right: 1.5%;" color="dark" fill="outline" size="small" (click)="resetCreatedLectureSeries()"> 
+                        <ion-icon name="refresh-outline"></ion-icon>
+                        <ion-label style="color: rgb(59, 59, 59);
+                                          margin-left: 5px;">
+                          Reset
+                        </ion-label>
+                      </ion-button>
+                  
+
+                    </ion-card-content>
+                  </ion-card>
+      
+      
+                </ion-col>
+                <ion-col>
+      
+                  <ion-card>
+                    <ion-card-header>
+                      <p style="font-size: 20px;">
+                        <b>View Created Lecture Series</b>
+                      </p>
+                    </ion-card-header>
+                    <ion-card-content>
+                      
+                      <form [formGroup]="searchLectureSeriesForm" (ngSubmit)="doSearchLectureSeries(searchLectureSeriesForm.value)">
+                        <ion-grid>
+                          <ion-row>
+                            
+                            <ion-col size="5">
+                              <ion-label class="viewCreatedLectureSeriesFormLabel">
+                                Degree Program
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-item>
+                                <ion-label>
+                                  Degree Program
+                                </ion-label>
+                                <ion-select placeholder="Select Program" style="min-width: 100%;" (ionChange)="retrieveAwardingBodyUniversity($event)" formControlName="degreeProgram">
+                                  <ion-select-option *ngFor="let item of publishedDegreePrograms" value="{{ item.payload.doc.data().degree }}">
+                                    {{ item.payload.doc.data().degree }}, {{ item.payload.doc.data().awardingBodyUniversity }}
+                                  </ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+                            
+                          </ion-row>
+                          <ion-row>
+            
+                            <ion-col size="5">
+                              <ion-label class="viewCreatedLectureSeriesFormLabel">
+                                Batch
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-item>
+                                <ion-label>
+                                  Batch
+                                </ion-label>
+                                <ion-select placeholder="Select Batch" style="min-width: 100%;" formControlName="batch">
+                                  <ion-select-option *ngFor="let item of publishedBatches" value="{{ item.payload.doc.data().batch }}">
+                                    {{ item.payload.doc.data().batch }}
+                                  </ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+                            
+                          </ion-row>
+                          <ion-row>
+            
+                            <ion-col size="5">
+                              <ion-label class="viewCreatedLectureSeriesFormLabel">
+                                Module
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-item>
+                                <ion-label>
+                                  Module
+                                </ion-label>
+                                <ion-select placeholder="Select Module" style="min-width: 100%;" (ionChange)="retrieveModuleTitle($event)" formControlName="module">
+                                  <ion-select-option *ngFor="let item of publishedModules" 
+                                    value="{{ item.payload.doc.data().moduleCode }}">
+                                      {{ item.payload.doc.data().moduleCode }} - {{ item.payload.doc.data().moduleTitle }}
+                                  </ion-select-option>
+                                </ion-select>
+                              </ion-item>
+                            </ion-col>
+            
+                          </ion-row>
+                        </ion-grid>
+            
+                        <ion-button expand="block" type="submit" [disabled]="!searchLectureSeriesForm.valid"> 
+                          Search
+                        </ion-button>
+                      </form>
+
+                      <ng-container *ngIf="showPublishedLectureSeries">
+                        <ion-card *ngFor="let item of publishedLectureSeries">
+
+                          <ion-card-content>
+
+                            <ion-label style="font-size: 15px;">
+                              Published Lecturer Series
+                            </ion-label>
+
+                            <ion-card>
+
+                              <ion-card-content>
+                                <ion-grid>
+                                  <ion-row>
+                                    <ion-col size="5">
+                                      <ion-label class="searchLectureSeriesFormLabel">
+                                        <b>No of Lectures: </b>
+                                      </ion-label>
+                                    </ion-col>
+                                    <ion-col size="7">
+                                      <ion-label>
+                                        {{ item.payload.doc.data().noOfLectures }} lecturers
+                                      </ion-label>
+                                    </ion-col>
+                                  </ion-row>
+                                  <ion-row>
+                                    <ion-col size="5">
+                                      <ion-label class="searchLectureSeriesFormLabel">
+                                        <b>Enrollment Key: </b>
+                                      </ion-label>
+                                    </ion-col>
+                                    <ion-col size="7">
+                                      <ion-label>
+                                        {{ item.payload.doc.data().enrollmentKey }}
+                                      </ion-label>
+                                    </ion-col>
+                                  </ion-row>
+                                  <ion-row>
+                                    <ion-col size="5">
+                                      <ion-label class="searchLectureSeriesFormLabel">
+                                        <b>Enrolled Students </b>
+                                      </ion-label>
+                                    </ion-col>
+                                    <ion-col size="7">
+                                      <div style="height: 300px;
+                                                  border: #ccc solid 1px;
+                                                  border-radius: 5pxl;
+                                                  padding: 5px;
+                                                  overflow-y: scroll;">
+                                        <ion-label>
+                                          {{ item.payload.doc.data().enrolledStudents }}
+                                        </ion-label>
+                                      </div>
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
+
+                                <ion-grid style="position: absolute;
+                                                top: 280px;">
+                                  <ion-row>
+                                    <ion-col>
+                                      <ion-button color="secondary" style="width: 120px;" (click)="editLectureSeries(item)">
+                                        <ion-icon name="create-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          EDIT
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                  </ion-row>
+                                  <ion-row>
+                                    <ion-col>
+                                      <ion-button color="danger" style="width: 120px;" 
+                                        (click)="removeLectureSeries('Confirmation Required', 'This lecture series will be removed, do you want to continue? ', item)">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          REMOVE
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
+                                
+
+
+
+
+
+                              </ion-card-content>
+
+                            </ion-card>
+
+                          </ion-card-content>
+
+                        </ion-card>
+                      </ng-container>
+
+
+                       <!-- Reset Button -->
+                      <ion-button style="width: 90px;
+                                        position: absolute;
+                                        top: -55px;
+                                        right: 1.5%;" color="dark" fill="outline" size="small" (click)="resetSearchCreatedLectureSeries()"> 
+                        <ion-icon name="refresh-outline"></ion-icon>
+                        <ion-label style="color: rgb(59, 59, 59);
+                                          margin-left: 5px;">
+                          Reset
+                        </ion-label>
+                      </ion-button>
+                  
+
+
+                    </ion-card-content>
+                  </ion-card>
+      
+                </ion-col>
+      
+              </ion-row>
+
+            </ion-grid>
+
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+
+
+</ion-content>
+

@@ -4,6 +4,7 @@ import { ServicesService } from './../services.service';
 import * as firebase from "firebase";
 import { LoadingController, NavController, AlertController } from '@ionic/angular';
 import { Network } from '@ionic-native/network/ngx';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-welcome',
@@ -31,34 +32,54 @@ export class WelcomePage implements OnInit {
     public loadingController: LoadingController,
     public alertController: AlertController,
     private network: Network,
+    private firestore: AngularFirestore,
   ) { }
 
 
   ngOnInit() {
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        // User is signed in.
-        console.log('User is signed in');
-        const loading = await this.loadingController.create({
-          message: 'Signing in - Please wait...',
-          duration: 2000
-        });
-        await loading.present();
+        this.firestore.collection('/users/userTypes/studentUsers').doc(this.authService.userDetails().email).ref.get().then(async (doc) => {
+          if (doc.data().status.toString() == "Active") {
+            // User is signed in.
+            console.log('User is signed in');
+            const loading = await this.loadingController.create({
+              message: 'Please wait...',
+              duration: 2000
+            });
+            await loading.present();
 
-        const { role, data } = await loading.onDidDismiss();
-        console.log('Loading dismissed!');
+            const { role, data } = await loading.onDidDismiss();
+            console.log('Loading dismissed!');
 
-        this.userEmail = this.authService.userDetails().email;
-        this.navCtrl.navigateForward("tabs/home");
+            this.userEmail = this.authService.userDetails().email;
+            this.navCtrl.navigateForward("tabs/home");
+          }
+          else {
+            this.authService.logoutUser()
+            const loading = await this.loadingController.create({
+              message: 'Session Closing...',
+              duration: 2000
+            });
+            await loading.present();
+            const { role, data } = await loading.onDidDismiss();
+            console.log('Loading dismissed!');
+            const alert = await this.alertController.create({
+              header: 'Account Disabled',
+              subHeader: 'Contact Program Office',
+              message: 'You cannot access the NSBM HUB as your account is disabled !',
+              buttons: ['OK']
+            });
+            await alert.present();
+          }
+        })
       }
       else {
         // No user is signed in.
         console.log('User is NOT signed in');
 
-
       }
     });
-   
   };
 
   async loginUser(value) {

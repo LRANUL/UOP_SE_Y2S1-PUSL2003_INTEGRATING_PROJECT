@@ -1,1 +1,77 @@
-<p>registration works!</p>
+<div class="w-100 h-auto">
+  <img src="../../assets/image/nsbmlog.png"  class="back">
+</div>
+<hr class="line">
+<div>
+    <img src="../../../assets/image/add.png" class="rounded mx-auto d-block pb-2 " style="width: 200px; height: 220px; padding-top: 30px;" alt="...">
+    <h1 class=" text-center">Registration Of Student</h1>
+  </div>
+  <div class=" container">
+    <form #userRegForm="ngForm" (ngSubmit)="createUser(userRegForm)">
+      <div>
+      <div class="row">
+        <div class="col-md-6 mb-2">
+          <label >First name</label>
+          <input ngModel #firstname="ngModel" name="firstName" type="text" class="form-control" id="firstName">
+        </div>
+        <div class="col-md-6 mb-2">
+          <label >Last name</label>
+          <input ngModel #lastname="ngModel" name="lastName" type="text" class="form-control" id="lastName">
+        </div>
+      </div>
+      <div class="row">
+        <div class="ml-3">
+          <label >NSBM ID</label>
+          <input ngModel #ids="ngModel" name="ids" class="form-control" id="ids" size="20">
+        </div>
+      </div>
+      <div class="row">
+        <div class="ml-3">
+          <label for="email">Email</label>
+          <input ngModel #email="ngModel" name="email" type="email" class="form-control" size="67">
+        </div>
+      </div>
+        <div class="row">
+          <div class="ml-3">
+            <label for="password">Password</label>
+            <input ngModel #password="ngModel" name="password" type="password" class="form-control" size="67">
+          </div>
+        </div>
+      <div class="row">
+        <div class="ml-3">
+          <label for="Faculty">Faculty</label>
+          <select ngModel #faculty="ngModel" name="faculty" class="form-control" id="faculty">
+            <option value=""></option>
+            <option value="School of Business">School of Business</option>
+            <option value="School of Computing">School of Computing</option>
+            <option value="School of Enginering">School of Enginering</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="ml-3">
+          <label for="Degree Code" >Degree Code</label>
+          <input ngModel #degreeCode="ngModel" name="degreeCode" class="form-control" id="degreeCode" size="10">
+        </div>
+      </div>
+      <div class="row">
+        <div class="ml-3">
+          <label >Degree Program</label>
+          <input ngModel #degreeProgram="ngModel" name="degreeProgram" class="form-control" id="degreeProgram" size="67">
+        </div>
+      </div>
+      <div class="row">
+        <div class="ml-3">
+          <label >Awarding university</label>
+          <input ngModel #university="ngModel" name="university" class="form-control" id="university" size="67">
+        </div>
+      </div>
+      <br>
+      <div class="row mt-3">
+        <div class="col-12 text-center">
+          <button class="btn btn-primary w-25" type="submit">Register</button>
+        </div>
+      </div>
+    </div>
+    </form>
+  </div>

@@ -56,7 +56,7 @@ export const firebaseConfig = {
     ServicesService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     InAppBrowser,
-    Network
+    Network,
   ],
   bootstrap: [AppComponent]
 })

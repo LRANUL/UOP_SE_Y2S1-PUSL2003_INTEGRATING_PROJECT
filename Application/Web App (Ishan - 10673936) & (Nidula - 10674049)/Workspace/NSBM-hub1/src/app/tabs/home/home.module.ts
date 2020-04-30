@@ -18,7 +18,7 @@ import { DashboardPageModule } from '../dashboard/dashboard.module';
     IonicModule,
     HomePageRoutingModule,
     YoutubePageModule,
-    DashboardPageModule
+    
   ],
   declarations: [HomePage]
 })
