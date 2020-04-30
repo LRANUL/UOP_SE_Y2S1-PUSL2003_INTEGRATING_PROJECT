@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { TransportationSchedulePageRoutingModule } from './transportation-schedule-routing.module';
 
 import { TransportationSchedulePage } from './transportation-schedule.page';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { TransportationSchedulePage } from './transportation-schedule.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    TransportationSchedulePageRoutingModule
+    TransportationSchedulePageRoutingModule,
+    NgxMaterialTimepickerModule
   ],
   declarations: [TransportationSchedulePage]
 })

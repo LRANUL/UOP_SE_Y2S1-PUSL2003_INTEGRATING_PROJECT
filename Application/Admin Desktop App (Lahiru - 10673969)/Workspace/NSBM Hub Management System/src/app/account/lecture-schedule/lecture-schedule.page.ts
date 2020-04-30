@@ -195,17 +195,17 @@ export class LectureSchedulePage implements OnInit {
   }
 
   onViewTitleChangedLectureSession(title){
-    console.log(title);
+  //  console.log(title);
     this.viewingMonthLectureSession = title; 
   }
 
   onEventSelectedLectureSession(event) {
-    console.log("Lecture Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title); 
+  //  console.log("Lecture Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title); 
   }
 
   onTimeSelectedLectureSession(event){
-    console.log("Lecture Session Selected Time: " + event.selectedTime + ", has sessions: " + (event.events !== undefined && event.events.length !== 0) +
-      ", disabled: " + event.disabled);
+  //  console.log("Lecture Session Selected Time: " + event.selectedTime + ", has sessions: " + (event.events !== undefined && event.events.length !== 0) +
+  //    ", disabled: " + event.disabled);
 
       if((event.events !== undefined && event.events.length !== 0) == false){
         this.lectureSessionsDocuments = [];
@@ -215,17 +215,17 @@ export class LectureSchedulePage implements OnInit {
         this.lectureSessionsDocuments = event.events;
         this.noLectureSessionAllText = false;
       }
-      console.log(this.lectureSessionsDocuments);
+  //    console.log(this.lectureSessionsDocuments);
   }
 
   onCurrentDateChangedLectureSession(event: Date){
-    console.log("Current Lecture Session Date Change: " + event);
+  //  console.log("Current Lecture Session Date Change: " + event);
 
     this.lectureSessionsDocuments = [];
   }
 
   onRangeChangedLectureSession(evt) {
-    console.log("Lecture Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
+  //  console.log("Lecture Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
   }
 
 

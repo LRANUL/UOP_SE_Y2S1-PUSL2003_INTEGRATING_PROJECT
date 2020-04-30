@@ -150,11 +150,36 @@ export class TransportationSchedulePage implements OnInit {
   }
 
 
+  // Confirm Box Implementation (Publish Transport Slot)
+  async publishTransportSlot (title: string, content: string, value) {
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: [
+
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log("Alert Box: Publish Transport Slot Request Denied");
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            console.log("Alert Box: Publish Transport Slot Request Accepted");
+
+            this.doAddNewTransportationSlot(value);
+          }
+        }
+
+      ]
+    });
+    await alert.present();
+  }
 
 
   doAddNewTransportationSlot(value){
-
-    console.log(value);
 
     // Publishing new transportation slot and add the details to the firestore database
     this.transportationScheduleService.publishNewTransportSlot(this.userSelectedOption, value, this.sideMenuPageUserFaculty.passUserId());

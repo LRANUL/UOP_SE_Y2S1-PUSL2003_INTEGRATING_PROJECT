@@ -441,21 +441,27 @@ export class FirestoreService {
 
   // Adding new lecture session by creating a new document in firestore database
   addNewLectureSession(userFaculty, value, degreeCode, awardingBodyUniversity, moduleTitle, sessionStartDateTime, sessionEndDateTime){
-    this.fireStore.collection("faculties/" + userFaculty + "/lectureSessions/").add({
-        academicSemester: parseInt(value.academicPeriodSemester),
-        academicYear: parseInt(value.academicPeriodYear),
-        degree: value.degreeProgram,
-        awardingBodyUniversity: awardingBodyUniversity,
-        degreeCode: degreeCode,
-        batch: value.batch,
-        startDateTime: new Date(sessionStartDateTime),
-        endDateTime: new Date(sessionEndDateTime),
-        lectureHall: value.lectureHall,
-        lecturer: value.lecturer,
-        moduleCode: value.module,
-        moduleTitle: moduleTitle,
-        status: value.status
-    });
+    return new Promise<any>((resolve, reject) => { 
+      this.fireStore.collection("faculties/" + userFaculty + "/lectureSessions/").add({
+          academicSemester: parseInt(value.academicPeriodSemester),
+          academicYear: parseInt(value.academicPeriodYear),
+          degree: value.degreeProgram,
+          awardingBodyUniversity: awardingBodyUniversity,
+          degreeCode: degreeCode,
+          batch: value.batch,
+          startDateTime: new Date(sessionStartDateTime),
+          endDateTime: new Date(sessionEndDateTime),
+          lectureHall: value.lectureHall,
+          lecturer: value.lecturer,
+          moduleCode: value.module,
+          moduleTitle: moduleTitle,
+          status: value.status
+        }).then(success => {
+          resolve(success);
+        }, error => {
+          reject(error);
+        });
+    })
   }
 
   // Adding new lecture series by creating a new document in firestore database
@@ -733,13 +739,14 @@ export class FirestoreService {
   }
 
   // Retrieving published lecture session and their detais from the firestore database for the semester calendar page
-  retrievePublishedLectureSessionsSemesterCalendar(userFaculty, value, userSelectedAwardingBodyUniversity) {
-    return this.fireStore.collection("faculties/"+ userFaculty +"/lectureSessions", ref => ref
-            .where("batch", "==", value.batch)
-            .where("degreeProgram", "==", value.degreeProgram)
-            .where("awardingBodyUniversity", "==", userSelectedAwardingBodyUniversity)
-            .where("academicYear", "==", parseInt(value.academicYearYear)) /* ( parseInt() ) Converting value data type from the form, string to int */
-            .where("academicSemester", "==", parseInt(value.academicYearSemester))).snapshotChanges();
+  retrievePublishedLectureSessionsSemesterCalendar(userFaculty, value, awardingBodyUniversity) {
+    return this.fireStore.collection("faculties/" + userFaculty + "/lectureSessions/", ref => ref
+        .where("batch", "==", value.batch)
+        .where("degree", "==", value.degreeProgram)
+        .where("awardingBodyUniversity", "==", awardingBodyUniversity)
+        .where("academicYear", "==", parseInt(value.academicPeriodYear)) /* ( parseInt() ) Converting value data type from the form, string to int */
+        .where("academicSemester", "==", parseInt(value.academicPeriodSemester)))
+        .snapshotChanges();
   }
 
   // Retrieving published lecture session and their detais from the firestore database for the lecture schedule page
