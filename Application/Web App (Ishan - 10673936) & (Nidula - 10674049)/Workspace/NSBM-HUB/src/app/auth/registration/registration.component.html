@@ -10,66 +10,100 @@
     <form #userRegForm="ngForm" (ngSubmit)="createUser(userRegForm)">
       <div>
       <div class="row">
-        <div class="col-md-6 mb-2">
+        <div class="col-md-6 mb-3">
           <label >First name</label>
-          <input ngModel #firstname="ngModel" name="firstName" type="text" class="form-control" id="firstName">
+          <input ngModel #firstname="ngModel" name="firstName" type="text" class="form-control" id="firstName" required>
+          <div class="ml-3" *ngIf="firstname.value=='' && firstname.touched">
+            <label style="color: red;">First name should be entered</label>
+          </div>
         </div>
-        <div class="col-md-6 mb-2">
+        <div class="col-md-6 mb-3">
           <label >Last name</label>
-          <input ngModel #lastname="ngModel" name="lastName" type="text" class="form-control" id="lastName">
+          <input ngModel #lastname="ngModel" name="lastName" type="text" class="form-control" id="lastName" required>
+          <div class="ml-3" *ngIf="lastname.value=='' && lastname.touched">
+            <label style="color: red;">Last name should be entered</label>
+          </div>
         </div>
       </div>
       <div class="row">
-        <div class="ml-3">
+        <div class="ml-3 mb-3">
           <label >NSBM ID</label>
-          <input ngModel #ids="ngModel" name="ids" class="form-control" id="ids" size="20">
+          <input ngModel #ids="ngModel" name="ids" class="form-control" id="ids" size="20"  minlength="10" required>
+          <div class="ml-3" *ngIf="ids.value=='' && ids.touched">
+            <label style="color: red;">ID cannot be left blank</label>
+          </div>
+          <div class="ml-3" *ngIf="ids.touched && ids.hasError('minlength')">
+            <label style="color: red;">NSBM ID should have atleast 10 nubmers</label>
+          </div>
         </div>
       </div>
       <div class="row">
-        <div class="ml-3">
+        <div class="ml-3 mb-3">
           <label for="email">Email</label>
-          <input ngModel #email="ngModel" name="email" type="email" class="form-control" size="67">
+          <input ngModel #email="ngModel" name="email" type="email" class="form-control" size="67" required>
+          <div class="ml-3" *ngIf="email.value=='' && email.touched">
+            <label style="color: red;">E-mail address cannot be left blank</label>
+          </div>
         </div>
       </div>
         <div class="row">
-          <div class="ml-3">
+          <div class="ml-3 mb-3">
             <label for="password">Password</label>
-            <input ngModel #password="ngModel" name="password" type="password" class="form-control" size="67">
+            <input ngModel #password="ngModel" name="password" type="password" class="form-control" size="67"  minlength="6" required>
+            <div class="ml-3" *ngIf="password.value=='' && password.touched">
+              <label style="color: red;">The password cannot be left blank</label>
+            </div>
+            <div class="ml-3" *ngIf="password.touched && password.hasError('minlength')">
+              <label style="color: red;">The password need to have atleast 6 characters</label>
+            </div>
           </div>
         </div>
       <div class="row">
-        <div class="ml-3">
+        <div class="ml-3 mb-3">
           <label for="Faculty">Faculty</label>
-          <select ngModel #faculty="ngModel" name="faculty" class="form-control" id="faculty">
+          <select ngModel #faculty="ngModel" name="faculty" class="form-control" id="faculty" required>
             <option value=""></option>
             <option value="School of Business">School of Business</option>
             <option value="School of Computing">School of Computing</option>
             <option value="School of Enginering">School of Enginering</option>
           </select>
+          <div class="ml-3  mb-3" *ngIf="faculty.value=='' && faculty.touched">
+            <label style="color: red;">Faculty should be selected</label>
+          </div>
         </div>
       </div>
       <div class="row">
-        <div class="ml-3">
+        <div class="ml-3 mb-3">
           <label for="Degree Code" >Degree Code</label>
-          <input ngModel #degreeCode="ngModel" name="degreeCode" class="form-control" id="degreeCode" size="10">
+          <input ngModel #degreeCode="ngModel" name="degreeCode" class="form-control" id="degreeCode" size="10" required>
+          <div class="ml-3" *ngIf="degreeCode.value=='' && degreeCode.touched">
+            <label style="color: red;">Degree code should be entered</label>
+          </div>
         </div>
       </div>
       <div class="row">
-        <div class="ml-3">
+        <div class="ml-3 mb-3">
           <label >Degree Program</label>
-          <input ngModel #degreeProgram="ngModel" name="degreeProgram" class="form-control" id="degreeProgram" size="67">
+          <input ngModel #degreeProgram="ngModel" name="degreeProgram" class="form-control" id="degreeProgram" size="67" required>
+          <div class="ml-3" *ngIf="degreeProgram.value=='' && degreeProgram.touched">
+            <label style="color: red;">Degree Program should be entered</label>
+          </div>
         </div>
       </div>
       <div class="row">
-        <div class="ml-3">
+        <div class="ml-3 mb-1">
           <label >Awarding university</label>
-          <input ngModel #university="ngModel" name="university" class="form-control" id="university" size="67">
+          <input ngModel #university="ngModel" name="university" class="form-control" id="university" size="67" required>
+          <div class="ml-3" *ngIf="university.value=='' && university.touched">
+            <label style="color: red;">Awarding university should be entered</label>
+          </div>
         </div>
       </div>
       <br>
-      <div class="row mt-3">
+      <div class="row mt-3 pb-5">
         <div class="col-12 text-center">
-          <button class="btn btn-primary w-25" type="submit">Register</button>
+          <button class="btn btn-success w-25" type="submit"  style="align-items: left;" [disabled]="!userRegForm.valid" >Register</button>
+          <button class="btn btn-primary w-25 ml-5" style="align-items: right;" routerLink="/login"> Back To Login</button>
         </div>
       </div>
     </div>

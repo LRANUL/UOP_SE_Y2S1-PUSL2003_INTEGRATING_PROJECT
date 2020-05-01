@@ -21,9 +21,6 @@
           <div class="ml-3" *ngIf="email.value=='' && email.touched">
             <label style="color: red;">E-mail address cannot be left blank</label>
           </div>
-          <div *ngIf="!email.valid && email.touched && email.value!=''">
-            <label style="color: red;"> Enter a vaild email address</label>
-          </div>
         </div>
         <div class="row pt-2">
           <div class="col-12">
@@ -42,6 +39,9 @@
           <div class="col-12 text-center">
             <button class="btn btn-success w-25" type="submit" style="align-items: left;" [disabled]="!loginForm.valid" >Login</button>
             <button class="btn btn-primary w-25 ml-5" style="align-items: right;" routerLink="/guest">Continue as guest</button>
+          </div>
+          <div class="col-12 text-center pt-4">
+          <label> If you are a student you can register by<a routerLink="/registration"> Clicking here</a> </label>
           </div>
         </div>
       </form>
