@@ -18,6 +18,8 @@ export class settingsPage {
 
   userEmail: string;
   Status: any;
+  StudentID: any;
+  userDegree: any;
   constructor(
     private navCtrl: NavController,
     private authService: ServicesService,
@@ -48,6 +50,10 @@ export class settingsPage {
     } else {
       this.navCtrl.navigateBack("");
     }
+    this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().email).ref.get().then((doc) => {
+      this.StudentID = doc.data().nsbmStudentID;
+      this.userDegree = doc.data().degree;
+    })
   }
 
   DarkMode() {

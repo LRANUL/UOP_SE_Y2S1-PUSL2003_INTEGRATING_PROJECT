@@ -1,8 +1,8 @@
 {
-  "name": "NSBM",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "name": "lk.nsbmhub.rpls",
+  "version": "1.0.0",
+  "author": "RPLS",
+  "homepage": "",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -14,14 +14,14 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^9.1.4",
-    "@angular/common": "~8.1.2",
-    "@angular/compiler": "~8.1.2",
-    "@angular/core": "~8.1.2",
+    "@angular/common": "~9.1.4",
+    "@angular/compiler": "~9.1.4",
+    "@angular/core": "~9.1.4",
     "@angular/fire": "^6.0.0",
-    "@angular/forms": "~8.1.2",
-    "@angular/platform-browser": "~8.1.2",
-    "@angular/platform-browser-dynamic": "~8.1.2",
-    "@angular/router": "~8.1.2",
+    "@angular/forms": "~9.1.4",
+    "@angular/platform-browser": "~9.1.4",
+    "@angular/platform-browser-dynamic": "~9.1.4",
+    "@angular/router": "~9.1.4",
     "@angular/service-worker": "^9.1.4",
     "@ionic-native/core": "^5.20.0",
     "@ionic-native/in-app-browser": "^5.24.0",
@@ -29,23 +29,24 @@
     "@ionic-native/status-bar": "^5.20.0",
     "@ionic/angular": "^5.1.0",
     "@ionic/storage": "^2.2.0",
+    "cordova-android": "^8.1.0",
+    "cordova-ios": "^5.1.1",
     "cordova-plugin-inappbrowser": "^3.2.0",
     "core-js": "^2.6.11",
     "firebase": "^7.14.2",
     "ionic2-calendar": "^0.5.0",
-    "rxjs": "^6.5.4",
-    "tslib": "^1.9.0",
-    "zone.js": "~0.9.1"
+    "rxjs": "^6.5.5",
+    "tslib": "^1.11.1",
+    "zone.js": "~0.10.3"
   },
   "devDependencies": {
     "@angular-devkit/architect": "~0.801.2",
-    "@angular-devkit/build-angular": "^0.803.23",
-    "@angular-devkit/core": "~8.1.2",
-    "@angular-devkit/schematics": "~8.1.2",
-    "@angular/cli": "~8.1.2",
-    "@angular/compiler": "~8.1.2",
-    "@angular/compiler-cli": "~8.1.2",
-    "@angular/language-service": "~8.1.2",
+    "@angular-devkit/build-angular": "^0.901.4",
+    "@angular-devkit/core": "~9.1.4",
+    "@angular-devkit/schematics": "~9.1.4",
+    "@angular/cli": "~9.1.4",
+    "@angular/compiler-cli": "~9.1.4",
+    "@angular/language-service": "~9.1.4",
     "@ionic/angular-toolkit": "^2.2.0",
     "@ionic/lab": "3.0.0",
     "@types/jasmine": "~3.3.8",
@@ -62,7 +63,27 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
-    "typescript": "~3.4.3"
+    "typescript": "~3.8.3",
+    "cordova-plugin-whitelist": "1.3.3",
+    "cordova-plugin-statusbar": "2.4.2",
+    "cordova-plugin-device": "2.0.2",
+    "cordova-plugin-splashscreen": "5.0.2",
+    "cordova-plugin-ionic-webview": "^4.0.0",
+    "cordova-plugin-ionic-keyboard": "^2.0.5"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-ionic-keyboard": {}
+    },
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  }
 }
