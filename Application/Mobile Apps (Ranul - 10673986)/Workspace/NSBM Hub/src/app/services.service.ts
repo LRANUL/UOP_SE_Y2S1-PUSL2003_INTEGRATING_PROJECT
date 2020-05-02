@@ -72,7 +72,11 @@ export class ServicesService {
 
   }
 
+  fetchNotice() {
 
+    return this.firestore.collection('notices/noticeTypes/notices-PO-To-Students').snapshotChanges();
+
+  }
   loginUser(value){
    return new Promise<any>((resolve, reject) => {
      firebase.auth().signInWithEmailAndPassword(value.email, value.password)

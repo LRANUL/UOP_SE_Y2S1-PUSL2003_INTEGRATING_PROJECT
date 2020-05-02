@@ -72,7 +72,9 @@ export class homePage implements OnInit {
   openCalender() {
     this.navCtrl.navigateRoot("/calendar");
   }
-  openFacilities(){}
+  openFacilities(){
+    this.navCtrl.navigateRoot("/facilities");
+  }
   logout() {
     this.authService
       .logoutUser()
