@@ -626,24 +626,29 @@ export class FirestoreService {
 
   // Searching for registered student details with the user entered nsbm email address
   searchRegisteredStudentNSBMEmail(nsbmEmailAddress) {
-      return this.fireStore.collection("users/userTypes/studentUsers", ref => ref
-          .where("Email", "==", nsbmEmailAddress)).snapshotChanges();
+    return this.fireStore.collection("users/userTypes/studentUsers", ref => ref
+            .where("Email", "==", nsbmEmailAddress)).snapshotChanges();
   }
 
 
 
   // Searching for registered lecturer details with the user entered nsbm id
   searchRegisteredLecturerNSBMId(nsbmLecturerId) {
-      return this.fireStore.collection("users/userTypes/lecturerUsers", ref => ref
-          .where("nsbmLecturerId", "==", nsbmLecturerId)).snapshotChanges();
+    return this.fireStore.collection("users/userTypes/lecturerUsers", ref => ref
+            .where("nsbmLecturerId", "==", nsbmLecturerId)).snapshotChanges();
   }
 
   // Searching for registered lecturer details with the user entered nsbm email address
   searchRegisteredLecturerNSBMEmail(nsbmEmailAddress) {
-      return this.fireStore.collection("users/userTypes/lecturerUsers", ref => ref
-          .where("nsbmEmailAddress", "==", nsbmEmailAddress)).snapshotChanges();
+    return this.fireStore.collection("users/userTypes/lecturerUsers", ref => ref
+            .where("nsbmEmailAddress", "==", nsbmEmailAddress)).snapshotChanges();
   }
 
+
+  // Retrieving documents of user activity from the firestore database
+  retrieveUserActivityRecords(){
+    return this.fireStore.collection("userActivityMonitoring").snapshotChanges();
+  }
 
   // Retrieving published lecture series and their details from the firestore database
   retrievePublishedLectureSeries(userFaculty, value, awardingBodyUniversity, moduleTitle) {

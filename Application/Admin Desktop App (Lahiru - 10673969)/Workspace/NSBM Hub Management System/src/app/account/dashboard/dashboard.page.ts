@@ -20,6 +20,15 @@ import { MoreDetailsEventPopoverPage } from './more-details-event-popover/more-d
 })
 export class DashboardPage implements OnInit {
 
+  userActivityRecordsSunday = [];
+  userActivityRecordsMonday = [];
+  userActivityRecordsTuesday = [];
+  userActivityRecordsWednesday = [];
+  userActivityRecordsThursday = [];
+  userActivityRecordsFriday = [];
+  userActivityRecordsSaturday = [];
+
+
   currentDate;
 
   nextDate;
@@ -47,8 +56,7 @@ export class DashboardPage implements OnInit {
   activeProgramOfficeUserDetailsLoadingSpinner: Boolean = true;
 
   onlineUsersCount: number = 0;
-  onlineUsersCountLowerTen;
-  onlineStudentUsersCount;
+  onlineStudentUsersCount: number = 0;
   onlineLecturerUsersCount: number = 0;
   onlineProgramOfficeUsersCount: number = 0;
   onlineStudentUserDetails;
@@ -65,7 +73,11 @@ export class DashboardPage implements OnInit {
   // Calling the ngOnInit() function when page is rendered on the user's screen
   ionViewWillEnter(){
     this.ngOnInit();
+/*
+    var userActivityRecords = this.retrieveUserActivityRecordsCount();
 
+    console.log(userActivityRecords[0]);
+*/
     // Initiating the user activity chart
     this.userActivityAreaChart();
 
@@ -166,6 +178,48 @@ export class DashboardPage implements OnInit {
   }
 
 
+
+  /*
+  // Process of gathering data for the user activity graph
+  retrieveUserActivityRecordsCount(){
+
+    var userActivityRecordsSaturday = [];
+
+    this.dashboardService.retrieveUserActivityRecords().subscribe(response => {
+      response.forEach(snap => {
+        let recordDocument:any = snap.payload.doc.data();
+        recordDocument.id = snap.payload.doc.id;
+        recordDocument.loginDateTime = recordDocument.loginDateTime.toDate();
+
+        if((new Date(recordDocument.loginDateTime).getDay() + 1) == 1){
+         // this.userActivityRecordsSunday.push(recordDocument);
+        }
+        else if((new Date(recordDocument.loginDateTime).getDay() + 1) == 2){
+         // this.userActivityRecordsMonday.push(recordDocument);
+        }
+        else if((new Date(recordDocument.loginDateTime).getDay() + 1) == 3){
+         // this.userActivityRecordsTuesday.push(recordDocument);
+        }
+        else if((new Date(recordDocument.loginDateTime).getDay() + 1) == 4){
+         // this.userActivityRecordsWednesday.push(recordDocument);
+        }
+        else if((new Date(recordDocument.loginDateTime).getDay() + 1) == 5){
+         // this.userActivityRecordsThursday.push(recordDocument);
+        }
+        else if((new Date(recordDocument.loginDateTime).getDay() + 1) == 6){
+         // this.userActivityRecordsFriday.push(recordDocument);
+        }
+        else if((new Date(recordDocument.loginDateTime).getDay() + 1) == 7){
+          userActivityRecordsSaturday.push(recordDocument);
+        }
+      })
+   
+      
+    });
+    return [userActivityRecordsSaturday];
+  }
+*/
+
   // Opening notifications popover
   async openNotificationPopover(ev: Event){
     const moreDetailsLectureSessionPopover = await this.popoverController.create({
@@ -189,10 +243,10 @@ export class DashboardPage implements OnInit {
     this.bars = new Chart(this.barChart.nativeElement, {
       type: 'line',
       data: {
-        labels: ['22-4-2020', '23-4-2020', '24-4-2020', '25-4-2020', '26-4-2020', '27-4-2020', '28-4-2020', '29-4-2020'],
+        labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         datasets: [{
           label: 'User Activity',
-          data: [8, 10, 12, 5, 3, 15, 14, 16],
+          data: [50,240,432,100,333,223,70],
           backgroundColor: 'rgb(109, 156, 235)', 
           borderColor: 'rgb(109, 219, 235)',
           borderWidth: 1

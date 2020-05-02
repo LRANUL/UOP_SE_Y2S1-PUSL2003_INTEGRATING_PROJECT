@@ -234,7 +234,7 @@ export class EventsPage implements OnInit {
               // Setting currentDate variable to returned event session
               // This will allow to redirect the user to the returned event session in the events calendar
               this.calendarEvent.currentDate = eventDoc.startDateTime.toDate();
-              /*
+              
               // Running a for loop until initially loaded (ngOnInit) event session of the same returned event session is found
               // For loop will running iterations of the number of initially loaded (ngOnInit) event sessions
               for (let index = 0; index < this.eventSourceEvent.length; index++) {
@@ -249,7 +249,7 @@ export class EventsPage implements OnInit {
                   break;
                 }
               }
-              */
+              
               // Adding the returned event session to the event calendar array
               this.eventSourceEvent.push(eventDoc);
             })
