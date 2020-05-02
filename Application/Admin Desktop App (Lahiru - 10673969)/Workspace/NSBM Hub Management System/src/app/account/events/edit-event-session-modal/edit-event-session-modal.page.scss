@@ -1,0 +1,21 @@
+ion-content{
+    --ion-background-color: rgb(243, 243, 243);
+}
+
+ion-card{
+    --ion-background-color: white;
+}
+
+ion-item{
+    border: #ccc solid 1px;
+    border-radius: 5px;
+}
+
+ion-label{
+    color: black;
+}
+
+.editEventFormLabel{
+    position: relative;
+    top: 15px;
+}

@@ -222,10 +222,10 @@ export class ModulesPage implements OnInit {
       this.alertNotice("ALERT", "You have entered a Module Code, Title and selected a Degree Program. Module search will proceed with the Module Code");
 
       // Retrieving registered modules with the search value of moduleCode
-      this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
+      this.modulesService.retrieveRegisteredModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
 
       // Assigning loading spinner to false upon the necessary content has loaded
-      this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+      this.modulesService.retrieveRegisteredModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
 
     }
     else if(value.moduleCode != "" && value.moduleTitle){
@@ -234,10 +234,10 @@ export class ModulesPage implements OnInit {
       this.alertNotice("ALERT", "You have entered a Module Code and Title. Module search will proceed with the Module Code");
 
       // Retrieving registered modules with the search value of moduleCode
-      this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
+      this.modulesService.retrieveRegisteredModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
       
       // Assigning loading spinner to false upon the necessary content has loaded
-      this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+      this.modulesService.retrieveRegisteredModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
     
     }
     else if(value.moduleTitle != "" && value.degreeProgram != ""){
@@ -246,10 +246,10 @@ export class ModulesPage implements OnInit {
       this.alertNotice("ALERT", "You have entered a Module Title and selected a Degree Program. Module search will proceed with the Module Title");
 
       // Retrieving registered modules with the search value of moduleTitle
-      this.modulesService.retrieveRegisterdModulesModuleTitle(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleTitle).subscribe(response => (this.registeredModules = response));
+      this.modulesService.retrieveRegisteredModulesModuleTitle(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleTitle).subscribe(response => (this.registeredModules = response));
       
       // Assigning loading spinner to false upon the necessary content has loaded
-      this.modulesService.retrieveRegisterdModulesModuleTitle(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleTitle).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+      this.modulesService.retrieveRegisteredModulesModuleTitle(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleTitle).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
 
     }
     else if(value.moduleCode != "" && value.degreeProgram != ""){
@@ -258,10 +258,10 @@ export class ModulesPage implements OnInit {
       this.alertNotice("ALERT", "You have entered a Module Code and selected a Degree Program. Module search will proceed with the Module Code");
 
       // Retrieving registered modules with the search value of moduleCode
-      this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
+      this.modulesService.retrieveRegisteredModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
       
       // Assigning loading spinner to false upon the necessary content has loaded
-      this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+      this.modulesService.retrieveRegisteredModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
 
     }
     else if(value.moduleCode != "" || value.moduleTitle != "" || value.degreeProgram != ""){
@@ -269,28 +269,28 @@ export class ModulesPage implements OnInit {
       if(value.moduleCode != ""){
 
         // Retrieving registered modules with the search value of moduleCode
-        this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
+        this.modulesService.retrieveRegisteredModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
         
         // Assigning loading spinner to false upon the necessary content has loaded
-        this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+        this.modulesService.retrieveRegisteredModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
 
       }
       if(value.moduleTitle != ""){
 
         // Retrieving registered modules with the search value of moduleTitle
-        this.modulesService.retrieveRegisterdModulesModuleTitle(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleTitle).subscribe(response => (this.registeredModules = response));
+        this.modulesService.retrieveRegisteredModulesModuleTitle(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleTitle).subscribe(response => (this.registeredModules = response));
         
         // Assigning loading spinner to false upon the necessary content has loaded
-        this.modulesService.retrieveRegisterdModulesModuleTitle(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleTitle).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+        this.modulesService.retrieveRegisteredModulesModuleTitle(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleTitle).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
 
       }
       if(value.degreeProgram != ""){
 
         // Retrieving registered modules with the search value of degreeProgram
-        this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passUserFaculty(), value.degreeProgram, this.awardingBodyUniversity).subscribe(response => (this.registeredModules = response));
+        this.modulesService.retrieveRegisteredModulesDegreeProgram(this.sideMenuPageUserFaculty.passUserFaculty(), value.degreeProgram, this.awardingBodyUniversity).subscribe(response => (this.registeredModules = response));
         
         // Assigning loading spinner to false upon the necessary content has loaded
-        this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passUserFaculty(), value.degreeProgram, this.awardingBodyUniversity).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+        this.modulesService.retrieveRegisteredModulesDegreeProgram(this.sideMenuPageUserFaculty.passUserFaculty(), value.degreeProgram, this.awardingBodyUniversity).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
 
       }
 

@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { EditEventSessionModalPageRoutingModule } from './edit-event-session-modal-routing.module';
 
 import { EditEventSessionModalPage } from './edit-event-session-modal.page';
+import { MaterialModule } from 'src/app/material.module';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 @NgModule({
   imports: [
@@ -14,7 +16,9 @@ import { EditEventSessionModalPage } from './edit-event-session-modal.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    EditEventSessionModalPageRoutingModule
+    EditEventSessionModalPageRoutingModule,
+    MaterialModule,
+    NgxMaterialTimepickerModule
   ],
   declarations: [EditEventSessionModalPage]
 })

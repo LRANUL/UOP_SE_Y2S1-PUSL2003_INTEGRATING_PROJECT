@@ -13,6 +13,14 @@ import { NotificationsPopoverPage } from '../notifications-popover/notifications
 })
 export class EventsPage implements OnInit {
 
+
+  // Setting min validation for angular material calendar
+  minDate: Date;
+
+  // Setting max validation for angular material calendar
+  maxDate: Date;
+
+
   searchEventForm: FormGroup;
 
   addNewEventForm: FormGroup;
@@ -24,7 +32,17 @@ export class EventsPage implements OnInit {
     private popoverController: PopoverController,
     private sideMenuPageUserFaculty: SideMenuPage,
     private eventsService: FirestoreService
-  ) { }
+  ) { 
+
+    // Retrieving current date and setting as min data
+    this.minDate = new Date();
+
+    // Retrieving the current year
+    const currentYear = new Date().getFullYear();
+    // Setting the max date december 31st two years in the future
+    this.maxDate = new Date(currentYear + 2, 11, 31);
+
+  }
 
   ngOnInit() {
 
@@ -63,7 +81,7 @@ export class EventsPage implements OnInit {
   retrievePublishedEventSessions = () => {
     // Retrieving the event sessions from the firestore database
     this.eventsService.retrievePublishedEventSessions(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(eventSlots => {
-      this.eventSourceEvent = []; // Clearing the exisiting events on the calendar before syncing
+      this.eventSourceEvent = []; // Clearing the existing events on the calendar before syncing
       (
         eventSlots.forEach(snap => {
         let eventDoc:any = snap.payload.doc.data();
@@ -72,7 +90,7 @@ export class EventsPage implements OnInit {
         eventDoc.startTime = eventDoc.startDateTime.toDate();
         eventDoc.endTime = eventDoc.endDateTime.toDate();
 
-        console.log(eventDoc);
+      //  console.log(eventDoc);
 
         this.eventSourceEvent.push(eventDoc);
       })
@@ -109,30 +127,24 @@ export class EventsPage implements OnInit {
       header: title,
       message: content,
       buttons: [
-
         {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log("Alert Box: Remove Lecture Session Request Denied");
+            console.log("Alert Box: Remove Event Session Request Denied");
           }
         },
         {
           text: 'Continue',
           handler: () => {
-            console.log("Alert Box: Remove Lecture Session Request Accepted");
-            console.log(value);
-            // Calling function to remove lecture session
+            console.log("Alert Box: Remove Event Session Request Accepted");
+            // Calling function to remove event session
             this.eventsService.removeEventSession(this.sideMenuPageUserFaculty.passUserFaculty(), value);
-
           }
         }
-
       ]
     });
-
     await alert.present();
-
   }
 
 
@@ -144,24 +156,22 @@ export class EventsPage implements OnInit {
 
   // Alert Box Implementation
   async alertNotice ( title: string, content: string ) {
-
     const alert = await this.alertController.create({
       header: title,
       message: content,
       buttons: ['OK']
     });
-
     await alert.present();
-
   }
 
-  // Confirm Box Implementation (Published Event Session)
+
+
+  // Confirm Box Implementation (Publish Event Session)
   async publishedEventSession ( title: string, content: string, value) {
     const alert = await this.alertController.create({
       header: title,
       message: content,
       buttons: [
-
         {
           text: 'Cancel',
           role: 'cancel',
@@ -174,55 +184,160 @@ export class EventsPage implements OnInit {
           handler: () => {
             console.log("Alert Box: Publish Event Session Request Accepted");
 
+            // Calling function to publish event session
+            this.doAddNewEvent(value);
           }
         }
-
       ]
     });
     await alert.present();
   }
 
 
-
   doAddNewEvent(value){
-    console.log(value);
-    
-    console.log(new Date(value.eventDate).toISOString());
-    //console.log((new Date(value.eventDate).toISOString()).split(0,10));
-    console.log((new Date(value.eventStartTime).toISOString()).split('T')[1]);
-    console.log((new Date(value.eventEndTime).toISOString()).split('T')[1]);
+    // Extracting month, date and year from selected event session date, sample format - 04/30/2020
+    // Month has to be incremented by one because the month range is retrieve by - 0-11
+    let eventSessionDate = (new Date(value.eventDate).getMonth()+1) + "/" + new Date(value.eventDate).getDate() + "/" + new Date(value.eventDate).getFullYear();
 
-    let eventDate = (new Date(value.eventDate).toISOString()).split('T')[0];
-    // 2020-04-15
+    // Merging event session date and event session start time into date format
+    let eventSessionStartDateTime = new Date(eventSessionDate + " " + value.eventStartTime);
 
-    let startTime = (new Date(value.eventStartTime).toISOString()).split('T')[1];
-    // 18:27:20.248Z
+    // Merging event session date and event session end time into date format
+    let eventSessionEndDateTime = new Date(eventSessionDate + " " + value.eventEndTime);
 
-    let endTime = (new Date(value.eventEndTime).toISOString()).split('T')[1];
-    // 18:27:20.248Z
-
-    let eventStartDateTime = new Date(eventDate + "T" + startTime);
-    // 2020-04-15T18:27:20.248Z
-    let eventEndDateTime = new Date(eventDate + "T" + endTime);
-    // 2020-04-15T18:27:20.248Z
-
-    console.log(eventStartDateTime);
-    console.log(eventEndDateTime);
-
-    this.eventsService.publishNewEventSession(this.sideMenuPageUserFaculty.passUserFaculty(), value, eventStartDateTime, eventEndDateTime);
-
-    this.alertNotice("Event Added", "New event has been published.");
-
+    this.eventsService.publishNewEventSession(this.sideMenuPageUserFaculty.passUserFaculty(), value, eventSessionStartDateTime, eventSessionEndDateTime)
+    .then(success => {
+        this.alertNotice("Event Added", "New event session has been published.");
+        this.addNewEventForm.reset();
+      }, error => {
+        console.log("Error: " + error);
+        this.alertNotice("ERROR", "Error has occurred: " + error);
+    });
   }
 
+
+  // Process of search for event session with the 
+  doSearchEvent(value){
+    if(value.eventTitle != ""){
+      this.eventsService.retrievePublishedEventSessionTitleSearch(this.sideMenuPageUserFaculty.passUserFaculty(), value.eventTitle).subscribe(response =>
+        {// Checking a document was found and returned
+          if(response.length > 0){
+
+            // Assigning returned event session to the event calendar
+            response.forEach(snap => {
+              let eventDoc:any = snap.payload.doc.data();
+              eventDoc.id = snap.payload.doc.id;
+              eventDoc.title = eventDoc.eventTitle + "  | Status:  " + eventDoc.status;
+              eventDoc.startTime = eventDoc.startDateTime.toDate();
+              eventDoc.endTime = eventDoc.endDateTime.toDate();
+              
+              // Setting currentDate variable to returned event session
+              // This will allow to redirect the user to the returned event session in the events calendar
+              this.calendarEvent.currentDate = eventDoc.startDateTime.toDate();
+              
+              // Running a for loop until initially loaded (ngOnInit) event session of the same returned event session is found
+              // For loop will running iterations of the number of initially loaded (ngOnInit) event sessions
+              for (let index = 0; index < this.eventSourceEvent.length; index++) {
+
+                // Checking if the initially loaded (ngOnInit) event session id is equal to the returned event session id
+                if(this.eventSourceEvent[index].id == eventDoc.id){
+
+                  // Initially loaded (ngOnInit) event session will be removed from the array
+                  this.eventSourceEvent.splice(index, 1);
+
+                  // Exiting the for loop
+                  break;
+                }
+              }
+              
+              // Adding the returned event session to the event calendar array
+              this.eventSourceEvent.push(eventDoc);
+            })
+          }
+          else{
+            // Showing alert box
+            this.alertNotice("Event Not Available", "Event title: " + value.eventTitle + " was not found.");
+          }
+        });
+    }
+    else if(value.eventDate != ""){
+
+      // Assigning the user selected event date
+      let eventDate = new Date(value.eventDate);
+      
+      // Assigning the user selected event date
+      let nextDate = new Date(eventDate);
+
+      // Increment the user selected event date by one
+      nextDate.setDate(nextDate.getDate() + 1);
+
+      // Checking if a event document is available, if there is it will be returned
+      this.eventsService.retrievePublishedEventSessionDateSearch(this.sideMenuPageUserFaculty.passUserFaculty(), eventDate, nextDate).subscribe(response => 
+        {
+          if(response.length > 0){
+
+            // Assigning returned event session to the event calendar
+            response.forEach(snap => {
+              let eventDoc:any = snap.payload.doc.data();
+              eventDoc.id = snap.payload.doc.id;
+              eventDoc.title = eventDoc.eventTitle + "  | Status:  " + eventDoc.status;
+              eventDoc.startTime = eventDoc.startDateTime.toDate();
+              eventDoc.endTime = eventDoc.endDateTime.toDate();
+              
+              // Setting currentDate variable to returned event session
+              // This will allow to redirect the user to the returned event session in the events calendar
+              this.calendarEvent.currentDate = eventDoc.startDateTime.toDate();
+
+              // Running a for loop until initially loaded (ngOnInit) event session of the same returned event session is found
+              // For loop will running iterations of the number of initially loaded (ngOnInit) event sessions
+              for (let index = 0; index < this.eventSourceEvent.length; index++) {
+
+                // Checking if the initially loaded (ngOnInit) event session id is equal to the returned event session id
+                if(this.eventSourceEvent[index].id == eventDoc.id){
+
+                  // Initially loaded (ngOnInit) event session will be removed from the array
+                  this.eventSourceEvent.splice(index, 1);
+
+                  // Exiting the for loop
+                  break;
+                }
+              }
+      
+              // Adding the returned event session to the event calendar array
+              this.eventSourceEvent.push(eventDoc);
+            })
+          }
+          else{
+            let eventDate = new Date(value.eventDate).getMonth()+ "/" +new Date(value.eventDate).getDate()+ "/" +new Date(value.eventDate).getFullYear()
+
+            // Showing alert box
+            this.alertNotice("Event Not Available", "Event on: " + eventDate + " was not found.");
+          }
+        });
+    }
+  }
+
+
+  resetSearchEventSection(){
+    // Clearing user entered values in search event form
+    this.searchEventForm.reset();
+
+    // Clearing the events session in the event calendar
+    this.eventSourceEvent = [];
+
+    // Retrieving the published event sessions after the events calendar has been cleared
+    this.retrievePublishedEventSessions();
+
+    // Retrieving the current date and assigning it to the event calendar current date 
+    this.calendarEvent.currentDate = new Date();
+  }
 
 
   // Declared to hold the events as array to determine the no of event sessions
   noOfEventSessions = [];
 
-
   // Event Calendar
-  eventSourceEvent;
+  eventSourceEvent = [];
   viewingMonthEvent;
 
   calendarEvent = {
@@ -259,7 +374,7 @@ export class EventsPage implements OnInit {
       else if ((evt.events !== undefined && evt.events.length !== 0) == true){
         this.noOfEventSessions = evt.events;
       }
-      console.log(this.noOfEventSessions);
+    //  console.log(this.noOfEventSessions);
   }
 
   onCurrentDateChangedEvent(event: Date){

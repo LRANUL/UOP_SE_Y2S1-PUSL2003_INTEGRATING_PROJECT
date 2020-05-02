@@ -77,6 +77,12 @@ export class FirestoreService {
               .where("userId", '==', Uid)).snapshotChanges();
   }
 
+  // Retrieving the user details of the users that have an account activity "Online" from the firestore database
+  retrieveOnlineUserDetails(userType){
+    return this.fireStore.collection("users/userTypes/"+ userType, ref => ref
+            .where("accountActivity", "==", "Online")).snapshotChanges();
+  }
+
 
   // Creating new document into user activity monitoring collection in firestore database
   userActivityMonitoring(loggedInUserId, loggedInUserEmail){
@@ -88,7 +94,7 @@ export class FirestoreService {
   }
 
 
-  // Retriving the current date and time from the localhost
+  // Retrieving the current date and time from the localhost
   currentDT = new Date();
   currentDateTime = this.currentDT.getDate() + "/" + this.currentDT.getMonth() + "/" + this.currentDT.getFullYear() + " " + this.currentDT.getHours() + ":" + this.currentDT.getMinutes() + ":" + this.currentDT.getSeconds();
  
@@ -253,7 +259,7 @@ export class FirestoreService {
                 noticeCoverImage: {
                   coverImageFileName: coverImageFileName,
                   coverImageFilePath: coverImageFilePath,
-                  cooverImageFileSize: coverImageFileSize
+                  coverImageFileSize: coverImageFileSize
                 },
                 noticeCreated: {
                   noticeCreatedByUid: loggedInUserId,
@@ -284,7 +290,7 @@ export class FirestoreService {
               noticeCoverImage: {
                 coverImageFileName: coverImageFileName,
                 coverImageFilePath: coverImageFilePath,
-                cooverImageFileSize: coverImageFileSize
+                coverImageFileSize: coverImageFileSize
               },
               noticeCreated: {
                 noticeCreatedByUid: loggedInUserId,
@@ -369,7 +375,7 @@ export class FirestoreService {
               noticeCoverImage: {
                 coverImageFileName: coverImageFileName,
                 coverImageFilePath: coverImageFilePath,
-                cooverImageFileSize: coverImageFileSize
+                coverImageFileSize: coverImageFileSize
               },
               noticeCreated: {
                 noticeCreatedByUid: loggedInUserId,
@@ -435,7 +441,7 @@ export class FirestoreService {
       assignedLecturer: value.assignedLecturer,
       assignedLectureHall: value.assignedLectureHall
     }).then(function() {
-      console.log("Module registerd and values were added");
+      console.log("Module registered and values were added");
     });
   }
 
@@ -481,16 +487,20 @@ export class FirestoreService {
 
   // Publishing new event session by adding the details to the firestore database
   publishNewEventSession(userFaculty, value, eventStartDateTime, eventEndDateTime){
-    // Creating an ID for the document
-    const docId = this.fireStore.createId();
+    return new Promise<any>((resolve, reject) => { 
+      // Creating an ID for the document
+      const docId = this.fireStore.createId();
 
-    return this.fireStore.collection("faculties/"+ userFaculty +"/eventSessions").doc(docId).set({
-      eventTitle: value.eventTitle,
-      startDateTime: eventStartDateTime,
-      endDateTime: eventEndDateTime,
-      status: value.eventStatus
-    }).then(function() {
-      console.log("New event published and values added");
+      this.fireStore.collection("faculties/"+ userFaculty +"/eventSessions").doc(docId).set({
+        eventTitle: value.eventTitle,
+        startDateTime: new Date(eventStartDateTime),
+        endDateTime: new Date(eventEndDateTime),
+        status: value.eventStatus
+      }).then(success => {
+        resolve(success);
+      }, error => {
+        reject(error);
+      });
     })
   }
 
@@ -616,24 +626,29 @@ export class FirestoreService {
 
   // Searching for registered student details with the user entered nsbm email address
   searchRegisteredStudentNSBMEmail(nsbmEmailAddress) {
-      return this.fireStore.collection("users/userTypes/studentUsers", ref => ref
-          .where("Email", "==", nsbmEmailAddress)).snapshotChanges();
+    return this.fireStore.collection("users/userTypes/studentUsers", ref => ref
+            .where("Email", "==", nsbmEmailAddress)).snapshotChanges();
   }
 
 
 
   // Searching for registered lecturer details with the user entered nsbm id
   searchRegisteredLecturerNSBMId(nsbmLecturerId) {
-      return this.fireStore.collection("users/userTypes/lecturerUsers", ref => ref
-          .where("nsbmLecturerId", "==", nsbmLecturerId)).snapshotChanges();
+    return this.fireStore.collection("users/userTypes/lecturerUsers", ref => ref
+            .where("nsbmLecturerId", "==", nsbmLecturerId)).snapshotChanges();
   }
 
   // Searching for registered lecturer details with the user entered nsbm email address
   searchRegisteredLecturerNSBMEmail(nsbmEmailAddress) {
-      return this.fireStore.collection("users/userTypes/lecturerUsers", ref => ref
-          .where("nsbmEmailAddress", "==", nsbmEmailAddress)).snapshotChanges();
+    return this.fireStore.collection("users/userTypes/lecturerUsers", ref => ref
+            .where("nsbmEmailAddress", "==", nsbmEmailAddress)).snapshotChanges();
   }
 
+
+  // Retrieving documents of user activity from the firestore database
+  retrieveUserActivityRecords(){
+    return this.fireStore.collection("userActivityMonitoring").snapshotChanges();
+  }
 
   // Retrieving published lecture series and their details from the firestore database
   retrievePublishedLectureSeries(userFaculty, value, awardingBodyUniversity, moduleTitle) {
@@ -665,7 +680,7 @@ export class FirestoreService {
 
 
 
-  // Retrieving published Lectuers to PO notices from current date to three days before from the firestore database
+  // Retrieving published Lecturers to PO notices from current date to three days before from the firestore database
   retrievePublishedLecturerToPONotice(currentDate, dateThreeDaysBeforeCurrentDate) {
     return this.fireStore.collection("notices/noticeTypes/notices-Lecturers-To-PO/", ref => ref
         .where("noticeCreated.noticeCreatedDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))
@@ -683,7 +698,7 @@ export class FirestoreService {
       ).snapshotChanges();
   }
 
-  // Retrieving published PO to Lectuers notices from current date to three days before from the firestore database
+  // Retrieving published PO to Lecturers notices from current date to three days before from the firestore database
   retrievePublishedPOToLecturerNotice(currentDate, dateThreeDaysBeforeCurrentDate) {
       return this.fireStore.collection("notices/noticeTypes/notices-PO-To-Lecturers/", ref => ref
           .where("noticeCreated.noticeCreatedDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))
@@ -729,7 +744,7 @@ export class FirestoreService {
     return this.fireStore.collection("faculties/" + userFaculty + "/lectureSessions").snapshotChanges();
   }
 
-  // Retrieving published lecture sessions and their detais from the firestore database for the current date
+  // Retrieving published lecture sessions and their details from the firestore database for the current date
   retrievePublishedLectureSessionsCurrentDate(userFaculty, currentDate, nextDate) {
     return this.fireStore.collection("faculties/"+ userFaculty +"/lectureSessions", ref => ref
             .where("startDateTime", ">=", new Date(currentDate))
@@ -738,7 +753,7 @@ export class FirestoreService {
             ).snapshotChanges();
   }
 
-  // Retrieving published lecture session and their detais from the firestore database for the semester calendar page
+  // Retrieving published lecture session and their details from the firestore database for the semester calendar page
   retrievePublishedLectureSessionsSemesterCalendar(userFaculty, value, awardingBodyUniversity) {
     return this.fireStore.collection("faculties/" + userFaculty + "/lectureSessions/", ref => ref
         .where("batch", "==", value.batch)
@@ -749,7 +764,7 @@ export class FirestoreService {
         .snapshotChanges();
   }
 
-  // Retrieving published lecture session and their detais from the firestore database for the lecture schedule page
+  // Retrieving published lecture session and their details from the firestore database for the lecture schedule page
   retrievePublishedLectureSessionsLectureSchedule(userFaculty, currentDate, nextDate) {
     return this.fireStore.collection("faculties/"+ userFaculty +"/lectureSessions", ref => ref
               .where("startDateTime", ">=", new Date(currentDate))
@@ -781,21 +796,34 @@ export class FirestoreService {
     return this.fireStore.collection("faculties/"+ userFaculty +"/eventSessions").snapshotChanges();
   }
 
+  // Retrieving the event session and their details from the firestore database from the user entered event title
+  retrievePublishedEventSessionTitleSearch(userFaculty, eventTitle){
+    return this.fireStore.collection("faculties/"+ userFaculty +"/eventSessions", ref => ref
+            .where("eventTitle", "==", eventTitle)).snapshotChanges();
+  }
+
+  //Retrieving the event session and their details from te firestore database from the user selected event date
+  retrievePublishedEventSessionDateSearch(userFaculty, eventDate, nextDate){
+    return this.fireStore.collection("faculties/"+ userFaculty +"/eventSessions", ref => ref
+            .where("startDateTime", ">=", eventDate)
+            .where("startDateTime", "<=", nextDate)).snapshotChanges();
+  }
+
   // Retrieving registered module and their details from the firestore database for the module page (Module Code)
-  retrieveRegisterdModulesModuleCode(userFaculty, value){
+  retrieveRegisteredModulesModuleCode(userFaculty, value){
     return this.fireStore.collection("faculties/"+ userFaculty +"/modules", ref => ref 
               .where("moduleCode", "==", value)).snapshotChanges();
   }
 
 
   // Retrieving registered module and their details from the firestore database for the module page (Module Title)
-  retrieveRegisterdModulesModuleTitle(userFaculty, value){
+  retrieveRegisteredModulesModuleTitle(userFaculty, value){
     return this.fireStore.collection("faculties/"+ userFaculty +"/modules", ref => ref 
               .where("moduleTitle", "==", value)).snapshotChanges();
   }
 
   // Retrieving registered module and their details from the firestore database for the module page (Degree Program)
-  retrieveRegisterdModulesDegreeProgram(userFaculty, userSelectedDegree, userSelectedAwardingBodyUniversity){
+  retrieveRegisteredModulesDegreeProgram(userFaculty, userSelectedDegree, userSelectedAwardingBodyUniversity){
     return this.fireStore.collection("faculties/"+ userFaculty +"/modules", ref => ref 
               .where("degree", "==", userSelectedDegree)
               .where("awardingBodyUniversity", "==", userSelectedAwardingBodyUniversity)).snapshotChanges();
@@ -932,14 +960,16 @@ export class FirestoreService {
 
   // Updating event session values in the firestore database
   updateEventSession(userFaculty, docId, value, eventStartDateTime, eventEndDateTime){
-    return this.fireStore.doc("faculties/"+ userFaculty +"/eventSessions/"+ docId).update({
+    return new Promise<any>((resolve, reject) => {
+      this.fireStore.doc("faculties/"+ userFaculty +"/eventSessions/"+ docId).update({
       eventTitle: value.eventTitle,
       startDateTime: eventStartDateTime,
       endDateTime: eventEndDateTime,
       status: value.eventStatus
-    }).then(function() {
-      console.log("Event Session Details has been updated.");
-    });
+      }).then(response => 
+          resolve(response)
+        ,error => reject(error))
+      });  
   }
 
   // Updating transport slot values in the firestore database
@@ -995,16 +1025,16 @@ export class FirestoreService {
   }
 
   // Removing PO to Students notice from the firestore database
-  removePublishedPOTOStudentsNotice(docId){
+  removePublishedPOToStudentsNotice(docId){
     this.fireStore.doc("notices/noticeTypes/notices-PO-To-Students/"+ docId).delete();
   }
 
   // Removing PO to Lecturers notice from the firestore database
-  removePublishedPOTOLecturersNotice(docId){
+  removePublishedPOToLecturersNotice(docId){
     this.fireStore.doc("notices/noticeTypes/notices-PO-To-Lecturers/"+ docId).delete();
   }
 
-  //Removing degree program fron the firestore database
+  //Removing degree program from the firestore database
   removeDegreeProgram(docId, userFaculty) {
     return this.fireStore.doc("faculties/" + userFaculty + "/degreePrograms/" + docId).delete();
   }
@@ -1051,7 +1081,7 @@ export class FirestoreService {
 
 
 
-  // Disabling the user acount by updating user account status to 'disabled' in the firestore database
+  // Disabling the user account by updating user account status to 'disabled' in the firestore database
   disableUserAccount(userType, docId) {
     return this.fireStore.doc("users/userTypes/" + userType + "/" + docId).update({
         status: "Disabled"
@@ -1060,7 +1090,7 @@ export class FirestoreService {
     });
   }
 
-  // Enabling the user acount by updating user account status to 'disabled' in the firestore database
+  // Enabling the user account by updating user account status to 'disabled' in the firestore database
   enableUserAccount(userType, docId) {
     return this.fireStore.doc("users/userTypes/" + userType + "/" + docId).update({
         status: "Active"

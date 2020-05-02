@@ -1,7 +1,3 @@
-.space{
-  padding-top: 40px;
-  padding-right: 40px;
-}
 
 ul#apps li{
 display: inline-block;
@@ -15,72 +11,6 @@ background-repeat: no-repeat;
 background-size: 100%;
 background-position: center;
 }
-
-.pa{
-padding-right: 20pt;
-}
-
-.ca{
-width: 15rem;
-height: 15rem;
-}
-
-.con{
-left: 600px;
-}
-
-@media only screen and (max-width: 900px){
-.pa{
-  right: 100%;
-}
-.ln{
-  bottom: 260px;
-}
-.lc{
-bottom: 505px;
-}
-
-.ca{
-  width: 13rem;
-  height: 14rem;
-}
-
-.con{
-  position: absolute;
-}
-
-.wf{
-  margin-left: 325px;
-  bottom: 500px;
-}
-}
-
-@media only screen and (max-width: 812px){
-  .pa{
-    left: 100%;
-  }
-  .ln{
-    bottom: 260px;
-  }
-  .lc{
-  bottom: 505px;
-  }
-
-  .ca{
-    width: 13rem;
-    height: 14rem;
-  }
-
-  .con{
-    position: unset;
-    align-items: flex-end;
-  }
-
-  .wf{
-    margin-left: 325px;
-    bottom: 500px;
-  }
-  }
 
 
 

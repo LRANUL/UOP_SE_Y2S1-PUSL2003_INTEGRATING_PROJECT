@@ -8,6 +8,8 @@ import { EventsPageRoutingModule } from './events-routing.module';
 
 import { EventsPage } from './events.page';
 import { NgCalendarModule } from 'ionic2-calendar';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MaterialModule } from 'src/app/material.module';
 
 @NgModule({
   imports: [
@@ -16,7 +18,9 @@ import { NgCalendarModule } from 'ionic2-calendar';
     ReactiveFormsModule,
     IonicModule,
     EventsPageRoutingModule,
-    NgCalendarModule
+    NgCalendarModule,
+    NgxMaterialTimepickerModule,
+    MaterialModule
   ],
   declarations: [EventsPage]
 })

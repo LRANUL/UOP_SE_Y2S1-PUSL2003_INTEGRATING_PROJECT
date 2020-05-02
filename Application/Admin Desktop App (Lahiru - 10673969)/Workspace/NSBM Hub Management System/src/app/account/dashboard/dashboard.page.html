@@ -7,7 +7,7 @@
     </ion-buttons>
 
     <ion-title style="position: absolute;
-                      top: 40%;">Dashboard</ion-title>
+                      top: 40%;">DASHBOARD</ion-title>
 
     <!-- Header Contents Section -->
     <div style="position: absolute;
@@ -536,7 +536,12 @@
             <ion-label style="position: relative;
                               top: 20px;
                               font-size: 17px;">
-              Active Users - <span style="color: rgb(0, 94, 122)"><b>03</b></span>
+              Active Users - 
+                <span style="color: rgb(0, 94, 122)">
+                  <b>
+                      {{ calculateTotalOnlineUsers(onlineStudentUsersCount, onlineLecturerUsersCount, onlineProgramOfficeUsersCount) }}
+                  </b>
+                </span>
             </ion-label>
 
             <div style="border: #ccc solid 1px;
@@ -550,7 +555,13 @@
                 <ion-row>
                   <ion-col>
                     <ion-label>
-                      <b>Students: <span style="color: rgb(4, 126, 163)">01</span></b>
+                      <b>Students: 
+                        <span style="color: rgb(4, 126, 163)">
+                          {{ convertToTwoDigit(onlineStudentUsersCount) }}
+                          <ion-spinner name="crescent" style="height: 15px;
+                                                        width: 15px;" *ngIf="activeStudentUsersLoadingSpinner"></ion-spinner>
+                        </span>
+                      </b>
                     </ion-label>
                   </ion-col>
                 </ion-row>
@@ -565,12 +576,20 @@
                                           left: 50%;
                                           top: -15px;
                                           transform: translateX(-50%);">
-                            <ion-row>
+                            <ion-spinner name="crescent" style="height: 50px;
+                                                  width: 50px;
+                                                  position: absolute;
+                                                  left: 50%;
+                                                  top: 40px;
+                                                  transform: translateX(-50%);" *ngIf="activeStudentUserDetailsLoadingSpinner"></ion-spinner>
+                            <ion-row *ngFor="let item of onlineStudentUserDetails">
                               <ion-col>
                                 <ion-label style="font-size: 13px;
                                             position: relative;
-                                            left: 25%;">
-                                  Mr. Solomon David
+                                            left: 20%;">
+                                  {{ item.payload.doc.data().name.prefix }}
+                                  {{ item.payload.doc.data().name.firstName }}
+                                  {{ item.payload.doc.data().name.lastName }}
                                 </ion-label>
                               </ion-col>
                             </ion-row>
@@ -588,7 +607,15 @@
                 </ion-row>
                 <ion-row>
                   <ion-col>
-                    <b>Lecturers: <span style="color: rgb(4, 126, 163)">01</span></b>
+                    <ion-label>
+                      <b>Lecturers: 
+                        <span style="color: rgb(4, 126, 163)">
+                          {{ convertToTwoDigit(onlineLecturerUsersCount) }}
+                          <ion-spinner name="crescent" style="height: 15px;
+                                                        width: 15px;" *ngIf="activeLecturerUsersLoadingSpinner"></ion-spinner>
+                        </span>
+                      </b>
+                    </ion-label>    
                   </ion-col>
                 </ion-row>
                 <ion-row>
@@ -602,12 +629,20 @@
                                           left: 50%;
                                           top: -15px;
                                           transform: translateX(-50%);">
-                            <ion-row>
+                            <ion-spinner name="crescent" style="height: 50px;
+                                                                width: 50px;
+                                                                position: absolute;
+                                                                left: 50%;
+                                                                top: 40px;
+                                                                transform: translateX(-50%);" *ngIf="activeLecturerUserDetailsLoadingSpinner"></ion-spinner>
+                            <ion-row *ngFor="let item of onlineLecturerUserDetails">
                               <ion-col>
                                 <ion-label style="font-size: 13px;
                                             position: relative;
-                                            left: 25%;">
-                                  Dr. Susan Peterson
+                                            left: 20%;">
+                                  {{ item.payload.doc.data().name.prefix }}
+                                  {{ item.payload.doc.data().name.firstName }}
+                                  {{ item.payload.doc.data().name.lastName }}
                                 </ion-label>
                               </ion-col>
                             </ion-row>
@@ -625,7 +660,15 @@
                 </ion-row>
                 <ion-row>
                   <ion-col>
-                    <b>Office Staff: <span style="color: rgb(4, 126, 163)">01</span></b>
+                    <ion-label>
+                      <b>Program Office Staff: 
+                        <span style="color: rgb(4, 126, 163)">
+                          {{ convertToTwoDigit(onlineProgramOfficeUsersCount) }}
+                          <ion-spinner name="crescent" style="height: 15px;
+                                                        width: 15px;" *ngIf="activeProgramOfficeUsersLoadingSpinner"></ion-spinner>
+                        </span>
+                      </b>
+                    </ion-label>
                   </ion-col>
                 </ion-row>
                 <ion-row>
@@ -639,12 +682,20 @@
                                           left: 50%;
                                           top: -15px;
                                           transform: translateX(-50%);">
-                            <ion-row>
+                            <ion-spinner name="crescent" style="height: 50px;
+                                                                width: 50px;
+                                                                position: absolute;
+                                                                left: 50%;
+                                                                top: 40px;
+                                                                transform: translateX(-50%);" *ngIf="activeProgramOfficeUserDetailsLoadingSpinner"></ion-spinner>
+                            <ion-row *ngFor="let item of onlineProgramOfficeUserDetails">
                               <ion-col>
                                 <ion-label style="font-size: 13px;
                                                   position: relative;
-                                                  left: 25%;">
-                                  Mr. Jon Anderson
+                                                  left: 20%;">
+                                  {{ item.payload.doc.data().name.prefix }}
+                                  {{ item.payload.doc.data().name.firstName }}
+                                  {{ item.payload.doc.data().name.lastName }}
                                 </ion-label>
                               </ion-col>
                             </ion-row>
