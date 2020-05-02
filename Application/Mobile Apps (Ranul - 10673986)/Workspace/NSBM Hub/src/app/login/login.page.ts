@@ -3,7 +3,6 @@ import { Component, OnInit } from "@angular/core";
 import * as firebase from "firebase";
 import { LoadingController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
-import { Network } from '@ionic-native/network/ngx';
 
 import {
   FormGroup,
@@ -36,7 +35,6 @@ export class Login implements OnInit {
     private authService: ServicesService,
     private formBuilder: FormBuilder,
     public loadingController: LoadingController,
-    private network: Network,
     private firestore: AngularFirestore,
     public alertController: AlertController,
   ) { }

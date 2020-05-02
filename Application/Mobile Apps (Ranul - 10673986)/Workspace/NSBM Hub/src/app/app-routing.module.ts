@@ -6,11 +6,11 @@ import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 const routes: Routes = [
     {
         path: '',
-        loadChildren: './welcome/welcome.module#WelcomePageModule'
+        loadChildren: () => import('./welcome/welcome.module').then(m => m.WelcomePageModule)
     },
     {
         path: "login",
-        loadChildren: "./login/login.module#LoginPageModule"
+        loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
     },
     {
         path: "",
@@ -18,18 +18,18 @@ const routes: Routes = [
     },
     {
         path: 'signup',
-        loadChildren: './signup/signup.module#SignupPageModule'
+        loadChildren: () => import('./signup/signup.module').then(m => m.SignupPageModule)
     }, {
         path: 'home/calendar',
-        loadChildren: './home/calendar/calendar.module#CalendarPageModule'
+        loadChildren: () => import('./home/calendar/calendar.module').then(m => m.CalendarPageModule)
     }, {
         path: '',
-        loadChildren: './home/facilities/facilities.module#FacilitiesPageModule'
+        loadChildren: () => import('./home/facilities/facilities.module').then(m => m.FacilitiesPageModule)
     }, {
         path: 'guest',
-        loadChildren: './guest/guest.module#GuestPageModule'
-    },  { path: 'calendar', loadChildren: './calendar/calendar.module#CalendarPageModule' },
-  { path: 'facilities', loadChildren: './facilities/facilities.module#FacilitiesPageModule' },
+        loadChildren: () => import('./guest/guest.module').then(m => m.GuestPageModule)
+    },  { path: 'calendar', loadChildren: () => import('./calendar/calendar.module').then(m => m.CalendarPageModule) },
+  { path: 'facilities', loadChildren: () => import('./facilities/facilities.module').then(m => m.FacilitiesPageModule) },
 
 
 

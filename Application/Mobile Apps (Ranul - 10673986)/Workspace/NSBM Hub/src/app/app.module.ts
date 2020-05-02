@@ -19,7 +19,7 @@ import { Storage, IonicStorageModule } from '@ionic/storage';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { Network } from '@ionic-native/network/ngx';
+;
 
 firebase.initializeApp(environment.firebase);
 export const firebaseConfig = {
@@ -56,7 +56,6 @@ export const firebaseConfig = {
     ServicesService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     InAppBrowser,
-    Network,
   ],
   bootstrap: [AppComponent]
 })

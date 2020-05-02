@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
-import { Network } from '@ionic-native/network/ngx';
+;
 
 @Component({
   selector: 'app-signup',
@@ -39,8 +39,6 @@ export class SignupPage implements OnInit {
     private navCtrl: NavController,
     private authService: ServicesService,
     private formBuilder: FormBuilder,
-    private network: Network
-
   ) { }
 
   ngOnInit() {

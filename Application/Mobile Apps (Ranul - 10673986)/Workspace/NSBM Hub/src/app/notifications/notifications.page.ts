@@ -2,7 +2,6 @@ import { ServicesService } from './../services.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { Network } from '@ionic-native/network/ngx';
 import { AngularFireList } from '@angular/fire/database';
 
 @Component({
@@ -19,7 +18,6 @@ export class notificationsPage {
 
 
   constructor(
-    private network: Network,
     private database: AngularFirestore,
     private Service: ServicesService,
   ) { this.autorefresh(event); }

@@ -3,7 +3,7 @@ import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms'
 import { ServicesService } from './../services.service';
 import * as firebase from "firebase";
 import { LoadingController, NavController, AlertController } from '@ionic/angular';
-import { Network } from '@ionic-native/network/ngx';
+;
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
@@ -31,7 +31,6 @@ export class WelcomePage implements OnInit {
     private formBuilder: FormBuilder,
     public loadingController: LoadingController,
     public alertController: AlertController,
-    private network: Network,
     private firestore: AngularFirestore,
   ) { }
 

@@ -4,7 +4,6 @@ import { NavController } from '@ionic/angular';
 import { ServicesService } from '../services.service';
 import { ThemeService } from './../theme.service';
 import { AlertController } from '@ionic/angular';
-import { Network } from '@ionic-native/network/ngx';
 import { async } from 'rxjs/internal/scheduler/async';
 import { AngularFirestore } from '@angular/fire/firestore';
 
@@ -21,7 +20,6 @@ export class homePage implements OnInit {
     private authService: ServicesService,
     private ThemeService: ThemeService,
     private InAppBrowser: InAppBrowser,
-    private network: Network,
     private firebase: ServicesService,
     private firestore: AngularFirestore,
   ) { }

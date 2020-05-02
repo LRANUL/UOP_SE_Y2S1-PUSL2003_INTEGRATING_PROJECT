@@ -5,7 +5,7 @@ import * as firebase from "firebase";
 import { NavController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { AlertController } from '@ionic/angular';
-import { Network } from '@ionic-native/network/ngx';
+;
 import { AngularFirestore } from '@angular/fire/firestore';
 
 
@@ -24,7 +24,6 @@ export class settingsPage {
     public loadingController: LoadingController,
     private ThemeService: ThemeService,
     public storage: Storage,
-    private network: Network,
     public alertController: AlertController,
     public toastController: ToastController,
     private firebase: ServicesService,
