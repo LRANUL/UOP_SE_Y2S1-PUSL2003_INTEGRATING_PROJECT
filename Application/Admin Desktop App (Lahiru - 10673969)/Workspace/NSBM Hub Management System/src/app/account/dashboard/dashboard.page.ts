@@ -24,7 +24,7 @@ export class DashboardPage implements OnInit {
 
   nextDate;
 
-  dateThreeDaysBeformCurrentDate;
+  dateThreeDaysBeforeCurrentDate;
 
   showLoadingDotsTodaysLectureSession: Boolean = true;
 
@@ -34,7 +34,26 @@ export class DashboardPage implements OnInit {
 
   showLoadingDotsUpcomingLectureSession: Boolean = false;
 
+  activeStudentUsersLoadingSpinner: Boolean = true;
 
+  activeLecturerUsersLoadingSpinner: Boolean = true;
+
+  activeProgramOfficeUsersLoadingSpinner: Boolean = true;
+
+  activeStudentUserDetailsLoadingSpinner: Boolean = true;
+
+  activeLecturerUserDetailsLoadingSpinner: Boolean = true;
+
+  activeProgramOfficeUserDetailsLoadingSpinner: Boolean = true;
+
+  onlineUsersCount: number = 0;
+  onlineUsersCountLowerTen;
+  onlineStudentUsersCount;
+  onlineLecturerUsersCount: number = 0;
+  onlineProgramOfficeUsersCount: number = 0;
+  onlineStudentUserDetails;
+  onlineLecturerUserDetails;
+  onlineProgramOfficeUserDetails;
 
   constructor(
     private dashboardService: FirestoreService,
@@ -49,6 +68,8 @@ export class DashboardPage implements OnInit {
 
     // Initiating the user activity chart
     this.userActivityAreaChart();
+
+    this.retrieveOnlineUserDetails();
 
     // Retrieving current date and time
     // Sample: Sun Apr 19 2020 18:44:52 GMT+0530 (India Standard Time)
@@ -72,9 +93,9 @@ export class DashboardPage implements OnInit {
 
 
 
-    this.dateThreeDaysBeformCurrentDate = new Date();
+    this.dateThreeDaysBeforeCurrentDate = new Date();
 
-    this.dateThreeDaysBeformCurrentDate.setDate(this.currentDate.getDate()-3);
+    this.dateThreeDaysBeforeCurrentDate.setDate(this.currentDate.getDate()-3);
 
 
 
@@ -95,6 +116,55 @@ export class DashboardPage implements OnInit {
   }
 
   ngOnInit() { }
+
+  retrieveOnlineUserDetails = () => {
+    // Retrieving user details of student users that have an account status "Online" from the firestore database
+    this.dashboardService.retrieveOnlineUserDetails("studentUsers").subscribe(response => {
+      this.activeStudentUsersLoadingSpinner = false;
+      this.onlineStudentUsersCount = response.length;
+      this.activeStudentUserDetailsLoadingSpinner = false;
+      this.onlineStudentUserDetails = response;
+    });
+
+    // Retrieving user details of lecturer users that have an account status "Online" from the firestore database
+    this.dashboardService.retrieveOnlineUserDetails("lecturerUsers").subscribe(response => {
+      this.activeLecturerUsersLoadingSpinner = false;
+      this.onlineLecturerUsersCount = response.length;
+      this.activeLecturerUserDetailsLoadingSpinner = false;
+      this.onlineLecturerUserDetails = response;
+    });
+
+    // Retrieving user details of program office users that have an account status "Online" from the firestore database
+    this.dashboardService.retrieveOnlineUserDetails("programOfficeUsers").subscribe(response => {
+      this.activeProgramOfficeUsersLoadingSpinner = false;
+      this.onlineProgramOfficeUsersCount = response.length;
+      this.activeProgramOfficeUserDetailsLoadingSpinner = false;
+      this.onlineProgramOfficeUserDetails = response;
+    });
+  }
+
+  // Process of returning two digits if there is only one digit in a number
+  // Sample: Passing - 5, Returning - 05
+  convertToTwoDigit(numericValue: number){
+    if(numericValue < 10){
+      return "0" + numericValue;
+    }
+    else{
+      return numericValue;
+    }
+  }
+
+  // Processing of adding all the active users
+  calculateTotalOnlineUsers(onlineStudentUsers: number, onlineLecturerUsers: number, onlineProgramOfficeUsers: number){
+    let totalActiveUsers = onlineStudentUsers + onlineLecturerUsers + onlineProgramOfficeUsers;
+
+    // Checking if number has one or two digits
+    // Adding one more digit if number only has one digit
+    // Sample: Passing - 5, Returning = 05
+    // Returning total number of active users 
+    return this.convertToTwoDigit(totalActiveUsers);
+  }
+
 
   // Opening notifications popover
   async openNotificationPopover(ev: Event){
@@ -157,10 +227,9 @@ export class DashboardPage implements OnInit {
     });
   }
 
-  
+    
 
-  
-  // Retrieving published lecture sessions for the current date from the firestore datbase
+  // Retrieving published lecture sessions for the current date from the firestore database
   publishedLectureSessionsCurrentDate;
   retrievePublishedLectureSessionsCurrentDate = () => {
       this.dashboardService.retrievePublishedLectureSessionsCurrentDate(this.sideMenuPageUserFaculty.passUserFaculty(), this.currentDate, this.nextDate).subscribe(response => {
@@ -182,12 +251,12 @@ export class DashboardPage implements OnInit {
   // Retrieving published news from the firestore database
   publishedNews;
   retrievePublishedNews = () =>
-    this.dashboardService.retrievePublishedNews(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => (this.publishedNews = response));
+    this.dashboardService.retrievePublishedNews(this.currentDate, this.dateThreeDaysBeforeCurrentDate).subscribe(response => (this.publishedNews = response));
 
   // Retrieving published notices (Lecturers To Program Office (PO)) and assigning them
   publishedNoticesLecturerToPO;
   retrievePublishedLecturerToPONotice = () => 
-    this.dashboardService.retrievePublishedLecturerToPONotice(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => (this.publishedNoticesLecturerToPO = response));
+    this.dashboardService.retrievePublishedLecturerToPONotice(this.currentDate, this.dateThreeDaysBeforeCurrentDate).subscribe(response => (this.publishedNoticesLecturerToPO = response));
 
 
   // More details of today's lecture sessions popover
@@ -264,7 +333,7 @@ export class DashboardPage implements OnInit {
   retrievePublishedEventSessions = () => {
     // Retrieving the event sessions from the firestore database
     this.dashboardService.retrievePublishedEventSessions(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(eventSlots => {
-      this.eventSourceEvent = []; // Clearing the exisiting events on the calendar before syncing
+      this.eventSourceEvent = []; // Clearing the existing events on the calendar before syncing
       eventSlots.forEach(snap => {
         let event:any = snap.payload.doc.data();
         event.id = snap.payload.doc.id;
@@ -272,7 +341,7 @@ export class DashboardPage implements OnInit {
         event.startTime = event.startDateTime.toDate();
         event.endTime = event.endDateTime.toDate();
 
-        console.log(event);
+      //  console.log(event);
 
         this.eventSourceEvent.push(event);
       })

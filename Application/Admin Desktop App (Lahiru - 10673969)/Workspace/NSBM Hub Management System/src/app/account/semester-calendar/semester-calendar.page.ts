@@ -23,7 +23,7 @@ export class SemesterCalendarPage implements OnInit {
   // Setting min validation for angular material calendar
   minDate: Date;
 
-  // Setting max validation for angular matrerial calendar
+  // Setting max validation for angular material calendar
   maxDate: Date;
   
   searchSemesterCalendar: FormGroup;
@@ -50,7 +50,7 @@ export class SemesterCalendarPage implements OnInit {
     // Retrieving current date and setting as min data
     this.minDate = new Date();
 
-    // Retriving the current year
+    // Retrieving the current year
     const currentYear = new Date().getFullYear();
     // Setting the max date december 31st two years in the future
     this.maxDate = new Date(currentYear + 2, 11, 31);
@@ -58,7 +58,7 @@ export class SemesterCalendarPage implements OnInit {
 
   ngOnInit() {
 
-    // Calling the functions inorder for them to execute upon page load
+    // Calling the functions in order for them to execute upon page load
     this.retrievePublishedBatch();
 
     this.retrievePublishedDegreeProgram();
@@ -227,7 +227,7 @@ export class SemesterCalendarPage implements OnInit {
 
   }
 
-  // Retriving published lecture sessions
+  // Retrieving published lecture sessions
   doSearchSemesterCalendar(value){
 
     this.loadingSpinnerPLS = true;
@@ -276,7 +276,7 @@ export class SemesterCalendarPage implements OnInit {
       this.alertNotice("Error", "An error has occurred: " + error);
     });
   
-    // Calling function to retrive the lecture sessions and setting loading dots to false after the contents has loaded.
+    // Calling function to retrieve the lecture sessions and setting loading dots to false after the contents has loaded.
     this.semesterCalendarService.retrievePublishedLectureSessionsSemesterCalendar(this.sideMenuPageUserFaculty.passUserFaculty(), value, this.awardingBodyUniversity).subscribe(() => this.loadingSpinnerPLS = false);
 
 
@@ -378,9 +378,9 @@ export class SemesterCalendarPage implements OnInit {
 
     this.userSelectionLectureAssignGroup = false;
     
-    console.log("Reponse: " + event.detail.value);
+    console.log("Response: " + event.detail.value);
 
-    if(this.userSelectedOption == "lectureAssignIndividaully"){
+    if(this.userSelectedOption == "lectureAssignIndividually"){
       this.userSelectionLectureAssignIndividually = true;
     }
     else if(this.userSelectedOption == "lectureAssignGroup"){
@@ -437,8 +437,8 @@ export class SemesterCalendarPage implements OnInit {
   doPublishLectureSlotSC(value){
 
 
-    if(value.addLectureContentLoadOption == "lectureAssignIndividaully"){
-      // If user selects 'lectureAssignIndividaully' option
+    if(value.addLectureContentLoadOption == "lectureAssignIndividually"){
+      // If user selects 'lectureAssignIndividually' option
 
       // Extracting month, date and year from selected lecture session date, sample format - 04/30/2020
       // Month has to be incremented by one because the month range is retrieve by - 0-11

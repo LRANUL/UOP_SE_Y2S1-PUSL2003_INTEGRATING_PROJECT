@@ -1006,7 +1006,7 @@ export class NoticesPage implements OnInit {
           handler: () => {
             console.log("Alert Box: Remove PO To Students Request Accepted");
 
-            this.noticesService.removePublishedPOTOStudentsNotice(value.payload.doc.id);
+            this.noticesService.removePublishedPOToStudentsNotice(value.payload.doc.id);
           }
         }
       ]
@@ -1033,7 +1033,7 @@ export class NoticesPage implements OnInit {
           handler: () => {
             console.log("Alert Box: Remove PO To Lecturers Request Accepted");
 
-            this.noticesService.removePublishedPOTOLecturersNotice(value.payload.doc.id);
+            this.noticesService.removePublishedPOToLecturersNotice(value.payload.doc.id);
           }
         }
       ]
