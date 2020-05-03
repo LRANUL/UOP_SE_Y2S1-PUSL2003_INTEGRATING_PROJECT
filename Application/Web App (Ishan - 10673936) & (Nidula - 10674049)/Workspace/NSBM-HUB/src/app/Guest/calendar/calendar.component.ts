@@ -1,24 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {startOfDay,endOfDay,subDays,addDays,endOfMonth,isSameDay,isSameMonth,addHours,} from 'date-fns';
 import { Subject } from 'rxjs';
-import {CalendarEvent,CalendarEventAction,CalendarEventTimesChangedEvent,CalendarView,
-} from 'angular-calendar';
-
-const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA',
-  },
-};
-
+import {CalendarEvent,CalendarEventAction,CalendarEventTimesChangedEvent,CalendarView} from 'angular-calendar';
+import { CalendarService } from '../../services/calendar.service';
 
 @Component({
   selector: 'app-calendar',
@@ -26,31 +10,32 @@ const colors: any = {
   styleUrls: ['./calendar.component.css']
 })
 export class CalendarComponent{
+
+  calevents: any []=[];
+
   view: CalendarView = CalendarView.Month;
+
   CalendarView = CalendarView;
+
   viewDate: Date = new Date();
-  refresh: Subject<any> = new Subject();
+
+  constructor(private cal: CalendarService) {
+  }
+
+  CalendarEvent: any []=[];
+
+  ngOnInit(){
+    this.cal.getData().subscribe(data=> this.CalendarEvent=data);
+  }
+
   activeDayIsOpen: boolean = true;
 
-  constructor() {}
-
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    if (isSameMonth(date, this.viewDate)) {
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-      }
-      this.viewDate = date;
-    }
-  }
   setView(view: CalendarView) {
     this.view = view;
   }
+
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
   }
+
 }

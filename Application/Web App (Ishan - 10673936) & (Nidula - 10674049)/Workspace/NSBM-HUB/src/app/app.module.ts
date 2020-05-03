@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import {AgmCoreModule} from '@agm/core';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { FlatpickrModule } from 'angularx-flatpickr';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -68,6 +69,7 @@ import { RegistrationComponent } from './auth/registration/registration.componen
     AngularFirestoreModule,
     AngularFireAuthModule,
     FormsModule,
+    FlatpickrModule.forRoot(),
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,

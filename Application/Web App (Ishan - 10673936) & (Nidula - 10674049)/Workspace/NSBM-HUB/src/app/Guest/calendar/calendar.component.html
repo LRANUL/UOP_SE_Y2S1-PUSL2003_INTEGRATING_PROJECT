@@ -1,6 +1,5 @@
 <app-header></app-header>
-<div>
-<div class="row text-center">
+<div class="row text-center pt-5">
   <div class="col-md-4">
     <div class="btn-group">
       <div
@@ -8,13 +7,15 @@
         mwlCalendarPreviousView
         [view]="view"
         [(viewDate)]="viewDate"
-        (viewDateChange)="closeOpenMonthViewDay()">
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
         Previous
       </div>
       <div
         class="btn btn-outline-secondary"
         mwlCalendarToday
-        [(viewDate)]="viewDate">
+        [(viewDate)]="viewDate"
+      >
         Today
       </div>
       <div
@@ -22,7 +23,8 @@
         mwlCalendarNextView
         [view]="view"
         [(viewDate)]="viewDate"
-        (viewDateChange)="closeOpenMonthViewDay()">
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
         Next
       </div>
     </div>
@@ -35,42 +37,91 @@
       <div
         class="btn btn-primary"
         (click)="setView(CalendarView.Month)"
-        [class.active]="view === CalendarView.Month">
+        [class.active]="view === CalendarView.Month"
+      >
         Month
       </div>
       <div
         class="btn btn-primary"
         (click)="setView(CalendarView.Week)"
-        [class.active]="view === CalendarView.Week">
+        [class.active]="view === CalendarView.Week"
+      >
         Week
       </div>
       <div
         class="btn btn-primary"
         (click)="setView(CalendarView.Day)"
-        [class.active]="view === CalendarView.Day">
+        [class.active]="view === CalendarView.Day"
+      >
         Day
       </div>
     </div>
   </div>
 </div>
-<br />
+<br/>
 <div [ngSwitch]="view">
   <mwl-calendar-month-view
     *ngSwitchCase="CalendarView.Month"
     [viewDate]="viewDate"
-    [refresh]="refresh"
-    [activeDayIsOpen]="activeDayIsOpen"
-    (dayClicked)="dayClicked($event.day)">
+    [events]="CalendarEvent"
+  >
   </mwl-calendar-month-view>
   <mwl-calendar-week-view
     *ngSwitchCase="CalendarView.Week"
     [viewDate]="viewDate"
-    [refresh]="refresh">
+    [events]="CalendarEvent"
+
+  >
   </mwl-calendar-week-view>
   <mwl-calendar-day-view
     *ngSwitchCase="CalendarView.Day"
     [viewDate]="viewDate"
-    [refresh]="refresh">
+    [events]="CalendarEvent"
+  >
   </mwl-calendar-day-view>
 </div>
+<br>
+
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Starts at</th>
+        <th>Ends at</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let event of CalendarEvent">
+        <td>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="event.eventTitle"
+          />
+        </td>
+        <td>
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="event.start"
+            dateFormat="Y-m-dTH:i"
+          />
+        </td>
+        <td>
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="event.end"
+            dateFormat="Y-m-dTH:i"
+            altFormat="F j, Y H:i"
+            placeholder="Not set"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
+
+
