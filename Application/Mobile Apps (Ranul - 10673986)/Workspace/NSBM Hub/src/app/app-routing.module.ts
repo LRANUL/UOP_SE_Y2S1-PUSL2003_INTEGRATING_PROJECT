@@ -23,15 +23,10 @@ const routes: Routes = [
         path: 'home/calendar',
         loadChildren: () => import('./home/calendar/calendar.module').then(m => m.CalendarPageModule)
     }, {
-        path: 'home/facilities',
-        loadChildren: () => import('./home/facilities/facilities.module').then(m => m.FacilitiesPageModule)
-    }, {
         path: 'guest',
         loadChildren: () => import('./guest/guest.module').then(m => m.GuestPageModule)
     },
-  { path: 'calendar', loadChildren: () => import('./calendar/calendar.module').then(m => m.CalendarPageModule) },
-  { path: 'facilities', loadChildren: () => import('./facilities/facilities.module').then(m => m.FacilitiesPageModule) },
-
+ 
 
 
 ];
