@@ -26,7 +26,7 @@ islogingin = false;
       this.router.navigateByUrl('/tabs/t1/Dashboard');
     },1800);
     });
-
+    
     
    
   }
