@@ -23,10 +23,6 @@ const routes: Routes = [
   {
     path: 'shuttle-schedule',
     loadChildren: () => import('./shuttle-schedule/shuttle-schedule.module').then( m => m.ShuttleSchedulePageModule)
-  },
-  {
-    path: 'time-table',
-    loadChildren: () => import('./time-table/time-table.module').then( m => m.TimeTablePageModule)
   }
 ];
 

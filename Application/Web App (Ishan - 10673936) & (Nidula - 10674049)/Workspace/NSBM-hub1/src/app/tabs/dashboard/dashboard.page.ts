@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SegmentChangeEventDetail }  from '@ionic/core'
 
 @Component({
   selector: 'app-dashboard',
@@ -9,7 +10,10 @@ export class DashboardPage implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() { 
+  }
+  onFilter(event:CustomEvent<SegmentChangeEventDetail>){
+    console.log(event.detail);
   }
 
 }

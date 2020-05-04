@@ -11,5 +11,8 @@ export class TabsPage implements OnInit {
 
   ngOnInit() {
   }
+  hii(){
+    console.log("helloo");
+  }
 
 }
