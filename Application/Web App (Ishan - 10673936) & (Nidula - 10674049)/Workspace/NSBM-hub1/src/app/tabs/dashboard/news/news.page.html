@@ -5,5 +5,29 @@
 </ion-header>
 
 <ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size-md="8" offset-md="2">
+        <ion-list>
+          <ion-item-sliding *ngFor="let item of loadedNews">
+            <ion-item>
+              <ion-thumbnail slot="start">
+                <ion-img [src]="item.imageUrl"></ion-img>
+              </ion-thumbnail>
+              <ion-label><h2>{{ item.title }}</h2><p>{{ item.content }}</p></ion-label>
+            </ion-item>
+            <ion-item-options side="end" >
+              <ion-item-option color="secondary" (click)="onEdit(item.id,itemSlide)">
+                View
+                <ion-icon name="eye-outline" slot="top"></ion-icon>
+              </ion-item-option >
+            </ion-item-options>
+          </ion-item-sliding>
 
+          
+           </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
 </ion-content>
