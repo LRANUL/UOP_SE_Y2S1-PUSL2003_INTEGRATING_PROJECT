@@ -398,7 +398,7 @@
 
                     <ion-checkbox checked="false" formControlName="termsAndConditionsAgreement"></ion-checkbox>
                     <ion-label>
-                      Please refer the <span (click)="showTermsAndCondtions()">Terms & Conditions</span> and agree to this by ticking the box.
+                      Please refer the <span (click)="showTermsAndConditions()">Terms & Conditions</span> and agree to this by ticking the box.
                     </ion-label>
 
                   </ion-col>
@@ -408,9 +408,9 @@
 
                   <ion-col style="margin-top: 10px;">
 
-                    <ion-checkbox checked="false"></ion-checkbox>
+                    <ion-checkbox checked="false" disabled="true"></ion-checkbox>
                     <ion-label>
-                      Send credentails to this User's email account (Outlook)
+                      Send credentials to this User's email account (Outlook)
                     </ion-label>
 
                   </ion-col>
@@ -422,10 +422,10 @@
                     <ion-item>
                       <ion-label style="position: absolute;
                                         left: 50%;
-                                        top: 50%;
-                                        transform: translate(-50%,-50%);
+                                        top: 0px;
+                                        transform: translateX(-50%);
                                         font-size: 17px;">
-                        Note: Current Logged In Porgram Office User will be Logged Out.
+                        Note: Current Logged In Program Office User will be Logged Out.
                       </ion-label>
                     </ion-item>
                   </ion-col>

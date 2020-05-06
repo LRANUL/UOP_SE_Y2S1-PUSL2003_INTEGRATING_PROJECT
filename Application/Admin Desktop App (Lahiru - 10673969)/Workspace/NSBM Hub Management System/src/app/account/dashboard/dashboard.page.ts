@@ -536,6 +536,8 @@ export class DashboardPage implements OnInit {
     console.log("Event Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
   }
 
+
+  
   // Alert Box Implementation
   async alertNotice ( title: string, content: string ) {
     const alert = await this.alertController.create({
@@ -544,6 +546,10 @@ export class DashboardPage implements OnInit {
       buttons: ['OK']
     });
     await alert.present();
+  }
+
+  moreDetailsLecturersPONotice(event, value){
+
   }
 
 

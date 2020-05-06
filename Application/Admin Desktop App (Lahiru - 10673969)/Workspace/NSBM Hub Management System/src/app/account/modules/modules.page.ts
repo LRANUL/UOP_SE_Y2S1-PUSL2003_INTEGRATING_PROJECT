@@ -215,10 +215,10 @@ export class ModulesPage implements OnInit {
     // Setting loading spinner as true until necessary content is loaded
     this.loadingSpinnerSearchRegisteredModule = true;
 
-    // Depending on the user's input the necessary reponse and operation is taken
+    // Depending on the user's input the necessary response and operation is taken
     if(value.moduleCode != "" && value.moduleTitle != "" && value.degreeProgram != ""){
 
-      // Alert notice with relavant message
+      // Alert notice with relevant message
       this.alertNotice("ALERT", "You have entered a Module Code, Title and selected a Degree Program. Module search will proceed with the Module Code");
 
       // Retrieving registered modules with the search value of moduleCode
@@ -230,7 +230,7 @@ export class ModulesPage implements OnInit {
     }
     else if(value.moduleCode != "" && value.moduleTitle){
 
-      // Alert notice with relavant message
+      // Alert notice with relevant message
       this.alertNotice("ALERT", "You have entered a Module Code and Title. Module search will proceed with the Module Code");
 
       // Retrieving registered modules with the search value of moduleCode
@@ -242,7 +242,7 @@ export class ModulesPage implements OnInit {
     }
     else if(value.moduleTitle != "" && value.degreeProgram != ""){
 
-      // Alert notice with relavant message
+      // Alert notice with relevant message
       this.alertNotice("ALERT", "You have entered a Module Title and selected a Degree Program. Module search will proceed with the Module Title");
 
       // Retrieving registered modules with the search value of moduleTitle
@@ -254,7 +254,7 @@ export class ModulesPage implements OnInit {
     }
     else if(value.moduleCode != "" && value.degreeProgram != ""){
 
-      // Alert notice with relavant message
+      // Alert notice with relevant message
       this.alertNotice("ALERT", "You have entered a Module Code and selected a Degree Program. Module search will proceed with the Module Code");
 
       // Retrieving registered modules with the search value of moduleCode

@@ -51,8 +51,17 @@ export class EditPoToStudentsNoticesModalPage implements OnInit {
   retrievePublishedNoticeCategories = () =>
     this.editPOToStudentsNoticeService.retrievePublishedNoticeCategories().subscribe(response => (this.publishedSessionStatuses = response));
 
+  
+  doEditPOToStudentsNotice(value){
+    
+  }
+
+
+
+
   closeEditPOStudentsModal(){
     this.modalController.dismiss();
   }
+
 
 }

@@ -267,7 +267,7 @@
 
                 <div style="position: absolute;
                             top: 282px;
-                            right: 3.4%;" *ngFor="let item of noOfLectureSessions">
+                            right: 3.4%;" *ngFor="let item of lectureSessionDocuments">
                   <ion-button size="small" title="Lecture Session Read More" color="secondary" (click)="moreDetailsUpcomingLectureSession($event, item)" style="width: 40px;
                                                                                                                                                                   height: 40px;
                                                                                                                                                                   border-radius: 5px;
@@ -318,7 +318,7 @@
                 <ion-grid style="height: 550px;
                                 overflow-y: scroll;">
                   <ion-row>
-                    <ion-col size="12" *ngFor="let item of publishedNoticesLecturerTOPO">
+                    <ion-col size="12" *ngFor="let item of publishedNoticesLecturerToPO">
 
                       <ion-card>
                         <ion-card-header>
@@ -358,7 +358,7 @@
                             <ion-row>
                               <ion-col style="width: 45px;">
                                 <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                           height: 40px;" (click)="moreDetailsLecturersPONotice($event, list)">
+                                                                                           height: 40px;" (click)="moreDetailsLecturersPONotice($event, item)">
                                   <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
                                   <ion-label style="color: white;
                                                     margin-left: 7px;">
@@ -481,7 +481,7 @@
                     [calendarMode]="calendarEvent.mode"
                     [currentDate]="calendarEvent.currentDate"
                     (onCurrentDateChanged)="onCurrentDateChangedEvent($event)"
-                    (onRangeChanged)="reloadSourceEvent(startTime, endTime)"
+                    (onRangeChanged)="onRangeChangedEvent($event)"
                     (onEventSelected)="onEventSelectedEvent($event)"
                     (onTitleChanged)="onViewTitleChangedEvent($event)"
                     (onTimeSelected)="onTimeSelectedEvent($event)"
@@ -497,11 +497,11 @@
                 <div style="position: absolute;
                             top: 282px;
                             right: 3.4%;" *ngFor="let item of noOfEventSessions">
-                  <ion-button size="small" title="Lecture Session Read More" color="secondary" (click)="moreDetailsEventSession($event, session)" style="width: 40px;
-                                                                                                                                                                  height: 40px;
-                                                                                                                                                                  border-radius: 5px;
-                                                                                                                                                                  margin-bottom: -5px;
-                                                                                                                                                                  margin-left: -10px;">
+                  <ion-button size="small" title="Lecture Session Read More" color="secondary" (click)="moreDetailsEventSession($event, item)" style="width: 40px;
+                                                                                                                                                      height: 40px;
+                                                                                                                                                      border-radius: 5px;
+                                                                                                                                                      margin-bottom: -5px;
+                                                                                                                                                      margin-left: -10px;">
                     <ion-icon name="document-text" style="font-size: 30px;"></ion-icon>
                   </ion-button>
                 </div>

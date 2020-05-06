@@ -319,7 +319,7 @@ export class SemesterCalendarPage implements OnInit {
         lectureSessionDegreeProgram: value.degreeProgram,
         lectureSessionAcademicYear: value.academicYear,
         lectureSessionAcademicSemester: value.academicSemester,
-        lectureSesionModuleCode: value.moduleCode,
+        lectureSessionModuleCode: value.moduleCode,
         lectureSessionModuleTitle: value.moduleTitle,
         lectureSessionStartDateTime: value.startTime,
         lectureSessionEndDateTime: value.endTime,
@@ -389,7 +389,7 @@ export class SemesterCalendarPage implements OnInit {
   }
 
 
-  // Reseting lecture session start and end date angular material calendar
+  // Resetting lecture session start and end date angular material calendar
   resetSessionStartEndDate(value){
 
     if (value.detail.value != "") {
@@ -399,7 +399,7 @@ export class SemesterCalendarPage implements OnInit {
 
   }
 
-  // Reseting lecture session end date angular material calendar
+  // Resting lecture session end date angular material calendar
   resetSessionEndDate(event: MatDatepickerInputEvent<Date>) {
     if(event.value != null){
       this.assignNewLectureSlotSC.controls['sessionEndDateMultiple'].setValue(null);

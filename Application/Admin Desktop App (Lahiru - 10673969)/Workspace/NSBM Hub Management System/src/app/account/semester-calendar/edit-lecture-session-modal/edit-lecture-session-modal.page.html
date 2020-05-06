@@ -171,7 +171,7 @@
                   <ion-label>
                     Lecture Status
                   </ion-label>
-                  <ion-select placeholder="Status" style="min-width: 100%;" value="{{ passedLectureSesionStatus }}" formControlName="lectureStatus">
+                  <ion-select placeholder="Status" style="min-width: 100%;" value="{{ passedLectureSessionStatus }}" formControlName="lectureStatus">
                     <ion-select-option *ngFor="let item of publishedSessionStatuses" value="{{ item.payload.doc.id }}">{{ item.payload.doc.id }}</ion-select-option>
                   </ion-select>
                 </ion-item>

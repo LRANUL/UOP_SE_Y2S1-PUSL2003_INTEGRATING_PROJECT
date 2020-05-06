@@ -389,8 +389,8 @@ export class NoticesPage implements OnInit {
       this.toggleResultLecturer = false;
     }
 
-    var withUploadcoverImageLecturer = document.getElementById("withcoverImageLecturer");
-    var withoutUploadcoverImageLecturer = document.getElementById("withoutcoverImageLecturer");
+    var withUploadcoverImageLecturer = document.getElementById("withCoverImageLecturer");
+    var withoutUploadcoverImageLecturer = document.getElementById("withoutCoverImageLecturer");
     if(this.toggleResultLecturer == true){
       withoutUploadcoverImageLecturer.style.display = "none";
       withUploadcoverImageLecturer.style.display = "inline";
@@ -401,7 +401,9 @@ export class NoticesPage implements OnInit {
     }
   }
 
+  moreDetailsNotice(event, value){
 
+  }
 
 
   // Upload Task

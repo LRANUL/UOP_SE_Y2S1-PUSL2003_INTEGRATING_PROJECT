@@ -6,6 +6,8 @@ import { AlertController, ModalController, PopoverController } from '@ionic/angu
 import { SideMenuPage } from '../side-menu/side-menu.page';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { finalize, tap } from 'rxjs/operators';
+import { EditNewsItemModalPage } from './edit-news-item-modal/edit-news-item-modal.page';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 @Component({
   selector: 'app-news',
@@ -24,7 +26,7 @@ export class NewsPage implements OnInit {
 
   currentDate;
 
-  dateThreeDaysBeformCurrentDate;
+  dateThreeDaysBeforeCurrentDate;
 
 
   noNewsText: Boolean = false;
@@ -73,9 +75,9 @@ export class NewsPage implements OnInit {
 
     this.currentDate = new Date();
 
-    this.dateThreeDaysBeformCurrentDate = new Date();
+    this.dateThreeDaysBeforeCurrentDate = new Date();
 
-    this.dateThreeDaysBeformCurrentDate.setDate(this.currentDate.getDate()-3);
+    this.dateThreeDaysBeforeCurrentDate.setDate(this.currentDate.getDate()-3);
 
 
     this.retrievePublishedNews();
@@ -96,7 +98,8 @@ export class NewsPage implements OnInit {
       ])),
       newsPublisher: new FormControl('', Validators.compose([
         Validators.required
-      ]))
+      ])),
+      newsAttachmentLink: new FormControl('')
     });
 
     this.addNewNewsForm.patchValue({
@@ -106,11 +109,23 @@ export class NewsPage implements OnInit {
   }
 
 
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
 
-  // Retrieving the pulbished news from the current date to three days before from the firestore database
+
+  // Retrieving the published news from the current date to three days before from the firestore database
   publishedNews;
   retrievePublishedNews = () =>
-    this.newsService.retrievePublishedNews(this.currentDate, this.dateThreeDaysBeformCurrentDate).subscribe(response => {
+    this.newsService.retrievePublishedNews(this.currentDate, this.dateThreeDaysBeforeCurrentDate).subscribe(response => {
       this.loadingSpinnerNews = false;
       this.publishedNews = response;
     });
@@ -170,6 +185,27 @@ export class NewsPage implements OnInit {
     }
   }
 
+  // Opening edit news item modal 
+  async editNewsItem(value){
+    const editModuleModal = await this.modalController.create({
+      component: EditNewsItemModalPage,
+      // Passing values to the modal using 'componentProps'
+      componentProps: {
+        newsItemDocId: value.payload.doc.id,
+        newsItemTitle: value.payload.doc.data().title,
+        newsItemDescription: value.payload.doc.data().description,
+        newsItemCategory: value.payload.doc.data().category
+      },
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+    editModuleModal.present();
+  }
+
+
+  openAttachmentLink(link){
+    window.open(link, '_blank');
+  }
 
 
 
@@ -209,17 +245,9 @@ export class NewsPage implements OnInit {
     // if 0, false is assigned
     if(NewsPage.attachmentLinkToggle%2 == 1){
       this.addAttachmentLinkSection = true;
-
-      this.addNewNewsForm = this.formBuilder.group({
-        newsAttachmentLink: new FormControl('', Validators.compose([
-          Validators.required
-        ]))
-      });
     }
     else if(NewsPage.attachmentLinkToggle%2 == 0){
       this.addAttachmentLinkSection = false;
-
-      this.addNewNewsForm.removeControl('newsAttachmentLink');
     }
   }
 
@@ -234,6 +262,8 @@ export class NewsPage implements OnInit {
     });
     await alert.present();
   }
+
+
 
   coverImage;
   file;
@@ -269,7 +299,6 @@ export class NewsPage implements OnInit {
       header: title,
       message: content,
       buttons: [
-
         {
           text: 'Cancel',
           role: 'cancel',
@@ -280,13 +309,11 @@ export class NewsPage implements OnInit {
         {
           text: 'Continue',
           handler: () => {
-            console.log("Alert Box: Published New Newse Request Accepted");
+            console.log("Alert Box: Published New News Request Accepted");
 
             this.doAddNewNews(value);
-
           }
         }
-
       ]
     });
     await alert.present();
@@ -341,8 +368,9 @@ export class NewsPage implements OnInit {
                 // Removing the user entered values from the input fields after the notice has been created
                 this.addNewNewsForm.reset();
 
+                // Assigning default form value
                 this.addNewNewsForm.patchValue({
-                  noticeAuthor: this.sideMenuPageUserFaculty.passUserFaculty()
+                  newsPublisher: "Program Office: "+ this.sideMenuPageUserFaculty.passUserFaculty()
                 });
 
                 // Displaying new notice successfully sent
@@ -409,8 +437,9 @@ export class NewsPage implements OnInit {
                 // Removing the user entered values from the input fields after the notice has been created
                 this.addNewNewsForm.reset();
 
+                // Assigning default form value
                 this.addNewNewsForm.patchValue({
-                  noticeAuthor: this.sideMenuPageUserFaculty.passUserFaculty()
+                  newsPublisher: "Program Office: "+ this.sideMenuPageUserFaculty.passUserFaculty()
                 });
 
                 // Displaying new notice successfully sent
@@ -440,13 +469,13 @@ export class NewsPage implements OnInit {
           // Removing the user entered values from the input fields after the notice has been created
           this.addNewNewsForm.reset();
 
+          // Assigning default form value
           this.addNewNewsForm.patchValue({
-            noticeAuthor: this.sideMenuPageUserFaculty.passUserFaculty()
+            newsPublisher: "Program Office: "+ this.sideMenuPageUserFaculty.passUserFaculty()
           });
 
           // Displaying new notice successfully sent
-          this.alertNotice('News Published', 
-            'News has been successfully published.');
+          this.alertNotice('News Published', 'News has been successfully published.');
         }, error => {
           console.log("Error: " + error);
           this.alertNotice("ERROR", "Error has occurred: " + error);
@@ -460,8 +489,9 @@ export class NewsPage implements OnInit {
           // Removing the user entered values from the input fields after the notice has been created
           this.addNewNewsForm.reset();
 
+          // Assigning default form value
           this.addNewNewsForm.patchValue({
-            noticeAuthor: this.sideMenuPageUserFaculty.passUserFaculty()
+            newsPublisher: "Program Office: "+ this.sideMenuPageUserFaculty.passUserFaculty()
           });
 
           // Displaying new notice successfully sent
@@ -476,6 +506,35 @@ export class NewsPage implements OnInit {
 
 
 
+  
+  // Confirm Box Implementation (Remove published news)
+  async removePublishedNews(title: string, content: string, value) {
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log("Alert Box: Remove Published News Request Denied");
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            console.log("Alert Box: Remove Published News Request Accepted");
+
+            let docId = value.payload.doc.id;
+
+            // Removing published news item from the firestore database
+            this.newsService.removePublishedNews(docId);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 
 
 }

@@ -126,7 +126,7 @@
             </ion-col>
             <ion-col size="7">
               <ion-item>
-                <ion-select placeholder="Select Status" style="min-width: 100%;" value="{{ passedTransportSlotStatus }}" formControlName="status">
+                <ion-select placeholder="Select Status" style="min-width: 100%;" formControlName="status">
                   <ion-select-option *ngFor="let item of publishedTransportSlotStatuses" value="{{ item.payload.doc.data().status }}">{{ item.payload.doc.data().status }}</ion-select-option>
                 </ion-select>
               </ion-item>

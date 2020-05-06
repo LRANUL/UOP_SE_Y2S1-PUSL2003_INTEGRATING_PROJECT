@@ -21,13 +21,29 @@ export class EditEventSessionModalPage implements OnInit {
 
   editEventSessionForm: FormGroup;
 
+  // Setting min validation for angular material calendar
+  minDate: Date;
+
+  // Setting max validation for angular material calendar
+  maxDate: Date;
+
   constructor(
     private navParams: NavParams,
     private modalController: ModalController,
     private formBuilder: FormBuilder,
     private editEventSessionService: FirestoreService,
     private alertController: AlertController
-  ) { }
+  ) {
+    
+    // Retrieving current date and setting as min data
+    this.minDate = new Date();
+
+    // Retrieving the current year
+    const currentYear = new Date().getFullYear();
+    // Setting the max date december 31st two years in the future
+    this.maxDate = new Date(currentYear + 2, 11, 31);
+
+   }
 
   ngOnInit() {
 

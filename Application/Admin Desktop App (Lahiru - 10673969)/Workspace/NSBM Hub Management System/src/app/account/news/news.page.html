@@ -113,13 +113,13 @@
                   <ion-col size="4" size-sm="12" size-md="4" size-lg="4" *ngFor="let item of publishedNews">
 
                     <ion-card>
-                      <ion-button *ngIf="item.payload.doc.data().coverImage" fill="clear">
+                      <ng-container *ngIf="item.payload.doc.data().coverImage">
                         <ion-img src="{{ item.payload.doc.data().coverImage.coverImageFilePath }}" style="height: 120px;
                                                                                                           position: relative;
                                                                                                           left: 50%;
                                                                                                           transform: translateX(-50%);">
                                                                                                           </ion-img>
-                        </ion-button>
+                        </ng-container>
                       <ion-card-header>
                         <ion-card-title>
                           {{ item.payload.doc.data().title }}
@@ -168,7 +168,8 @@
                           </ion-row>
                           <ion-row *ngIf="item.payload.doc.data().attachmentLink">
                             <ion-col size="12">
-                              <ion-button style="min-width: 100%;">
+                              <ion-button style="min-width: 100%;"
+                                (click)="openAttachmentLink(item.payload.doc.data().attachmentLink)">
                                 <ion-icon name="link-outline" style="color: white;"></ion-icon>
                                 <ion-label style="color: white;
                                                   margin-left: 10px;">
@@ -179,7 +180,7 @@
                           </ion-row>
                           <ion-row>
                             <ion-col size="6">
-                              <ion-button color="secondary" style="min-width: 100%;">
+                              <ion-button color="secondary" style="min-width: 100%;" (click)="editNewsItem(item)">
                                 <ion-icon name="create-outline" style="color: white;"></ion-icon>
                                 <ion-label style="color: white;
                                                   margin-left: 10px;">
@@ -188,7 +189,8 @@
                               </ion-button>
                             </ion-col>
                             <ion-col size="6">
-                              <ion-button color="danger" style="min-width: 100%;">
+                              <ion-button color="danger" style="min-width: 100%;" 
+                                (click)="removePublishedNews('Confirmation', 'This news item will be removed, do you want to continue?', item)">
                                 <ion-icon name="trash-outline" style="color: white;"></ion-icon>
                                 <ion-label style="color: white;
                                                   margin-left: 10px;">
@@ -335,10 +337,10 @@
                             <p> Progress: {{ percent | number }}% </p>
                             <ion-progress-bar value="{{ percent / 100 }}"></ion-progress-bar>
                           </div>
-                          <div *ngIf="snapshot | async as snapt">
+                          <div *ngIf="snapshot | async as snap">
                             <p> 
-                              File Size: {{ snapt.totalBytes | fileSizePipe }} <br>
-                              Transferred: {{ snapt.bytesTransferred | fileSizePipe }}
+                              File Size: {{ snap.totalBytes | fileSizePipe }} <br>
+                              Transferred: {{ snap.bytesTransferred | fileSizePipe }}
                             </p>
                           </div>
                         </ion-card-content>
@@ -388,7 +390,7 @@
                   </ion-col>
                   <ion-col size="8">
                     <ion-item>
-                      <ion-input placeholder="Enter Link" type="text" clearInput formControlName="newsAttachmentLink"></ion-input>
+                      <ion-input placeholder="Enter Link" type="url" clearInput formControlName="newsAttachmentLink"></ion-input>
                     </ion-item>
                   </ion-col>
                 </ion-row>
@@ -401,14 +403,14 @@
                   </ion-col>
                   <ion-col size="8">
                     <ion-item>
-                      <ion-input type="url" readOnly clearInput formControlName="newsPublisher"></ion-input>
+                      <ion-input type="text" readOnly clearInput formControlName="newsPublisher"></ion-input>
                     </ion-item>
                   </ion-col>
                 </ion-row>
 
                 <ion-row>
                   <ion-col>
-                    <ion-checkbox checked="false"></ion-checkbox>
+                    <ion-checkbox checked="false" disabled="true"></ion-checkbox>
                     <p style="position: absolute;
                               top: 5px;
                               left: 30px;">

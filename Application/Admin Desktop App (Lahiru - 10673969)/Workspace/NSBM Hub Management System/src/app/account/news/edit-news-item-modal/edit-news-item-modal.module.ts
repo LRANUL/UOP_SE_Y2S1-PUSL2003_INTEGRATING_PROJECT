@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { NewsPageRoutingModule } from './news-routing.module';
+import { EditNewsItemModalPageRoutingModule } from './edit-news-item-modal-routing.module';
 
-import { NewsPage } from './news.page';
+import { EditNewsItemModalPage } from './edit-news-item-modal.page';
 
 import { FileSizeFormatPipe } from './file-size-format.pipe';
 
@@ -16,11 +16,11 @@ import { FileSizeFormatPipe } from './file-size-format.pipe';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    NewsPageRoutingModule
+    EditNewsItemModalPageRoutingModule
   ],
   declarations: [
-    NewsPage,
+    EditNewsItemModalPage,
     FileSizeFormatPipe
   ]
 })
-export class NewsPageModule {}
+export class EditNewsItemModalPageModule {}

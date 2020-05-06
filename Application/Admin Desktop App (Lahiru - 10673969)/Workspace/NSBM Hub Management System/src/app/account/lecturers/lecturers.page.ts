@@ -368,8 +368,8 @@ export class LecturersPage implements OnInit {
 
 
   // Process of opening show terms and conditions modal
-  showTermsAndCondtions() {
-    console.log("Modal");
+  showTermsAndConditions() {
+    console.log("New Lecturer User Registration Terms & Conditions Agreement");
   }
 
 

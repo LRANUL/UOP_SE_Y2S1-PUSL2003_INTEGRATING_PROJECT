@@ -972,6 +972,20 @@ export class FirestoreService {
       });  
   }
 
+  // Updated published news item values in the firestore database
+  updateNewsItem(docId, value){
+    return new Promise<any>((resolve, reject) => {
+      this.fireStore.doc("news/"+ docId).update({
+        title: value.newsTitle,
+        description: value.newsDescription,
+        category: value.newsCategory
+      }).then(response => 
+          resolve(response)
+        ,error => 
+          reject(error))
+    });
+  }
+
   // Updating transport slot values in the firestore database
   updateTransportSlot(transportSlotType, docId, value){
     
@@ -1079,6 +1093,10 @@ export class FirestoreService {
     return this.fireStore.doc("faculties/"+ userFaculty +"/lectureSeries/"+ docId).delete();
   }
 
+  // Removing published news from the firestore database
+  removePublishedNews(docId){
+    return this.fireStore.doc("news/"+ docId).delete();
+  }
 
 
   // Disabling the user account by updating user account status to 'disabled' in the firestore database

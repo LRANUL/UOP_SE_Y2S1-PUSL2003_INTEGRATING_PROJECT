@@ -61,6 +61,8 @@ import { UpdateAccountPasswordModalPageModule } from './account/settings/update-
 import { EditLectureSeriesModalPageModule } from './account/semester-calendar/edit-lecture-series-modal/edit-lecture-series-modal.module';
 import { NotificationsPopoverPageModule } from './account/notifications-popover/notifications-popover.module';
 import { MoreDetailsEventPopoverPageModule } from './account/dashboard/more-details-event-popover/more-details-event-popover.module';
+import { EditNewsItemModalPageModule } from './account/news/edit-news-item-modal/edit-news-item-modal.module';
+
 
 
 
@@ -109,7 +111,8 @@ import { MoreDetailsEventPopoverPageModule } from './account/dashboard/more-deta
     UpdateAccountDetailsModalPageModule,
     UpdateAccountPasswordModalPageModule,
     EditLectureSeriesModalPageModule,
-    NotificationsPopoverPageModule
+    NotificationsPopoverPageModule,
+    EditNewsItemModalPageModule
   ],
   providers: [
     StatusBar,

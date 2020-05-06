@@ -171,7 +171,7 @@
 								[calendarMode]="calendarEvent.mode"
 								[currentDate]="calendarEvent.currentDate"
 								(onCurrentDateChanged)="onCurrentDateChangedEvent($event)"
-								(onRangeChanged)="reloadSourceEvent(startTime, endTime)"
+								(onRangeChanged)="onRangeChangedEvent($event)"
 								(onEventSelected)="onEventSelectedEvent($event)"
 								(onTitleChanged)="onViewTitleChangedEvent($event)"
 								(onTimeSelected)="onTimeSelectedEvent($event)"
