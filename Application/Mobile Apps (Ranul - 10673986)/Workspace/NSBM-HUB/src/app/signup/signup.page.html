@@ -1,0 +1,122 @@
+<ion-content>
+  <div class="register">
+    <ion-card class="card">
+      <ion-card-header>
+        <ion-card-title>Register</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+      <form class="form" [formGroup]="validations_form" (ngSubmit)="tryRegister(validations_form.value)"
+        overflow-scroll="true">
+        <ion-item>
+          <ion-label position="floating" color="primary">First Name</ion-label>
+          <ion-input type="text" formControlName="fName">
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating" color="primary">Middle Name</ion-label>
+          <ion-input type="text" formControlName="mName">
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating" color="primary">Last Name</ion-label>
+          <ion-input type="text" formControlName="lName">
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating" color="primary">Faculty</ion-label>
+          <ion-select interface="action-sheet" formControlName="faculty" value="">
+            <ion-select-option value="School of Business">School of Business</ion-select-option>
+            <ion-select-option value="School of Computing">School of Computing</ion-select-option>
+            <ion-select-option value="School of Engineering">School of Engineering</ion-select-option>
+          </ion-select>
+        </ion-item>
+            <ion-item>
+              <ion-label position="floating" color="primary">Awarding Body</ion-label>
+              <ion-select interface="action-sheet" formControlName="awardingBodyUniversity" value="">
+                <ion-select-option value="University of Plymouth">University of Plymouth
+                </ion-select-option>
+                <ion-select-option value="NSBM Green University">NSBM Green University</ion-select-option>
+                <ion-select-option value="University College Dublin">University College Dublin</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating" color="primary">Degree</ion-label>
+              <ion-select interface="action-sheet" formControlName="degree" value="">
+                <ion-select-option value="BSc(Hons) Software Engineering">BSc(Hons) Software Engineering
+                </ion-select-option>
+                <ion-select-option value="BSc(Hons) Computer Security">BSc(Hons) Computer Security</ion-select-option>
+                <ion-select-option value="BSc(Hons) Management Information Systems ">BSc(Hons) Management Information Systems
+                </ion-select-option>
+                <ion-select-option value="BSc Software Engineering">BSc Software Engineering</ion-select-option>
+                <ion-select-option value="BSc(Hons) Computer Systems Engineering">BSc(Hons) Computer Systems Engineering
+                </ion-select-option>
+                <ion-select-option value="BSc International Business">BSc Mechatronic Engineering</ion-select-option>
+                <ion-select-option value="BSc International Business">BSc International Business</ion-select-option>
+                <ion-select-option value="BSc(Hons) Accounting and Finance">BSc(Hons) Accounting and Finance
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating" color="primary">Degree Code</ion-label>
+              <ion-select interface="action-sheet" formControlName="DegreeCode" value="">
+                <ion-select-option value="SE-PLY">Software Engineering Plymouth
+                </ion-select-option>
+                <ion-select-option value="CS-PLY">Computer Security Plymouth</ion-select-option>
+                <ion-select-option value="MIS">Management Information Systems UCD
+                </ion-select-option>
+                <ion-select-option value="SE-NSBM">Software Engineering NSBM</ion-select-option>
+                <ion-select-option value="CE-NSBM">Computer Systems Engineering NSBM
+                </ion-select-option>
+                <ion-select-option value="ME-NSBM">Mechatronic Engineering NSBM</ion-select-option>
+                <ion-select-option value="IB-NSBM">International Business NSBM</ion-select-option>
+                <ion-select-option value="AF">Accounting and Finance Plymouth
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+        <ion-item>
+          <ion-label position="floating" color="primary">Batch</ion-label>
+          <ion-input type="number" formControlName="batch">
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating" color="primary">NSBM Student ID</ion-label>
+          <ion-input type="number" formControlName="sid">
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating" color="primary">Email</ion-label>
+          <ion-input type="text" formControlName="email" ngModel pattern="(\W|^)[\w.+\-]*@(students.nsbm)\.lk(\W|$)">
+          </ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.email">
+            <div class="error-message"
+              *ngIf="validations_form.get('email').hasError(validation.type) && (validations_form.get('email').dirty || validations_form.get('email').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+        <ion-item>
+          <ion-label position="floating" color="primary">Password</ion-label>
+          <ion-input type="password" formControlName="password" class="form-control" required>
+          </ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.password">
+            <div class="error-message"
+              *ngIf="validations_form.get('password').hasError(validation.type) && (validations_form.get('password').dirty || validations_form.get('password').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+        <ion-button class="submit-btn" type="submit" [disabled]="!validations_form.valid">Register
+        </ion-button>
+        <label class="error-message">{{errorMessage}}</label>
+        <label class="success-message">{{successMessage}}</label>
+      
+      </form>
+        <p class="go-to-login">Already have an account? <a (click)="goLoginPage()">Try to Log In.</a></p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

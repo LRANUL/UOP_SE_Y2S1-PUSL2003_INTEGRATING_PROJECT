@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Send Lecture Key</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-item>
+    <ion-card>
+      <ion-card-title>Schedule</ion-card-title>
+      <calendar [eventSource]="eventSource" [calendarMode]="calendar.mode" [currentDate]="calendar.currentDate">
+      </calendar>
+    </ion-card>
+  </ion-item>
+  <ion-item>
+    <h4>Selected Module: {{Module}}</h4>
+  </ion-item>
+  <ion-item>
+    Allow Location<ion-toggle checked={{check}} (ionChange)="checkevt($event)"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-button color="warning" (click)="generateKey()">Generate and Add Key</ion-button>
+    <ion-label aria-placeholder="Press the Button to Generate and Add a Key">:- {{Key}} </ion-label>
+  </ion-item>
+</ion-content>

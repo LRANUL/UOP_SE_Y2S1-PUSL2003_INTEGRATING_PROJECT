@@ -1,0 +1,34 @@
+<body>
+  <ion-app>
+    <ion-slides pager="false" [options]="slideOpts" class="slides" style="margin: 5px;">
+      <ion-slide>
+        <img src="/assets/slides/Slide_1.png">
+      </ion-slide>
+      <ion-slide>
+        <img src="/assets/slides/Slide_2.png">
+      </ion-slide>
+      <ion-slide>
+        <img src="/assets/slides/Slide_3.png">
+      </ion-slide>
+      <ion-slide>
+        <img src="/assets/slides/Slide_4.png">
+      </ion-slide>
+      <ion-slide>
+        <img src="/assets/slides/Slide_5.png">
+      </ion-slide>
+    </ion-slides>
+
+    <ion-footer>
+        <ion-button (click)="goToLoginPage()" color="primary" shape="round" expand="block">
+          Login
+        </ion-button>
+        <ion-button (click)="goToRegisterPage()" shape="round" color="primary" expand="block">
+          Register
+        </ion-button>
+        <ion-button (click)="goToGuestPage()" shape="round" color="primary" expand="block">
+          Guests
+        </ion-button>
+    </ion-footer>
+
+  </ion-app>
+  </body>

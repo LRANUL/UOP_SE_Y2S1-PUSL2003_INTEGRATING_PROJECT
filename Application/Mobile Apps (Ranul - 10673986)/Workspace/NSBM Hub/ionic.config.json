@@ -1,7 +1,0 @@
-{
-  "name": "NSBM",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "angular"
-}

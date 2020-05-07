@@ -1,0 +1,59 @@
+<ion-app>
+  <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>eSign</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div name=Sessions>
+        <ion-card *ngFor="let item of session">
+          <ion-card-title>
+            <ion-card-header>Sign Your Attendance Online</ion-card-header>
+          </ion-card-title>
+          <ion-card-content>
+            <ion-input [(ngModel)]="SessionCode" placeholder="Enter your Session Code">Session Code: </ion-input>
+            <br>
+            <ion-label>Module: {{ item.Module }}</ion-label><br>
+            <ion-label>Session: {{ item.Session }}</ion-label><br>
+            <ion-label>Date: {{ item.Date }}</ion-label><br>
+            <ion-label>Hall: {{ item.Hall }}</ion-label><br>
+            <br>
+            <ion-label *ngIf="location">Student Location: {{ item.Hall }}<ion-icon name="checkmark-done-circle-outline"
+                color="success"></ion-icon>
+            </ion-label>
+            <ion-label *ngIf="!location">Student Location: outside<ion-icon name="close-circle-outline" color="danger">
+              </ion-icon>
+            </ion-label>
+            <p *ngIf="location">we have detected you are inside the hall</p>
+            <p *ngIf="!location">we cannot detect your inside the hall enable location services and try again.</p>
+            <ion-button [disabled]="item.SessionCode != SessionCode" (click)="addAttendaceToFirebase()" shape="round"
+              color="light" slot="end">Mark Attendance<ion-icon slot="icon-only" name="checkmark-done-circle">
+              </ion-icon>
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <div name="NoSessions" *ngIf="nosession" align='center'>
+        <ion-card>
+          <ion-card-content>
+            <h1>No sessions today, check your calendar.</h1>
+            <ion-img src="/assets/internals/nosession.svg" style="height: 200px;"></ion-img>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <div name="CompletedSessions" *ngIf="signed" align='center'>
+        <ion-card>
+          <ion-card-content>
+            <h1>You have already signed for all your sessions today.</h1>
+            <ion-img src="/assets/internals/done.svg" style="height: 200px;"></ion-img>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+    </ion-content>
+  </div>
+</ion-app>

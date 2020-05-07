@@ -1,0 +1,7 @@
+{
+  "name": "NSBM-HUB",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
