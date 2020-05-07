@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NavController, ModalController, ActionSheetController } from '@ionic/angular';
 import { NoticeService } from '../notice.service';
 import { EditComponent } from '../edit/edit.component';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-notice-detail',
@@ -12,6 +13,8 @@ import { EditComponent } from '../edit/edit.component';
 })
 export class NoticeDetailPage implements OnInit {
   notices:notice;
+  editNoticeform:FormGroup;
+
   constructor(
     private activeRoute: ActivatedRoute,
     private navCon:NavController,
@@ -27,35 +30,53 @@ export class NoticeDetailPage implements OnInit {
          return;
        }
        this.notices = this.noticeServ.getNotice(param.get('noticeId'));
+       this.editNoticeform =new FormGroup({
+        title: new FormControl(this.notices.title,{
+          updateOn:'blur',
+          validators:[Validators.required]
+        }),
+        desc: new FormControl(this.notices.desc,{
+          updateOn:'blur',
+          validators:[Validators.required,Validators.maxLength(255)]
+        }),
+       })
+
     });
   }
 
-  onEdit(){
-    this.actionSheet.create({
-      header:'Choose an Option to edit',
-      buttons:[
-        {
-        text:'Change the Title',
-        handler: () =>{this.openEditModel('select');}
-        },
-        {
-          text:'change Content',
-          handler: () =>{this.openEditModel('random');}
-        },
-        {
-          text:'Change Image',
-          handler: () =>{}
-        },
-        {
-          text:'Cancel',
-          role:'cancel'
-        }
-    ]
-    }).then(actionEle =>{
-      actionEle.present();
-    });
-    
+  onEditNotice(){
+    if(!this.editNoticeform.valid){
+      return;
+    }
+    console.log(this.editNoticeform);
   }
+
+  // onEdit(){
+  //   this.actionSheet.create({
+  //     header:'Choose an Option to edit',
+  //     buttons:[
+  //       {
+  //       text:'Change the Title',
+  //       handler: () =>{this.openEditModel('select');}
+  //       },
+  //       {
+  //         text:'change Content',
+  //         handler: () =>{this.openEditModel('random');}
+  //       },
+  //       {
+  //         text:'Change Image',
+  //         handler: () =>{}
+  //       },
+  //       {
+  //         text:'Cancel',
+  //         role:'cancel'
+  //       }
+  //   ]
+  //   }).then(actionEle =>{
+  //     actionEle.present();
+  //   });
+    
+  // }
 
   openEditModel(mode: 'select' | 'random'){
     console.log(mode);

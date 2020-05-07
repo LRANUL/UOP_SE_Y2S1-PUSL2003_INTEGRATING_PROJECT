@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/t1/Dashboard/notes"></ion-back-button>
+    </ion-buttons>
+    <ion-title>create-note</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (ngSubmit)="onCreateNote()" #newNote="ngForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-sm="10" offset-sm="1">
+          <ion-item>
+            <ion-label position="floating">Title</ion-label>
+            <ion-input type="text" ngModel name="title" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="10" offset-sm="1">
+          <ion-item>
+            <ion-label position="floating">Subject</ion-label>
+            <ion-select name="subject" [ngModel]="'Iot'">
+              <ion-select-option value="Iot">IOT</ion-select-option>
+              <ion-select-option value="java">Java</ion-select-option>
+              <ion-select-option value="Algo">Algothems</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="10" offset-sm="1">
+          <ion-item>
+            <ion-label position="floating">Note</ion-label>
+            <ion-textarea type="text" ngModel name="desc" required rows="13"></ion-textarea>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-button type="submit" color="primary" expand="block" [disabled]="!newNote.valid">Add Note!</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
