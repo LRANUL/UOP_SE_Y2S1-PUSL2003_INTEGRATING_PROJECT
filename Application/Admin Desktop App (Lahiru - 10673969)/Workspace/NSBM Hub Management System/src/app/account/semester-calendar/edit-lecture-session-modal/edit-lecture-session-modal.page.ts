@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NavParams, ModalController } from '@ionic/angular';
+import { NavParams, ModalController, AlertController } from '@ionic/angular';
 import { FirestoreService } from 'src/app/services/firebase/firestore.service';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { SideMenuPage } from '../../side-menu/side-menu.page';
 
 
 @Component({
@@ -11,32 +12,52 @@ import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms'
 })
 export class EditLectureSessionModalPage implements OnInit {
 
+  // Setting min validation for angular material calendar
+  minDate: Date;
+
+  // Setting max validation for angular material calendar
+  maxDate: Date;
+
+
   editLectureSessionForm: FormGroup;
 
   // Declaring variables to store the passed value
   passedLectureSessionId = null;
   passedLectureSessionBatch = null;
-  passedLectureSessionDegreeProgram = null;
+  passedLectureSessionDegree = null;
   passedLectureSessionAcademicYear = null;
   passedLectureSessionAcademicSemester = null;
-  passedLectureSesionModuleCode = null;
+  passedLectureSessionModuleCode = null;
   passedLectureSessionModuleTitle = null;
   passedLectureSessionLecturer = null;
   passedLectureSessionLectureHall = null;
   passedLectureSessionStatus = null;
-
   passedLectureSessionStartDateTime = null;
-  lectureSessionStartDateTime;
-  
   passedLectureSessionEndDateTime = null;
-  lectureSessionEndTime;
 
+  passedUserFaculty = null;
+
+  lectureSessionDate;
+  lectureSessionStartTime;
+  lectureSessionEndTime;
+  
   constructor(
     private navParams: NavParams,
     private modalController: ModalController,
     private formBuilder: FormBuilder,
-    private editLectureSessionService: FirestoreService
-  ) { }
+    private editLectureSessionService: FirestoreService,
+    private alertController: AlertController
+  ) {
+
+    // Retrieving current date and setting as min data
+    this.minDate = new Date();
+
+    // Retrieving the current year
+    const currentYear = new Date().getFullYear();
+    // Setting the max date december 31st two years in the future
+    this.maxDate = new Date(currentYear + 2, 11, 31);
+
+   }
 
   ngOnInit() {
 
@@ -58,16 +79,47 @@ export class EditLectureSessionModalPage implements OnInit {
     this.passedLectureSessionId = this.navParams.get('lectureSessionId');
     
     this.passedLectureSessionBatch = this.navParams.get('lectureSessionBatch');
-    this.passedLectureSessionDegreeProgram = this.navParams.get('lectureSessionDegreeProgram');
+    this.passedLectureSessionDegree = this.navParams.get('lectureSessionDegreeProgram');
     this.passedLectureSessionAcademicYear = this.navParams.get('lectureSessionAcademicYear');
     this.passedLectureSessionAcademicSemester = this.navParams.get('lectureSessionAcademicSemester');
-    this.passedLectureSesionModuleCode = this.navParams.get('lectureSesionModuleCode');
+    this.passedLectureSessionModuleCode = this.navParams.get('lectureSessionModuleCode');
     this.passedLectureSessionModuleTitle = this.navParams.get('lectureSessionModuleTitle');
     this.passedLectureSessionStartDateTime = this.navParams.get('lectureSessionStartDateTime');
     this.passedLectureSessionEndDateTime = this.navParams.get('lectureSessionEndDateTime');
     this.passedLectureSessionLecturer = this.navParams.get('lectureSessionLecturer');
     this.passedLectureSessionLectureHall = this.navParams.get('lectureSessionLectureHall');
     this.passedLectureSessionStatus = this.navParams.get('lectureSessionStatus');
+
+    this.passedUserFaculty = this.navParams.get('userFaculty');
+
+
+    // Assigning lecture session start date time to get the lecture session date
+    this.lectureSessionDate = this.passedLectureSessionStartDateTime.toDate();
+    
+    // Setting the time section of the lecture session date time to zero
+    this.lectureSessionDate.setHours(0,0,0,0);
+
+    // Retracting the lecture session start time in format: Hour:Minute AM/PM, Sample: 09:00 AM
+    this.lectureSessionStartTime = this.passedLectureSessionStartDateTime.toDate().toLocaleString([], { hour: "2-digit", minute: "2-digit", hour12: true});
+
+    // Retracting the lecture session end time in format: Hour:Minute AM/PM, Sample: 05:00 PM
+    this.lectureSessionEndTime = this.passedLectureSessionEndDateTime.toDate().toLocaleString([], { hour: "2-digit", minute: "2-digit", hour12: true});
+
+
+    this.editLectureSessionForm.patchValue({
+      batch: this.passedLectureSessionBatch,
+      degreeProgram: this.passedLectureSessionDegree,
+      academicYear: this.passedLectureSessionAcademicYear,
+      academicSemester: this.passedLectureSessionAcademicSemester,
+      module: this.passedLectureSessionModuleCode,
+      lecturer: this.passedLectureSessionLecturer,
+      lectureHall: this.passedLectureSessionLectureHall,
+      lectureStatus: this.passedLectureSessionStatus,
+      sessionDate: this.lectureSessionDate,
+      sessionStartTime: this.lectureSessionStartTime,
+      sessionEndTime: this.lectureSessionEndTime
+    });
+
 
 
     this.retrievePublishedBatch();
@@ -82,12 +134,9 @@ export class EditLectureSessionModalPage implements OnInit {
 
     this.retrievePublishedSessionStatuses();
 
-
-    // Assigning date and time seperately to the variables
-    this.lectureSessionStartDateTime = this.passedLectureSessionStartDateTime.toISOString();
-    this.lectureSessionEndTime = this.passedLectureSessionEndDateTime.toISOString();
-    console.log(this.passedLectureSessionAcademicSemester);
-    console.log(this.publishedDegreeProgramNoOfSemestersAnnaully);
+    
+    
+    this.retrieveAwardingBodyUniversityOnLoad(this.passedLectureSessionDegree);
     
   }
 
@@ -95,40 +144,74 @@ export class EditLectureSessionModalPage implements OnInit {
 
   // Retrieving the published batches from the firestore database
   publishedBatches;
-  
-  retrievePublishedBatch = () => 
-    this.editLectureSessionService.retrievePublishedBatch(this.navParams.get('userFaculty')).subscribe(response => (this.publishedBatches = response));
-
-
+  retrievePublishedBatch(){
+    this.editLectureSessionService.retrievePublishedBatch(this.passedUserFaculty).subscribe(response => (this.publishedBatches = response));
+  }
 
 
   // Retrieving the published degree programs and details from the firestore database
   publishedDegreePrograms;
 
-  publishedDegreeProgramDegree;
-  publishedDegreeProgramAwardingBodyUniversity;
-  publishedDegreeProgramNoOfYears
-  publishedDegreeProgramNoOfSemestersAnnaully;
 
   retrievePublishedDegreeProgram = () => {
-    this.editLectureSessionService.retrievePublishedDegreeProgram(this.navParams.get('userFaculty')).subscribe(response => (this.publishedDegreePrograms = 
-       response.forEach(document => {
-        let firestoreDoc: any = document.payload.doc.data();
-        this.publishedDegreeProgramDegree = firestoreDoc.degree;
-        this.publishedDegreeProgramAwardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
-        this.publishedDegreeProgramNoOfYears = firestoreDoc.deliveryNoOfYears;
-        this.publishedDegreeProgramNoOfSemestersAnnaully = firestoreDoc.deliveryNoOfSemestersAnnually;
-      })
-    ));
+    this.editLectureSessionService.retrievePublishedDegreeProgram(this.navParams.get('userFaculty')).subscribe(response => (this.publishedDegreePrograms = response));
   }
 
   // Implementation of generating an array for the count of, no of years and no of semesters
   convertToArray(n: number): any[] {
     return Array(n);
   }
-  
 
-    
+
+  publishedAwardingBodyUniversityOfDegree;
+  awardingBodyUniversity;
+  degreeCode;
+
+  // Executed upon page load
+  async retrieveAwardingBodyUniversityOnLoad(degree){
+    // Retrieving the awardingBody University of the selected degree
+    this.editLectureSessionService.retrievingAwardingBodyUniversityOfDegree(degree, this.passedUserFaculty).subscribe(response => (this.publishedAwardingBodyUniversityOfDegree =
+      response.forEach(document => {
+        let firestoreDoc: any = document.payload.doc.data();
+        this.awardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
+        this.degreeCode = firestoreDoc.degreeCode;
+      //  console.log(this.awardingBodyUniversity);
+      //  console.log(this.degreeCode);
+      })
+    ));
+  }
+
+  // Executed upon select option change
+  async retrieveAwardingBodyUniversityOnChange(event){
+    // Retrieving the awardingBody University of the selected degree
+    this.editLectureSessionService.retrievingAwardingBodyUniversityOfDegree(event.detail.value, this.passedUserFaculty).subscribe(response => (this.publishedAwardingBodyUniversityOfDegree =
+      response.forEach(document => {
+        let firestoreDoc: any = document.payload.doc.data();
+        this.awardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
+        this.degreeCode = firestoreDoc.degreeCode;
+      //  console.log(this.awardingBodyUniversity);
+      //  console.log(this.degreeCode);
+      })
+    ));
+  }
+
+
+
+  publishedModuleTitleOfModuleCode;
+
+  // Executed upon select option change
+  async retrieveModuleTitleOnChange(event){
+    // Retrieving the module title of the selected module code
+    this.editLectureSessionService.retrievingModuleTitleOfModuleCode(event.detail.value, this.passedUserFaculty).subscribe(response => (this.publishedModuleTitleOfModuleCode =
+      response.forEach(document => {
+        let firestoreDoc: any = document.payload.doc.data();
+        this.passedLectureSessionModuleTitle = firestoreDoc.moduleTitle;
+      })
+    ));
+  }
+
+
+  
 
   // Retrieving the published modules and their details from the firestore database
   publishedModules;
@@ -137,13 +220,7 @@ export class EditLectureSessionModalPage implements OnInit {
   publishedModuleTitle;
 
   retrieveRegisteredModules = () => {
-    this.editLectureSessionService.retrieveRegisteredModules(this.navParams.get('userFaculty')).subscribe(response => (this.publishedModules = 
-      response.forEach(document => {
-        let firestoreDoc: any = document.payload.doc.data();
-        this.publishedModuleCode = document.payload.doc.id;
-        this.publishedModuleTitle = firestoreDoc.moduleTitle;
-      })
-    ));
+    this.editLectureSessionService.retrieveRegisteredModules(this.navParams.get('userFaculty')).subscribe(response => (this.publishedModules = response));
   }
 
 
@@ -171,84 +248,72 @@ export class EditLectureSessionModalPage implements OnInit {
     this.editLectureSessionService.retrievePublishedSessionStatuses().subscribe(response => (this.publishedSessionStatuses = response));
 
 
+
+
+  // Confirm Box Implementation (Edit Published Lecture Session)
+  async editPublishedLectureSession ( title: string, content: string, value) {
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log("Alert Box: Edit Published Lecture Session Request Denied");
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            console.log("Alert Box: Edit Published Lecture Session Request Accepted");
+
+            // Calling function to edit published lecture session
+            this.doEditLectureSession(value);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
    
-  userFormDataModuleCode;  
-  userFormDataAwardingBodyUniversity;
-
-  userFormDataLectureSessionStartDateWithPreviousDate; // Used to store lecture session date from a count in milliseconds since 00:00:00 UTC on 1 January 1970
-  userFormDataLectureSessionStartDateWithPreviousDateUnix;
-  userFormDataLectureSessionStartDateWithPreviousTimeHoursMilli;
-  userFormDataLectureSessionStartDateWithPreviousTimeMinutesMilli;
-  userFormDataLectureSessionStartDateWithPreviousTimeSecondsMilli;
-  userFormDataLectureSessionStartDateWithPreviousTimeMilliseconds;
-  userFormDataLectureSessionStartDateWithPreviousTimeUnix
-  userFormDataLectureSessionStartDateWithoutPreviousTimeUnix; 
-  userFormDataLectureSessionStartTimeUnix; // Used to store lecture session start time convertion from hours to milliseconds
-  userFormDataLectureSessionStartDateTimeUnix;  // Used to store lecture session start time in unix epoch timestamp
-  userFormDataLectureSessionStartDateTime; // Used to store lecture session start time in ISO 8601 timestamp
-
-  userFormDataLectureSessionEndTimeUnix; // Used to store lecture session end time convertion from hours to milliseconds
-  userFormDataLectureSessionEndDateTimeUnix; // Used to store lecture session end time in unix epoch timestamp
-  userFormDataLectureSessionEndDateTime; // Used to store lecture session end time in ISO 8601 timestamp
-
   // Process of adding edited values of lecture session to firestore database
   doEditLectureSession(value) {
-    
-    // Retrieving module code for user selected module title
-    if(value.module == this.publishedModuleTitle){
-      this.userFormDataModuleCode = this.publishedModuleCode;
-    }
 
-    // Retriving the awardingBodyUniversity from the user selected degreeProgram
-    if(value.degreeProgram == this.publishedDegreeProgramDegree){
-      this.userFormDataAwardingBodyUniversity = this.publishedDegreeProgramAwardingBodyUniversity;
-    }
+    // Extracting month, date and year from selected lecture session date, sample format - 04/30/2020
+    // Month has to be incremented by one because the month range is retrieve by - 0-11
+    let lectureSessionDate = (new Date(value.sessionDate).getMonth()+1) + "/" + new Date(value.sessionDate).getDate() + "/" + new Date(value.sessionDate).getFullYear();
 
-    // Calculating lecture session start datetime
-    // Converting user selected date to (Unix Epoch Seconds time) in milliseconds
-    this.userFormDataLectureSessionStartDateWithPreviousDate = new Date(value.sessionDate);
-    this.userFormDataLectureSessionStartDateWithPreviousDateUnix = this.userFormDataLectureSessionStartDateWithPreviousDate.getTime();
-    this.userFormDataLectureSessionStartDateWithPreviousTimeHoursMilli = (this.userFormDataLectureSessionStartDateWithPreviousDate).getHours().getMilliseconds();
-    this.userFormDataLectureSessionStartDateWithPreviousTimeMinutesMilli = (this.userFormDataLectureSessionStartDateWithPreviousDate).getMinutes().getMilliseconds();
-    this.userFormDataLectureSessionStartDateWithPreviousTimeSecondsMilli = (this.userFormDataLectureSessionStartDateWithPreviousDate).getSeconds().getMilliseconds();
-    this.userFormDataLectureSessionStartDateWithPreviousTimeMilliseconds = (this.userFormDataLectureSessionStartDateWithPreviousDate).getMilliseconds();
+    // Merging lecture session date and lecture session start time into date format
+    let lectureSessionStartDateTime = new Date(lectureSessionDate + " " + value.sessionStartTime);
 
-    this.userFormDataLectureSessionStartDateWithPreviousTimeUnix = this.userFormDataLectureSessionStartDateWithPreviousTimeHoursMilli + this.userFormDataLectureSessionStartDateWithPreviousTimeMinutesMilli +
-      this.userFormDataLectureSessionStartDateWithPreviousTimeSecondsMilli + this.userFormDataLectureSessionStartDateWithPreviousTimeMilliseconds;
-
-    this.userFormDataLectureSessionStartDateWithoutPreviousTimeUnix = this.userFormDataLectureSessionStartDateWithPreviousDateUnix - this.userFormDataLectureSessionStartDateWithPreviousTimeUnix;
-
-    // Converting user selected time from hours to milliseconds
-    this.userFormDataLectureSessionStartTimeUnix = value.sessionStartTime.toDate().getMilliseconds();
-
-    // Adding date milliseconds value and start time milliseconds value to generate the (Unix Epoch Timestamp) in milliseconds for the lecture session start UNIX datetime timestamp
-    this.userFormDataLectureSessionStartDateTimeUnix = this.userFormDataLectureSessionStartDateWithoutPreviousTimeUnix + this.userFormDataLectureSessionStartTimeUnix;
-
-    // Converting lecture start datetime (Unix Epoch Timestamp) milliseconds to ISO 8601 timestamp
-    this.userFormDataLectureSessionStartDateTime = this.userFormDataLectureSessionStartDateTimeUnix.toISOString();
-
-    console.log(this.userFormDataLectureSessionStartDateTime);
-
-    // Calculating lecture session end datetime
-    // Converting user selected time from hours to milliseconds
-    this.userFormDataLectureSessionEndTimeUnix = value.sessionEndTime.toDate().getMilliseconds();
-
-    // Adding date milliseconds value and start time milliseconds value to generate the (Unix Epoch Timestamp) in milliseconds for the lecture session start UNIX datetime timestamp
-    this.userFormDataLectureSessionEndDateTimeUnix = this.userFormDataLectureSessionStartDateWithoutPreviousTimeUnix + this.userFormDataLectureSessionEndTimeUnix;
-
-    // Converting lecture end datetime (Unix Epoch Timestamp) milliseconds to ISO 8601 timestamp
-    this.userFormDataLectureSessionEndDateTime = this.userFormDataLectureSessionEndDateTimeUnix.toDate().getMilliseconds();
+    // Merging lecture session date and lecture session end time into date format
+    let lectureSessionEndDateTime = new Date(lectureSessionDate + " " + value.sessionEndTime);
 
     // Update values in firestore database with the user updated values
-    this.editLectureSessionService.updateLectureSession(this.navParams.get('userFaculty'), this.passedLectureSessionId, value, this.userFormDataModuleCode, this.userFormDataLectureSessionStartDateTime, this.userFormDataLectureSessionEndDateTime);
-   
-    console.log(this.userFormDataLectureSessionEndDateTime);
-
-
-
+    this.editLectureSessionService.updateLectureSession(this.passedUserFaculty, this.passedLectureSessionId, value, 
+      this.awardingBodyUniversity, this.degreeCode, this.passedLectureSessionModuleTitle, lectureSessionStartDateTime, lectureSessionEndDateTime)
+      .then(success => {
+        this.alertNotice("Lecture Session Updated", "Lecture Session has been updated with the new details.");
+      }, error => {
+        console.log("Error: " + error);
+        this.alertNotice("ERROR", "Error has occurred: " + error);
+    });
 
   }
   
+
+  // Alert Box Implementation
+  async alertNotice ( title: string, content: string ) {
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
 
 
 

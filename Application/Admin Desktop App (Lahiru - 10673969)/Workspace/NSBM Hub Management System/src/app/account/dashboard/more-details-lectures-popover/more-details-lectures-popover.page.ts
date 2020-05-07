@@ -35,7 +35,7 @@ export class MoreDetailsLecturesPopoverPage implements OnInit {
     this.passedAcademicPeriodYear = this.navParams.get('academicPeriodYear');
     this.passedAcademicPeriodSemester = this.navParams.get('academicPeriodSemester');
 
-
+    
   }
 
   // Closing the popover

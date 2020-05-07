@@ -339,10 +339,10 @@ export class NewsPage implements OnInit {
       console.log("DateTime: " + currentDateTimeUnix + " FileName: " + currentFileName);
 
       // Storage path of the file in the firebase storage
-      var path = 'files/images/notices/events/' + currentDateTimeUnix + '_' + currentFileName;
+      var path = 'files/images/newsCoverImages/' + currentDateTimeUnix + '_' + currentFileName;
 
       // Custom metadata
-      const customMetadata = { app: 'Event Notice Cover Image File' };
+      const customMetadata = { app: 'News Cover Image File' };
 
       // File referencing
       const fileRef = this.storage.ref(path);
@@ -364,7 +364,8 @@ export class NewsPage implements OnInit {
             this.newsService.publishNews(this.addNewsCoverImageSection, this.addAttachmentLinkSection, this.file.name, resp, this.fileSize, 
               this.sideMenuPageUserFaculty.passUserFaculty(), this.sideMenuPageUserFaculty.passUserId(), value)
               .then(success => {
-                console.log("News published successfully " + success);
+
+                console.log("News published successfully");
                 // Removing the user entered values from the input fields after the notice has been created
                 this.addNewNewsForm.reset();
 
@@ -373,9 +374,25 @@ export class NewsPage implements OnInit {
                   newsPublisher: "Program Office: "+ this.sideMenuPageUserFaculty.passUserFaculty()
                 });
 
+                // Setting cover image toggle to the initial state after form reset
+                NewsPage.coverImageToggle = 1;
+
+                // Setting attachment toggle to the initial state after form reset
+                NewsPage.attachmentLinkToggle = 1;
+
                 // Displaying new notice successfully sent
                 this.alertNotice('News Published', 
                   'News has been successfully published.');
+
+                // Removing all the items in the published news section
+                this.publishedNews = null;
+
+                // Setting coverImage view section to initial state after form reset
+                this.coverImage = null;
+
+                // Retrieving all published news items for the past three days
+                this.retrievePublishedNews();
+
               }, error => {
                 console.log("Error: " + error);
                 this.alertNotice("ERROR", "Error has occurred: " + error);
@@ -408,10 +425,10 @@ export class NewsPage implements OnInit {
       console.log("DateTime: " + currentDateTimeUnix + " FileName: " + currentFileName);
 
       // Storage path of the file in the firebase storage
-      var path = 'files/images/notices/events/' + currentDateTimeUnix + '_' + currentFileName;
+      var path = 'files/images/newsCoverImages/' + currentDateTimeUnix + '_' + currentFileName;
 
       // Custom metadata
-      const customMetadata = { app: 'Event Notice Cover Image File' };
+      const customMetadata = { app: 'News Cover Image File' };
 
       // File referencing
       const fileRef = this.storage.ref(path);
@@ -433,7 +450,8 @@ export class NewsPage implements OnInit {
             this.newsService.publishNews(this.addNewsCoverImageSection, this.addAttachmentLinkSection, this.file.name, resp, this.fileSize, 
               this.sideMenuPageUserFaculty.passUserFaculty(), this.sideMenuPageUserFaculty.passUserId(), value)
               .then(success => {
-                console.log("News published successfully " + success);
+
+                console.log("News published successfully");
                 // Removing the user entered values from the input fields after the notice has been created
                 this.addNewNewsForm.reset();
 
@@ -442,9 +460,22 @@ export class NewsPage implements OnInit {
                   newsPublisher: "Program Office: "+ this.sideMenuPageUserFaculty.passUserFaculty()
                 });
 
+                // Setting cover image toggle to the initial state after form reset
+                NewsPage.coverImageToggle = 1;
+
+                // Setting coverImage view section to initial state after form reset
+                this.coverImage = null;
+
                 // Displaying new notice successfully sent
                 this.alertNotice('News Published', 
                   'News has been successfully published.');
+
+                // Removing all the items in the published news section
+                this.publishedNews = null;
+
+                // Retrieving all published news items for the past three days
+                this.retrievePublishedNews();
+
               }, error => {
                 console.log("Error: " + error);
                 this.alertNotice("ERROR", "Error has occurred: " + error);
@@ -465,7 +496,8 @@ export class NewsPage implements OnInit {
       this.newsService.publishNews(this.addNewsCoverImageSection, this.addAttachmentLinkSection, "NULL", "NULL", "NULL", 
         this.sideMenuPageUserFaculty.passUserFaculty(), this.sideMenuPageUserFaculty.passUserId(), value)
         .then(success => {
-          console.log("News published successfully " + success);
+
+          console.log("News published successfully");
           // Removing the user entered values from the input fields after the notice has been created
           this.addNewNewsForm.reset();
 
@@ -474,8 +506,18 @@ export class NewsPage implements OnInit {
             newsPublisher: "Program Office: "+ this.sideMenuPageUserFaculty.passUserFaculty()
           });
 
+          // Setting cover image toggle to the initial state after form reset
+          NewsPage.attachmentLinkToggle = 1;
+
           // Displaying new notice successfully sent
           this.alertNotice('News Published', 'News has been successfully published.');
+
+          // Removing all the items in the published news section
+          this.publishedNews = null;
+
+          // Retrieving all published news items for the past three days
+          this.retrievePublishedNews();
+
         }, error => {
           console.log("Error: " + error);
           this.alertNotice("ERROR", "Error has occurred: " + error);
@@ -485,7 +527,8 @@ export class NewsPage implements OnInit {
       this.newsService.publishNews(this.addNewsCoverImageSection, this.addAttachmentLinkSection, "NULL", "NULL", "NULL",
         this.sideMenuPageUserFaculty.passUserFaculty(), this.sideMenuPageUserFaculty.passUserId(), value)
         .then(success => {
-          console.log("News published successfully " + success);
+
+          console.log("News published successfully");
           // Removing the user entered values from the input fields after the notice has been created
           this.addNewNewsForm.reset();
 
@@ -497,6 +540,14 @@ export class NewsPage implements OnInit {
           // Displaying new notice successfully sent
           this.alertNotice('News Published', 
             'News has been successfully published.');
+
+          // Removing all the items in the published news section
+          this.publishedNews = null;
+
+          // Retrieving all published news items for the past three days
+          this.retrievePublishedNews();
+
+
         }, error => {
           console.log("Error: " + error);
           this.alertNotice("ERROR", "Error has occurred: " + error);
@@ -525,10 +576,37 @@ export class NewsPage implements OnInit {
           handler: () => {
             console.log("Alert Box: Remove Published News Request Accepted");
 
+            // Removing news item cover image from firebase storage
+            if(value.payload.doc.data().coverImage != null){
+              console.log("ffdd");
+              this.newsService.removeCoverImage(value.payload.doc.data().coverImage.coverImageFilePath)
+                .then(success => {
+                // console.log("News item cover image successfully removed from firebase storage.");
+                // this.alertNotice("News Item Cover Image Removed", "News item cover image successfully removed.");
+                }, error => {
+                  console.log("Error: " + error);
+                  this.alertNotice("Error", "News item cover image removal error: " + error);
+              });
+            }
+
             let docId = value.payload.doc.id;
 
             // Removing published news item from the firestore database
-            this.newsService.removePublishedNews(docId);
+            this.newsService.removePublishedNews(docId)
+              .then(success => {
+                console.log("News item has been successfully removed.");
+                this.alertNotice("News Item Removed", "News item has been successfully removed.");
+              }, error => {
+                console.log("Error: " + error);
+                this.alertNotice("Error", "News item removal error: " + error);
+            });
+
+            // Removing all the items in the published news section
+            this.publishedNews = null;
+
+            // Retrieving all published news items for the past three days
+            this.retrievePublishedNews();
+
           }
         }
       ]

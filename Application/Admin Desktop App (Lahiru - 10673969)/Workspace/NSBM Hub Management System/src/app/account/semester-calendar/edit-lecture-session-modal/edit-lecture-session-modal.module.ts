@@ -10,6 +10,10 @@ import { EditLectureSessionModalPage } from './edit-lecture-session-modal.page';
 
 import { HttpClientModule } from '@angular/common/http';
 
+import { MaterialModule } from 'src/app/material.module';
+
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -17,7 +21,9 @@ import { HttpClientModule } from '@angular/common/http';
     IonicModule,
     EditLectureSessionModalPageRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MaterialModule,
+    NgxMaterialTimepickerModule
   ],
   declarations: [EditLectureSessionModalPage]
 })

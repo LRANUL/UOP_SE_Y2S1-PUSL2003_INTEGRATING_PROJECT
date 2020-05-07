@@ -6,6 +6,7 @@ import { LoginCredential } from './../../types';
 import * as firebase from 'firebase/app';
 import { error } from 'util';
 import { AlertController } from '@ionic/angular';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 
 
@@ -17,6 +18,7 @@ export class FirestoreService {
   constructor(
     private fireStore: AngularFirestore,
     private angularFireAuth: AngularFireAuth,
+    private angularFireStorage: AngularFireStorage,
     private alertController: AlertController
   ) { }
 
@@ -240,7 +242,6 @@ export class FirestoreService {
   // Publishing new notice by creating a new document and add details into the firestore database
   publishNotice(coverImageToggle, noticeType, recipientType, coverImageFileName, coverImageFilePath, coverImageFileSize, loggedInUserId, value){
     return new Promise<any>((resolve, reject) => { // Adding new record into firebase auth
-
       // Creating a new ID for the document
       const docId = this.fireStore.createId();
 
@@ -920,22 +921,26 @@ export class FirestoreService {
   }
 
   // Updating lecture session values in the firestore database
-  updateLectureSession(userFaculty, id, value, userFormDataModuleCode, userFormDataSessionStartDateTime, userFormDataSessionEndDateTime) {
-    return this.fireStore.doc("faculties/"+ userFaculty +"/lectureSessions/"+ id).update({
-      batch: value.batch,
-      degreeProgram: value.degreeProgram,  
-      academicYear: value.academicYear,
-      academicSemester: value.academicSemester,
-      moduleCode: userFormDataModuleCode,
-      moduleTitle: value.moduleTitle,
-      lecture: value.lecturer,
-      lectureHall: value.lectureHall,
-      status: value.lectureStatus,
-      startDateTime: userFormDataSessionStartDateTime,
-      endDateTime: userFormDataSessionEndDateTime
-    }).then(function() {
-      console.log("Lecture Session Details has been updated.");
-    });
+  updateLectureSession(userFaculty, docId, value, userFormAwardingBodyUniversity, userFormDegreeCode, userFormDataModuleTitle, 
+    userFormDataSessionStartDateTime, userFormDataSessionEndDateTime) {
+      return new Promise<any>((resolve, reject) => {
+        this.fireStore.doc("faculties/"+ userFaculty +"/lectureSessions/"+ docId).update({
+          batch: value.batch,
+          degree: value.degreeProgram,  
+          awardingBodyUniversity: userFormAwardingBodyUniversity,
+          degreeCode: userFormDegreeCode,
+          academicYear: value.academicYear,
+          academicSemester: value.academicSemester,
+          moduleCode: value.module,
+          moduleTitle: userFormDataModuleTitle,
+          lecturer: value.lecturer,
+          lectureHall: value.lectureHall,
+          status: value.lectureStatus,
+          startDateTime: userFormDataSessionStartDateTime,
+          endDateTime: userFormDataSessionEndDateTime
+        }).then(response => resolve(response),
+          error => reject(error))
+      }); 
   }
 
   // Updating module values in the firestore database
@@ -1040,12 +1045,24 @@ export class FirestoreService {
 
   // Removing PO to Students notice from the firestore database
   removePublishedPOToStudentsNotice(docId){
-    this.fireStore.doc("notices/noticeTypes/notices-PO-To-Students/"+ docId).delete();
+    return new Promise<any>((resolve, reject) => {
+      this.fireStore.doc("notices/noticeTypes/notices-PO-To-Students/"+ docId).delete()
+        .then(response => 
+          resolve(response)
+          ,error => 
+            reject(error))
+        });
   }
 
   // Removing PO to Lecturers notice from the firestore database
   removePublishedPOToLecturersNotice(docId){
-    this.fireStore.doc("notices/noticeTypes/notices-PO-To-Lecturers/"+ docId).delete();
+    return new Promise<any>((resolve, reject) => {
+      this.fireStore.doc("notices/noticeTypes/notices-PO-To-Lecturers/"+ docId).delete()
+        .then(response => 
+          resolve(response)
+          ,error => 
+            reject(error))
+        });
   }
 
   //Removing degree program from the firestore database
@@ -1116,6 +1133,19 @@ export class FirestoreService {
         console.log("User Account has been disabled");
     });
   } 
+
+
+  // Removing cover image from firebase storage
+  removeCoverImage(coverImageUrl){
+    return new Promise<any>((resolve, reject) => {
+      this.angularFireStorage.storage.refFromURL(coverImageUrl).delete()
+        .then(response => 
+          resolve(response)
+          ,error => 
+            reject(error))
+        });
+  }
+
 
 
 }

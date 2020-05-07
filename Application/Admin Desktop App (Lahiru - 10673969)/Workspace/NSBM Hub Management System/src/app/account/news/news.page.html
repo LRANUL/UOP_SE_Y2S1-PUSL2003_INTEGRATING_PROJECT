@@ -50,7 +50,7 @@
     <ion-row>
       <ion-col>
       
-        <ion-card>
+        <ion-card style="border-radius: 5px;">
           <ion-card-header>
             <ion-card-title>
               Published News
@@ -119,7 +119,7 @@
                                                                                                           left: 50%;
                                                                                                           transform: translateX(-50%);">
                                                                                                           </ion-img>
-                        </ng-container>
+                      </ng-container>
                       <ion-card-header>
                         <ion-card-title>
                           {{ item.payload.doc.data().title }}
@@ -337,12 +337,23 @@
                             <p> Progress: {{ percent | number }}% </p>
                             <ion-progress-bar value="{{ percent / 100 }}"></ion-progress-bar>
                           </div>
+
+                          <div *ngIf="snapshot | async as snap">
+                            <p> 
+                              File Size: {{ snap.totalBytes }} <br>
+                              Transferred: {{ snap.bytesTransferred }}
+                            </p>
+                          </div>
+
+                          <!-- Code block shows file size in converted file size -->
+                          <!--
                           <div *ngIf="snapshot | async as snap">
                             <p> 
                               File Size: {{ snap.totalBytes | fileSizePipe }} <br>
                               Transferred: {{ snap.bytesTransferred | fileSizePipe }}
                             </p>
                           </div>
+                          -->
                         </ion-card-content>
                       </ion-card>
 
@@ -358,7 +369,14 @@
                             <ion-img [src]="ufurl"></ion-img>
                             <a [href]="ufurl" target="_blank" rel="noopener" download> Download </a>
                           </div>
-                          <p> File Size: {{ fileSize | fileSizePipe }} </p>
+
+                          <p> File Size: {{ fileSize }} </p>  
+
+                          <!-- Code block shows file size in converted file size -->
+                          <!-- 
+                          <p> File Size: {{ fileSize | fileSizePipe }} </p>  
+                          -->
+
                           <ion-button expand="full" color="success" (click)="isFileUploading = isFileUploaded = false"> Upload More </ion-button>
                         </ion-card-content>
                       </ion-card>

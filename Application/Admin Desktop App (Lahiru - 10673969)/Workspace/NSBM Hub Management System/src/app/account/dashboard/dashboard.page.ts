@@ -41,6 +41,8 @@ export class DashboardPage implements OnInit {
 
   noLectureSessionText: Boolean = false;
 
+  noLecturerPONoticeText: Boolean = false;
+
   showLoadingDotsUpcomingLectureSession: Boolean = false;
 
   activeStudentUsersLoadingSpinner: Boolean = true;
@@ -246,7 +248,7 @@ export class DashboardPage implements OnInit {
         labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         datasets: [{
           label: 'User Activity',
-          data: [50,240,432,100,333,223,70],
+          data: [323,342,330,332,333,314,295],
           backgroundColor: 'rgb(109, 156, 235)', 
           borderColor: 'rgb(109, 219, 235)',
           borderWidth: 1
@@ -310,7 +312,14 @@ export class DashboardPage implements OnInit {
   // Retrieving published notices (Lecturers To Program Office (PO)) and assigning them
   publishedNoticesLecturerToPO;
   retrievePublishedLecturerToPONotice = () => 
-    this.dashboardService.retrievePublishedLecturerToPONotice(this.currentDate, this.dateThreeDaysBeforeCurrentDate).subscribe(response => (this.publishedNoticesLecturerToPO = response));
+    this.dashboardService.retrievePublishedLecturerToPONotice(this.currentDate, this.dateThreeDaysBeforeCurrentDate).subscribe(response => {
+      if(response.length > 0){
+        this.publishedNoticesLecturerToPO = response;
+      }
+      else{
+        this.noLecturerPONoticeText = true;
+      }
+    });
 
 
   // More details of today's lecture sessions popover
@@ -372,7 +381,7 @@ export class DashboardPage implements OnInit {
         batch: value.batch,
         lecturer: value.lecturer,
         lectureHall: value.lectureHall,
-        degree: value.degreeProgram,
+        degree: value.degree,
         awardingBodyUniversity: value.awardingBodyUniversity,
         academicPeriodYear: value.academicYear,
         academicPeriodSemester: value.academicSemester
@@ -402,12 +411,13 @@ export class DashboardPage implements OnInit {
     })
   }
 
+  /*
    // More details of event sessions popover
    async moreDetailsEventSession(ev: Event, value){
     const moreDetailsEventSessionPopover = await this.popoverController.create({
       component: MoreDetailsEventPopoverPage,
       componentProps: {
-        eventSessionDocId: value.payload.doc.id,
+        eventSessionDocId: value.id,
         status: value.status
       },
       event: ev
@@ -415,6 +425,7 @@ export class DashboardPage implements OnInit {
 
     moreDetailsEventSessionPopover.present();
   }
+  */
 
 
 

@@ -138,7 +138,9 @@
                                               height: 100px;
                                               width: 100px;" *ngIf="loadingSpinnerPLS"></ion-spinner>
 
-                   <ion-grid style="margin-top: 50px;
+
+                  <!-- 
+                  <ion-grid style="margin-top: 50px;
                                   padding-top: 100px;">
                     <ion-row>
                       <ion-col>
@@ -160,7 +162,8 @@
                         </ion-button>
                       </ion-col>
                     </ion-row>
-                  </ion-grid>
+                  </ion-grid> 
+                  -->
 
                 </ion-col>
 
@@ -419,11 +422,7 @@
                                 </ion-label>
                                 <ion-select placeholder="Lecturer" style="min-width: 100%;" formControlName="lecturer">
                                   <ion-select-option *ngFor="let item of registeredLecturers" 
-                                    value="
-                                      {{ item.payload.doc.data().name.prefix }}
-                                      {{ item.payload.doc.data().name.firstName }}
-                                      {{ item.payload.doc.data().name.lastName }}
-                                    ">
+                                    value="{{ item.payload.doc.data().name.prefix }} {{ item.payload.doc.data().name.firstName }} {{ item.payload.doc.data().name.lastName }}">
                                     {{ item.payload.doc.data().name.prefix }}
                                     {{ item.payload.doc.data().name.firstName }}
                                     {{ item.payload.doc.data().name.lastName }}
@@ -575,7 +574,7 @@
                                                                   right: 16px;
                                                                   color: rgb(78, 78, 78);
                                                                   font-size: 30px;"></ion-icon>
-                          </ion-col>
+                            </ion-col>
                           </ion-row>
                         </ion-grid>
 

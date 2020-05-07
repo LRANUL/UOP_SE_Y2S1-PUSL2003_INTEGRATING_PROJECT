@@ -52,7 +52,7 @@
       <ion-col size="9.5">
         <ion-row>
           <ion-col>
-            <ion-card style="height: 580px;">
+            <ion-card style="height: 690px;">
               <ion-card-header>
                 <ion-card-title>
                   Today's Lecturers
@@ -60,8 +60,8 @@
               </ion-card-header>
               <ion-card-content>
 
-                <ion-grid style="height: 510px;
-                                overflow-y: scroll;">
+                <ion-grid style="height: 620px;
+                                overflow-y: auto;">
                   <ion-row>
                     <ion-col size="3" size-sm="12" size-lg="3" size-xl="3" *ngFor="let item of publishedLectureSessionsCurrentDate">
 
@@ -245,8 +245,8 @@
                 </div>
                 
 
-                <div style="overflow-y: scroll;
-                            margin-top: -10px;">
+                <div style="overflow-y: auto;
+                            margin-top: 10px;">
                   <div style="height: 580px;">
                     <calendar [eventSource]="eventSourceLecture"
                     [calendarMode]="calendarLecture.mode"
@@ -277,6 +277,7 @@
                   </ion-button>
                 </div>
 
+                <!-- Text shown id there are no available lecture sessions for the selected date -->
                 <div style="position: absolute;
                             left: 50%;
                             top: 60%;
@@ -316,7 +317,7 @@
               <ion-card-content>
 
                 <ion-grid style="height: 550px;
-                                overflow-y: scroll;">
+                                overflow-y: auto;">
                   <ion-row>
                     <ion-col size="12" *ngFor="let item of publishedNoticesLecturerToPO">
 
@@ -355,6 +356,7 @@
                                 </ion-label>
                               </ion-col>
                             </ion-row>
+                            <!--
                             <ion-row>
                               <ion-col style="width: 45px;">
                                 <ion-button size="small" shape="round" size="small" style="width: 100%;
@@ -367,6 +369,7 @@
                                 </ion-button>
                               </ion-col>
                             </ion-row>
+                            -->
                           </ion-grid>
                         </ion-card-content>
                       </ion-card>
@@ -374,6 +377,23 @@
                     </ion-col>
                   </ion-row>
                 </ion-grid>
+
+
+                <!-- Text shown id there are no available lecturer to PO notices for the past three days -->
+                <div style="position: absolute;
+                            left: 50%;
+                            top: 50%;
+                            transform: translate(-50%,-50%);" *ngIf="noLecturerPONoticeText">
+                  <ion-item style="border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  padding: 5px;">
+                    <ion-label style="font-size: 17px;">
+                      No Notices Available
+                    </ion-label>
+                  </ion-item>
+                </div>
+
+
               </ion-card-content>
             </ion-card>
 
@@ -389,12 +409,19 @@
               <ion-card-content>
 
                 <ion-grid style="height: 550px;
-                                overflow-y: scroll;">
+                                overflow-y: auto;">
                   <ion-row>
                     <ion-col size="12" *ngFor="let item of publishedNews">
 
                       <ion-card>
                         <ion-card-header>
+                          <ng-container *ngIf="item.payload.doc.data().coverImage">
+                            <ion-img src="{{ item.payload.doc.data().coverImage.coverImageFilePath }}" style="height: 120px;
+                                                                                                              position: relative;
+                                                                                                              left: 50%;
+                                                                                                              transform: translateX(-50%);">
+                                                                                                              </ion-img>
+                          </ng-container>
                           <ion-card-title>
                             {{ item.payload.doc.data().title }}
                           </ion-card-title>
@@ -474,9 +501,9 @@
                 </div>
                 
 
-                <div style="overflow-y: scroll;
+                <div style="overflow-y: auto;
                             margin-top: 20px;">
-                  <div style="height: 500px;">
+                  <div style="height: 490px;">
                     <calendar [eventSource]="eventSourceEvent"
                     [calendarMode]="calendarEvent.mode"
                     [currentDate]="calendarEvent.currentDate"
@@ -494,6 +521,7 @@
                   </div>
                 </div>
 
+                <!--
                 <div style="position: absolute;
                             top: 282px;
                             right: 3.4%;" *ngFor="let item of noOfEventSessions">
@@ -505,6 +533,7 @@
                     <ion-icon name="document-text" style="font-size: 30px;"></ion-icon>
                   </ion-button>
                 </div>
+                -->
 
               </ion-card-content>
             </ion-card>
@@ -569,7 +598,7 @@
                   <ion-col>
 
                     <ion-grid style="height: 144px;
-                                    overflow-y: scroll;">
+                                    overflow-y: auto;">
                       <ion-row>
                         <ion-col>
                           <ion-grid style="position: relative;
@@ -622,7 +651,7 @@
                   <ion-col>
 
                     <ion-grid style="height: 144px;
-                                    overflow-y: scroll;">
+                                    overflow-y: auto;">
                       <ion-row>
                         <ion-col>
                           <ion-grid style="position: relative;
@@ -675,7 +704,7 @@
                   <ion-col>
 
                     <ion-grid style="height: 144px;
-                                    overflow-y: scroll;">
+                                    overflow-y: auto;">
                       <ion-row>
                         <ion-col>
                           <ion-grid style="position: relative;

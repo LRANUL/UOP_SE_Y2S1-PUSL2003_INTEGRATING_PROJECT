@@ -160,7 +160,7 @@ export class NoticesPage implements OnInit {
   retrieveRegisteredModules = () => 
     this.noticesService.retrieveRegisteredModules(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(response => (this.publishedModules = response));
 
-  // Retrieving the published batches from the firesore database
+  // Retrieving the published batches from the firestore database
   publishedBatches;
   retrievePublishedBatch = () => 
     this.noticesService.retrievePublishedBatch(this.sideMenuPageUserFaculty.passUserFaculty()).subscribe(response => (this.publishedBatches = response));
@@ -231,7 +231,7 @@ export class NoticesPage implements OnInit {
       componentProps: {
         noticeDocId: value.payload.doc.id,
         noticeCreatedFaculty: value.payload.doc.data().noticeCreated.noticeCreatedByFaculty,
-        noticeCredtedDateTime: value.payload.doc.data().noticeCreated.noticeCreatedDateTime,
+        noticeCreatedDateTime: value.payload.doc.data().noticeCreated.noticeCreatedDateTime,
         noticeRecipientBatch: value.payload.doc.data().noticeRecipient.noticeRecipientBatch,
         noticeRecipientModule: value.payload.doc.data().noticeRecipient.noticeRecipientModule
       },
@@ -262,7 +262,7 @@ export class NoticesPage implements OnInit {
       componentProps: {
         noticeDocId: value.payload.doc.id,
         noticeCreatedLecturer: value.payload.doc.data().noticeCreated.noticeCreatedByLecturer,
-        noticeCredtedDateTime: value.payload.doc.data().noticeCreated.noticeCreatedDateTime,
+        noticeCreatedDateTime: value.payload.doc.data().noticeCreated.noticeCreatedDateTime,
         noticeRecipient: value.payload.doc.data().noticeRecipient
       },
       event: ev
@@ -311,27 +311,37 @@ export class NoticesPage implements OnInit {
   
 
   /* Javascript Function */
-  showLecturerForm(){
-    var userClickLecture = document.getElementById("newNoticeSubmitLecturer");
+  showStudentForm(){
+    var userClickLecturer = document.getElementById("newNoticeSubmitLecturer");
     var userClickStudent = document.getElementById("newNoticeSubmitStudent");
     var newNoticeSectionCard = document.getElementById("newNoticeSection");
+    var studentFormButton = document.getElementById("newNoticeButtonStudent");
+    var lecturerFormButton = document.getElementById("newNoticeButtonLecturer");
+    if(userClickLecturer.style.display === "inline"){
+      userClickLecturer.style.display = "none";
+      userClickStudent.style.display = "inline";
+      studentFormButton.style.background = "#0B80D3";
+      lecturerFormButton.style.background = "#02A5D7";
+      newNoticeSectionCard.style.background = "#F3FAFC";
+    }
+  }
+
+  showLecturerForm(){
+    var userClickLecturer = document.getElementById("newNoticeSubmitLecturer");
+    var userClickStudent = document.getElementById("newNoticeSubmitStudent");
+    var newNoticeSectionCard = document.getElementById("newNoticeSection");
+    var studentFormButton = document.getElementById("newNoticeButtonStudent");
+    var lecturerFormButton = document.getElementById("newNoticeButtonLecturer");
     if(userClickStudent.style.display === "inline"){
       userClickStudent.style.display = "none";
-      userClickLecture.style.display = "inline";
+      userClickLecturer.style.display = "inline";
+      lecturerFormButton.style.backgroundColor = "#0B80D3";
+      studentFormButton.style.backgroundColor = "#02A5D7";
       newNoticeSectionCard.style.background = "#CDE7F9";
     }
   }
 
-  showStudentForm(){
-    var userClickLecture = document.getElementById("newNoticeSubmitLecturer");
-    var userClickStudent = document.getElementById("newNoticeSubmitStudent");
-    var newNoticeSectionCard = document.getElementById("newNoticeSection");
-    if(userClickLecture.style.display === "inline"){
-      userClickLecture.style.display = "none";
-      userClickStudent.style.display = "inline";
-      newNoticeSectionCard.style.background = "#F3FAFC";
-    }
-  }
+  
 
   selectedNoticeCategoryValue: string;
 
@@ -355,16 +365,16 @@ export class NoticesPage implements OnInit {
       this.toggleResultStudent = false;
     }
 
-    var withUploadcoverImage = document.getElementById("withcoverImage");
-    var withoutUploadcoverImage = document.getElementById("withoutcoverImage");
+    var withUploadCoverImage = document.getElementById("withCoverImage");
+    var withoutUploadCoverImage = document.getElementById("withoutCoverImage");
 
     if(this.toggleResultStudent == true){
-      withoutUploadcoverImage.style.display = "none";
-      withUploadcoverImage.style.display = "inline";
+      withoutUploadCoverImage.style.display = "none";
+      withUploadCoverImage.style.display = "inline";
     }
     else if(this.toggleResultStudent == false){
-      withoutUploadcoverImage.style.display = "inline";
-      withUploadcoverImage.style.display = "none";
+      withoutUploadCoverImage.style.display = "inline";
+      withUploadCoverImage.style.display = "none";
     }
   }
 
@@ -389,15 +399,15 @@ export class NoticesPage implements OnInit {
       this.toggleResultLecturer = false;
     }
 
-    var withUploadcoverImageLecturer = document.getElementById("withCoverImageLecturer");
-    var withoutUploadcoverImageLecturer = document.getElementById("withoutCoverImageLecturer");
+    var withUploadCoverImageLecturer = document.getElementById("withCoverImageLecturer");
+    var withoutUploadCoverImageLecturer = document.getElementById("withoutCoverImageLecturer");
     if(this.toggleResultLecturer == true){
-      withoutUploadcoverImageLecturer.style.display = "none";
-      withUploadcoverImageLecturer.style.display = "inline";
+      withoutUploadCoverImageLecturer.style.display = "none";
+      withUploadCoverImageLecturer.style.display = "inline";
     }
     else if(this.toggleResultLecturer == false){
-      withoutUploadcoverImageLecturer.style.display = "inline";
-      withUploadcoverImageLecturer.style.display = "none";
+      withoutUploadCoverImageLecturer.style.display = "inline";
+      withUploadCoverImageLecturer.style.display = "none";
     }
   }
 
@@ -477,7 +487,7 @@ export class NoticesPage implements OnInit {
     
   }
 
-  // Retriving the current date and time from the localhost
+  // Retrieving the current date and time from the localhost
   currentDT = new Date();
   currentDateTime = this.currentDT.getDate() + "/" + (this.currentDT.getMonth()+1) + "/" + this.currentDT.getFullYear() + " " + this.currentDT.getHours() + ":" + this.currentDT.getMinutes() + ":" + this.currentDT.getSeconds();
   
@@ -514,15 +524,15 @@ export class NoticesPage implements OnInit {
 
   // Upload file process (Student)
   uploadNewNoticeImageStudent(value) {
-
+    
     // If user selects values in both recipient options, batch and module
     if(value.noticeRecipientModule != "" && value.noticeRecipientBatch != ""){
-      console.error('Both Recipent Options has been selected.');
+      console.error('Both Recipient Options has been selected.');
 
       this.alertNotice('ERROR! ', 'Both recipient options has been selected, please select one option.');
     }
     else{
-
+      
       // Checking if the cover image was toggled
       if(this.toggleResultStudent == true){
       
@@ -537,7 +547,7 @@ export class NoticesPage implements OnInit {
         else{
           // File Object
           // const file = event.item(0);
-
+    
           this.isFileUploading = true;
           this.isFileUploaded = false;
           
@@ -552,46 +562,54 @@ export class NoticesPage implements OnInit {
           console.log("DateTime: " + currentDateTimeUnix + " FileName: " + currentFileName);
 
           // Storage path of the file in the firebase storage
-          var path = 'files/images/notices/noticeCoverImages/' + currentDateTimeUnix + '_' + currentFileName;
+          var path = 'files/images/noticeCoverImages/' + currentDateTimeUnix + '_' + currentFileName;
 
           // Custom metadata
-          const customMetadata = { app: 'Event Notice Cover Image File' };
+          const customMetadata = { app: 'Notice Cover Image File' };
 
           // File referencing
           const fileRef = this.storage.ref(path);
 
           // Uploading file to firebase storage
           this.task = this.storage.upload(path, this.file, { customMetadata });
-
+      
           // Retrieving file progress percentage
           this.percentage = this.task.percentageChanges();
           this.snapshot = this.task.snapshotChanges().pipe(
-
+          
             finalize(() => {
-
+            
               // Retrieving the URL of the uploaded file storage
               this.UploadedFileURL = fileRef.getDownloadURL();
-              
+     
               // Uploading notice document to firestore
               this.UploadedFileURL.subscribe(resp => {
 
                 if(value.noticeRecipientModule != "") {
                   this.noticesService.publishNotice(this.toggleResultStudent, "notices-PO-To-Students", "Module", this.file.name, resp, this.fileSize, this.sideMenuPageUserFaculty.passUserId(), value)
                     .then(success => {
+                      console.log("6");
                       console.log("Notice Sent to Students: " + success);
                       // Removing the user entered values from the input fields after the notice has been created
                       this.noticePOToStudentForm.reset();
-
+                   
                       this.noticePOToStudentForm.patchValue({
                         noticeAuthor: this.loggedInUserFaculty
                       });
-                      
+                    
                       // Displaying new notice successfully created
                       this.alertNotice('Notice Successfully Sent', 
                         'Notice has been sent. Notices can be viewed in the "Notices sent to students" section on the right side of the screen.');
-                    }, error => {
-                      console.log("Error: " + error);
-                      this.alertNotice("ERROR", "Error has occurred: " + error);
+                      
+                      // Setting notices po to students section to null
+                      this.publishedNoticesPOTOStudent = null;
+
+                      // Retrieving PO to student notices for the past three data from the firestore database
+                      this.retrievePublishedPOToStudentNotice();
+
+                      }, error => {
+                        console.log("Error: " + error);
+                        this.alertNotice("ERROR", "Error has occurred: " + error);
                     });
                 }
                 else if (value.noticeRecipientBatch != "") {
@@ -600,7 +618,7 @@ export class NoticesPage implements OnInit {
                       console.log("Notice Sent to Students: " + success);
                       // Removing the user entered values from the input fields after the notice has been created
                       this.noticePOToStudentForm.reset();
-
+                    
                       this.noticePOToStudentForm.patchValue({
                         noticeAuthor: this.loggedInUserFaculty
                       });
@@ -608,6 +626,13 @@ export class NoticesPage implements OnInit {
                       // Displaying new notice successfully created
                       this.alertNotice('Notice Successfully Sent', 
                         'Notice has been sent. Notices can be viewed in the "Notices sent to students" section on the right side of the screen.');
+
+                      // Setting notices po to students section to null
+                      this.publishedNoticesPOTOStudent = null;
+
+                      // Retrieving PO to student notices for the past three data from the firestore database
+                      this.retrievePublishedPOToStudentNotice();
+
                     }, error => {
                       console.log("Error: " + error);
                       this.alertNotice("ERROR", "Error has occurred: " + error);
@@ -635,13 +660,19 @@ export class NoticesPage implements OnInit {
               // Displaying new notice successfully created
               this.alertNotice('Notice Successfully Sent', 
                 'Notice has been sent. Notices can be viewed in the "Notices sent to students" section on the right side of the screen.');
-
+            
               // Removing the user entered values from the input fields after the notice has been created
               this.noticePOToStudentForm.reset();
 
               this.noticePOToStudentForm.patchValue({
                 noticeAuthor: this.loggedInUserFaculty
               });
+
+              // Setting notices po to students section to null
+              this.publishedNoticesPOTOStudent = null;
+
+              // Retrieving PO to student notices for the past three data from the firestore database
+              this.retrievePublishedPOToStudentNotice();
 
             }, error => {
               console.log("Error: " + error);
@@ -662,6 +693,12 @@ export class NoticesPage implements OnInit {
               this.noticePOToStudentForm.patchValue({
                 noticeAuthor: this.loggedInUserFaculty
               });
+
+              // Setting notices po to students section to null
+              this.publishedNoticesPOTOStudent = null;
+
+              // Retrieving PO to student notices for the past three data from the firestore database
+              this.retrievePublishedPOToStudentNotice();
 
             }, error => {
               console.log("Error: " + error);
@@ -708,7 +745,7 @@ export class NoticesPage implements OnInit {
   uploadNewNoticeImageLecturer(value) {
 
     // Checking if the selected notice category is event
-    if(this.toggleResultStudent == true){
+    if(this.toggleResultLecturer == true){
     
       // Validating selection of files for only images
       if(this.file.type.split('/')[0] !== 'image') {
@@ -736,10 +773,10 @@ export class NoticesPage implements OnInit {
         console.log("DateTime: " + currentDateTimeUnix + " FileName: " + currentFileName);
 
         // Storage path of the file in the firebase storage
-        var path = 'files/images/notices/noticeCoverImages/' + currentDateTimeUnix + '_' + currentFileName;
+        var path = 'files/images/noticeCoverImages/' + currentDateTimeUnix + '_' + currentFileName;
 
         // Custom metadata
-        const customMetadata = { app: 'Event Notice Cover Image File' };
+        const customMetadata = { app: 'Notice Cover Image File' };
 
         // File referencing
         const fileRef = this.storage.ref(path);
@@ -771,6 +808,13 @@ export class NoticesPage implements OnInit {
                   // Displaying new notice successfully sent
                   this.alertNotice('Notice Successfully Sent', 
                     'Notice has been sent. Notices can be viewed in the "Notices sent to lecturers" section below this form');
+
+                  // Setting PO to lecturer notice section to null
+                  this.publishedNoticesPOToLecturer;
+
+                  // Retrieving PO to lecturer notices for the past three days from the firestore database
+                  this.retrievePublishedPOToLecturerNotice();
+
                 }, error => {
                   console.log("Error: " + error);
                   this.alertNotice("ERROR", "Error has occurred: " + error);
@@ -788,7 +832,7 @@ export class NoticesPage implements OnInit {
         )
       }
     }
-    else if(this.toggleResultStudent == false){
+    else if(this.toggleResultLecturer == false){
       this.noticesService.publishNotice(this.toggleResultStudent, "notices-PO-To-Lecturers", "NULL", "NULL", "NULL", "NULL", this.sideMenuPageUserFaculty.passUserId(), value)
         .then(success => {
           console.log("Notice Sent to Lecturers: " + success);
@@ -802,6 +846,13 @@ export class NoticesPage implements OnInit {
           // Displaying new notice successfully sent
           this.alertNotice('Notice Successfully Sent', 
             'Notice has been sent. Notices can be viewed in the "Notices sent to lecturers" section below this form');
+
+          // Setting PO to lecturer notice section to null
+          this.publishedNoticesPOToLecturer;
+
+          // Retrieving PO to lecturer notices for the past three days from the firestore database
+          this.retrievePublishedPOToLecturerNotice();
+
         }, error => {
           console.log("Error: " + error);
           this.alertNotice("ERROR", "Error has occurred: " + error);
@@ -990,7 +1041,7 @@ export class NoticesPage implements OnInit {
 
 
 
-  // Confirm Box Implementation (Remove PO to Studemts Notice)
+  // Confirm Box Implementation (Remove PO to Students Notice)
   async removePOStudentsNotice (title: string, content: string, value) {
     const alert = await this.alertController.create({
       header: title,
@@ -1008,7 +1059,28 @@ export class NoticesPage implements OnInit {
           handler: () => {
             console.log("Alert Box: Remove PO To Students Request Accepted");
 
-            this.noticesService.removePublishedPOToStudentsNotice(value.payload.doc.id);
+            // Removing student notice cover image from the firebase storage
+            if(value.payload.doc.data().noticeCoverImage != null){
+              this.noticesService.removeCoverImage(value.payload.doc.data().noticeCoverImage.coverImageFilePath)
+                .then(success => {
+                // console.log("Notice cover image successfully removed from firebase storage.");
+                // this.alertNotice("Notice Cover Image Removed", "Notice cover image successfully removed.");
+                }, error => {
+                  console.log("Error: " + error);
+                  this.alertNotice("Error", "Notice cover image removal error: " + error);
+              });
+            }
+
+            // Removing student notice document from the firestore database
+            this.noticesService.removePublishedPOToStudentsNotice(value.payload.doc.id)
+              .then(success => {
+                console.log("Notice Removed", "Notice has been successfully removed.");
+                this.alertNotice("Notice Removed", "Notice has been successfully removed.");
+              }, error => {
+                console.log("Error: " + error);
+                this.alertNotice("Error", "Notice removal error: " + error);
+            });
+
           }
         }
       ]
@@ -1035,7 +1107,28 @@ export class NoticesPage implements OnInit {
           handler: () => {
             console.log("Alert Box: Remove PO To Lecturers Request Accepted");
 
-            this.noticesService.removePublishedPOToLecturersNotice(value.payload.doc.id);
+            // Removing lecturer notice cover image from the firebase storage
+            if(value.payload.doc.data().noticeCoverImage != null){
+              this.noticesService.removeCoverImage(value.payload.doc.data().noticeCoverImage.coverImageFilePath)
+                .then(success => {
+                // console.log("Lecturer Notice cover image successfully removed from firebase storage.");
+                // this.alertNotice("Lecturer Notice Cover Image Removed", "Lecturer Notice cover image successfully removed.");
+                }, error => {
+                  console.log("Error: " + error);
+                  this.alertNotice("Error", "Lecturer Notice cover image removal error: " + error);
+              });
+            }
+
+            // Removing lecturer notice document from the firestore database
+            this.noticesService.removePublishedPOToLecturersNotice(value.payload.doc.id)
+              .then(success => {
+                console.log("Lecturer Notice Removed", "Lecturer Notice has been successfully removed.");
+                this.alertNotice("Lecturer Notice Removed", "Lecturer Notice has been successfully removed.");
+              }, error => {
+                console.log("Error: " + error);
+                this.alertNotice("Error", "Lecturer Notice removal error: " + error);
+            });
+
           }
         }
       ]

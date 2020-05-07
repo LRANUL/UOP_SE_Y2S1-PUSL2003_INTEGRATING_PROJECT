@@ -99,7 +99,7 @@ export class LectureSchedulePage implements OnInit {
 
 
 
-  // Retreving the lecture sessions of the current date and their details from the firestore database
+  // Retrieving the lecture sessions of the current date and their details from the firestore database
   publishedLectureSessionCurrentDate;
   retrievePublishedLectureSessionsCurrentDate = () => {
     this.lecturesService.retrievePublishedLectureSessionsCurrentDate(this.sideMenuPageUserFaculty.passUserFaculty(), this.currentDate, this.nextDate).subscribe(response => {
@@ -139,7 +139,7 @@ export class LectureSchedulePage implements OnInit {
         lectureSessionDegreeProgram: value.payload.doc.data().degree,
         lectureSessionAcademicYear: value.payload.doc.data().academicYear, 
         lectureSessionAcademicSemester: value.payload.doc.data().academicSemester,
-        lectureSesionModuleCode: value.payload.doc.data().moduleCode,
+        lectureSessionModuleCode: value.payload.doc.data().moduleCode,
         lectureSessionModuleTitle: value.payload.doc.data().moduleTitle,
         lectureSessionStartDateTime: value.payload.doc.data().startDateTime,
         lectureSessionEndDateTime: value.payload.doc.data().endDateTime,

@@ -14,7 +14,9 @@
 
       <ion-grid>
 
-        <form [formGroup]="editLectureSessionForm" (ngSubmit)="doEditLectureSession(editLectureSessionForm.value)">
+        <form [formGroup]="editLectureSessionForm" 
+          (ngSubmit)="editPublishedLectureSession('Confirmation', 
+            'Lecture session will be updated with these details, do you want to continue?', editLectureSessionForm.value)">
 
           <div style="border: #ccc solid 1px;
                       padding: 10px;
@@ -39,11 +41,8 @@
               </ion-col>
               <ion-col size="7">
                 <ion-item>
-                  <ion-label>
-                    Batch
-                  </ion-label>
-                  <ion-select placeholder="Batch" style="min-width: 100%;" value="{{ passedLectureSessionBatch }}" formControlName="batch">
-                    <ion-select-option *ngFor="let item of publishedBatches" value="{{ item.payload.doc.id }}">{{ item.payload.doc.id }}</ion-select-option>
+                  <ion-select style="min-width: 100%;" value="{{ passedLectureSessionBatch }}" formControlName="batch">
+                    <ion-select-option *ngFor="let item of publishedBatches" value="{{ item.payload.doc.data().batch }}">{{ item.payload.doc.data().batch }}</ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
@@ -56,11 +55,12 @@
               </ion-col>
               <ion-col size="7">
                 <ion-item>
-                  <ion-label>
-                    Degree Program
-                  </ion-label>
-                  <ion-select placeholder="Degree Program" style="min-width: 100%;" value="{{ passedLectureSessionDegreeProgram }}" formControlName="degreeProgram">
-                    <ion-select-option value="{{ publishedDegreeProgramDegree }}">{{ publishedDegreeProgramDegree }}, {{ publishedDegreeProgramAwardingBodyUniversity }}</ion-select-option>
+                  <ion-select placeholder="Degree Program" style="min-width: 100%;" value="{{ passedLectureSessionDegree }}"
+                    formControlName="degreeProgram" (ionChange)="retrieveAwardingBodyUniversityOnChange($event)">
+                    <ion-select-option *ngFor="let item of publishedDegreePrograms"  
+                      value="{{ item.payload.doc.data().degree }}">
+                      {{ item.payload.doc.data().degree }}, {{ item.payload.doc.data().awardingBodyUniversity }}
+                    </ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
@@ -77,13 +77,21 @@
                             border-radius: 5px;">
 
                   <ion-row>
-                    <ion-select placeholder="Year" style="min-width: 95%;" value="{{ passedLectureSessionAcademicYear }}" formControlName="academicYear">
-                      <ion-select-option *ngFor="let item of convertToArray(publishedDegreeProgramNoOfYears); let i = index" value="{{ i + 1 }}">Year {{ i + 1 }}</ion-select-option>
-                    </ion-select>
+                    <ion-select placeholder="Select Year" okText="Select" cancelText="Cancel" style="max-width: 100% !important;" 
+                      value="{{ passedLectureSessionAcademicYear }}" formControlName="academicYear">
+                        <ion-select-option value="1">Year 1</ion-select-option>
+                        <ion-select-option value="2">Year 2</ion-select-option>
+                        <ion-select-option value="3">Year 3</ion-select-option>
+                        <ion-select-option value="4">Year 4</ion-select-option>
+                   </ion-select>
                   </ion-row>
                   <ion-row>
-                    <ion-select placeholder="Semester" style="min-width: 95%;" value="{{ passedLectureSessionAcademicSemester }}" formControlName="academicSemester">
-                      <ion-select-option *ngFor="let item of convertToArray(publishedDegreeProgramNoOfSemestersAnnaully); let i = index" value="{{ i + 1 }}">Semester {{ i + 1 }}</ion-select-option>
+                    <ion-select placeholder="Select Semester" okText="Select" cancelText="Cancel" style="max-width: 100% !important;" 
+                      value="{{ passedLectureSessionAcademicSemester }}" formControlName="academicYear">
+                        <ion-select-option value="1">Semester 1</ion-select-option>
+                        <ion-select-option value="2">Semester 2</ion-select-option>
+                        <ion-select-option value="3">Semester 3</ion-select-option>
+                        <ion-select-option value="4">Semester 4</ion-select-option>
                     </ion-select>
                   </ion-row>
 
@@ -117,11 +125,11 @@
               </ion-col>
               <ion-col size="7">
                 <ion-item>
-                  <ion-label>
-                    Module
-                  </ion-label>
-                  <ion-select placeholder="Module" style="min-width: 100%;" value="{{ passedLectureSesionModuleCode }} {{ passedLectureSessionModuleTitle }}" formControlName="module">
-                    <ion-select-option value="{{ publishedModuleTitle }}">{{ publishedModuleCode }} - {{ publishedModuleTitle }}</ion-select-option>
+                  <ion-select placeholder="Select Module" style="min-width: 100%;" value="{{ passedLectureSessionModuleCode }}" 
+                    formControlName="module" (ionChange)="retrieveModuleTitleOnChange($event)">
+                    <ion-select-option *ngFor="let item of publishedModules" value="{{ item.payload.doc.data().moduleCode }}">
+                      {{ item.payload.doc.data().moduleCode }} - {{ item.payload.doc.data().moduleTitle }}
+                    </ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
@@ -138,7 +146,12 @@
                     Lecturer
                   </ion-label>
                   <ion-select placeholder="Lecturer" style="min-width: 100%;" value="{{ passedLectureSessionLecturer }}" formControlName="lecturer">
-                    <ion-select-option *ngFor="let item of registeredLecturers" value="{{ item.payload.doc.id }}">{{ item.payload.doc.data().r }}</ion-select-option>
+                    <ion-select-option *ngFor="let item of registeredLecturers" 
+                      value="{{ item.payload.doc.data().name.prefix }} {{ item.payload.doc.data().name.firstName }} {{ item.payload.doc.data().name.lastName }}">
+                      {{ item.payload.doc.data().name.prefix }} 
+                      {{ item.payload.doc.data().name.firstName }} 
+                      {{ item.payload.doc.data().name.lastName }}
+                    </ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
@@ -155,7 +168,9 @@
                     Lecture Hall
                   </ion-label>
                   <ion-select placeholder="Lecture Hall" style="min-width: 100%;" value="{{ passedLectureSessionLectureHall }}" formControlName="lectureHall">
-                    <ion-select-option *ngFor="let item of publishedLectureHalls" value="{{ item.payload.doc.id }}">{{ item.payload.doc.id }}</ion-select-option>
+                    <ion-select-option *ngFor="let item of publishedLectureHalls" value="{{ item.payload.doc.data().lectureHall }}">
+                      {{ item.payload.doc.data().lectureHall }}
+                    </ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
@@ -172,7 +187,9 @@
                     Lecture Status
                   </ion-label>
                   <ion-select placeholder="Status" style="min-width: 100%;" value="{{ passedLectureSessionStatus }}" formControlName="lectureStatus">
-                    <ion-select-option *ngFor="let item of publishedSessionStatuses" value="{{ item.payload.doc.id }}">{{ item.payload.doc.id }}</ion-select-option>
+                    <ion-select-option *ngFor="let item of publishedSessionStatuses" value="{{ item.payload.doc.data().status }}">
+                      {{ item.payload.doc.data().status }}
+                    </ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
@@ -183,10 +200,19 @@
                   Session Date
                 </ion-label>
               </ion-col>
-              <ion-col size="7">
-                <ion-item>
-                  <ion-datetime value="{{ lectureSessionStartDateTime }}" formControlName="sessionDate"></ion-datetime>
-                </ion-item>
+              <ion-col size="7">                                                                              
+                <input placeholder="Select session date" (click)="lectureSessionDate.open()" [matDatepicker]="lectureSessionDate" [min]="minDate" [max]="maxDate" readOnly formControlName="sessionDate"
+                  style="border: #ccc 1px solid;
+                        border-radius: 5px;
+                        width: 100%;
+                        height: 100%;
+                        padding: 15px;">
+                <mat-datepicker #lectureSessionDate></mat-datepicker>
+                <ion-icon name="calendar-outline" style="position: absolute;
+                                                        top: 13px;
+                                                        right: 16px;
+                                                        color: rgb(78, 78, 78);
+                                                        font-size: 28px;"></ion-icon>
               </ion-col>
             </ion-row>
             <ion-row>
@@ -196,9 +222,18 @@
                 </ion-label>
               </ion-col>
               <ion-col size="7">
-                <ion-item>
-                  <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="{{ lectureSessionStartDateTime }}" formControlName="sessionStartTime"></ion-datetime>
-                </ion-item>
+                <input [ngxTimepicker]="lectureSessionStartTime" placeholder="Pick Start Time" readOnly formControlName="sessionStartTime"
+                  style="border: #ccc 1px solid;
+                        border-radius: 5px;
+                        width: 100%;
+                        height: 100%;
+                        padding: 15px;">
+                <ngx-material-timepicker #lectureSessionStartTime [minutesGap]="5" [defaultTime]="lectureSessionStartTime"></ngx-material-timepicker>
+                <ion-icon name="time-outline" style="position: absolute;
+                                                    top: 13px;
+                                                    right: 16px;
+                                                    color: rgb(78, 78, 78);
+                                                    font-size: 30px;"></ion-icon>
               </ion-col>
             </ion-row>
             <ion-row>
@@ -208,9 +243,18 @@
                 </ion-label>
               </ion-col>
               <ion-col size="7">
-                <ion-item>
-                  <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="{{ lectureSessionEndTime }}" formControlName="sessionEndTime"></ion-datetime>
-                </ion-item>
+                <input [ngxTimepicker]="lectureSessionEndTime" placeholder="Pick End Time" readOnly formControlName="sessionEndTime"
+                  style="border: #ccc 1px solid;
+                        border-radius: 5px;
+                        width: 100%;
+                        height: 100%;
+                        padding: 15px;">
+                <ngx-material-timepicker #lectureSessionEndTime [minutesGap]="5" [defaultTime]="lectureSessionEndTime"></ngx-material-timepicker>
+                <ion-icon name="time-outline" style="position: absolute;
+                                                    top: 13px;
+                                                    right: 16px;
+                                                    color: rgb(78, 78, 78);
+                                                    font-size: 30px;"></ion-icon>
               </ion-col>
             </ion-row>
           </div>

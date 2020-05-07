@@ -54,6 +54,7 @@ export class SemesterCalendarPage implements OnInit {
     const currentYear = new Date().getFullYear();
     // Setting the max date december 31st two years in the future
     this.maxDate = new Date(currentYear + 2, 11, 31);
+
   }
 
   ngOnInit() {
@@ -220,12 +221,13 @@ export class SemesterCalendarPage implements OnInit {
         let firestoreDoc: any = document.payload.doc.data();
         this.awardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
         this.degreeCode = firestoreDoc.degreeCode;
-        console.log(this.awardingBodyUniversity);
-        console.log(this.degreeCode);
+       // console.log(this.awardingBodyUniversity);
+       // console.log(this.degreeCode);
       })
     ));
 
   }
+
 
   // Retrieving published lecture sessions
   doSearchSemesterCalendar(value){
@@ -308,7 +310,6 @@ export class SemesterCalendarPage implements OnInit {
 
   // Editing lecture sessions modal calling, opening modal
   async editLectureSession(value){
-    console.log(value);
 
     const editLectureSessionModal = await this.modalController.create({
       component: EditLectureSessionModalPage,
@@ -466,7 +467,7 @@ export class SemesterCalendarPage implements OnInit {
       // Retrieving the user selected day value, ranging from 1 to 7 (Sunday to Saturday)
       let userSelectedDay = value.sessionDayMultiple;
 
-      // Retieving the user selected session start date
+      // Retrieving the user selected session start date
       let userSelectedSessionStartDate = value.sessionStartDateMultiple;
 
       // Retrieving day value of the user selected session start date
@@ -484,11 +485,11 @@ export class SemesterCalendarPage implements OnInit {
         // For looping identifying the next date for the user selected day value
         // Will be running seven loops until day value is found
         for (let index = 0; index < 7; index++) {
-          // Retieving the date value (1 - 31) and increment it by one 
+          // Retrieving the date value (1 - 31) and increment it by one 
           // This will be assigned to the user selected session start datetime value
           userSelectedSessionStartDate.setDate(userSelectedSessionStartDate.getDate() + 1);
 
-          // Retriving the current day value of the user selected session start datetime value and incrementing it by one
+          // Retrieving the current day value of the user selected session start datetime value and incrementing it by one
           // Because value is in range from 0-6 (Sunday to Saturday)
           let currentDayValue = (userSelectedSessionStartDate.getDay() + 1);
 
@@ -503,7 +504,7 @@ export class SemesterCalendarPage implements OnInit {
         }
       }
 
-      // Extracting the UNIX timpastamp - no of seconds from the firstSessionDateTime
+      // Extracting the UNIX timestamp - no of seconds from the firstSessionDateTime
       firstSessionDateTimeUnix = firstSessionDateTime.getTime();
       
       // Retrieving the user selected session end date

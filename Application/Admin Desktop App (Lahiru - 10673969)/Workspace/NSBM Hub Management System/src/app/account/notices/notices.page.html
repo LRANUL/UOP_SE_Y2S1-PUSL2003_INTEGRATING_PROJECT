@@ -79,19 +79,21 @@
                     <ion-grid>
                       <ion-row>
                         <ion-col>
-                          <ion-button expand="full" id="newNoticeButtonStudent" (click)="showStudentForm()" style="--background: #02A5D7;
-                                                                                                                  margin-left: -23px;
-                                                                                                                  margin-right: -5px;">
-                            Student
-                          </ion-button> 
+                          <button id="newNoticeButtonStudent" (click)="showStudentForm()" style="background-color: #0B80D3;
+                                                                                                letter-spacing: 5px;
+                                                                                                margin-top: 5px;
+                                                                                                color: #ffffff" class="btn btn-block">
+                            <b>STUDENT</b>
+                          </button> 
                         </ion-col>
                         
                         <ion-col>
-                          <ion-button expand="full" id="newNoticeButtonLecturer" (click)="showLecturerForm()" style="--background: #0B80D3;
-                                                                                                                    margin-left: -5px;
-                                                                                                                    margin-right: -23px;">
-                            Lecturer
-                          </ion-button>
+                          <button id="newNoticeButtonLecturer" (click)="showLecturerForm()" style="background-color: #02A5D7;
+                                                                                                  letter-spacing: 5px;
+                                                                                                  margin-top: 5px;  
+                                                                                                  color: #ffffff" class="btn btn-block">
+                            <b>LECTURER</b>
+                          </button>
                         </ion-col>
                       </ion-row>
                     </ion-grid>
@@ -107,7 +109,7 @@
                             <ion-label><h3 style="padding-top: 15px;
                                                   font-size: 15px;">Notice Title</h3></ion-label>
                           </ion-col>
-                          <ion-col size="8">
+                          <ion-col size="9">
                             <ion-item>
                               <ion-input type="text" placeholder="Enter Title" clearInput formControlName="noticeTitle"></ion-input>
                             </ion-item>
@@ -118,7 +120,7 @@
                             <ion-label><h3 style="padding-top: 15px;
                                                   font-size: 15px;">Notice Description</h3></ion-label>
                           </ion-col>
-                          <ion-col size="8">
+                          <ion-col size="9">
                             <ion-item>
                               <ion-textarea placeholder="Enter Description" formControlName="noticeDescription"></ion-textarea>
                             </ion-item>
@@ -129,7 +131,7 @@
                             <ion-label><h3 style="padding-top: 15px;
                                                   font-size: 15px;">Notice Category</h3></ion-label>
                           </ion-col>
-                          <ion-col size="8">
+                          <ion-col size="9">
                             <ion-item>
                               <ion-select placeholder="Select Category" interface="popover" style="min-width: 100%;" formControlName="noticeCategory">
                                 <ion-select-option *ngFor="let item of publishedNoticeCategories" 
@@ -150,7 +152,7 @@
                               </h3>
                             </ion-label>
                           </ion-col>
-                          <ion-col size="8">
+                          <ion-col size="9">
                             <ion-item>
                               <ion-label style="color: #ccc;">Cover Image</ion-label>
                               <ion-toggle (ionChange)="changeUploadCoverImageStudent($event)"></ion-toggle>
@@ -163,14 +165,14 @@
                             <ion-label><h3 style="padding-top: 15px;
                                                   font-size: 15px;">Notice Cover Image</h3></ion-label>
                           </ion-col>
-                          <ion-col size="8">
+                          <ion-col size="9">
 
                           <!-- Code Block with upload event cover image -->
-                          <div id="withcoverImage" style="display: none;">
+                          <div id="withCoverImage" style="display: none;">
                             <!-- Card Before Uploading an Image -->
                             <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded" style="min-width: 100%;
                                                                                                     height: 300px;
-                                                                                                    margin-left: 0px">
+                                                                                                    margin-left: 0px;">
                               <ion-card-header>
                                 <ion-card-title>Select Image to Upload</ion-card-title>
                               </ion-card-header>
@@ -207,13 +209,23 @@
                                   <p> Progress: {{ percent | number }}% </p>
                                   <ion-progress-bar value="{{ percent / 100 }}"></ion-progress-bar>
                                 </div>
-                                <div *ngIf="snapshot | async as snapt">
+                                <div *ngIf="snapshot | async as snap">
+
                                   <p> 
-                                    File Size: {{ snapt.totalBytes | fileSizePipe }} <br>
-                                    Transferred: {{ snapt.bytesTransferred | fileSizePipe }}
-                                  </p>
+                                    File Size: {{ snap.totalBytes }} <br>
+                                    Transferred: {{ snap.bytesTransferred }}
+                                  </p>                                   
+
+                                  <!-- Code block shows file size in converted file size -->
+                                  <!-- 
+                                  <p> 
+                                    File Size: {{ snap.totalBytes | fileSizePipe }} <br>
+                                    Transferred: {{ snap.bytesTransferred | fileSizePipe }}
+                                  </p> 
+                                  -->
+
                                   <!--
-                                  <div *ngIf="snapshot && snapt.bytesTransferred != snapt.totalBytes">
+                                  <div *ngIf="snapshot && snap.bytesTransferred != snap.totalBytes">
                                     <ion-button color="warning" size="small" (click)="task.pause()" class="button is-warning">
                                       Pause 
                                     </ion-button>
@@ -241,14 +253,19 @@
                                   <ion-img [src]="ufurl"></ion-img>
                                   <a [href]="ufurl" target="_blank" rel="noopener" download> Download </a>
                                 </div>
-                                <p> File Size: {{ fileSize | fileSizePipe }} </p>
+
+                                <p> File Size: {{ fileSize }} </p>
+
+                                <!-- Code block show file size in converted file size -->
+                                <!-- <p> File Size: {{ fileSize | fileSizePipe }} </p> -->
+
                                 <ion-button expand="full" color="success" (click)="isFileUploading = isFileUploaded = false"> Upload More </ion-button>
                               </ion-card-content>
                             </ion-card>
                           </div>
 
                           <!-- Code block without upload cover image -->
-                          <div id="withoutcoverImage" style="display: inline">
+                          <div id="withoutCoverImage" style="display: inline">
                             <ion-card style="min-width: 100%;
                                             height: 300px;
                                             margin-left: 0px;">
@@ -273,7 +290,14 @@
                               </ion-select>
                             </ion-item>
                           </ion-col>
-                          <ion-label><p style="margin-top: 35px;">OR</p></ion-label>
+                          <ion-col size="1">
+                            <ion-label style="position: absolute;
+                                            top: 50%;
+                                            left: 50%;
+                                            font-size: 16px;
+                                            letter-spacing: 5px;
+                                            transform: translate(-50%,-50%);"><b>OR</b></ion-label>
+                          </ion-col>
                           <ion-col size="4">
                             <ion-item>
                               <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Batch" formControlName="noticeRecipientBatch" style="min-width: 100%;">
@@ -287,7 +311,7 @@
                             <ion-label><h3 style="padding-top: 15px;
                                                   font-size: 15px;">Notice Author</h3></ion-label>
                           </ion-col>
-                          <ion-col size="8">
+                          <ion-col size="9">
                             <ion-item>
                               <ion-input formControlName="noticeAuthor" style="min-width: 100%;" type="text" readOnly></ion-input>
                             </ion-item>
@@ -316,7 +340,7 @@
                               <ion-label><h3 style="padding-top: 15px;
                                                     font-size: 15px;">Notice Title</h3></ion-label>
                             </ion-col>
-                            <ion-col size="8">
+                            <ion-col size="9">
                               <ion-item>
                                 <ion-input type="text" placeholder="Enter Title" clearInput formControlName="noticeTitle"></ion-input>
                               </ion-item>
@@ -327,7 +351,7 @@
                               <ion-label><h3 style="padding-top: 15px;
                                                     font-size: 15px;">Notice Description</h3></ion-label>
                             </ion-col>
-                            <ion-col size="8">
+                            <ion-col size="9">
                               <ion-item>
                                 <ion-textarea placeholder="Enter Description" formControlName="noticeDescription"></ion-textarea>
                               </ion-item>
@@ -338,7 +362,7 @@
                               <ion-label><h3 style="padding-top: 15px;
                                                     font-size: 15px;">Notice Category</h3></ion-label>
                             </ion-col>
-                            <ion-col size="8">
+                            <ion-col size="9">
                               <ion-item>
                                 <ion-select interface="popover" placeholder="Select Category" style="min-width: 100%;" formControlName="noticeCategory">
                                   <ion-select-option *ngFor="let item of publishedNoticeCategories" 
@@ -359,7 +383,7 @@
                                 </h3>
                               </ion-label>
                             </ion-col>
-                            <ion-col size="8">
+                            <ion-col size="9">
                               <ion-item>
                                 <ion-label style="color: #ccc;">Cover Image</ion-label>
                                 <ion-toggle (ionChange)="changeUploadCoverImageLecturer($event)"></ion-toggle>
@@ -372,10 +396,10 @@
                               <ion-label><h3 style="padding-top: 15px;
                                                     font-size: 15px;">Notice Cover Image</h3></ion-label>
                             </ion-col>
-                            <ion-col size="8">
+                            <ion-col size="9">
 
                             <!-- Code Block with upload event cover image -->
-                            <div id="withcoverImageLecturer" style="display: none;">
+                            <div id="withCoverImageLecturer" style="display: none;">
                               <!-- Card Before Uploading an Image -->
                               <ion-card text-center *ngIf="!isFileUploading && !isFileUploaded" style="min-width: 100%;
                                                                                                       height: 300px;
@@ -411,11 +435,20 @@
                                     <p> Progress: {{ percent | number }}% </p>
                                     <ion-progress-bar value="{{ percent / 100 }}"></ion-progress-bar>
                                   </div>
-                                  <div *ngIf="snapshot | async as snapt">
+                                  <div *ngIf="snapshot | async as snap">
+
                                     <p> 
-                                      File Size: {{ snapt.totalBytes | fileSizePipe }} <br>
-                                      Transferred: {{ snapt.bytesTransferred | fileSizePipe }}
+                                      File Size: {{ snap.totalBytes }} <br>
+                                      Transferred: {{ snap.bytesTransferred }}
                                     </p>
+
+                                    <!-- Code block shows file size in converted file size -->
+                                    <!-- 
+                                    <p> 
+                                      File Size: {{ snap.totalBytes | fileSizePipe }} <br>
+                                      Transferred: {{ snap.bytesTransferred | fileSizePipe }}
+                                    </p>  
+                                    -->
 
                                   </div>
                                 </ion-card-content>
@@ -433,7 +466,12 @@
                                     <ion-img [src]="ufurl"></ion-img>
                                     <a [href]="ufurl" target="_blank" rel="noopener" download> Download </a>
                                   </div>
-                                  <p> File Size: {{ fileSize | fileSizePipe }} </p>
+
+                                  <p> File Size: {{ fileSize }} </p>
+
+                                  <!-- Code block shows file size in converted file size -->
+                                  <!-- <p> File Size: {{ fileSize | fileSizePipe }} </p> -->
+
                                   <ion-button expand="full" color="success" (click)="isFileUploading = isFileUploaded = false"> Upload More </ion-button>
                                 </ion-card-content>
                               </ion-card>
@@ -458,7 +496,7 @@
                               <ion-label><h3 style="padding-top: 15px;
                                                     font-size: 15px;">Notice Recipient</h3></ion-label>
                             </ion-col>
-                            <ion-col size="8">
+                            <ion-col size="9">
                               <ion-item>
                                 <ion-select multiple="true" cancelText="Close" okText="SELECT" placeholder="Select Lecturer"  formControlName="noticeRecipient" style="min-width: 100%;">
                                   <ion-select-option *ngFor="let item of registeredLecturerUsers" 
@@ -474,7 +512,7 @@
                               <ion-label><h3 style="padding-top: 15px;
                                                     font-size: 15px;">Notice Author</h3></ion-label>
                             </ion-col>
-                            <ion-col size="8">
+                            <ion-col size="9">
                               <ion-item>
                                   <ion-input formControlName="noticeAuthor" style="min-width: 100%;" type="text" readOnly></ion-input>
                               </ion-item>
