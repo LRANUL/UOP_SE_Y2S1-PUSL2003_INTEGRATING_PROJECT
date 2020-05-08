@@ -7,5 +7,6 @@ export class notice{
         public createDate:Date,
         public batch:number,
         public fac:string,
+        public userId:string
         ){}
 }

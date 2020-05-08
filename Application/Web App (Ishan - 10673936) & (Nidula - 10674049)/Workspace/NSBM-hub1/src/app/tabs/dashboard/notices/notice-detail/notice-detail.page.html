@@ -13,9 +13,14 @@
 <ion-content>
   <!-- <ion-button (click)="onEdit()" class="ion-margin" color="primary" >Edit</ion-button> -->
   <form [formGroup]="editNoticeform">
-    <ion-grid>
+    <ion-grid class="ion-no-padding">
       <ion-row>
-        <ion-col size-md="6" offset-md="3">
+        <ion-col size-sm="8" offset-sm="2">
+          <ion-img [src]="notices.imageUrl"></ion-img>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-md="8" offset-md="2" class="ion-text-center ion-padding">
           <ion-item> 
             <ion-label position="floating">Title</ion-label>
             <ion-input formControlName="title" type="text" autocomplete autocorrect></ion-input>
@@ -23,7 +28,7 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col size-md="6" offset-md="3">
+        <ion-col size-md="8" offset-md="2">
           <ion-item >
             <ion-label position="floating">Description</ion-label>
             <ion-textarea formControlName="desc" rows="10"></ion-textarea>

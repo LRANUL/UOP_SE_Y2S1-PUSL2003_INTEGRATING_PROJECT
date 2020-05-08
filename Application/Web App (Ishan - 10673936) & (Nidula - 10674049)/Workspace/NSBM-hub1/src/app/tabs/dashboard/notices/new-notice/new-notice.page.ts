@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
+import { NoticeService } from '../notice.service';
+import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 
 
 @Component({
@@ -9,7 +12,7 @@ import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class NewNoticePage implements OnInit {
 newNoticeform:FormGroup;
-  constructor() { }
+  constructor(private noticeServ:NoticeService,private router:Router,private loaderCon:LoadingController) { }
 
   ngOnInit() {
     this.newNoticeform= new FormGroup({
@@ -38,8 +41,23 @@ newNoticeform:FormGroup;
   onCreateNotice(){
     if(!this.newNoticeform.valid){
       return;
-    }
-    console.log(this.newNoticeform);
+       }
+    this.loaderCon.create({
+         message:'creating Notice!'
+       }).then(loadEle =>{
+         loadEle.present();
+         this.noticeServ.addUserNotices(
+          this.newNoticeform.value.title,
+          "https://upload.wikimedia.org/wikipedia/commons/0/0b/Cat_poster_1.jpg",
+          this.newNoticeform.value.desc,
+          
+         ).subscribe(()=>{
+           loadEle.dismiss();
+          this.newNoticeform.reset(); 
+          this.router.navigate(['/tabs/t1/Dashboard']);
+         }); 
+       })
+      
     
   }
 }
