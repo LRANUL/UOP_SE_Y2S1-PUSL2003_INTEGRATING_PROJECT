@@ -9,27 +9,30 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
+      <ion-refresher slot="fixed" (ionRefresh)="getSessions($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <div name=Sessions>
-        <ion-card *ngFor="let item of session">
+        <ion-card *ngFor="let item of session|slice:0:1; let ind=index;">
           <ion-card-title>
             <ion-card-header>Sign Your Attendance Online</ion-card-header>
           </ion-card-title>
           <ion-card-content>
+            <ion-label>Cloud Session Code <B>{{item.SessionCode}}</B></ion-label><BR>
+            <i> CODE SHOWN FOR DEMOSTRATION PURPOSE ONLY</i>
             <ion-input [(ngModel)]="SessionCode" placeholder="Enter your Session Code">Session Code: </ion-input>
-            <br>
             <ion-label>Module: {{ item.Module }}</ion-label><br>
-            <ion-label>Session: {{ item.Session }}</ion-label><br>
             <ion-label>Date: {{ item.Date }}</ion-label><br>
             <ion-label>Hall: {{ item.Hall }}</ion-label><br>
             <br>
-            <ion-label *ngIf="location">Student Location: {{ item.Hall }}<ion-icon name="checkmark-done-circle-outline"
+            <ion-label *ngIf="yeslocation">Student Location: {{ item.Hall }}<ion-icon name="checkmark-done-circle-outline"
                 color="success"></ion-icon>
             </ion-label>
-            <ion-label *ngIf="!location">Student Location: outside<ion-icon name="close-circle-outline" color="danger">
+            <ion-label *ngIf="nolocation">Student Location: outside<ion-icon name="close-circle-outline" color="danger">
               </ion-icon>
             </ion-label>
-            <p *ngIf="location">we have detected you are inside the hall</p>
-            <p *ngIf="!location">we cannot detect your inside the hall enable location services and try again.</p>
+            <p *ngIf="yeslocation">we have detected you are inside the hall</p>
+            <p *ngIf="nolocation">we cannot detect your inside the hall enable location services and try again.</p>
             <ion-button [disabled]="item.SessionCode != SessionCode" (click)="addAttendaceToFirebase()" shape="round"
               color="light" slot="end">Mark Attendance<ion-icon slot="icon-only" name="checkmark-done-circle">
               </ion-icon>

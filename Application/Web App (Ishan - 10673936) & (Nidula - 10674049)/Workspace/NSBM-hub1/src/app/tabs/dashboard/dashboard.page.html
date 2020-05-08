@@ -5,6 +5,76 @@
     <ion-segment-button value="dash">Dashboard</ion-segment-button>
     <ion-segment-button value="all">Home</ion-segment-button>
 </ion-segment>
+<section class="ion-text-center ion-padding">
+    <ion-icon name="person"></ion-icon>
+    <h4>Welcome</h4>
+</section>
 
- <h1>Dashboard Content</h1>
+ <ion-grid >
+     <ion-row>
+        <ion-col size-sm="12"  size-lg="6" class="ion-text-center" padding>
+             <ion-card text-center class="ion-text-center ion-padding" padding color="primary" routerLink="/tabs/t1/Dashboard/notices">
+                 <ion-icon name="person" ></ion-icon>
+                 <h2>Notices</h2>
+             </ion-card>
+         </ion-col>
+         <ion-col size-sm="12"  size-lg="6" text-center padding>
+            <ion-card class="ion-text-center ion-padding"color="primary" routerLink="/tabs/t1/Dashboard/notes">
+                <ion-icon name="person" ></ion-icon>
+                <h2>Notes</h2>
+            </ion-card>
+        </ion-col>
+     </ion-row>
+     <ion-row>
+        <ion-col   size-sm="12" size-lg="6" text-center padding>
+            <ion-card class="ion-text-center ion-padding" color="primary" routerLink="/tabs/t1/Dashboard/news">
+                <ion-icon name="person" ></ion-icon>
+                <h2>News</h2>
+            </ion-card>
+        </ion-col>
+        <ion-col size-sm="12" size-lg="6" text-center padding>
+           <ion-card class="ion-text-center ion-padding" color="primary">
+               <ion-icon name="person" ></ion-icon>
+               <h2>Shuttle-Times</h2>
+           </ion-card>
+       </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col size-sm="12" size-lg="6" text-center padding>
+            <ion-card class="ion-text-center ion-padding" color="primary">
+                <ion-icon name="person" ></ion-icon>
+                <h2>Wifi</h2>
+            </ion-card>
+        </ion-col>
+        <ion-col  size-lg="6" text-center padding *ngIf="tab">
+           <ion-card class="ion-text-center ion-padding" color="primary">
+               <ion-icon name="person" ></ion-icon>
+               <h2>Clubs and Societies</h2>
+           </ion-card>
+       </ion-col>
+    </ion-row>
+    <ion-row *ngIf="tab">
+        <ion-col size-sm="12" size-lg="6" text-center padding *ngIf="tab">
+            <ion-card class="ion-text-center ion-padding" color="primary">
+                <ion-icon name="person" ></ion-icon>
+                <h2>Social Media</h2>
+            </ion-card>
+        </ion-col>
+        <ion-col  size-lg="6" text-center padding *ngIf="tab">
+           <ion-card class="ion-text-center ion-padding" color="primary">
+               <ion-icon name="person" ></ion-icon>
+               <h2>Events</h2>
+           </ion-card>
+       </ion-col>
+    </ion-row>
+    <ion-row *ngIf="tab">
+        <ion-col size-sm="12" size-lg="8" offset-lg="2" *ngIf="tab">
+            <ion-card class="ion-text-center ion-padding" color="primary">
+                <ion-icon name="person" ></ion-icon>
+                <h2>Bus-timetable</h2>
+            </ion-card>
+        </ion-col>
+        
+    </ion-row>
+ </ion-grid>
 </ion-content>

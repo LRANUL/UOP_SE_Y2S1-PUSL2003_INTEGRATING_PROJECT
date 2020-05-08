@@ -72,6 +72,40 @@ export class WelcomePage implements OnInit {
             await alert.present();
           }
         })
+        this.firestore.collection('/users/userTypes/lecturerUsers').doc(this.authService.userDetails().email).ref.get().then(async (doc) => {
+          if (doc.data().status.toString() == "Active") {
+            // User is signed in.
+            console.log('User is signed in');
+            const loading = await this.loadingController.create({
+              message: 'Please wait...',
+              duration: 2000
+            });
+            await loading.present();
+
+            const { role, data } = await loading.onDidDismiss();
+            console.log('Loading dismissed!');
+
+            this.userEmail = this.authService.userDetails().email;
+            this.navCtrl.navigateForward("tabs/home");
+          }
+          else {
+            this.authService.logoutUser()
+            const loading = await this.loadingController.create({
+              message: 'Session Closing...',
+              duration: 2000
+            });
+            await loading.present();
+            const { role, data } = await loading.onDidDismiss();
+            console.log('Loading dismissed!');
+            const alert = await this.alertController.create({
+              header: 'Account Disabled',
+              subHeader: 'Contact Program Office',
+              message: 'You cannot access the NSBM HUB as your account is disabled !',
+              buttons: ['OK']
+            });
+            await alert.present();
+          }
+        })
       }
       else {
         // No user is signed in.

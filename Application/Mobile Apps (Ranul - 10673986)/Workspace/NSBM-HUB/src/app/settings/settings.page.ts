@@ -15,11 +15,13 @@ import { AngularFirestore } from '@angular/fire/firestore';
   styleUrls: ['settings.page.scss']
 })
 export class settingsPage {
-
+  student: boolean = false;
+  lecturer: boolean = false;
   userEmail: string;
   Status: any;
-  StudentID: any;
+  ID: any;
   userDegree: any;
+  faculty: any;
   constructor(
     private navCtrl: NavController,
     private authService: ServicesService,
@@ -47,13 +49,26 @@ export class settingsPage {
   ngOnInit() {
     if (this.authService.userDetails()) {
       this.userEmail = this.authService.userDetails().email;
+      if (this.authService.userDetails().email.includes("students.nsbm.lk")) {
+        // console.log(this.authService.userDetails().email +" Code 1")
+        this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().email).ref.get().then((doc) => {
+          this.ID = doc.data().nsbmStudentID;
+          this.userDegree = doc.data().degree;
+        })
+        this.student = true
+      }
+      else {
+        // console.log(this.authService.userDetails().email + " Code 2")
+        this.firestore.collection('/users/userTypes/lecturerUsers').doc(this.firebase.userDetails().email).ref.get().then((doc) => {
+          this.ID = doc.data().nsbmLecturerId;
+          this.faculty = doc.data().specializedFaculty;
+        })
+        this.lecturer = true
+      }
     } else {
       this.navCtrl.navigateBack("");
     }
-    this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().email).ref.get().then((doc) => {
-      this.StudentID = doc.data().nsbmStudentID;
-      this.userDegree = doc.data().degree;
-    })
+    
   }
 
   DarkMode() {
