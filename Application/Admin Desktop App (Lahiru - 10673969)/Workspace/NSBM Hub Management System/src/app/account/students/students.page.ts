@@ -275,5 +275,20 @@ export class StudentsPage implements OnInit {
 
   }
 
+
+  // Resetting search registered student section and form
+  resetSearchRegisteredStudentUser(){
+
+    // Resetting formControlGroup
+    this.searchRegisteredStudentForm.reset();
+
+    // Resetting section
+    this.registeredStudentCard = false; 
+
+    // Page load text to true
+    this.pageLoadSearchStudentText = true;
+
+  }
+
 }
 

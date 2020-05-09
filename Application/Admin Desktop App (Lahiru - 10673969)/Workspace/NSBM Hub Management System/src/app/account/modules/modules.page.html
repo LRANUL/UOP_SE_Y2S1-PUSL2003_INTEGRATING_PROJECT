@@ -51,7 +51,7 @@
 
       <ion-col>
 
-        <ion-card style="width: 100%;">
+        <ion-card style="width: 99%;">
           <ion-card-header>
             <ion-card-title>Search Registered Modules</ion-card-title>
           </ion-card-header>
@@ -145,6 +145,18 @@
                                               margin-top: 20px;
                                               height: 100px;
                                               width: 100px;" *ngIf="loadingSpinnerSearchRegisteredModule"></ion-spinner>
+
+              <!-- Reset Button -->
+              <ion-button style="width: 90px;
+                                position: absolute;
+                                top: -50px;
+                                right: 0.5%;" color="dark" fill="outline" size="small" (click)="resetSearchRegisteredModule()"> 
+                <ion-icon name="refresh-outline"></ion-icon>
+                <ion-label style="color: rgb(59, 59, 59);
+                                  margin-left: 5px;">
+                  Reset
+                </ion-label>
+              </ion-button>
 
               <ion-grid>
 

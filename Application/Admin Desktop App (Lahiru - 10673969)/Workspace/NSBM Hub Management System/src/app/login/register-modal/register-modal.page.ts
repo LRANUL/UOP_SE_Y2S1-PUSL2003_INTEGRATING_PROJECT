@@ -103,6 +103,11 @@ export class RegisterModalPage implements OnInit {
   }
 
 
+  viewTermsAndConditions(){
+    console.log("View Terms & Conditions");
+  }
+
+
 
   doNewUserRegistration(value){
     this.loginService.newUserRegisterDetailsVerification(value);

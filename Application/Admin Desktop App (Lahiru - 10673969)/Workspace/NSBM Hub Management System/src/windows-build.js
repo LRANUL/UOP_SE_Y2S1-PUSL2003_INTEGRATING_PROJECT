@@ -7,7 +7,7 @@ const path = require('path');
 // SAMPLE:
 // appDirectory: "C:\\Users\LucasLHH\Desktop\iSAM-App-win32-x64"
 // Pathway of locating the windows release version of the application
-const APP_DIR = path.resolve(__dirname, './../release-builds/NSBM-Hub-Management-System-win32-ia32');
+const APP_DIR = path.resolve(__dirname, './../release-builds/NSBM-Hub-MS-win32-ia32');
 
 // SAMPLE:
 // outputDirectory: "C:\\Users\LucasLHH\Desktop\windows_installer"
@@ -21,7 +21,7 @@ const msiCreator = new MSICreator({
 
     // Configuring the metadata
     description: 'NSBM Hub Management System',
-    exe: 'NSBM Hub Management System',
+    exe: 'NSBM-Hub-MS',
     name: 'NSBM Hub Management System',
     manufacturer: 'Team Quinn',
     version: '1.0.0',
