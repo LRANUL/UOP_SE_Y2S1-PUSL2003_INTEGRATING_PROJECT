@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
-import {WifiPage} from './../home/wifi/wifi.page'
 
 import { IonicModule } from '@ionic/angular';
 
@@ -17,7 +15,6 @@ import { DashboardPage } from './dashboard.page';
     IonicModule,
     DashboardPageRoutingModule
   ],
-  declarations: [DashboardPage, WifiPage],
-  entryComponents: [WifiPage]
+  declarations: [DashboardPage]
 })
 export class DashboardPageModule {}

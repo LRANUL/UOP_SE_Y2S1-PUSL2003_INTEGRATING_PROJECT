@@ -11,7 +11,7 @@
 
 /* Core CSS required for Ionic components to work properly */
 @import "~@ionic/angular/css/core.css";
-
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
 /* Basic CSS for apps built with Ionic */
 @import "~@ionic/angular/css/normalize.css";
 @import "~@ionic/angular/css/structure.css";
@@ -25,7 +25,6 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-@import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 .ion-invalid.ion-touched ion-label{
     color:var(--ion-color-danger) ;

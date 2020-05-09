@@ -13,10 +13,10 @@ export class NoteService {
   private _notes= new BehaviorSubject<note[]>( [
     {
       id:'1',
-      title:'title_1',
+      title:'Java pRoject -info',
       subject:'Java',
       date:new Date('2019-01-01'),
-      desc:"note 1",
+      desc:"Description ",
       userId:'1'
     },
     {

@@ -17,7 +17,7 @@ islogin=true;
   ngOnInit() {
   }
 
-  onLoggingIn(){
+  onLoggingIn(authForm:NgForm){
     this.Load.create({keyboardClose:true,message:'Loggin in...'}).then(loadEle=>{
       loadEle.present();
       this.authService.login(); 
