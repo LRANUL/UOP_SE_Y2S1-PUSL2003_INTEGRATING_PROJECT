@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-wifi',
@@ -7,9 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WifiPage implements OnInit {
 
-  constructor() { }
+  constructor(private modal: ModalController) { }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
+    async closeModal(){
+      await this.modal.dismiss();
+    }
 }

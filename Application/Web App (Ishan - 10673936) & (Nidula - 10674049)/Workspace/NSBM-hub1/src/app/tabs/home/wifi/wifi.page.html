@@ -1,9 +1,21 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>wifi</ion-title>
+    <ion-title>WIFI Information</ion-title>
+    <ion-buttons slot="end">
+    <ion-button (click)="closeModal()">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
-
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Credentials</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-label>Username: Students <br></ion-label>
+      <ion-label>Password: Students54321</ion-label>
+    </ion-card-content>
+  </ion-card> 
 </ion-content>

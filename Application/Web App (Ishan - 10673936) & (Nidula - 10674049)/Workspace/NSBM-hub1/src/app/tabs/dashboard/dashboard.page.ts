@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SegmentChangeEventDetail }  from '@ionic/core'
+import { ModalController } from '@ionic/angular';
+import {WifiPage} from './../home/wifi/wifi.page'
+
 
 @Component({
   selector: 'app-dashboard',
@@ -8,7 +11,14 @@ import { SegmentChangeEventDetail }  from '@ionic/core'
 })
 export class DashboardPage implements OnInit {
 tab:boolean=false;
-  constructor() { }
+  constructor(private modal: ModalController) { }
+
+  async openModal(){
+    const modal = await this.modal.create({
+      component: WifiPage
+    });
+    return await modal.present();
+  }
 
   ngOnInit() { 
   }
