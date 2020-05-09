@@ -27,7 +27,7 @@ export class LecturersPage implements OnInit {
 
   disableButton: Boolean = false;
 
-  enableButton: Boolean = true;
+  enableButton: Boolean = false;
 
 
   constructor(
@@ -167,10 +167,12 @@ export class LecturersPage implements OnInit {
             this.lecturerNameMiddleName = firestoreDoc.name.middleName;
             this.lecturerNameLastName = firestoreDoc.name.lastName;
             this.lecturerNsbmLecturerId = firestoreDoc.nsbmLecturerId;
-            this.lecturerNsbmEmailAddress = firestoreDoc.nsbmEmailAddress;
             this.lecturerStatus = firestoreDoc.status;
             this.lecturerSpecializedFaculty = firestoreDoc.specializedFaculty;
             this.lecturerSpecialization = firestoreDoc.specialization;
+
+            // Lecturer user document ID is the lecturer NSBM email address
+            this.lecturerNsbmEmailAddress = this.lecturerDocId;
           });
 
           if(this.lecturerStatus == "Disabled"){
@@ -214,10 +216,12 @@ export class LecturersPage implements OnInit {
             this.lecturerNameMiddleName = firestoreDoc.name.middleName;
             this.lecturerNameLastName = firestoreDoc.name.lastName;
             this.lecturerNsbmLecturerId = firestoreDoc.nsbmLecturerId;
-            this.lecturerNsbmEmailAddress = firestoreDoc.nsbmEmailAddress;
             this.lecturerStatus = firestoreDoc.status;
             this.lecturerSpecializedFaculty = firestoreDoc.specializedFaculty;
             this.lecturerSpecialization = firestoreDoc.specialization;
+
+            // Lecturer user document ID is the lecturer NSBM email address
+            this.lecturerNsbmEmailAddress = this.lecturerDocId;
           });
 
           if(this.lecturerStatus == "Disabled"){
@@ -230,12 +234,15 @@ export class LecturersPage implements OnInit {
           console.log("Registered Lecturer Record Found");
         }
         else{
+          // Setting loading dots to false
+          this.showLoadingDots = false;
           this.alertNotice("Not Found", "Registered Lecturer Record with NSBM Email Address: " + value.nsbmEmailAddress + ", is not available");
           console.log("Registered Lecturer Record Not Found");
         }
       }, error => {
         console.log("Error: " + error);
         this.alertNotice("Error", "An error has occurred: " + error);
+        // Setting loading dots to false
         this.showLoadingDots = false;
       });
     }

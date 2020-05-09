@@ -202,7 +202,7 @@ export class NewsPage implements OnInit {
     editModuleModal.present();
   }
 
-
+  // Opening news attachment link in a new tab over the existing tab
   openAttachmentLink(link){
     window.open(link, '_blank');
   }

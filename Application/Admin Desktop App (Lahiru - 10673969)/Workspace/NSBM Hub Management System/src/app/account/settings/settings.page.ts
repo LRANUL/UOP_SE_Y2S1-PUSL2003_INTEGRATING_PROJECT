@@ -402,6 +402,9 @@ export class SettingsPage implements OnInit {
       this.updatePasswordLoginFormSection = false;
       this.closeUpdatePasswordLoginFormButton = false;
 
+      // Resetting update account password form
+      this.updatePasswordLoginForm.reset();
+
       this.updateDetailsLoginFormSection = true;
       this.closeUpdateDetailsLoginFormButton = true;
     }
@@ -412,6 +415,9 @@ export class SettingsPage implements OnInit {
     else if(this.updateDetailsLoginFormSection == true){
       this.updateDetailsLoginFormSection = false;
       this.closeUpdateDetailsLoginFormButton = false;
+
+      // Resetting update account details form
+      this.updateDetailsLoginForm.reset();
     }
   }
 
@@ -419,6 +425,9 @@ export class SettingsPage implements OnInit {
     if(this.updateDetailsLoginFormSection == true){
       this.updateDetailsLoginFormSection = false;
       this.closeUpdateDetailsLoginFormButton = false;
+
+      // Resetting update account details form
+      this.updateDetailsLoginForm.reset();
 
       this.updatePasswordLoginFormSection = true;
       this.closeUpdatePasswordLoginFormButton = true;
@@ -430,6 +439,9 @@ export class SettingsPage implements OnInit {
     else if (this.updatePasswordLoginFormSection == true){
       this.updatePasswordLoginFormSection = false;
       this.closeUpdatePasswordLoginFormButton = false;
+
+      // Resetting update account password form
+      this.updatePasswordLoginForm.reset();
     }
   }
 
@@ -477,7 +489,7 @@ export class SettingsPage implements OnInit {
   }
 
 
-  // Process of verifying entered credentails and opening update user account password modal
+  // Process of verifying entered credentials and opening update user account password modal
   openUpdatePasswordModal(value){
 
     // Verifying entered login credentials
@@ -514,7 +526,7 @@ export class SettingsPage implements OnInit {
   }
 
 
-  /* Functions of calling serive functions and the values to firestore */
+  /* Functions of calling service functions and adding the values to firestore database */
   // Process of adding a new degree program
   doAddDegreeProgram(value){
 

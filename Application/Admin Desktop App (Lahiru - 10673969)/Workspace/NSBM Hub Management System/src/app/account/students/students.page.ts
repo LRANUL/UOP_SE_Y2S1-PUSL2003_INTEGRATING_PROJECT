@@ -112,11 +112,13 @@ export class StudentsPage implements OnInit {
             this.studentNameMiddleName = firestoreDoc.name.middleName;
             this.studentNameLastName = firestoreDoc.name.lastName;
             this.studentNsbmStudentId = firestoreDoc.nsbmStudentID;
-            this.studentNsbmEmailAddress = firestoreDoc.Email;
             this.studentBatch = firestoreDoc.batch;
             this.studentDegree = firestoreDoc.degree;
             this.studentAwardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
             this.studentStatus = firestoreDoc.status;
+
+            // Student user document ID is the student NSBM email address
+            this.studentNsbmEmailAddress = this.studentDocId;
           });
 
           if(this.studentStatus == "Disabled"){
@@ -129,6 +131,7 @@ export class StudentsPage implements OnInit {
           console.log("Registered Lecturer Record Found");
         }
         else{
+          // Setting loading dots to false
           this.showLoadingDots = false;
           this.alertNotice("Not Found", "Registered Student Record with NSBM ID: " + value.nsbmId + ", is not available");
           console.log("Registered Student Record Not Found");
@@ -136,6 +139,7 @@ export class StudentsPage implements OnInit {
       }, error => {
         console.log("Error: " + error);
         this.alertNotice("Error", "An error has occurred: " + error);
+        // Setting loading dots to false
         this.showLoadingDots = false;
       });
     }
@@ -160,11 +164,13 @@ export class StudentsPage implements OnInit {
             this.studentNameMiddleName = firestoreDoc.name.middleName;
             this.studentNameLastName = firestoreDoc.name.lastName;
             this.studentNsbmStudentId = firestoreDoc.nsbmStudentID;
-            this.studentNsbmEmailAddress = firestoreDoc.Email;
             this.studentBatch = firestoreDoc.batch;
             this.studentDegree = firestoreDoc.degree;
             this.studentAwardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
             this.studentStatus = firestoreDoc.status;
+
+            // Student user document ID is the student NSBM email address
+            this.studentNsbmEmailAddress = this.studentDocId;
           });
 
           if(this.studentStatus == "Disabled"){
@@ -177,12 +183,15 @@ export class StudentsPage implements OnInit {
           console.log("Registered Student Record Found");
         }
         else{
+          // Setting loading dots to false
+          this.showLoadingDots = false;
           this.alertNotice("Not Found", "Registered Student Record with NSBM Email Address: " + value.nsbmEmailAddress + ", is not available");
           console.log("Registered Student Record Not Found");
         }
       }, error => {
         console.log("Error: " + error);
         this.alertNotice("Error", "An error has occurred: " + error);
+        // Setting loading dots to false
         this.showLoadingDots = false;
       });
     }

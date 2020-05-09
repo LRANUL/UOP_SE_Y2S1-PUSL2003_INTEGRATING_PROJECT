@@ -1,24 +1,46 @@
-const createWindowsInstaller = require('electron-winstaller').createWindowsInstaller
-const path = require('path')
+// Importing the necessary modules
+const { MSICreator } = require('electron-wix-msi');
+const path = require('path');
 
-getInstallerConfig()
-  .then(createWindowsInstaller)
-  .catch((error) => {
-    console.error(error.message || error)
-    process.exit(1)
-  })
+// Defining the input and output directory
+// The directories must be absolute, not relative 
+// SAMPLE:
+// appDirectory: "C:\\Users\LucasLHH\Desktop\iSAM-App-win32-x64"
+// Pathway of locating the windows release version of the application
+const APP_DIR = path.resolve(__dirname, './../release-builds/NSBM-Hub-Management-System-win32-ia32');
 
-function getInstallerConfig () {
-  const rootPath = path.join('./')
-  const outPath = path.join(rootPath, 'release-builds')
+// SAMPLE:
+// outputDirectory: "C:\\Users\LucasLHH\Desktop\windows_installer"
+// Pathway to where to deploy installation file
+const OUT_DIR = path.resolve(__dirname, './../release-builds/nsbm-hub-ms-setup-x86-1.0.0');
 
-  return Promise.resolve({
-    appDirectory: path.join(outPath, 'builds/'),
-    authors: 'Team Quinn',
-    noMsi: true,
-    outputDirectory: path.join(outPath, 'windows-installer'),
-    exe: 'NSBM-Hub-Management-System.exe',
-    setupExe: 'NSBM-Hub-Management-System.exe',
-    setupIcon: path.join(rootPath,'assets','icon','icon.ico')
-  })
-}
+// Instantiating the MSICreator
+const msiCreator = new MSICreator({
+    appDirectory: APP_DIR,
+    outputDirectory: OUT_DIR,
+
+    // Configuring the metadata
+    description: 'NSBM Hub Management System',
+    exe: 'NSBM Hub Management System',
+    name: 'NSBM Hub Management System',
+    manufacturer: 'Team Quinn',
+    version: '1.0.0',
+
+    // Configuring the installer user interface
+    ui: {
+      chooseDirectory: true,
+      "images": {
+        "background": path.resolve(__dirname, './assets/images/desktop-setup-installation-images/nsbm_hub_setup_background.png'),
+        "banner": path.resolve(__dirname, './assets/images/desktop-setup-installation-images/nsbm_hub_setup_banner.png')
+      }
+    },
+});
+
+
+// Creating a .wxs template file
+msiCreator.create().then(function(){
+
+  // Compiling the template to a .msi file
+   msiCreator.compile();
+
+});

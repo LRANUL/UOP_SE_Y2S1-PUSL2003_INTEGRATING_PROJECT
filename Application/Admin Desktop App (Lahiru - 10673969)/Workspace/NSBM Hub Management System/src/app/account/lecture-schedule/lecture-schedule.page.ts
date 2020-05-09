@@ -70,7 +70,7 @@ export class LectureSchedulePage implements OnInit {
         eventLectureSession.startTime = eventLectureSession.startDateTime.toDate();
         eventLectureSession.endTime = eventLectureSession.endDateTime.toDate();
 
-        console.log(eventLectureSession);
+      //  console.log(eventLectureSession);
 
         this.eventSourceLectureSession.push(eventLectureSession);
       });

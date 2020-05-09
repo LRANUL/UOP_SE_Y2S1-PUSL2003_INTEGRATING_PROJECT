@@ -528,7 +528,7 @@ export class SemesterCalendarPage implements OnInit {
 
       let lecturePublicationCount = 0;
 
-      // Running a for loop untill the number of sessions with one addtional to iterate for the final week of the session period
+      // Running a for loop until the number of sessions with one additional to iterate for the final week of the session period
       for (let index = 0; index <= noOfSessions; index++) {
 
         // Checking if the iterating session value is greater than the user selected session end date, 
@@ -558,18 +558,17 @@ export class SemesterCalendarPage implements OnInit {
               this.alertNotice("ERROR", "Error has occurred: " + error);
           });
         }
-
-        if(lecturePublicationCount == (noOfSessions+1)){
-          this.alertNotice("Lecture Sessions Published", "New Lecture Sessions have been published. Check the 'Active Calander'.");
-        }
-        else if(lecturePublicationCount != (noOfSessions+1)){
-          this.alertNotice("ERROR", "Error has occurred. Not all lecture sessions were created.");
-        }
-
+        
         // Incrementing the days by seven days to retrieve lecture session date for every week of the session period
         firstSessionDateTime.setDate(firstSessionDateTime.getDate() + 7);
       }
 
+      if(lecturePublicationCount == (noOfSessions+1)){
+        this.alertNotice("Lecture Sessions Published", "New Lecture Sessions have been published. Check the 'Active Calender'.");
+      }
+      else if(lecturePublicationCount != (noOfSessions+1)){
+        this.alertNotice("ERROR", "Error has occurred. Not all lecture sessions were created.");
+      }
 
     }
 

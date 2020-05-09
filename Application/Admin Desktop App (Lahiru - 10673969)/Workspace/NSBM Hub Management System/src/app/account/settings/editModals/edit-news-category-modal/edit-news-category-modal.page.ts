@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-edit-news-category-modal',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditNewsCategoryModalPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private modalController: ModalController
+  ) { }
 
   ngOnInit() {
+  }
+
+  closeEditNewsCategory(){
+    this.modalController.dismiss();
   }
 
 }

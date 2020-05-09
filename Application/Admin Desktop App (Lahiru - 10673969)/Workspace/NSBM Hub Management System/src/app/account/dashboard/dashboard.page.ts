@@ -74,7 +74,6 @@ export class DashboardPage implements OnInit {
 
   // Calling the ngOnInit() function when page is rendered on the user's screen
   ionViewWillEnter(){
-    this.ngOnInit();
 /*
     var userActivityRecords = this.retrieveUserActivityRecordsCount();
 
@@ -248,7 +247,7 @@ export class DashboardPage implements OnInit {
         labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         datasets: [{
           label: 'User Activity',
-          data: [323,342,330,332,333,314,295],
+          data: [314,342,330,332,333,329,295],
           backgroundColor: 'rgb(109, 156, 235)', 
           borderColor: 'rgb(109, 219, 235)',
           borderWidth: 1
@@ -328,14 +327,14 @@ export class DashboardPage implements OnInit {
       component: MoreDetailsTodaysLecturesPopoverPage,
       componentProps: {
         lectureSessionDocId: value.payload.doc.id,
-        degree: value.payload.doc.data().degreeProgram,
+        degree: value.payload.doc.data().degree,
         awardingBodyUniversity:  value.payload.doc.data().awardingBodyUniversity,
         academicPeriodYear:  value.payload.doc.data().academicYear,
         academicPeriodSemester: value.payload.doc.data().academicSemester
       },
       event: ev
     });
-
+    console.log(value);
     moreDetailsTodaysLectureSessionPopover.present();
   }
 
@@ -428,10 +427,11 @@ export class DashboardPage implements OnInit {
   */
 
 
+  // Opening news attachment link in a new tab over the existing tab
+  openAttachmentLink(link){
+    window.open(link, '_blank');
+  }
 
-
-
-  
 
   // Declared to hold the events as array to store the sessions
   lectureSessionDocuments = [];
@@ -448,12 +448,12 @@ export class DashboardPage implements OnInit {
   selectedDate = new Date();
 
   nextMonthLecture(){
-    var frontSwipeLecture = document.getElementById('weeksLectureCalendar').querySelector('.swiper-container')['swiper'];
+    var frontSwipeLecture = document.getElementById('upcomingLectureCalendar').querySelector('.swiper-container')['swiper'];
     frontSwipeLecture.slideNext();
   }
 
   previousMonthLecture(){
-    var backSwipeLecture = document.getElementById('weeksLectureCalendar').querySelector('.swiper-container')['swiper'];
+    var backSwipeLecture = document.getElementById('upcomingLectureCalendar').querySelector('.swiper-container')['swiper'];
     backSwipeLecture.slidePrev();
   }
 

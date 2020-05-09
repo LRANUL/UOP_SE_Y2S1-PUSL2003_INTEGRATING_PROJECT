@@ -1,4 +1,4 @@
-<ion-list style="min-width: 350px;">
+<ion-list style="min-width: 200px;">
   <ion-item>
     <ion-grid>
       <ion-row>
@@ -27,10 +27,10 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col>
-          <ion-label *ngFor="let item of passedNoticeRecipient" style="margin-left: 30px;
-                                                                      height: 100px;
-                                                                      overflow-y: scroll;">
+        <ion-col style="margin-left: 30px;
+                        height: 100px;
+                        overflow-y: auto;">
+          <ion-label *ngFor="let item of passedNoticeRecipient">
             {{ item }} <br>
           </ion-label>
         </ion-col>
@@ -42,14 +42,14 @@
       <ion-row>
         <ion-col>
           <ion-label>
-            <b>Created At:</b>
+            <b>Created On:</b>
           </ion-label>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
           <ion-label>
-            {{ passedNoticeCredtedDateTime.toDate() | date: 'dd-MM-yyy | h:mm a' }}
+            {{ passedNoticeCreatedDateTime.toDate() | date: 'dd-MM-yyy | h:mm a' }}
           </ion-label>
         </ion-col>
       </ion-row>

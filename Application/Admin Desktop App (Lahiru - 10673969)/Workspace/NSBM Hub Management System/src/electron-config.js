@@ -12,40 +12,37 @@ const url = require('url');
 let mainWindow;
 
 function createWindow() {
-// Creating the browser window
-mainWindow = new BrowserWindow({width: 1200, height: 700});
+    // Creating the browser window
+    mainWindow = new BrowserWindow({width: 1366, height: 768});
 
-// After creating the browser window the index.html that in within the app will be executed
-const startUrl = process.env.ELECTRON_START_URL || url.format({
-pathname: path.join(__dirname, '/../www/index.html'),
-protocol: 'file:',
-slashes: true
-});
-mainWindow.loadURL(startUrl);
+    // After creating the browser window the index.html that in within the app will be executed
+    const startUrl = process.env.ELECTRON_START_URL || url.format({
+        pathname: path.join(__dirname, '/../www/index.html'),
+        protocol: 'file:',
+        slashes: true
+    });
+    mainWindow.loadURL(startUrl);
 
-// Opening the developer tools
-mainWindow.webContents.openDevTools();
+    // Opening the developer tools
+    //mainWindow.webContents.openDevTools();
 
-// Executed when the window is closed.
-mainWindow.on('closed', function () {
-
-mainWindow = null
-})
+    // Executed when the window is closed.
+    mainWindow.on('closed', function () {
+        mainWindow = null
+    })
 }
 
 app.on('ready', createWindow);
 
 // Quit when all the window is closed
 app.on('window-all-closed', function () {
-
-if (process.platform !== 'darwin') {
-app.quit()
-}
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
 });
 
 app.on('activate', function () {
-
-if (mainWindow === null) {
-createWindow()
-}
+    if (mainWindow === null) {
+        createWindow()
+    }
 });

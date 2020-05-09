@@ -117,7 +117,16 @@
                   </div>
                 -->
 
-                <p style="margin-left: 200px;">Forgot the password?</p>
+                <ion-button fill="clear" color="medium" style="width: 210px;
+                                                              position: relative;
+                                                              top: -2px;
+                                                              margin-left: 130px;"
+                  (click)="alertNotice('Contact the Web Administrator')">
+                  <p style="color: rgb(99, 99, 99);">
+                    Forgot the password?
+                  </p>
+                </ion-button>
+                
               </ion-col>
 
             </ion-row>
@@ -154,12 +163,26 @@
                                                                 height: 60px;
                                                                 font-size: 16px;
                                                                 position: absolute; 
-                                                                top: 800px;
-                                                                right: 70px;">
+                                                                bottom: 8%;
+                                                                right: 5%;">
       <ion-label>
         About
       </ion-label>
     </ion-button>
+
+    <!-- Bottom Text -->
+    <div style="width: 100%;
+                position: absolute;
+                bottom: 0px;">
+      <div style="text-align: center;
+                  font-size: 15px;
+                  color: rgb(102, 102, 102);">
+        <i>
+        THIS IS AN EDUCATIONAL PROJECT, CREDITS TO AUTHORS ARE ADDED WERE POSSIBLE,
+        DEVELOPED UNDER FAIR USE LICENSE FOR EDUCATIONAL PURPOSES ONLY.
+        </i>
+      </div>
+    </div>
 
 
   </div>

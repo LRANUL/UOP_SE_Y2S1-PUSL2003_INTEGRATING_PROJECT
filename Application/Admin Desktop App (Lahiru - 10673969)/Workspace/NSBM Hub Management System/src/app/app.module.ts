@@ -62,6 +62,7 @@ import { EditLectureSeriesModalPageModule } from './account/semester-calendar/ed
 import { NotificationsPopoverPageModule } from './account/notifications-popover/notifications-popover.module';
 import { MoreDetailsEventPopoverPageModule } from './account/dashboard/more-details-event-popover/more-details-event-popover.module';
 import { EditNewsItemModalPageModule } from './account/news/edit-news-item-modal/edit-news-item-modal.module';
+import { MoreInformationPopoverPageModule } from './account/settings/more-information-popover/more-information-popover.module';
 
 
 
@@ -112,7 +113,8 @@ import { EditNewsItemModalPageModule } from './account/news/edit-news-item-modal
     UpdateAccountPasswordModalPageModule,
     EditLectureSeriesModalPageModule,
     NotificationsPopoverPageModule,
-    EditNewsItemModalPageModule
+    EditNewsItemModalPageModule,
+    MoreInformationPopoverPageModule
   ],
   providers: [
     StatusBar,

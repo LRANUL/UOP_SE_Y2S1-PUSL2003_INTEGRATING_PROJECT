@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-edit-credit-weighting-modal',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditCreditWeightingModalPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private modalController: ModalController
+  ) { }
 
   ngOnInit() {
+  }
+
+  closeEditCreditWeightingModal(){
+    this.modalController.dismiss();
   }
 
 }
