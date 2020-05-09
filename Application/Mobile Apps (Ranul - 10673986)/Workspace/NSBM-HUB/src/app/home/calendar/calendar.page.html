@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar color="light">
+  <ion-buttons slot="start">
+      <ion-back-button defaultHref="tabs/home"><ion-icon>←</ion-icon>
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Schedule
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <calendar [eventSource]="eventSource" [calendarMode]="calendar.mode" [currentDate]="calendar.currentDate">
+    </calendar>
+  </ion-card>
+</ion-content>
