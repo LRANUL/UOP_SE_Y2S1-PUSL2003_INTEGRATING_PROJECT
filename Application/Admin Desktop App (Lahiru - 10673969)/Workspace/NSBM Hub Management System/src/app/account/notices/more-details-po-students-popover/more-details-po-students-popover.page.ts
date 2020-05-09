@@ -10,7 +10,7 @@ export class MoreDetailsPoStudentsPopoverPage implements OnInit {
 
   passedNoticeDocId = null;
   passedNoticeCreatedFaculty = null;
-  passedNoticeCredtedDateTime = null;
+  passedNoticeCreatedDateTime = null;
   passedNoticeRecipientBatch = null;
   passedNoticeRecipientModule = null;
 
@@ -29,7 +29,7 @@ export class MoreDetailsPoStudentsPopoverPage implements OnInit {
     this.passedNoticeDocId = this.navParams.get('noticeDocId');
 
     this.passedNoticeCreatedFaculty = this.navParams.get('noticeCreatedFaculty');
-    this.passedNoticeCredtedDateTime = this.navParams.get('noticeCredtedDateTime');
+    this.passedNoticeCreatedDateTime = this.navParams.get('noticeCreatedDateTime');
 
     if(this.navParams.get('noticeRecipientBatch') == "NULL"){
       this.passedNoticeRecipientBatch = "None";
@@ -43,8 +43,8 @@ export class MoreDetailsPoStudentsPopoverPage implements OnInit {
     this.passedNoticeRecipientBatch = this.navParams.get('noticeRecipientBatch');
     this.passedNoticeRecipientModule = this.navParams.get('noticeRecipientModule');
 
-    console.log(this.passedNoticeRecipientBatch);
-    console.log(this.passedNoticeRecipientModule);
+  //  console.log(this.passedNoticeRecipientBatch);
+  //  console.log(this.passedNoticeRecipientModule);
 
   }
 

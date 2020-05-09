@@ -259,22 +259,24 @@
                     startHour="9"
                     endHour="17"
                     step="30"
-                    startingDayWeek="1" id="LectureCalendar">
+                    startingDayWeek="1" id="upcomingLectureCalendar">
                   
                     </calendar>
                   </div>
                 </div>
 
                 <div style="position: absolute;
-                            top: 282px;
-                            right: 3.4%;" *ngFor="let item of lectureSessionDocuments">
-                  <ion-button size="small" title="Lecture Session Read More" color="secondary" (click)="moreDetailsUpcomingLectureSession($event, item)" style="width: 40px;
-                                                                                                                                                                  height: 40px;
-                                                                                                                                                                  border-radius: 5px;
-                                                                                                                                                                  margin-bottom: -5px;
-                                                                                                                                                                  margin-left: -10px;">
+                            top: 288px;
+                            right: 3.4%;">
+                  <div *ngFor="let item of lectureSessionDocuments">
+                    <ion-button size="small" title="Lecture Session Read More" color="secondary" (click)="moreDetailsUpcomingLectureSession($event, item)" style="width: 40px;
+                                                                                                                                                                height: 40px;
+                                                                                                                                                                border-radius: 5px;
+                                                                                                                                                                margin-top: 8%;
+                                                                                                                                                                margin-left: -10px;">
                     <ion-icon name="document-text" style="font-size: 30px;"></ion-icon>
                   </ion-button>
+                  </div>
                 </div>
 
                 <!-- Text shown id there are no available lecture sessions for the selected date -->
@@ -379,7 +381,7 @@
                 </ion-grid>
 
 
-                <!-- Text shown id there are no available lecturer to PO notices for the past three days -->
+                <!-- Text shown if there are no available lecturer to PO notices for the past three days -->
                 <div style="position: absolute;
                             left: 50%;
                             top: 50%;
@@ -431,6 +433,18 @@
                         </ion-card-header>
                         <ion-card-content>
                           <ion-grid>
+                            <ion-row *ngIf="item.payload.doc.data().attachmentLink">
+                              <ion-col size="12">
+                                <ion-button style="min-width: 100%;"
+                                  (click)="openAttachmentLink(item.payload.doc.data().attachmentLink)">
+                                  <ion-icon name="link-outline" style="color: white;"></ion-icon>
+                                  <ion-label style="color: white;
+                                                    margin-left: 10px;">
+                                    Open Attachment Link
+                                  </ion-label>
+                                </ion-button>
+                              </ion-col>
+                            </ion-row>
                             <ion-row>
                               <ion-col>
                                 <ion-label>
@@ -736,8 +750,9 @@
                   </ion-col>
                 </ion-row>
               </ion-grid>
-
+              
             </div>
+
           </ion-card-content>
         </ion-card>
 

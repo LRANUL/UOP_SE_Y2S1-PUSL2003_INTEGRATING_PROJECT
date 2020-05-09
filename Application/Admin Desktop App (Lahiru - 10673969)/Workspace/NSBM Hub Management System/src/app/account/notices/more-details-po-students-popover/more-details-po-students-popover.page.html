@@ -40,14 +40,14 @@
       <ion-row>
         <ion-col>
           <ion-label>
-            <b>Created At:</b>
+            <b>Created On:</b>
           </ion-label>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
           <ion-label>
-            {{ passedNoticeCredtedDateTime.toDate() | date: 'dd-MM-yyy | h:mm a' }}
+            {{ passedNoticeCreatedDateTime.toDate() | date: 'dd-MM-yyy | h:mm a' }}
           </ion-label>
         </ion-col>
       </ion-row>
@@ -67,25 +67,45 @@
           <ion-label style="font-size: 17px;">
             Module Recipients: 
           </ion-label>
-          <ion-label *ngIf="recipientBatchNone" style="margin-left: 30px;">
-            None <br>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="recipientBatchNone">
+        <ion-col>
+          <ion-label style="margin-left: 30px;">
+            None
           </ion-label>
-          <ion-label *ngFor="let item of passedNoticeRecipientBatch" style="margin-left: 30px;
-                                                                            height: 100px;
-                                                                            overflow-y: scroll;">
-            {{ item }} <br>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col style="margin-left: 50px;
+                        height: 80px;
+                        overflow-y: auto;">
+          <ion-label *ngFor="let item of passedNoticeRecipientBatch">
+            {{ item }} 
           </ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
           <ion-label style="font-size: 17px;
                             margin-top: 15px;">
             Batch Recipients: 
           </ion-label>
-          <ion-label *ngIf="recipientModuleNone" style="margin-left: 30px;">
-            None <br>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="recipientModuleNone" >
+        <ion-col>
+          <ion-label style="margin-left: 30px;">
+            None 
           </ion-label>
-          <ion-label *ngFor="let item of passedNoticeRecipientModule" style="margin-left: 30px;
-                                                                            height: 100px;
-                                                                            overflow-y: scroll;">
-            {{ item }} <br>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col style="margin-left: 50px;
+                        height: 80px;
+                        overflow-y: auto;">
+          <ion-label *ngFor="let item of passedNoticeRecipientModule">
+            {{ item }}
           </ion-label>
         </ion-col>
       </ion-row>

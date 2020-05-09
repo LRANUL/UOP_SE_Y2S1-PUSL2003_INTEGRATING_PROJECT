@@ -247,7 +247,7 @@ export class NoticesPage implements OnInit {
       componentProps: {
         noticeDocId: value.payload.doc.id,
         noticeCreatedFaculty: value.payload.doc.data().noticeCreated.noticeCreatedByFaculty,
-        noticeCredtedDateTime: value.payload.doc.data().noticeCreated.noticeCreatedDateTime,
+        noticeCreatedDateTime: value.payload.doc.data().noticeCreated.noticeCreatedDateTime,
         noticeRecipient: value.payload.doc.data().noticeRecipient
       },
       event: ev
@@ -338,6 +338,25 @@ export class NoticesPage implements OnInit {
       lecturerFormButton.style.backgroundColor = "#0B80D3";
       studentFormButton.style.backgroundColor = "#02A5D7";
       newNoticeSectionCard.style.background = "#CDE7F9";
+    }
+  }
+
+  
+  markAsRead(noticeDocumentValue){
+    let noticeReadButton = document.getElementById('noticeReadButton');
+    let noticeUnreadButton = document.getElementById('noticeUnreadButton');
+    if(noticeReadButton.style.display === "inline"){
+      noticeReadButton.style.display = "none";
+      noticeUnreadButton.style.display = "inline";
+    }
+  }
+
+  markAsUnread(noticeDocumentValue){
+    let noticeReadButton = document.getElementById('noticeReadButton');
+    let noticeUnreadButton = document.getElementById('noticeUnreadButton');
+    if(noticeUnreadButton.style.display === "inline"){
+      noticeUnreadButton.style.display = "none";
+      noticeReadButton.style.display = "inline";
     }
   }
 

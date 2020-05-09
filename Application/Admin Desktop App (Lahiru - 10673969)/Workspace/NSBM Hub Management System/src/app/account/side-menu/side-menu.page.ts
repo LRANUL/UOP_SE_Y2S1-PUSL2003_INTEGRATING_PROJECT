@@ -159,20 +159,9 @@ export class SideMenuPage implements OnInit {
   }
 
 
+   
 
-
-
-  // Logout Process
-  logout(){
-
-    this.sideMenuService.logout();
-
-    this.logoutAlert('Confirmation ', 'Are you sure you want to logout?');
-
-  }
-
-
-  // Alert Box Implementation (Logout)
+  // Alert Box Implementation (Logout Process)
   async logoutAlert ( title: string, content: string ) {
 
     const alert = await this.alertController.create({
@@ -204,6 +193,8 @@ export class SideMenuPage implements OnInit {
                 }
             );
 
+            // this.sideMenuService.logout();
+
           }
         }
       ]
@@ -222,8 +213,7 @@ export class SideMenuPage implements OnInit {
 
     await loading.present();
 
-    this.router.navigate(["/login"]);
-
+    // Logout Process
     if(firebase.auth().currentUser){
       firebase.auth().signOut()
         .then(() => {
@@ -233,6 +223,8 @@ export class SideMenuPage implements OnInit {
           this.alertNotice("Error", "Logout Process Failed, " + error);
         });
     }
+    // Redirecting user to login page
+    this.router.navigate(["/login"]);
   }
 
 

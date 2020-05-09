@@ -51,7 +51,7 @@ export class AuthService {
       });
   }
   insertUserData(userCredential: firebase.auth.UserCredential) {
-    return this.db.doc(`Users/userTypes/studentUsers/${userCredential.user.email}`).set({
+    return this.db.doc(`users/userTypes/studentUsers/${userCredential.user.email}`).set({
       email: this.newUser.email,
       firstName: this.newUser.firstName,
       lastName: this.newUser.lastName,

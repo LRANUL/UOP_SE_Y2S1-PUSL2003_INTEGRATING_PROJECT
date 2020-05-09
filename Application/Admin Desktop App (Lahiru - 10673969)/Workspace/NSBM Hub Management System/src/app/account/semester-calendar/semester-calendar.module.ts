@@ -16,7 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { MaterialModule } from 'src/app/material.module';
 
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 @NgModule({

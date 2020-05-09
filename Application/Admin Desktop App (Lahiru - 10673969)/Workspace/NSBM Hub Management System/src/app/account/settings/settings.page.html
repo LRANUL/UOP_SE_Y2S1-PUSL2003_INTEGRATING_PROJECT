@@ -1435,8 +1435,8 @@
 
             <!-- Update Details Login Credentials Form -->
             <ion-button color="danger" style="position: relative;
-                                              left: 5%;
-                                              top: 30px;
+                                              left: 22.5%;
+                                              top: 25px;
                                               transform: translateX(-10%);" (click)="openUpdateDetailsLoginForm()" *ngIf="closeUpdateDetailsLoginFormButton">
               <ion-icon name="close-outline"></ion-icon>
             </ion-button>
@@ -1444,7 +1444,11 @@
             <div style="border: #ccc solid 1px;
                         border-radius: 5px;
                         margin: 30px;
-                        padding: 20px;" *ngIf="updateDetailsLoginFormSection">
+                        padding: 20px;
+                        width: 60%;
+                        position: relative;
+                        left: 50%;
+                        transform: translateX(-50%);" *ngIf="updateDetailsLoginFormSection">
               <ion-label style="font-size: 18px;">
                 Enter Login Credentials
               </ion-label>
@@ -1493,8 +1497,8 @@
 
             <!-- Update Password Login Credentials Form -->
             <ion-button color="danger" style="position: relative;
-                                              left: 90%;
-                                              top: 30px;
+                                              left: 78.5%;
+                                              top: 25px;
                                               transform: translateX(-10%);" (click)="openUpdatePasswordLoginForm()" *ngIf="closeUpdatePasswordLoginFormButton">
               <ion-icon name="close-outline"></ion-icon>
             </ion-button>
@@ -1502,7 +1506,11 @@
             <div style="border: #ccc solid 1px;
                         border-radius: 5px;
                         margin: 30px;
-                        padding: 20px;" *ngIf="updatePasswordLoginFormSection">
+                        padding: 20px;
+                        width: 60%;
+                        position: relative;
+                        left: 50%;
+                        transform: translateX(-50%);" *ngIf="updatePasswordLoginFormSection">
               <ion-label style="font-size: 18px;">
                 Enter Login Credentials
               </ion-label>

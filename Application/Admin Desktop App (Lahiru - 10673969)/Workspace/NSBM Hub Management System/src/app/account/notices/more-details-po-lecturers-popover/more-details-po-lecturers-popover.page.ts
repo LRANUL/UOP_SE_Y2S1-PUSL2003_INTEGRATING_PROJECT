@@ -10,7 +10,7 @@ export class MoreDetailsPoLecturersPopoverPage implements OnInit {
 
   passedNoticeDocId = null;
   passedNoticeCreatedLecturer = null;
-  passedNoticeCredtedDateTime = null;
+  passedNoticeCreatedDateTime = null;
   passedNoticeRecipient = null;
 
   constructor(
@@ -24,7 +24,7 @@ export class MoreDetailsPoLecturersPopoverPage implements OnInit {
     this.passedNoticeDocId = this.navParams.get('noticeDocId');
 
     this.passedNoticeCreatedLecturer = this.navParams.get('noticeCreatedLecturer');
-    this.passedNoticeCredtedDateTime = this.navParams.get('noticeCredtedDateTime');
+    this.passedNoticeCreatedDateTime = this.navParams.get('noticeCreatedDateTime');
     this.passedNoticeRecipient = this.navParams.get('noticeRecipient');
 
 

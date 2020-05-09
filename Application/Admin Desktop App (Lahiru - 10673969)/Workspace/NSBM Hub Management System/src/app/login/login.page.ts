@@ -77,7 +77,7 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
 
-    // Setting timere for the splash screen
+    // Setting timer for the splash screen
     setTimeout(() => {
       this.splashContent = false;
       this.loginContent = true;
@@ -179,11 +179,8 @@ export class LoginPage implements OnInit {
 
 
 
-
-  // Displays the entered values into the console
-  public submit(){
-    console.log(this.loginForm.value);
-  }
+  
+  
 
 
   // Alert Box Implementation

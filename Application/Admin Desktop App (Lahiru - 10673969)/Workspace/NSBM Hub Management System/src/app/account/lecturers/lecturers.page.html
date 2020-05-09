@@ -142,12 +142,71 @@
                         <ion-card-title>{{ lecturerNamePrefix }} {{ lecturerNameFirstName }} {{ lecturerNameMiddleName }} {{ lecturerNameLastName }} </ion-card-title>
                       </ion-card-header>
                       <ion-card-content>
-                        <b>NSBM ID: </b> {{ lecturerNsbmLecturerId }} <br>
-                        <b>NSBM Email Address: </b> {{ lecturerNsbmEmailAddress }} <br>
-                        <b>Specialization: </b> {{ lecturerSpecialization }} <br>
-                        <b>Specialied Faculty: </b> {{ lecturerSpecializedFaculty }} <br>
-                        <b>Account Status: </b> {{ lecturerStatus }}
                         <ion-grid>
+                          <ion-row>
+                            <ion-col size="5">
+                              <ion-label>
+                                <b>NSBM ID: </b> 
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-label>
+                                {{ lecturerNsbmLecturerId }}
+                              </ion-label>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="5">
+                              <ion-label>
+                                <b>NSBM Email Address: </b> 
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-label style="position: absolute;
+                                                top: 50%;
+                                                transform: translateY(-50%);">
+                                {{ lecturerNsbmEmailAddress }}
+                              </ion-label>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="5">
+                              <ion-label>
+                                <b>Specialization: </b> 
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-label>
+                                {{ lecturerSpecialization }}
+                              </ion-label>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="5">
+                              <ion-label>
+                                <b>Specialized Faculty: </b> 
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-label style="position: absolute;
+                                                top: 50%;
+                                                transform: translateY(-50%);">
+                                {{ lecturerSpecializedFaculty }}
+                              </ion-label>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="5">
+                              <ion-label>
+                                <b>Account Status: </b> 
+                              </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-label>
+                                {{ lecturerStatus }}
+                              </ion-label>
+                            </ion-col>
+                          </ion-row>
                           <ion-row>
                             <ion-col>
                               <ion-button shape="round" color="secondary" style="min-width: 100%;">
@@ -239,7 +298,7 @@
 
                     <ion-row style="margin-bottom: 10px;">
                       <ion-item style="min-width: 100%;">
-                        <ion-label>Name Prefix</ion-label>
+                        <ion-label class="newLecturerUserFormSelect">Name Prefix</ion-label>
                         <ion-select formControlName="nameTitle">
                           <ion-select-option value="Mr.">Mr.</ion-select-option>
                           <ion-select-option value="Sir.">Sir.</ion-select-option>
@@ -281,7 +340,7 @@
                   <ion-col size="12" size-sm="12" size-lg="6">
 
                     <ion-item>
-                      <ion-label>Specialized Faculty</ion-label>
+                      <ion-label class="newLecturerUserFormSelect">Specialized Faculty</ion-label>
                       <ion-select cancelText="Cancel" okText="Continue" formControlName="specializedFaculty"> 
                         <ion-select-option value="School of Computing">School of Computing</ion-select-option>
                         <ion-select-option value="School of Business">School of Business</ion-select-option>
@@ -374,7 +433,7 @@
                   <ion-col size="12" size-sm="12" size-lg="6">
 
                     <ion-item>
-                      <ion-label>Status</ion-label>
+                      <ion-label class="newLecturerUserFormSelect">Status</ion-label>
                       <ion-select cancelText="Cancel" okText="Continue" formControlName="lecturerStatus"> 
                         <ion-select-option *ngFor="let item of publishedUserStatuses" value="{{ item.payload.doc.data().status }}">
                           {{ item.payload.doc.data().status }}

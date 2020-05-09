@@ -641,13 +641,19 @@
                               </ion-card-subtitle>
                             </ion-card-header>
                             <ion-card-content>
-                              <ion-label>
-                                <b>Notice Category: </b>
-                                {{ list.payload.doc.data().noticeCategory }} <br>
-                              </ion-label>
                               <ion-grid>
                                 <ion-row>
-                                  <ion-col style="width: 45px;" *ngIf="list.payload.doc.data().noticeCoverImage">
+                                  <ion-col size="6">
+                                    <ion-label>
+                                      <b>Notice Category: </b>
+                                    </ion-label>
+                                  </ion-col>
+                                  <ion-col size="6">
+                                    {{ list.payload.doc.data().noticeCategory }}
+                                  </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                  <ion-col size="12" style="width: 45px;" *ngIf="list.payload.doc.data().noticeCoverImage">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
                                                                                                height: 40px;" color="secondary" (click)="viewImageNotice(list)">
                                       <ion-icon name="image-outline" style="color: white;"></ion-icon>
@@ -657,7 +663,7 @@
                                       </ion-label>
                                     </ion-button>
                                   </ion-col>
-                                  <ion-col style="width: 45px;">
+                                  <ion-col size="12" style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
                                                                                                height: 40px;" (click)="moreDetailsPOLecturersNotice($event, list)">
                                       <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
@@ -669,7 +675,7 @@
                                   </ion-col>
                                 </ion-row>
                                 <ion-row>
-                                  <ion-col style="width: 45px;">
+                                  <ion-col size="6" style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
                                                                                                height: 40px;" color="warning" (click)="viewImageNotice(list)">
                                       <ion-icon name="create-outline" style="color: white;"></ion-icon>
@@ -679,7 +685,7 @@
                                       </ion-label>
                                     </ion-button>
                                   </ion-col>
-                                  <ion-col style="width: 45px;">
+                                  <ion-col size="6" style="width: 45px;">
                                     <ion-button size="small" shape="round" size="small" style="width: 100%;
                                                                                                height: 40px;" color="danger" 
                                         (click)="removePOLecturersNotice('Confirmation','This notice will be removed, do you want to continue?', list)">
@@ -718,7 +724,7 @@
 
             <!-- Notices From Lecturers -->
             <ion-card style="width: 99%;
-                            height: 800px;
+                            height: 830px;
                             background-color: white;
                             margin-left: 4px;
                             margin-top: 10px;">
@@ -831,6 +837,18 @@
                                 <ion-row>
                                   <ion-col size="5">
                                     <ion-label>
+                                      <b>Sent By:</b>
+                                    </ion-label>
+                                  </ion-col>
+                                  <ion-col size="7">
+                                    <ion-label>
+                                      {{ item.payload.doc.data().noticeCreated.noticeCreatedByLecturerName }}
+                                    </ion-label>
+                                  </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                  <ion-col size="5">
+                                    <ion-label>
                                       <b>Sent Date Time:</b>
                                     </ion-label>
                                   </ion-col>
@@ -841,35 +859,33 @@
                                   </ion-col>
                                 </ion-row>
                                 <ion-row>
-                                  <ion-col size="12" style="width: 45px;">
-                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" (click)="moreDetailsLecturersPONotice($event, item)">
-                                      <ion-icon name="document-text-outline" style="color: white;"></ion-icon>
-                                      <ion-label style="color: white;
-                                                        margin-left: 7px;">
-                                        MORE DETAILS
-                                      </ion-label>
-                                    </ion-button>
+                                  <ion-col size="12" style="display: inline;" id="noticeReadButton">
+                                    <div style="width: 100%;
+                                                height: 48px;">
+                                      <ion-button size="small" shape="round"style="width: 96.7%;
+                                                                                  height: 40px;
+                                                                                  position: absolute;
+                                                                                  left: 50%;
+                                                                                  transform: translateX(-50%);" (click)="markAsRead(item)">
+                                        <ion-icon name="checkmark-done-outline" style="color: white;
+                                                                                      margin-right: 5px;"></ion-icon>
+                                        <ion-label style="color: white;">
+                                          MARK AS READ
+                                        </ion-label>
+                                      </ion-button>
+                                    </div>
                                   </ion-col>
-                                </ion-row>
-                                <ion-row>
-                                  <ion-col size="6" style="width: 45px;">
-                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" color="secondary" (click)="viewImageNotice(item)">
-                                      <ion-icon name="checkmark-done-outline" style="color: white;
-                                                                                    margin-right: 5px;"></ion-icon>
-                                      <ion-label style="color: white;">
-                                        MARK AS <br> READ
-                                      </ion-label>
-                                    </ion-button>
-                                  </ion-col>
-                                  <ion-col size="6" style="width: 45px;">
-                                    <ion-button size="small" shape="round" size="small" style="width: 100%;
-                                                                                               height: 40px;" color="medium" (click)="moreDetailsNotice($event, item)">
+                                  <ion-col size="12" style="width: 100%;
+                                                            display: none;" id="noticeUnreadButton">
+                                    <ion-button size="small" shape="round" style="width: 100%;
+                                                                                  height: 40px;
+                                                                                  position: relative;
+                                                                                  left: 50%;
+                                                                                  transform: translateX(-50%);" color="medium" (click)="markAsUnread(item)">
                                       <ion-icon name="arrow-undo-outline" style="color: white;
                                                                                 margin-right: 5px;"></ion-icon>
                                       <ion-label style="color: white;">
-                                        MARK AS <br> UNREAD        
+                                        MARK AS UNREAD        
                                       </ion-label>
                                     </ion-button>
                                   </ion-col>
@@ -897,7 +913,7 @@
 
              <!-- Notices Sent to Students -->
               <ion-card style="width: 99%;
-                              height: 800px;
+                              height: 830px;
                               background-color: white;
                               margin-left: 4px;
                               margin-top: 0px;">

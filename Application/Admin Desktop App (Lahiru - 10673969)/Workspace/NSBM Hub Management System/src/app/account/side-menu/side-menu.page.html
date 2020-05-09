@@ -35,13 +35,12 @@
               <ion-img src="{{ p.icon }}" style="width: 26px;
                                                 margin-top: -2px;"></ion-img>
 
-              <!-- Ionic icon implmentation
+              <!-- Ionic icon implementation
               <ion-icon slot="start" [name]="p.icon"></ion-icon> 
               -->
             </ion-label>
-            <ion-label style="position: absolute;
-                              top: 1px;
-                              left: 40px;"> {{ p.title }} 
+            <ion-label class="sideMenuHeading"> 
+              {{ p.title }} 
             </ion-label>
           </ion-item>
         </ion-menu-toggle>
@@ -89,9 +88,7 @@
             <ion-img src="assets/images/account/side-menu_icons/profile.png" style="width: 26px;
                                                                                             margin-top: -2px;"></ion-img>
           </ion-label>
-          <ion-label style="position: absolute;
-                            top: 1px;
-                            left: 40px;"> 
+          <ion-label class="sideMenuHeading"> 
             Profile
           </ion-label>
         </ion-item>
@@ -102,9 +99,7 @@
                                                     margin-top: -2px;
                                                     font-size: 25px;"></ion-icon>
           </ion-label>
-          <ion-label style="position: absolute;
-                            top: 1px;
-                            left: 40px;"> 
+          <ion-label class="sideMenuHeading"> 
             Settings
           </ion-label>
         </ion-item>
@@ -112,7 +107,8 @@
         <ion-item>
           <button ion-button style="width: 300px;
                                     height: 50px;
-                                    background-color: white;" (click)="logout()">
+                                    background-color: white;" 
+            (click)="logoutAlert('Confirmation ', 'This will log you out, are you sure you want to logout?')" class="btn">
             <ion-label>
               <ion-icon name="log-out-outline" style="width: 26px;
                                                       font-size: 30px;
@@ -121,11 +117,13 @@
                                                       left: 5px;"></ion-icon>
             </ion-label>
             <ion-label style="position: absolute;
-                              top: 15px;
-                              left: 40px;
+                              top: 50%;
+                              left: 15%;
+                              transform: translateY(-50%);
                               font-size: 16px;
+                              letter-spacing: 3px;
                               color: #B90000;"> 
-              Logout
+              LOGOUT
             </ion-label>
           </button>
         </ion-item>
@@ -135,7 +133,7 @@
     </ion-content>
   </ion-menu>
 
-  <ion-router-outlet id="content" main></ion-router-outlet> <!-- (ion-router) section displays the content relavant for the page -->
-  <!-- this will be loaded from the loadChrildren link provided in the app-routing.module.ts file -->
+  <ion-router-outlet id="content" main></ion-router-outlet> <!-- (ion-router) section displays the content relevant for the page -->
+  <!-- this will be loaded from the loadChildren link provided in the app-routing.module.ts file -->
 
 </ion-split-pane>

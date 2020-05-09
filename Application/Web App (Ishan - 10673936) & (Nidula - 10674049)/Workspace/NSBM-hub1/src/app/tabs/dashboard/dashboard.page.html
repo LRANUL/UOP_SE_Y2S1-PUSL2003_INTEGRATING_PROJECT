@@ -41,13 +41,13 @@
     </ion-row>
     <ion-row>
         <ion-col size-sm="12" size-lg="6" text-center padding>
-            <ion-card class="ion-text-center ion-padding" color="primary">
-                <ion-icon name="person" ></ion-icon>
+            <ion-card (click)="openModal()" class="ion-text-center ion-padding" color="primary" style="cursor: pointer;">
+                <ion-icon  name="person" ></ion-icon>
                 <h2>Wifi</h2>
             </ion-card>
         </ion-col>
         <ion-col  size-lg="6" text-center padding *ngIf="tab">
-           <ion-card class="ion-text-center ion-padding" color="primary">
+           <ion-card class="ion-text-center ion-padding" color="primary" routerLink="/tabs/home/clubs/sports">
                <ion-icon name="person" ></ion-icon>
                <h2>Clubs and Societies</h2>
            </ion-card>

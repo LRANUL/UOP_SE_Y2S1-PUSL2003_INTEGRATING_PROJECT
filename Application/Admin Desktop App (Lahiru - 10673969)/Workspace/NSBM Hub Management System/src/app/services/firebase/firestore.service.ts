@@ -625,10 +625,10 @@ export class FirestoreService {
         .where("nsbmStudentID", "==", nsbmStudentId)).snapshotChanges();
   }
 
-  // Searching for registered student details with the user entered nsbm email address
+  // Searching for registered student document ids with the user entered nsbm email address
   searchRegisteredStudentNSBMEmail(nsbmEmailAddress) {
     return this.fireStore.collection("users/userTypes/studentUsers", ref => ref
-            .where("Email", "==", nsbmEmailAddress)).snapshotChanges();
+            .where(firebase.firestore.FieldPath.documentId(), '==', nsbmEmailAddress)).snapshotChanges();
   }
 
 
@@ -639,10 +639,10 @@ export class FirestoreService {
             .where("nsbmLecturerId", "==", nsbmLecturerId)).snapshotChanges();
   }
 
-  // Searching for registered lecturer details with the user entered nsbm email address
+  // Searching for registered lecturer document ids with the user entered nsbm email address
   searchRegisteredLecturerNSBMEmail(nsbmEmailAddress) {
     return this.fireStore.collection("users/userTypes/lecturerUsers", ref => ref
-            .where("nsbmEmailAddress", "==", nsbmEmailAddress)).snapshotChanges();
+            .where(firebase.firestore.FieldPath.documentId(), '==', nsbmEmailAddress)).snapshotChanges();
   }
 
 
