@@ -398,7 +398,7 @@ export class LecturersPage implements OnInit {
 
           console.log(" (Firebase Auth) Lecturer Credentials Registration Successful, " + success);
 
-          // Displaying new leaturer user created confirmation in alert message 
+          // Displaying new lecturer user created confirmation in alert message 
           this.alertNotice('Lecturer Registration Successful', 'New lecturer has been registered. New record can be viewed from the "Registered Lecturers" section.');
           this.alertNotice('Alert', 'Program Office User logged out');
 
@@ -418,8 +418,8 @@ export class LecturersPage implements OnInit {
             this.alertNotice('NSBM Email Already Exists', 'Another user with the same NSBM email address already exists.');
           }
           else{
-            // Displaying new leaturer user created failure in alert message 
-            this.alertNotice('Lecturer Registration Failed', 'Error has occured, please contact web administrator');
+            // Displaying new lecturer user created failure in alert message 
+            this.alertNotice('Lecturer Registration Failed', 'Error has occurred, please contact web administrator');
           }
           
         });
@@ -436,4 +436,20 @@ export class LecturersPage implements OnInit {
 
   }
 
+
+  // Resetting search registered student section and form
+  resetSearchRegisteredLecturerUser(){
+
+    // Resetting formControlGroup
+    this.searchRegisteredLecturerForm.reset();
+
+    // Resetting section
+    this.registeredLecturerCard = false; 
+
+    // Page load text to true
+    this.pageLoadSearchLecturerText = true;
+
+  }
+
+  
 }

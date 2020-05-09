@@ -119,7 +119,6 @@
               </ion-label>
             </div>
 
-
             <ion-spinner name="dots" style="position: absolute;
                                             left: 50%;
                                             transform: translateX(-50%);
@@ -127,6 +126,17 @@
                                             height: 100px;
                                             width: 100px;" *ngIf="showLoadingDots"></ion-spinner>
 
+            <!-- Reset Button -->
+            <ion-button style="width: 90px;
+                              position: absolute;
+                              top: -50px;
+                              right: 0.5%;" color="dark" fill="outline" size="small" (click)="resetSearchRegisteredLecturerUser()"> 
+              <ion-icon name="refresh-outline"></ion-icon>
+              <ion-label style="color: rgb(59, 59, 59);
+                                margin-left: 5px;">
+                Reset
+              </ion-label>
+            </ion-button>
 
             <div style="overflow-y: scroll; 
                         height: 500px;

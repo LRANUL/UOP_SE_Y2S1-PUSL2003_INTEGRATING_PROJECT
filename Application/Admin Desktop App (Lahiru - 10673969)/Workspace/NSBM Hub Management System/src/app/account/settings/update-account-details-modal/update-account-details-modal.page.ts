@@ -12,6 +12,7 @@ import { SideMenuPage } from '../../side-menu/side-menu.page';
 export class UpdateAccountDetailsModalPage implements OnInit {
 
   passedLoggedInUserId = null;
+  passedLoggedInUserFaculty = null;
 
   loadingSpinnerAccountDetails: Boolean = true;
 
@@ -20,7 +21,6 @@ export class UpdateAccountDetailsModalPage implements OnInit {
   constructor(
     private modalController: ModalController,
     private updateAccountDetailsService: FirestoreService,
-    private sideMenuPageUserFaculty: SideMenuPage,
     private navParams: NavParams,
     private formBuilder: FormBuilder,
     private alertController: AlertController
@@ -47,7 +47,7 @@ export class UpdateAccountDetailsModalPage implements OnInit {
   // Process of updating account details
   doEditAccountDetails(value){
 
-    this.updateAccountDetailsService.updateProgramOfficeUser(value, this.sideMenuPageUserFaculty.passUserEmailAddress())
+    this.updateAccountDetailsService.updateProgramOfficeUser(value, this.passedLoggedInUserId)
       .then(async response => {
         this.alertNotice("Account Details Updated", "Your account details has been updated.");
       }, error => {

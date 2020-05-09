@@ -1023,6 +1023,14 @@ export class FirestoreService {
 
   }
 
+  // Updating lecture series values in the firestore database
+  updateLectureSeries(value, docId, userFaculty){
+    return this.fireStore.doc("faculties/"+ userFaculty +"/lectureSeries/"+ docId).update({
+        noOfLectures: value.noOfLectures,
+        enrollmentKey: value.enrollmentKey
+    });
+  }
+
   // Removing event session from the firestore database
   removeEventSession(userFaculty, id) {
     return this.fireStore.doc("faculties/"+ userFaculty +"/eventSessions/"+ id).delete();

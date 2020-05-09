@@ -558,8 +558,9 @@
                         <ion-item style="margin-top: -12px;
                                         color: black;">
                           <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
-                          <ion-label style="margin-left: 10px;">Select Date</ion-label>
-                          <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticePOToLecturersSelectedDate($event)"></ion-datetime>
+                          <ion-label style="margin-left: 10px;
+                                            color: rgb(148, 148, 148);">Select Date</ion-label>
+                          <ion-datetime (ionChange)="retrieveNoticePOToLecturersSelectedDate($event)"></ion-datetime>
                         </ion-item>
                       </ion-col>
                     </ion-row>
@@ -738,8 +739,9 @@
                       <ion-item style="margin-top: -12px;
                                       color: black;">
                         <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
-                        <ion-label style="margin-left: 10px;">Select Date</ion-label>
-                        <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticeLecturersToPOSelectedDate($event)"></ion-datetime>
+                        <ion-label style="margin-left: 10px;
+                                          color: rgb(148, 148, 148);">Select Date</ion-label>
+                        <ion-datetime (ionChange)="retrieveNoticeLecturersToPOSelectedDate($event)"></ion-datetime>
                       </ion-item>
                     </ion-col>
                   </ion-row>
@@ -926,8 +928,9 @@
                       <ion-col>
                         <ion-item style="margin-top: -12px;">
                           <ion-icon name="calendar-outline" style="color: black;"></ion-icon>
-                          <ion-label style="margin-left: 10px;">Select Date</ion-label>
-                          <ion-datetime value="{{ currentDateTime }}" (ionChange)="retrieveNoticePOToStudentsSelectedDate($event)"></ion-datetime>
+                          <ion-label style="margin-left: 10px;
+                                            color: rgb(148, 148, 148);">Select Date</ion-label>
+                          <ion-datetime (ionChange)="retrieveNoticePOToStudentsSelectedDate($event)"></ion-datetime>
                         </ion-item>
                       </ion-col>
                     </ion-row>
@@ -951,7 +954,7 @@
                                     border-radius: 5px;
                                     padding: 5px;">
                       <ion-label style="font-size: 17px;">
-                        No Notices were sent to students for the selected date
+                        No Notices were sent to students on the selected date
                       </ion-label>
                     </ion-item>
                   </div>

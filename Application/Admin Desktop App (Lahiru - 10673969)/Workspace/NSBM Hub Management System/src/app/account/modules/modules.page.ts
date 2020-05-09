@@ -80,7 +80,19 @@ export class ModulesPage implements OnInit {
     moreDetailsLectureSessionPopover.present();
   }
 
-  
+
+  // Resetting search registered modules section and form
+  resetSearchRegisteredModule(){
+
+    // Resetting formControlGroup
+    this.searchRegisteredModuleForm.reset();
+
+    // Resetting section
+    this.registeredModules = []; 
+
+  }
+
+
 
 
   // Retrieving the published module credits weighting and their details from the firestore database
@@ -228,7 +240,7 @@ export class ModulesPage implements OnInit {
       this.modulesService.retrieveRegisteredModulesModuleCode(this.sideMenuPageUserFaculty.passUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
 
     }
-    else if(value.moduleCode != "" && value.moduleTitle){
+    else if(value.moduleCode != "" && value.moduleTitle != ""){
 
       // Alert notice with relevant message
       this.alertNotice("ALERT", "You have entered a Module Code and Title. Module search will proceed with the Module Code");
